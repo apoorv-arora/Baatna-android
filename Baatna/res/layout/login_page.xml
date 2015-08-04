@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/tour_grey"
+    android:clickable="true" >
+
+    <RelativeLayout
+        android:id="@+id/page_header"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/height48"
+        android:layout_alignParentTop="true"
+        android:background="@color/black_trans_fifty" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/page_header_close"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height48"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="goBack"
+            android:text="X"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size16" />
+
+        <com.application.baatna.utils.TextViewBold
+            android:id="@+id/page_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size15" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/page_header"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black_trans_forty"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <!-- FB Button -->
+
+                <LinearLayout
+                    android:id="@+id/login_page_layout_connect_using_facebook"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/fb_button_border"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="facebookAction"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:id="@+id/login_page_facebook_icon_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/login_fb_icon_border"
+                        android:gravity="center" >
+
+                        <com.application.baatna.utils.IconView
+                            android:id="@+id/login_page_facebook_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|left"
+                            android:text="ª"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/size16" />
+                    </LinearLayout>
+
+                    <com.application.baatna.utils.TextViewRegular
+                        android:id="@+id/login_page_layout_connect_using_facebook_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/size17" />
+                </LinearLayout>
+
+            </RelativeLayout>
+            
+            <RelativeLayout
+                android:id="@+id/login_email_details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <View
+                    android:id="@+id/email_login_separator1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_toLeftOf="@+id/help_string"
+                    android:background="@color/white_trans_ten"
+                    android:gravity="left|center_vertical" />
+
+                <com.application.baatna.utils.TextViewRegular
+                    android:id="@+id/help_string"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent1"
+                    android:gravity="center"
+                    android:text="@string/login_using_email"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size14" />
+
+                <View
+                    android:id="@+id/email_login_separator2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_toRightOf="@id/help_string"
+                    android:background="@color/white_trans_ten"
+                    android:gravity="right|center_vertical" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/login_details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_corner_borders_login"
+                android:orientation="vertical" >
+
+                <com.application.baatna.utils.EditTextRegular
+                    android:id="@+id/login_username"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_trans_ten"
+                    android:hint="@string/email"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white_trans_eighty"
+                    android:textSize="@dimen/size15" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white_trans_ten" />
+
+                <com.application.baatna.utils.EditTextRegular
+                    android:id="@+id/login_email"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_trans_ten"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white_trans_eighty"
+                    android:textSize="@dimen/size16" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white_trans_ten" />
+
+                <com.application.baatna.utils.EditTextRegular
+                    android:id="@+id/login_password"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_trans_ten"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white_trans_eighty"
+                    android:textSize="@dimen/size16" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/white_trans_ten"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/login_submit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true" >
+
+                <com.application.baatna.utils.TextViewBold
+                    android:id="@+id/submit_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size17" />
+            </LinearLayout>
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/forgot_pass_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="forgotPassword"
+                android:text="@string/forgot_password_header"
+                android:textColor="@color/white_trans_ninety"
+                android:textSize="@dimen/size14" />
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/login_page_already_have_an_account"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="center"
+                android:textColor="@color/white_trans_seventy"
+                android:textSize="@dimen/size14"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/login_blank_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/terms_of_service_separator"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:layout_weight=".1"
+                android:background="@color/transparent1" />
+
+            <LinearLayout
+                android:id="@+id/about_us_terms_conditions_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/black_trans_fifty"
+                android:orientation="horizontal" >
+
+                <com.application.baatna.utils.TextViewRegular
+                    android:id="@+id/about_us_terms_conditions"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent1"
+                    android:clickable="true"
+                    android:gravity="left"
+                    android:textColor="@color/white_trans_fifty"
+                    android:textSize="@dimen/size11" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

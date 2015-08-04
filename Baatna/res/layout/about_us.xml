@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/about_us_main"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/separator2"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/home_logo_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/zomato_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="150dp" />
+
+                <com.application.baatna.utils.TextViewRegular
+                    android:id="@+id/home_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/about_version"
+                    android:textColor="@color/font_color"
+                    android:textSize="@dimen/size18" />
+            </LinearLayout>
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/about_us_body"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:lineSpacingMultiplier="1.2"
+                android:text="@string/about_text"
+                android:textColor="@color/font_color"
+                android:textSize="@dimen/size18" />
+
+            <com.google.android.gms.plus.PlusOneButton
+                xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
+                android:id="@+id/plus_one_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                plus:annotation="inline"
+                plus:size="standard" />
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="fill_parent"
+        android:layout_height=".5dp"
+        android:layout_above="@+id/about_us_terms_conditions_container"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:id="@id/about_us_terms_conditions_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/separator3"
+        android:background="@drawable/whitebuttoncustomback"
+        android:orientation="horizontal" >
+
+        <com.application.baatna.utils.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent1"
+            android:clickable="false"
+            android:gravity="center"
+            android:paddingTop="0dp"
+            android:text="á"
+            android:textColor="@color/zomato_red"
+            android:textSize="@dimen/size15" />
+
+        <com.application.baatna.utils.TextViewRegular
+            android:id="@+id/about_us_terms_conditions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/about_us_terms_of_use"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size14" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator3"
+        android:layout_width="fill_parent"
+        android:layout_height=".5dp"
+        android:layout_above="@+id/about_us_privacy_policy_container"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:id="@id/about_us_privacy_policy_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/whitebuttoncustomback"
+        android:orientation="horizontal" >
+
+        <com.application.baatna.utils.IconView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent1"
+            android:clickable="false"
+            android:gravity="center"
+            android:paddingTop="0dp"
+            android:text="¢"
+            android:textColor="@color/zomato_red"
+            android:textSize="@dimen/size15" />
+
+        <com.application.baatna.utils.TextViewRegular
+            android:id="@+id/about_us_privacy_policy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="@string/about_us_privacypolicy"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size14" />
+    </LinearLayout>
+
+</RelativeLayout>

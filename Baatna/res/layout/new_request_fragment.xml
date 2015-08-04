@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/new_request_progress_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:id="@+id/new_request_progress"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- General case -->
+
+    <ScrollView
+        android:id="@+id/new_request_scroll_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbarStyle="outsideOverlay" >
+
+        <LinearLayout
+            android:id="@+id/new_request_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/category_et"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_background"
+                android:gravity="top|left"
+                android:hint="@string/category_hint"
+                android:inputType="textAutoCorrect|textAutoComplete"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/zhl_darkest"
+                android:textColorHint="@color/zhl_darkest_custom"
+                android:textSize="@dimen/size16" />
+
+            <View
+                android:id="@+id/category_separator"
+                android:layout_width="fill_parent"
+                android:layout_height=".5dp"
+                android:background="@color/zomato_red" />
+
+            <EditText
+                android:id="@+id/description_et"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/all_round_cornered_zhl_button"
+                android:gravity="top|left"
+                android:hint="@string/description_hint"
+                android:inputType="textMultiLine"
+                android:lines="4"
+                android:maxLines="4"
+                android:singleLine="false"
+                android:textColor="@color/zhl_darkest"
+                android:textColorHint="@color/zhl_darkest_custom"
+                android:textSize="@dimen/size16" />
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/greenbuttonfeedback"
+                android:clickable="true"
+                android:text="@string/post"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size14" />
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/category_selection_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/or_select_from_categories"
+                android:textColor="@color/zhl_darkest"
+                android:textSize="@dimen/size14" />
+
+            <ListView
+                android:id="@+id/category_list_view"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- For no internet connection which has retry -->
+
+    <LinearLayout
+        android:id="@+id/empty_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/empty_view_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="k"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/height150" />
+
+        <TextView
+            android:id="@+id/empty_view_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_internet_message"
+            android:textColor="@color/dark_grey" />
+
+        <LinearLayout
+            android:id="@+id/empty_view_retry_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_zdhl4_drawable"
+            android:clickable="true"
+            android:gravity="center" >
+
+            <com.application.baatna.utils.IconView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="e"
+                android:textColor="@color/z_grey_font_color"
+                android:textSize="@dimen/size22" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

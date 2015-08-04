@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="size3">3.65dp</dimen>
+    <dimen name="size5">5dp</dimen>
+    <dimen name="size7">8dp</dimen>
+    <dimen name="size8">10dp</dimen>
+    <dimen name="size9">14dp</dimen>
+    <dimen name="size10">16dp</dimen>
+    <dimen name="size11">18dp</dimen>
+    <dimen name="size12">20dp</dimen>
+    <dimen name="size13">22dp</dimen>
+    <dimen name="size14">23dp</dimen>
+    <dimen name="size15">25dp</dimen>
+    <dimen name="size16">27dp</dimen>
+    <dimen name="size17">29dp</dimen>
+    <dimen name="size18">30dp</dimen>
+    <dimen name="size19">33dp</dimen>
+    <dimen name="size20">34dp</dimen>
+    <dimen name="size21">35dp</dimen>
+    <dimen name="size22">36dp</dimen>
+    <dimen name="size23">38dp</dimen>
+    <dimen name="size24">40dp</dimen>
+    <dimen name="size26">42dp</dimen>
+    <dimen name="size30">50dp</dimen>
+    <dimen name="size32">54dp</dimen>
+    <dimen name="size35">59dp</dimen>
+    <dimen name="size40">66dp</dimen>
+    <dimen name="size42">70dp</dimen>
+    <dimen name="size45">75dp</dimen>
+    <dimen name="size46">77dp</dimen>
+    <dimen name="size47">80dp</dimen>
+    <dimen name="size50">86dp</dimen>
+    <dimen name="size11_user">18dp</dimen>
+    <dimen name="size18_user">30dp</dimen>
+    <dimen name="size_tabs">18dp</dimen>
+    <dimen name="size13_rest">20dp</dimen>
+    <dimen name="size17_feed">29dp</dimen>
+    <dimen name="size14_rest">23dp</dimen>
+    <dimen name="size16_rest">27dp</dimen>
+    <dimen name="height0_5">0.8dp</dimen>
+    <dimen name="height1">2dp</dimen>
+    <dimen name="height2">4dp</dimen>
+    <dimen name="height3">6dp</dimen>
+    <dimen name="height4">8dp</dimen>
+    <dimen name="height5">8dp</dimen>
+    <dimen name="height6">9dp</dimen>
+    <dimen name="height7">11dp</dimen>
+    <dimen name="height10">16dp</dimen>
+    <dimen name="height14">21dp</dimen>
+    <dimen name="height15">25dp</dimen>
+    <dimen name="height16">27dp</dimen>
+    <dimen name="height32">52dp</dimen>
+    <dimen name="height35">55dp</dimen>
+    <dimen name="height42">70dp</dimen>
+    <dimen name="height46">75dp</dimen>
+    <dimen name="height48">80dp</dimen>
+    <dimen name="height54">86dp</dimen>
+    <dimen name="height55">91dp</dimen>
+    <dimen name="height75">100dp</dimen>
+    <dimen name="height150">200dp</dimen>
+    <dimen name="height170">220dp</dimen>
+    <dimen name="height300">480dp</dimen>
+    <dimen name="speedial_circle_size">80dp</dimen>
+    <dimen name="size30_res">60dp</dimen>
+    <dimen name="corner_radius">1dp</dimen>
+    <dimen name="corner_radius_tour">2dp</dimen>
+    <dimen name="corner_radius_four">1dp</dimen>
+    <dimen name="corner_radius_medium">1dp</dimen>
+    <dimen name="corner_radius_verified">4dp</dimen>
+    <dimen name="corner_radius_notification">10dp</dimen>
+    <dimen name="corner_radius_big">150dp</dimen>
+    <dimen name="corner_radius_button">4dp</dimen>
+
+    <!-- Crop dimensions -->
+    <dimen name="crop_indicator_size">43dp</dimen>
+    <dimen name="preview_margin">20dp</dimen>
+    <dimen name="shadow_margin">5dp</dimen>
+    <dimen name="crop_min_side">45dp</dimen>
+    <dimen name="crop_touch_tolerance">20dp</dimen>
+    <dimen name="wp_selector_dash_length">4dp</dimen>
+    <dimen name="wp_selector_off_length">4dp</dimen>
+
+    <!-- Collection Card rounding -->
+    <dimen name="corner_radius_four_collections">5dp</dimen>
+
+    <item name="landmark_pin_size" type="dimen">12dp</item>
+    <item name="pinA_size" type="dimen">14dp</item>
+    
+    <item name="toolbar_height" type="dimen">@dimen/height54</item>
+    
+
+</resources>

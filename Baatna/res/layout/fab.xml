@@ -1,0 +1,37 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.application.baatna.utils.fab.FABControl
+        android:id="@+id/multiple_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
+        android:layerType="hardware"
+        fab:fab_addButtonColorNormal="@color/zomato_red"
+        fab:fab_addButtonColorPressed="@color/zomato_red_feedback"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_labelStyle="@style/fab_labels_style" >
+
+        <com.application.baatna.utils.fab.FABUnit
+            android:id="@+id/fab_post_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layerType="hardware"
+            android:onClick="actionBarSelected"
+            fab:fab_colorNormal="@color/fab_checkin_color"
+            fab:fab_colorPressed="@color/fab_checkin_color_pressed"
+            fab:fab_icon="@drawable/fab_check_in"
+            fab:fab_size="normal"
+            fab:fab_title="@string/post_request" />
+
+    </com.application.baatna.utils.fab.FABControl>
+
+</RelativeLayout>
