@@ -30,15 +30,15 @@
     </style>
 
     <style name="ZomatoActionBarHome" parent="android:Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/zomato_darker</item>
-        <item name="android:height">@dimen/height48</item>
+        <item name="android:background">@color/action_bar_default</item>
+        <item name="android:height">@dimen/height60</item>
         <item name="android:displayOptions">showCustom</item>
         <item name="android:backgroundStacked">@color/white</item>
     </style>
 
     <style name="ZomatoActionBar" parent="android:Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/zomato_darker</item>
-        <item name="android:height">@dimen/height48</item>
+        <item name="android:background">@color/action_bar_default</item>
+        <item name="android:height">@dimen/height60</item>
         <item name="android:displayOptions">showCustom</item>
         <item name="android:backgroundStacked">@color/white</item>
         <item name="android:titleTextStyle">@style/myTheme.ActionBar.Text</item>

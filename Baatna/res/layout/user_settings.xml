@@ -2,8 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
+    android:background="@color/white"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -67,32 +67,33 @@
         <RelativeLayout
             android:id="@+id/logout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/minimum_clickable_area"
             android:background="@drawable/whitebuttoncustomback"
-            android:onClick="logoutConfirm" >
+            android:onClick="logoutConfirm"
+            android:paddingRight="@dimen/toolbar_padding" >
 
             <com.application.baatna.utils.IconView
                 android:id="@+id/logout_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/drawer_icon_left_padding"
                 android:layout_centerVertical="true"
-                android:gravity="center"
                 android:text="V"
-                android:textColor="@color/color_iconfont"
+                android:textColor="@color/zdark"
                 android:textSize="@dimen/drawer_icon_size" />
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/logout_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/logout_icon"
-                android:background="@drawable/whitebuttoncustomback"
+                android:layout_height="fill_parent"
                 android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/drawer_text_left_padding"
                 android:text="@string/logout"
-                android:textColor="@color/font_color"
-                android:textSize="@dimen/size15" />
+                android:textAllCaps="true"
+                android:textColor="@color/zdark"
+                android:textSize="@dimen/drawer_text_size" />
         </RelativeLayout>
 
         <View
@@ -114,34 +115,35 @@
         <RelativeLayout
             android:id="@+id/wishbox"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/minimum_clickable_area"
             android:background="@drawable/whitebuttoncustomback"
-            android:onClick="openWishbox" >
+            android:onClick="openWishbox"
+            android:paddingRight="@dimen/toolbar_padding" >
 
             <com.application.baatna.utils.IconView
                 android:id="@+id/wishbox_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
                 android:layout_centerVertical="true"
-                android:gravity="center"
-                android:text="*"
-                android:textColor="@color/color_iconfont"
+                android:paddingLeft="@dimen/drawer_icon_left_padding"
+                android:text="Q"
+                android:textColor="@color/zdark"
                 android:textSize="@dimen/drawer_icon_size" />
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/wishbox_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/wishbox_icon"
-                android:background="@drawable/whitebuttoncustomback"
+                android:layout_height="fill_parent"
                 android:gravity="center_vertical"
+                android:paddingLeft="@dimen/drawer_text_left_padding"
+                android:layout_centerVertical="true"
                 android:text="@string/wishbox"
-                android:textColor="@color/font_color"
-                android:textSize="@dimen/size15" />
+                android:textAllCaps="true"
+                android:textColor="@color/zdark"
+                android:textSize="@dimen/drawer_text_size" />
         </RelativeLayout>
-        
+
         <View
             android:layout_width="fill_parent"
             android:layout_height=".5dp"
@@ -150,32 +152,33 @@
         <RelativeLayout
             android:id="@+id/rate"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/minimum_clickable_area"
             android:background="@drawable/whitebuttoncustomback"
-            android:onClick="rate" >
+            android:onClick="rate"
+            android:paddingRight="@dimen/toolbar_padding" >
 
             <com.application.baatna.utils.IconView
                 android:id="@+id/rate_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/drawer_icon_left_padding"
                 android:layout_centerVertical="true"
-                android:gravity="center"
                 android:text="*"
-                android:textColor="@color/color_iconfont"
+                android:textColor="@color/zdark"
                 android:textSize="@dimen/drawer_icon_size" />
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/rate_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/rate_icon"
-                android:background="@drawable/whitebuttoncustomback"
+                android:layout_height="fill_parent"
                 android:gravity="center_vertical"
+                android:paddingLeft="@dimen/drawer_text_left_padding"
+                android:layout_centerVertical="true"
                 android:text="@string/rate_app"
-                android:textColor="@color/font_color"
-                android:textSize="@dimen/size15" />
+                android:textAllCaps="true"
+                android:textColor="@color/zdark"
+                android:textSize="@dimen/drawer_text_size" />
         </RelativeLayout>
 
         <View
@@ -186,32 +189,33 @@
         <RelativeLayout
             android:id="@+id/feedback"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/minimum_clickable_area"
             android:background="@drawable/whitebuttoncustomback"
-            android:onClick="feedback" >
+            android:onClick="feedback"
+            android:paddingRight="@dimen/toolbar_padding" >
 
             <com.application.baatna.utils.IconView
                 android:id="@+id/feedback_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/drawer_icon_left_padding"
                 android:layout_centerVertical="true"
-                android:gravity="center"
-                android:text="ô"
-                android:textColor="@color/color_iconfont"
+                android:text="T"
+                android:textColor="@color/zdark"
                 android:textSize="@dimen/drawer_icon_size" />
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/feedback_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/feedback_icon"
-                android:background="@drawable/whitebuttoncustomback"
+                android:layout_height="fill_parent"
                 android:gravity="center_vertical"
+                android:paddingLeft="@dimen/drawer_text_left_padding"
+                android:layout_centerVertical="true"
                 android:text="@string/feedback"
-                android:textColor="@color/font_color"
-                android:textSize="@dimen/size15" />
+                android:textAllCaps="true"
+                android:textColor="@color/zdark"
+                android:textSize="@dimen/drawer_text_size" />
         </RelativeLayout>
 
         <View
@@ -222,33 +226,34 @@
         <RelativeLayout
             android:id="@+id/aboutus"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/minimum_clickable_area"
             android:background="@drawable/whitebuttoncustomback"
             android:clickable="true"
-            android:onClick="aboutus" >
+            android:onClick="aboutus"
+            android:paddingRight="@dimen/toolbar_padding" >
 
             <com.application.baatna.utils.IconView
                 android:id="@+id/aboutus_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
                 android:layout_centerVertical="true"
-                android:gravity="center"
-                android:text=";"
-                android:textColor="@color/color_iconfont"
+                android:paddingLeft="@dimen/drawer_icon_left_padding"
+                android:text="P"
+                android:textColor="@color/zdark"
                 android:textSize="@dimen/drawer_icon_size" />
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/aboutus_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/aboutus_icon"
-                android:background="@drawable/whitebuttoncustomback"
+                android:layout_height="fill_parent"
                 android:gravity="center_vertical"
+                android:paddingLeft="@dimen/drawer_text_left_padding"
+                android:layout_centerVertical="true"
                 android:text="@string/about_us"
-                android:textColor="@color/font_color"
-                android:textSize="@dimen/size15" />
+                android:textAllCaps="true"
+                android:textColor="@color/zdark"
+                android:textSize="@dimen/drawer_text_size" />
         </RelativeLayout>
     </LinearLayout>
 

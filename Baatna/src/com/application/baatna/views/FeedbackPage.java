@@ -100,7 +100,8 @@ public class FeedbackPage extends Activity {
 
         actionBarCustomView.findViewById(R.id.home_icon_subcontainer).setVisibility(View.GONE);
         actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
-
+        actionBarCustomView.findViewById(R.id.back_icon).setVisibility(View.VISIBLE);
+        
         actionBar.setCustomView(actionBarCustomView);
 
         SpannableString s = new SpannableString(getResources().getString(R.string.feedback_title));
@@ -128,7 +129,7 @@ public class FeedbackPage extends Activity {
 	{
 
 		String feedbackText =  getResources().getString(R.string.feedback_email);
-		String email = "android@zomato.com";
+		String email = "android@baatna.com";
 		SpannableString ss = new SpannableString(feedbackText);
 		ClickableSpan clickableSpan = new ClickableSpan() {
 			@Override
@@ -159,7 +160,7 @@ public class FeedbackPage extends Activity {
 		Intent i = new Intent(Intent.ACTION_SEND);
 
 		i.setType("application/octet-stream");
-		i.putExtra(Intent.EXTRA_EMAIL  , new String [] {"android@zomato.com"});
+		i.putExtra(Intent.EXTRA_EMAIL  , new String [] {"android@baatna.com"});
 		i.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.feedback_email_subject));
 
 		try { 

@@ -364,10 +364,12 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
+		
 		View v = inflater.inflate(R.layout.baatna_action_bar, null);
 
 		v.findViewById(R.id.action_buttons).setVisibility(View.VISIBLE);
-
+		v.findViewById(R.id.home_icon_zomato).setVisibility(View.VISIBLE);
+		
 		v.findViewById(R.id.open_messages).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
@@ -539,28 +541,6 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 		setImageInDrawer();
 		updateUserInfoInDrawer();
 
-		findViewById(R.id.logout).getLayoutParams().height = width / 8;
-		findViewById(R.id.aboutus).getLayoutParams().height = width / 8;
-		findViewById(R.id.feedback).getLayoutParams().height = width / 8;
-		findViewById(R.id.rate).getLayoutParams().height = width / 8;
-		findViewById(R.id.wishbox).getLayoutParams().height = width / 8;
-
-		int leftPadding = 3 * width / 80;
-		findViewById(R.id.logout).setPadding(leftPadding, 0, width / 20, 0);
-		findViewById(R.id.aboutus).setPadding(leftPadding, 0, width / 20, 0);
-		findViewById(R.id.feedback).setPadding(leftPadding, 0, width / 20, 0);
-		findViewById(R.id.rate).setPadding(leftPadding, 0, width / 20, 0);
-		findViewById(R.id.wishbox).setPadding(leftPadding, 0, width / 20, 0);
-		findViewById(R.id.logout_text).setPadding(width / 40, 0, 0, 0);
-		findViewById(R.id.rate_text).setPadding(width / 40, 0, 0, 0);
-		findViewById(R.id.wishbox_text).setPadding(width / 40, 0, 0, 0);
-		findViewById(R.id.feedback_text).setPadding(width / 40, 0, 0, 0);
-		findViewById(R.id.aboutus_text).setPadding(width / 40, 0, 0, 0);
-		findViewById(R.id.logout_icon).getLayoutParams().width = width / 16;
-		findViewById(R.id.rate_icon).getLayoutParams().width = width / 16;
-		findViewById(R.id.wishbox_icon).getLayoutParams().width = width / 16;
-		findViewById(R.id.feedback_icon).getLayoutParams().width = width / 16;
-		findViewById(R.id.aboutus_icon).getLayoutParams().width = width / 16;
 	}
 
 	// called from

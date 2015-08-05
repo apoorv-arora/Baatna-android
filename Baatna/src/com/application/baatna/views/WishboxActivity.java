@@ -67,16 +67,16 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayUseLogoEnabled(true);
-		
+
 		actionBar.setTitle(getResources().getString(R.string.your_wishbox));
 
 		try {
 			int width = getWindowManager().getDefaultDisplay().getWidth();
-			findViewById(android.R.id.home).setPadding(width / 80, 0,
+			findViewById(android.R.id.home).setPadding(width / 40, 0,
 					width / 40, 0);
 			ViewGroup home = (ViewGroup) findViewById(android.R.id.home)
 					.getParent();
-			home.getChildAt(0).setPadding(width / 80, 0, width / 80, 0);
+			home.getChildAt(0).setPadding(width / 40, 0, width / 80, 0);
 		} catch (Exception e) {
 		}
 	}
@@ -253,9 +253,10 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 				v.setTag(viewHolder);
 			}
 
-			((RelativeLayout.LayoutParams)v.findViewById(R.id.wishbox_list_item).getLayoutParams())
-			.setMargins(width / 20,width / 40, width / 20, width / 40);
-			
+			((RelativeLayout.LayoutParams) v.findViewById(
+					R.id.wishbox_list_item).getLayoutParams()).setMargins(
+					width / 20, width / 40, width / 20, width / 40);
+
 			viewHolder.date.setPadding(width / 20, width / 20, width / 20,
 					width / 40);
 			viewHolder.title.setPadding(width / 20, width / 20, width / 20,
@@ -263,7 +264,8 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 			viewHolder.crossIcon.setPadding(width / 20, width / 20, width / 20,
 					width / 40);
 			// set the date in hh:mm format
-			viewHolder.date.setText(CommonLib.getDateFromUTC(wish.getTimeOfPost()));
+			viewHolder.date.setText(CommonLib.getDateFromUTC(wish
+					.getTimeOfPost()));
 			// set the span of title
 			String title = mContext.getResources().getString(
 					R.string.wish_title_hint)
@@ -282,8 +284,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 					ds.setUnderlineText(false);
 					ds.setTypeface(CommonLib.getTypeface(
 							getApplicationContext(), CommonLib.Bold));
-					ds.setColor(getResources().getColor(
-							R.color.bt_orange));
+					ds.setColor(getResources().getColor(R.color.bt_orange));
 				}
 			};
 			finalSpanBuilderStr.setSpan(cs1, title.indexOf(wish.getTitle()),

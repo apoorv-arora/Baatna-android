@@ -33,7 +33,7 @@
     <string name="email_or_username">Email or username</string>
     <string name="edit_name_hint">Name</string>
     <string name="feedback_hint">Write something...</string>
-    <string name="feedback_email">If you have something to say that doesn\'t fit here, please shoot us an email at android@zomato.com</string>
+    <string name="feedback_email">If you have something to say that doesn\'t fit here, please shoot us an email at android@baatna.com</string>
     <string name="feedback_email_subject">Zomato Android App Feedback</string>
     <string name="send_mail">Send Mail</string>
     <string name="no_email_clients">There are no email clients installed.</string>

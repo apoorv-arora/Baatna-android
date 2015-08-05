@@ -3,6 +3,6 @@
 
     <item android:drawable="@color/font_color" android:state_pressed="true"/>
     <item android:drawable="@color/zomato_darker" android:state_checked="true"/>
-    <item android:drawable="@color/zomato_darker"/>
+    <item android:drawable="@color/action_bar_default"/>
 
 </selector>

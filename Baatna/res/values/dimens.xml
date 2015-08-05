@@ -33,6 +33,7 @@
     <dimen name="size46">46dp</dimen>
     <dimen name="size47">47dp</dimen>
     <dimen name="size50">50dp</dimen>
+    <dimen name="height60">75dp</dimen>
     <dimen name="size11_user">11dp</dimen>
     <dimen name="size18_user">18dp</dimen>
     <dimen name="size_tabs">12dp</dimen>
@@ -67,8 +68,9 @@
 
     <!--
 	<dimen name="corner_radius">3dp</dimen>
-	<dimen name="corner_radius_four">4dp</dimen>    -->
-    
+	<dimen name="corner_radius_four">4dp</dimen>
+    -->
+
     <dimen name="corner_radius_button">4dp</dimen>
     <dimen name="corner_radius_medium">1dp</dimen>
     <dimen name="corner_radius">1dp</dimen>
@@ -77,7 +79,7 @@
     <dimen name="corner_radius_verified">4dp</dimen>
     <dimen name="corner_radius_notification">10dp</dimen>
     <dimen name="corner_radius_big">100dp</dimen>
-    <dimen name="drawer_icon_size">@dimen/size15</dimen>
+    <dimen name="drawer_icon_size">60dp</dimen>
 
     <!-- Crop dimensions -->
     <dimen name="crop_indicator_size">35dp</dimen>
@@ -101,9 +103,8 @@
 
     <item name="landmark_pin_size" type="dimen">10dp</item>
     <item name="pinA_size" type="dimen">12dp</item>
-    
-    
-     <!-- FAB -->
+
+    <!-- FAB -->
     <dimen name="fab_icon_size">24dp</dimen>
     <dimen name="fab_plus_icon_size">20dp</dimen>
     <dimen name="fab_plus_icon_stroke">2dp</dimen>
@@ -117,12 +118,16 @@
     <dimen name="fab_actions_spacing">12dp</dimen>
     <dimen name="fab_labels_margin">8dp</dimen>
     <dimen name="drawer_text_left_padding">60dp</dimen>
-    
+    <item name="drawer_icon_left_padding" type="dimen">28dp</item>
+
+    <!-- Drawer dimensions -->
+    <item name="drawer_text_size" type="dimen">14dp</item>
+
     <!-- Material dimensions -->
     <item name="toolbar_height" type="dimen">@dimen/height46</item>
-    
+    <item name="minimum_clickable_area" type="dimen">48dp</item>
+    <item name="toolbar_padding" type="dimen">16dp</item>
+    <item name="drawer_user_container_height" type="dimen">140dp</item>
     <item name="shadow_elevation" type="dimen">.15dp</item>
-    
-    
 
 </resources>

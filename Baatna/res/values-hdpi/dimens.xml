@@ -57,6 +57,7 @@
     <dimen name="height54">54dp</dimen>
     <dimen name="height55">55dp</dimen>
     <dimen name="height75">75dp</dimen>
+    <dimen name="height60">75dp</dimen>
     <dimen name="height100">100dp</dimen>
     <dimen name="height150">150dp</dimen>
     <dimen name="height170">170dp</dimen>
@@ -88,4 +89,19 @@
     <item name="toolbar_height" type="dimen">46dp</item>
     
 
+    <!-- Baatna sizes -->
+    <dimen name="font_size40">40dp</dimen>
+    <dimen name="font_size45">45dp</dimen>
+    <dimen name="font_size50">50dp</dimen>
+    <dimen name="font_size55">55dp</dimen>
+    <dimen name="font_size60">60dp</dimen>
+    
+      <!-- Material dimensions -->
+    <item name="minimum_clickable_area" type="dimen">48dp</item>
+    <item name="toolbar_padding" type="dimen">16dp</item>
+    <item name="drawer_user_container_height" type="dimen">140dp</item>
+    <item name="shadow_elevation" type="dimen">.15dp</item>
+    <item name="drawer_text_size" type="dimen">14dp</item>
+    <item name="drawer_icon_left_padding" type="dimen">28dp</item>
+    
 </resources>

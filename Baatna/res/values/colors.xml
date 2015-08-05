@@ -14,6 +14,7 @@
     <color name="transparent_white">#e5ffffff</color>
     <color name="grey">#F3F3F3F3</color>
     <color name="dark_grey">#aeaeae</color>
+    <color name="action_bar_default">#2a393f</color>
     <!--
     <color name="zomato_red">#e75149</color>
     <color name="zomato_red_trans_fifty">#80e75149</color>

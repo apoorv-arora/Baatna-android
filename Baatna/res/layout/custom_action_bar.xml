@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/toolbar_height"
-    android:layout_gravity="fill_horizontal"
-    android:background="@drawable/baatna_red_feedback">
+    android:layout_gravity="fill_horizontal">
 
     <LinearLayout
         android:id="@+id/action_container"
@@ -141,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:background="@drawable/baatna_red_feedback"
+            android:background="@drawable/baatna_dark_feedback"
             android:clickable="true"
             android:gravity="right|center_vertical"
             android:onClick="actionBarSelected"
@@ -154,7 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:background="@drawable/baatna_red_feedback"
+            android:background="@drawable/baatna_dark_feedback"
             android:clickable="true"
             android:gravity="right|center_vertical"
             android:onClick="actionBarSelected"
@@ -204,7 +203,7 @@
             android:clickable="true"
             android:background="@drawable/radial_oval_feedback"
             android:onClick="proceed"
-            android:text="@string/zicon_tick_bold"
+            android:text="G"
             android:textColor="@color/white"
             android:textSize="@dimen/size18" />
     </LinearLayout>
@@ -247,7 +246,7 @@
             android:id="@+id/add_review_icon"
             android:layout_width="@dimen/height48"
             android:layout_height="@dimen/height48"
-            android:background="@drawable/zomato_dark_feedback"
+            android:background="@drawable/baatna_dark_feedback"
             android:clickable="true"
             android:gravity="center"
             android:onClick="actionBarSelected"
@@ -260,7 +259,7 @@
             android:id="@+id/add_photo_icon"
             android:layout_width="@dimen/height48"
             android:layout_height="@dimen/height48"
-            android:background="@drawable/zomato_dark_feedback"
+            android:background="@drawable/baatna_dark_feedback"
             android:clickable="true"
             android:gravity="center"
             android:onClick="actionBarSelected"
@@ -273,7 +272,7 @@
             android:id="@+id/share_icon"
             android:layout_width="@dimen/height48"
             android:layout_height="@dimen/height48"
-            android:background="@drawable/zomato_dark_feedback"
+            android:background="@drawable/baatna_dark_feedback"
             android:clickable="true"
             android:gravity="center"
             android:onClick="actionBarSelected"
@@ -436,7 +435,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:background="@drawable/baatna_red_feedback"
+            android:background="@drawable/baatna_dark_feedback"
             android:ellipsize="end"
             android:maxLines="1"
             android:gravity="center"
