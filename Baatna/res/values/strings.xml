@@ -67,4 +67,6 @@
     <string name="feed_user_joined">%1$s joined your organization.</string>
     <string name="feed_user_requested">%1$s wants to borrow a %2$s.</string>
     <string name="feed_requested_fulfilled">%1$s was offered %2$s by %3$s.</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
 </resources>
