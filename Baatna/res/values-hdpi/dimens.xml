@@ -59,6 +59,7 @@
     <dimen name="height75">75dp</dimen>
     <dimen name="height60">75dp</dimen>
     <dimen name="height100">100dp</dimen>
+    <dimen name="height125">125dp</dimen>
     <dimen name="height150">150dp</dimen>
     <dimen name="height170">170dp</dimen>
     <dimen name="height300">300dp</dimen>

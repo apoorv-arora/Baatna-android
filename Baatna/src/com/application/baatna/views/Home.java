@@ -3,45 +3,6 @@ package com.application.baatna.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
-import android.view.Window;
-import android.view.animation.AccelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.data.FeedItem;
@@ -68,6 +29,43 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.Window;
+import android.view.animation.AccelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class Home extends FragmentActivity implements FacebookConnectCallback,
 		BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener {
@@ -119,10 +117,10 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 
 		feedListView = (ListView) findViewById(R.id.feedListView);
 		feedListView.addHeaderView(headerView);
+		feedListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
 		feedListView.setDividerHeight(width / 40);
 
 		headerView.findViewById(R.id.search_map).getLayoutParams().width = width;
-		headerView.findViewById(R.id.search_map).getLayoutParams().height = width;
 
 		headerView.findViewById(R.id.search_map).setOnClickListener(new View.OnClickListener() {
 
@@ -130,6 +128,17 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 			public void onClick(View v) {
 				Intent intent = new Intent(Home.this, MapActivity.class);
 				startActivity(intent);
+			}
+		});
+		
+		((RelativeLayout.LayoutParams)headerView.findViewById(R.id.request_icon).getLayoutParams())
+					.setMargins(width / 20 + width / 80, 0, 0, 0);
+		headerView.findViewById(R.id.make_request_container).setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Home.this, NewRequestActivity.class);
+				startActivityForResult(intent, CommonLib.NEW_REQUEST);
 			}
 		});
 
@@ -774,7 +783,7 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 			mMap.getUiSettings().setZoomControlsEnabled(false);
 			mMap.getUiSettings().setTiltGesturesEnabled(false);
 			mMap.getUiSettings().setCompassEnabled(false);
-			mMap.setMyLocationEnabled(true);
+			mMap.setMyLocationEnabled(false);
 			mMap.setBuildingsEnabled(true);
 
 			CameraPosition cameraPosition;
@@ -1027,7 +1036,6 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 				v = LayoutInflater.from(mContext).inflate(
 						R.layout.feed_list_item_snippet, null);
 			}
-
 			ViewHolder viewHolder = (ViewHolder) v.getTag();
 			if (viewHolder == null) {
 				viewHolder = new ViewHolder();
@@ -1047,18 +1055,8 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 				v.setTag(viewHolder);
 			}
 
-			// fix sizes
-			viewHolder.bar.getLayoutParams().width = width / 10;
-			((RelativeLayout.LayoutParams) viewHolder.bar.getLayoutParams())
-					.setMargins(width / 40, 0, 0, 0);
-			((RelativeLayout.LayoutParams) viewHolder.action_container
-					.getLayoutParams()).setMargins(0, 0, width / 40, 0);
-				
-			viewHolder.accept.setPadding(width / 40, width / 80, width / 40,
-					width / 80);
-			viewHolder.decline.setPadding(width / 40, width / 80, width / 40,
-					width / 80);
-
+			((RelativeLayout.LayoutParams)v.findViewById(R.id.feed_item_container).getLayoutParams())
+			.setMargins(width / 40, 0, width / 40, 0);
 			User user = feedItem.getUserIdFirst();
 
 			User user2 = feedItem.getUserSecond();
@@ -1080,6 +1078,10 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 							getResources().getColor(R.color.zomato_red)));
 					viewHolder.accept.setVisibility(View.INVISIBLE);
 					viewHolder.decline.setVisibility(View.INVISIBLE);
+					viewHolder.bar
+					.setBackgroundDrawable(new ColorDrawable(
+							getResources().getColor(
+									R.color.feed_joined)));
 				}
 				break;
 			case CommonLib.FEED_TYPE_NEW_REQUEST:
@@ -1091,7 +1093,7 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 					viewHolder.bar
 							.setBackgroundDrawable(new ColorDrawable(
 									getResources().getColor(
-											R.color.black_trans_ninety)));
+											R.color.zomato_red)));
 
 					viewHolder.accept
 							.setOnClickListener(new View.OnClickListener() {
@@ -1117,7 +1119,6 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 					viewHolder.accept.setVisibility(View.VISIBLE);
 					viewHolder.decline.setVisibility(View.VISIBLE);
 				}
-
 				break;
 			case CommonLib.FEED_TYPE_REQUEST_FULFILLED:
 				String description = getResources().getString(
@@ -1129,9 +1130,13 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 						getResources().getColor(R.color.bt_orange)));
 				viewHolder.accept.setVisibility(View.INVISIBLE);
 				viewHolder.decline.setVisibility(View.INVISIBLE);
+				viewHolder.bar
+				.setBackgroundDrawable(new ColorDrawable(
+						getResources().getColor(
+								R.color.feed_offered)));
 				break;
+				
 			}
-
 			return v;
 		}
 

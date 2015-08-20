@@ -35,7 +35,7 @@
                 android:id="@+id/feedListView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/zhl"/>
+                android:background="@color/feed_bg"/>
             
         </RelativeLayout>
 

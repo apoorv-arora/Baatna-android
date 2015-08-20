@@ -173,5 +173,11 @@
     <color name="bt_orange">#ff7e69</color>
     <color name="bt_grey">#f8f8f8</color>
     <color name="bt_drawer_green">#3ae3bc</color>
-
+    <color name="green_gradient">#00dca0</color>
+    <color name="feed_bg">#f8f8f8</color>
+    <color name="decline_bg_color">#f8f8f8</color>
+    <color name="decline_text_color">#a7a9ac</color>
+    <color name="feed_offered">#ff90f5</color>
+    <color name="feed_joined">#a58edd</color>
+    
 </resources>

@@ -37,8 +37,11 @@ public class CommonLib {
 	// public static final String SERVER_BODY = "api.baatna.com/";
 	// public static String SERVER_WITHOUT_VERSION = "https://1api.baatna.com/";
 	public static final String SERVER_PREFIX = "http://";
-	public static final String SERVER_BODY = "52.76.6.41:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://52.76.6.41:8080/BaatnaServer/rest/";
+//	public static final String SERVER_BODY = "52.76.6.41:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://52.76.6.41:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "192.168.43.86:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.43.86:8080/BaatnaServer/rest/";
+	
 	
 	public static final boolean enableHSLogin = true;
 
