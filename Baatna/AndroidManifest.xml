@@ -196,7 +196,7 @@
 
         <!-- Services -->
         <service android:name="com.application.zomato.utils.CacheCleanerService" />
-        <service android:name="com.application.services.broadcast.GCMIntentService" />
+        <service android:name="com.application.baatna.services.GcmIntentService" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
