@@ -52,6 +52,7 @@ public class FacebookConnect {
 	private final String FIELD_GENDER = "gender";
 	//private final String FIELD_LOCATION = "location";
 	private final String FIELDS = "fields";
+	private final String FIELD_PICTURE = "picture.type(large)";
 	
 	private Exception failException = null;
 
@@ -244,7 +245,7 @@ public class FacebookConnect {
 		CommonLib.ZLog("FC", "fbRequestME");
 
 		String REQUEST_FIELDS = TextUtils.join(",", new String[] {
-				FIELD_ID, FIELD_EMAIL, FIELD_NAME, FIELD_BIRTHDAY, FIELD_GENDER});//, FIELD_LOCATION });
+				FIELD_ID, FIELD_EMAIL, FIELD_NAME, FIELD_BIRTHDAY, FIELD_GENDER, FIELD_PICTURE});//, FIELD_LOCATION });
 
 		Bundle parameters = new Bundle();
 		parameters.putString(FIELDS, REQUEST_FIELDS);
@@ -324,7 +325,31 @@ public class FacebookConnect {
 
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("fbid", params[0]));
-				nameValuePairs.add(new BasicNameValuePair("fbdata", params[1]));
+				try {
+					JSONObject fbDataJson = new JSONObject(params[1]);
+					String profile_pic = null;
+					if (fbDataJson.has("picture")) {
+						JSONObject profilePicJson;
+						profilePicJson = fbDataJson.getJSONObject("picture");
+						if (profilePicJson.has("data")) {
+							profilePicJson = profilePicJson.getJSONObject("data");
+							if (profilePicJson.has("url"))
+								profile_pic = String.valueOf(profilePicJson.get("url"));
+						}
+					}
+					if(profile_pic != null)
+						nameValuePairs.add(new BasicNameValuePair("profile_pic", profile_pic));
+					JSONObject fbData = new JSONObject();
+					if(fbDataJson.has("id"))
+						fbData.put("id", String.valueOf(fbDataJson.get("id")));
+					if(fbDataJson.has("email"))
+						fbData.put("email", String.valueOf(fbDataJson.get("email")));
+					if(fbDataJson.has("name"))
+						fbData.put("name", String.valueOf(fbDataJson.get("name")));
+					nameValuePairs.add(new BasicNameValuePair("fbdata", String.valueOf(fbData)));
+				} catch(JSONException e) {
+					e.printStackTrace();
+				}
 				nameValuePairs.add(new BasicNameValuePair("fb_token", params[3]));
 				nameValuePairs.add(new BasicNameValuePair("fb_permission", params[4]));
 
@@ -414,7 +439,32 @@ public class FacebookConnect {
 			try {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("fbid", params[0]));
-				nameValuePairs.add(new BasicNameValuePair("fbdata", params[1]));
+				try {
+					JSONObject fbDataJson = new JSONObject(params[1]);
+					String profile_pic = null;
+					if (fbDataJson.has("picture")) {
+						JSONObject profilePicJson;
+						profilePicJson = fbDataJson.getJSONObject("picture");
+						if (profilePicJson.has("data")) {
+							profilePicJson = profilePicJson.getJSONObject("data");
+							if (profilePicJson.has("url"))
+								profile_pic = String.valueOf(profilePicJson.get("url"));
+						}
+					}
+					if(profile_pic != null)
+						nameValuePairs.add(new BasicNameValuePair("profile_pic", profile_pic));
+					JSONObject fbData = new JSONObject();
+					if(fbDataJson.has("id"))
+						fbData.put("id", String.valueOf(fbDataJson.get("id")));
+					if(fbDataJson.has("email"))
+						fbData.put("email", String.valueOf(fbDataJson.get("email")));
+					if(fbDataJson.has("name"))
+						fbData.put("name", String.valueOf(fbDataJson.get("name")));
+					nameValuePairs.add(new BasicNameValuePair("fbdata", String.valueOf(fbData)));
+				} catch(JSONException e) {
+					e.printStackTrace();
+				}
+
 				nameValuePairs.add(new BasicNameValuePair("fb_token", params[3]));
 				nameValuePairs.add(new BasicNameValuePair("fb_permission", params[4]));
 				
@@ -559,7 +609,32 @@ public class FacebookConnect {
 
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("fbid", params[0]));
-				nameValuePairs.add(new BasicNameValuePair("fbdata", params[1]));
+				try {
+					JSONObject fbDataJson = new JSONObject(params[1]);
+					String profile_pic = null;
+					if (fbDataJson.has("picture")) {
+						JSONObject profilePicJson;
+						profilePicJson = fbDataJson.getJSONObject("picture");
+						if (profilePicJson.has("data")) {
+							profilePicJson = profilePicJson.getJSONObject("data");
+							if (profilePicJson.has("url"))
+								profile_pic = String.valueOf(profilePicJson.get("url"));
+						}
+					}
+					if(profile_pic != null)
+						nameValuePairs.add(new BasicNameValuePair("profile_pic", profile_pic));
+					JSONObject fbData = new JSONObject();
+					if(fbDataJson.has("id"))
+						fbData.put("id", String.valueOf(fbDataJson.get("id")));
+					if(fbDataJson.has("email"))
+						fbData.put("email", String.valueOf(fbDataJson.get("email")));
+					if(fbDataJson.has("name"))
+						fbData.put("name", String.valueOf(fbDataJson.get("name")));
+					nameValuePairs.add(new BasicNameValuePair("fbdata", String.valueOf(fbData)));
+				} catch(JSONException e) {
+					e.printStackTrace();
+				}
+				
 				nameValuePairs.add(new BasicNameValuePair("fb_token", params[3]));
 				nameValuePairs.add(new BasicNameValuePair("fb_permission", params[4]));
 				nameValuePairs.add(new BasicNameValuePair("response_type", "get_friends"));

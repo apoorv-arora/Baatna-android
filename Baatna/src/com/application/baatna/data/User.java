@@ -1,6 +1,8 @@
 package com.application.baatna.data;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 
 	private int userId;
 	private int isVerified;

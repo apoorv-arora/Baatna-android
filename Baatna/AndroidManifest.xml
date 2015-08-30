@@ -109,8 +109,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-        <activity
-            android:name="com.application.baatna.views.MessagesActivity"
+         <activity
+            android:name="com.application.baatna.views.FriendListActivity"
             android:hardwareAccelerated="true"
             android:label="@string/app_name"
             android:parentActivityName="com.application.baatna.views.Home"
@@ -119,6 +119,19 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.MessagesActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoMessageTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" >
+                </action>
+                <category android:name="android.intent.category.NORMAL" >
+                </category>
+            </intent-filter>
         </activity>
         <activity
             android:name="com.application.baatna.views.UserPageActivity"
@@ -170,7 +183,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-         <activity
+        <activity
             android:name="com.application.baatna.views.HSLoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -179,8 +192,8 @@
         <!-- Facebook Activity -->
         <activity
             android:name="com.facebook.LoginActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-        
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
 
         <!-- Broadcast Receivers -->
         <receiver
@@ -197,6 +210,7 @@
         <!-- Services -->
         <service android:name="com.application.zomato.utils.CacheCleanerService" />
         <service android:name="com.application.baatna.services.GcmIntentService" />
+        <service android:name="com.application.baatna.services.IMService" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

@@ -384,7 +384,7 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(Home.this,
-								MessagesActivity.class);
+								FriendListActivity.class);
 						startActivity(intent);
 						overridePendingTransition(R.anim.slide_in_right,
 								R.anim.slide_out_left);

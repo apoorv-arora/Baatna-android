@@ -2,11 +2,16 @@ package com.application.baatna.services;
 
 import java.util.zip.Inflater;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.application.baatna.R;
 import com.application.baatna.Splash;
+import com.application.baatna.data.Message;
+import com.application.baatna.db.MessageDBWrapper;
 import com.application.baatna.receivers.GcmBroadcastReceiver;
 import com.application.baatna.utils.CommonLib;
-import com.application.baatna.views.BaatnaActivity;
+import com.application.baatna.utils.ParserJson;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
@@ -74,6 +79,19 @@ public class GcmIntentService extends IntentService {
 	private void sendNotification(Bundle extras) {
 
 		String msg = extras.getString("Notification");
+		String type = extras.getString("type");
+		
+		if( type.equals("message")) {
+			JSONObject message = null;
+			try {
+				message = new JSONObject(msg);
+				Message messageObj = ParserJson.parse_Message(message);
+				MessageDBWrapper.addMessage(messageObj, prefs.getInt("uid", 0), System.currentTimeMillis());
+			} catch(JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		//check if app is alive, do not push the message notifiication then
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 		Intent notificationActivity = new Intent(this, Splash.class);
 		notificationActivity.putExtra("", "");
@@ -85,28 +103,6 @@ public class GcmIntentService extends IntentService {
 				.setSound(soundUri);
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-		// String len = extras.getString("length");
-		// String command = extras.getString("command");
-		//
-		// CommonLib.ZLog("sendNotification", msg);
-		// int l = Integer.parseInt(len);
-		// JSONObject response = null;
-		//
-		// try {
-		// // 1. base 64 decode
-		// byte[] data = Base64.decode(msg, Base64.DEFAULT);
-		//
-		// // 2. G unzip
-		// String decom = decompress(data, l);
-		//
-		// CommonLib.ZLog("GCM sendNotification after g unzip ", decom + ".");
-		// CommonLib.ZLog("command", command + ".");
-		//
-		// response = new JSONObject(decom);
-		//
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
 	}
 
 	public static String decompress(byte[] compressed, int len) {

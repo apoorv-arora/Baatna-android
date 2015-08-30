@@ -39,9 +39,8 @@ public class CommonLib {
 	public static final String SERVER_PREFIX = "http://";
 //	public static final String SERVER_BODY = "52.76.6.41:8080/BaatnaServer/rest/";
 //	public static String SERVER_WITHOUT_VERSION = "http://52.76.6.41:8080/BaatnaServer/rest/";
-	public static final String SERVER_BODY = "192.168.43.86:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.43.86:8080/BaatnaServer/rest/";
-	
+	public static final String SERVER_BODY = "192.168.1.42:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.42:8080/BaatnaServer/rest/";
 	
 	public static final boolean enableHSLogin = true;
 
@@ -103,6 +102,7 @@ public class CommonLib {
 	public static final int HARDWARE_REGISTER = 206;
 	public static final int UPDATE_INSTITUTION = 207;
 	public static final int WISH_UPDATE_STATUS = 208;
+	public static final int SEND_MESSAGE = 209;
 	
 	
 	/**

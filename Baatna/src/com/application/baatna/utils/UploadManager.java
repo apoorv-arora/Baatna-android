@@ -133,6 +133,16 @@ public class UploadManager {
 				new Object[] { accessToken, wishId, action});
 
 	}
+	
+	public static void sendMessage(String userId, String message) {
+		for (UploadManagerCallback callback : callbacks) {
+			callback.uploadStarted(CommonLib.SIGNUP, 0, userId, null);
+		}
+
+		new SendMessage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				new Object[] { userId, message});
+
+	}
 
 	private static class SignUp extends AsyncTask<Object, Void, Object[]> {
 
@@ -224,7 +234,7 @@ public class UploadManager {
 			email = (String) params[0];
 			
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("access_token", email));
+			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			
@@ -447,6 +457,45 @@ public class UploadManager {
 			}
 		}
 	}
+	
+	private static class SendMessage extends AsyncTask<Object, Void, Object[]> {
+
+		private String userId;
+		private String message;
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+
+			Object result[] = null;
+			userId = (String) params[0];
+			message = (String) params[1];
+			
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("userId", userId));
+			nameValuePairs.add(new BasicNameValuePair("message", message));
+			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
+			
+			try {
+				result = PostWrapper.postRequest(CommonLib.SERVER + "messaging/post?", nameValuePairs, PostWrapper.SEND_MESSAGE, context);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return result;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Object[] arg) {
+			if (arg[0].equals("failure"))
+				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
+
+			for (UploadManagerCallback callback : callbacks) {
+				callback.uploadFinished(CommonLib.SEND_MESSAGE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+			}
+		}
+	}
+
 
 
 }

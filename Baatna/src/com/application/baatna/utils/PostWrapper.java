@@ -31,6 +31,7 @@ public class PostWrapper {
 	public static String HARDWARE_REGISTER = "hardware_register";
 	public static String INSTITUTION_ID = "update_institution_id";
 	public static String WISH_STATUS_UPDATE = "wish_status_update";
+	public static String SEND_MESSAGE = "send_message";
 
 	public static void Initialize(Context context) {
 		// helper = new ResponseCacheManager(context);

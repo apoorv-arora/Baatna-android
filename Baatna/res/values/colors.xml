@@ -180,4 +180,7 @@
     <color name="feed_offered">#ff90f5</color>
     <color name="feed_joined">#a58edd</color>
     
+    <color name="message_from">#ebfaf7</color>
+    <color name="message_to">#f7f7f7</color>
+    
 </resources>

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import com.application.baatna.data.Categories;
 import com.application.baatna.data.FeedItem;
+import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
 import com.google.android.gms.maps.model.LatLng;
@@ -424,6 +425,41 @@ public class ParserJson {
 		return returnUser;
 	}
 
+	public static Message parse_Message(JSONObject messageObject) {
+		if (messageObject == null)
+			return null;
+
+		Message returnMessage = new Message();
+		try {
+			if(messageObject.has("to_user") && messageObject.get("to_user") instanceof JSONObject) {
+				returnMessage.setToUser(parse_User(messageObject.getJSONObject("to_user")));
+			}
+			
+			if(messageObject.has("from_user") && messageObject.get("from_user") instanceof JSONObject) {
+				returnMessage.setFromUser(parse_User(messageObject.getJSONObject("from_user")));
+			}
+			
+			if(messageObject.has("message_id") && messageObject.get("message_id") instanceof Integer) {
+				returnMessage.setMessageId(messageObject.getInt("message_id"));
+			}
+			
+			if(messageObject.has("from_to") && messageObject.get("from_to") instanceof Integer) {
+				returnMessage.setMessageId(messageObject.getInt("message_id"));
+			}
+			
+			if(messageObject.has("message") ) {
+				returnMessage.setMessage(String.valueOf(messageObject.get("message")));
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return returnMessage;
+	}
+
+
+	
 	public static ArrayList<FeedItem> parse_NewsFeedResponse(InputStream is)
 			throws JSONException {
 

@@ -130,4 +130,6 @@
     <item name="drawer_user_container_height" type="dimen">140dp</item>
     <item name="shadow_elevation" type="dimen">.15dp</item>
 
+    <dimen name="z_circular_image_height">24dp</dimen>
+    
 </resources>

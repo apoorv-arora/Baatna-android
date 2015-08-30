@@ -172,6 +172,10 @@ public class RequestWrapper {
 			Message result = (Message) in.readObject();
 			in.close();
 			return result;
+		} else if (Type.equals("")) {
+			Object o = in.readObject();
+			in.close();
+			return o;
 		} else {
 			in.close();
 			return null;

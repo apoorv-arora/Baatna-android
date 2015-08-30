@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 
+import com.application.baatna.db.MessageDBWrapper;
 import com.application.baatna.utils.BaatnaLocationListener;
 import com.application.baatna.utils.CacheCleanerService;
 import com.application.baatna.utils.CommonLib;
@@ -121,6 +122,9 @@ public class BaatnaApp extends Application {
 		UploadManager.setContext(getApplicationContext());
 		PostWrapper.Initialize(getApplicationContext());
 		RequestWrapper.Initialize(getApplicationContext());
+		
+		//DB Initialize
+		MessageDBWrapper.Initialize(getApplicationContext());
 		cache = new LruCache<String, Bitmap>(30);
 
 //		new ThirdPartyInitAsync()

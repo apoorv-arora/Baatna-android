@@ -1,11 +1,23 @@
 package com.application.baatna.data;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable{
 
 	private User fromUser;
 	private User toUser;
 	private boolean isGroupChat;
 	private boolean fromTo;
+	private String message;
+	private long messageId;
+
+	public long getMessageId() {
+		return messageId;
+	}
+
+	public void setMessageId(long messageId) {
+		this.messageId = messageId;
+	}
 
 	public User getFromUser() {
 		return fromUser;
@@ -38,5 +50,15 @@ public class Message {
 	public void setFromTo(boolean fromTo) {
 		this.fromTo = fromTo;
 	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	
 
 }

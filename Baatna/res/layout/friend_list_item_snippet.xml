@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/feed_item_root"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height125" >
+
+    <RelativeLayout
+        android:id="@+id/feed_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height125"
+        android:background="@color/white"
+        android:elevation="@dimen/shadow_elevation" >
+
+        <com.application.baatna.utils.TextViewRegular
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/left_bar"
+            android:textColor="@color/zhl_darkest"
+            android:textSize="@dimen/size12" />
+
+        <com.application.baatna.utils.TextViewRegular
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/zhl_darkest"
+            android:textSize="@dimen/size12" />
+        <!--
+    <com.application.baatna.utils.RoundedImageView
+        android:id="@+id/user_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/left_bar"
+        android:background="@drawable/button_border"
+        android:layoutDirection="ltr"
+        android:scaleType="fitXY"
+        app:corner_radius="@dimen/corner_radius_four_collections"
+        app:oval="false" />
+        android:layout_alignBottom="@id/user_image"
+        android:layout_alignTop="@id/user_image"
+        android:layout_toLeftOf="@id/user_image"
+        android:layout_toRightOf="@id/action_container"
+        -->
+
+        <com.application.baatna.utils.TextViewRegular
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time"
+            android:layout_toRightOf="@id/left_bar"
+            android:textColor="@color/font_color"
+            android:textSize="@dimen/size14" />
+
+        <View
+            android:id="@id/left_bar"
+            android:layout_width="@dimen/size5"
+            android:layout_height="@dimen/height125"
+            android:layout_alignParentLeft="true"
+            android:background="@color/zomato_red" />
+    </RelativeLayout>
+
+</RelativeLayout>
