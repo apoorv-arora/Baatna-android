@@ -28,13 +28,22 @@
             <enum name="right" value="3" />
         </attr>
     </declare-styleable>
-    <declare-styleable name="RoundedImageView">
+    <!--  <declare-styleable name="RoundedImageView">
         <attr name="corner_radius" format="dimension" />
         <attr name="border_width" format="dimension" />
         <attr name="border_color" format="color" />
         <attr name="mutate_background" format="boolean" />
         <attr name="oval" format="boolean" />
         <attr name="android:scaleType" />
+    </declare-styleable>-->
+    <declare-styleable name="ZCircularImageView">
+        <attr name="border" format="boolean"/>
+        <attr name="border_width" format="dimension"/>
+        <attr name="border_color" format="color"/>
+        <attr name="shadow" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="Theme">
+        <attr name="circularImageViewStyle" format="reference"/>
     </declare-styleable>
     
 </resources>

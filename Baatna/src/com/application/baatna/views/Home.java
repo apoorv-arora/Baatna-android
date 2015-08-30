@@ -543,7 +543,8 @@ public class Home extends FragmentActivity implements FacebookConnectCallback,
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						// navigateToMyProfile();
+						 Intent intent = new Intent(Home.this, UserPageActivity.class);
+						 startActivity(intent);
 					}
 				});
 

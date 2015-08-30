@@ -520,6 +520,8 @@ public class FacebookConnect {
 				String uname = "";
 				String accessToken = "";
 				String thumbUrl = "";
+				String profile_pic = "";
+				String email = "";
 				boolean verified_user = false;
 				int status = 0;
 
@@ -528,6 +530,21 @@ public class FacebookConnect {
 						status = 1;
 						accessToken = res.getString("access_token"); 
 						uid = res.getInt("user_id");
+						if(res.has("user")) {
+							res = res.getJSONObject("user");
+							if(res.has("user")) {
+								res = res.getJSONObject("user");
+								if(res.has("profile_pic")) {
+									profile_pic = String.valueOf(res.get("profile_pic"));
+								}
+								if(res.has("email")) {
+									email = String.valueOf(res.get("email"));
+								}
+								if(res.has("username")) {
+									uname = String.valueOf(res.get("username"));
+								}
+							}
+						}
 					} else {
 						status = 0;
 						errorMessage = "Something went wrong";
@@ -539,7 +556,8 @@ public class FacebookConnect {
 
 					Bundle bundle = new Bundle();
 					bundle.putInt("uid", uid);
-					// bundle.putString("email", email);
+					bundle.putString("profile_pic", profile_pic);
+				    bundle.putString("email", email);
 					bundle.putString("username", uname);
 					bundle.putString("thumbUrl", thumbUrl);
 					bundle.putString("access_token", accessToken);

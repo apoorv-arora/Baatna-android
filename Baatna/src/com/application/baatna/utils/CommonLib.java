@@ -1,6 +1,8 @@
 package com.application.baatna.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +22,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
+import android.graphics.PorterDuff.Mode;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
@@ -37,11 +47,13 @@ public class CommonLib {
 	// public static final String SERVER_BODY = "api.baatna.com/";
 	// public static String SERVER_WITHOUT_VERSION = "https://1api.baatna.com/";
 	public static final String SERVER_PREFIX = "http://";
-//	public static final String SERVER_BODY = "52.76.6.41:8080/BaatnaServer/rest/";
-//	public static String SERVER_WITHOUT_VERSION = "http://52.76.6.41:8080/BaatnaServer/rest/";
-	public static final String SERVER_BODY = "192.168.1.42:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.42:8080/BaatnaServer/rest/";
-	
+	// public static final String SERVER_BODY =
+	// "52.76.6.41:8080/BaatnaServer/rest/";
+	// public static String SERVER_WITHOUT_VERSION =
+	// "http://52.76.6.41:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "192.168.1.5:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.5:8080/BaatnaServer/rest/";
+
 	public static final boolean enableHSLogin = true;
 
 	// public static String API_VERSION = "v2/";
@@ -71,8 +83,8 @@ public class CommonLib {
 	public static String BOLD_FONT_FILENAME = "BOLD_FONT_FILENAME";
 
 	/** Authorization params */
-	public static final String SOURCE = "&source=android_market&version="
-			+ android.os.Build.VERSION.RELEASE + "&app_version=" + VERSION;
+	public static final String SOURCE = "&source=android_market&version=" + android.os.Build.VERSION.RELEASE
+			+ "&app_version=" + VERSION;
 	public static final String CLIENT_ID = "bt_android_client";
 	public static final String APP_TYPE = "bt_android";
 
@@ -103,18 +115,16 @@ public class CommonLib {
 	public static final int UPDATE_INSTITUTION = 207;
 	public static final int WISH_UPDATE_STATUS = 208;
 	public static final int SEND_MESSAGE = 209;
-	
-	
+
 	/**
 	 * Feed types
-	 * */
+	 */
 	public static final int FEED_TYPE_NEW_USER = 1;
 	public static final int FEED_TYPE_NEW_REQUEST = 2;
 	public static final int FEED_TYPE_REQUEST_FULFILLED = 3;
 
 	// Calculate the sample size of bitmaps
-	public static int calculateInSampleSize(BitmapFactory.Options options,
-			int reqWidth, int reqHeight) {
+	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		// Raw height and width of image
 		int inSampleSize = 1;
 		double ratioH = (double) options.outHeight / reqHeight;
@@ -156,8 +166,7 @@ public class CommonLib {
 		}
 	}
 
-	private static File createFileFromInputStream(InputStream inputStream,
-			String name) {
+	private static File createFileFromInputStream(InputStream inputStream, String name) {
 
 		try {
 			File f = File.createTempFile("font", null);
@@ -217,15 +226,13 @@ public class CommonLib {
 		if (language.equalsIgnoreCase("pt") && country.equalsIgnoreCase("PT"))
 			language = "pt";
 
-		else if (language.equalsIgnoreCase("pt")
-				&& country.equalsIgnoreCase("BR"))
+		else if (language.equalsIgnoreCase("pt") && country.equalsIgnoreCase("BR"))
 			language = "por";
 
 		else if (language.equalsIgnoreCase("in"))
 			language = "id";
 
-		else if (language.equalsIgnoreCase("es")
-				&& country.equalsIgnoreCase("CL"))
+		else if (language.equalsIgnoreCase("es") && country.equalsIgnoreCase("CL"))
 			language = "es_cl";
 
 		else if (language.equalsIgnoreCase("cs"))
@@ -240,16 +247,14 @@ public class CommonLib {
 		else if (language.equalsIgnoreCase("it"))
 			language = "it";
 
-		return SOURCE + uuidString + "&lang=" + language + "&android_language="
-				+ languageLog + "&android_country=" + country;
+		return SOURCE + uuidString + "&lang=" + language + "&android_language=" + languageLog + "&android_country="
+				+ country;
 	}
 
-	public static InputStream getStream(HttpResponse response)
-			throws IllegalStateException, IOException {
+	public static InputStream getStream(HttpResponse response) throws IllegalStateException, IOException {
 		InputStream instream = response.getEntity().getContent();
 		Header contentEncoding = response.getFirstHeader("Content-Encoding");
-		if (contentEncoding != null
-				&& contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
 			instream = new GZIPInputStream(instream);
 		}
 		return instream;
@@ -259,8 +264,7 @@ public class CommonLib {
 	public static boolean isNetworkAvailable(Context c) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) c
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager
-				.getActiveNetworkInfo();
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
@@ -273,8 +277,7 @@ public class CommonLib {
 	 * @return distance in km
 	 */
 
-	public static double distFrom(double lat1, double lng1, double lat2,
-			double lng2) {
+	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
 		double earthRadius = 6371;
 		double dLat = Math.toRadians(lat2 - lat1);
 		double dLng = Math.toRadians(lng2 - lng1);
@@ -282,8 +285,7 @@ public class CommonLib {
 		lat2 = Math.toRadians(lat2);
 		double sindLat = Math.sin(dLat / 2);
 		double sindLng = Math.sin(dLng / 2);
-		double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(lat1)
-				* Math.cos(lat2);
+		double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(lat1) * Math.cos(lat2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		double dist = earthRadius * c;
 
@@ -292,8 +294,7 @@ public class CommonLib {
 
 	// Returns the Network State
 	public static String getNetworkState(Context context) {
-		ConnectivityManager cm = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		String returnValue = "";
 		if (null != activeNetwork) {
@@ -310,8 +311,7 @@ public class CommonLib {
 
 	// Returns the Data Network type
 	public static String getNetworkType(Context context) {
-		TelephonyManager telephonyManager = (TelephonyManager) context
-				.getSystemService(Context.TELEPHONY_SERVICE);
+		TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
 		switch (telephonyManager.getNetworkType()) {
 
@@ -370,17 +370,14 @@ public class CommonLib {
 
 	// check done before storing the bitmap in the memory
 	public static boolean shouldScaleDownBitmap(Context context, Bitmap bitmap) {
-		if (context != null && bitmap != null && bitmap.getWidth() > 0
-				&& bitmap.getHeight() > 0) {
-			WindowManager wm = (WindowManager) context
-					.getSystemService(Context.WINDOW_SERVICE);
+		if (context != null && bitmap != null && bitmap.getWidth() > 0 && bitmap.getHeight() > 0) {
+			WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 			Display display = wm.getDefaultDisplay();
 			DisplayMetrics metrics = new DisplayMetrics();
 			display.getMetrics(metrics);
 			int width = metrics.widthPixels;
 			int height = metrics.heightPixels;
-			return ((width != 0 && width / bitmap.getWidth() < 1) || (height != 0 && height
-					/ bitmap.getHeight() < 1));
+			return ((width != 0 && width / bitmap.getWidth() < 1) || (height != 0 && height / bitmap.getHeight() < 1));
 		}
 		return false;
 	}
@@ -391,36 +388,317 @@ public class CommonLib {
 
 	public static String getDateFromUTC(long timestamp) {
 		Date date = new Date(timestamp);
-        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        cal.setTime(date);
-        return (cal.get(Calendar.MONTH)
-                + "/" + cal.get(Calendar.DATE)
-                + " " + cal.get(Calendar.HOUR)
-                + ":" + cal.get(Calendar.MINUTE)
-                + (cal.get(Calendar.AM_PM)==0?"AM":"PM")
-                );
+		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+		cal.setTime(date);
+		return (cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.DATE) + " " + cal.get(Calendar.HOUR) + ":"
+				+ cal.get(Calendar.MINUTE) + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
+	}
+
+	/**
+	 * Returns the bitmap associated
+	 */
+	public static Bitmap getBitmap(Context mContext, int resId, int width, int height) throws OutOfMemoryError {
+		if (mContext == null)
+			return null;
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+
+		BitmapFactory.decodeResource(mContext.getResources(), resId, options);
+		options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
+		options.inJustDecodeBounds = false;
+		options.inPreferredConfig = Bitmap.Config.RGB_565;
+
+		if (!CommonLib.isAndroidL())
+			options.inPurgeable = true;
+
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), resId, options);
+
+		return bitmap;
+	}
+
+	/**
+	 * Blur a bitmap with the radius associated
+	 */
+	public static Bitmap fastBlur(Bitmap bitmap, int radius) {
+		try {
+			int w = bitmap.getWidth();
+			int h = bitmap.getHeight();
+
+			int[] pix = new int[w * h];
+			CommonLib.ZLog("pix", w + " " + h + " " + pix.length);
+			bitmap.getPixels(pix, 0, w, 0, 0, w, h);
+
+			Bitmap blurBitmap = bitmap.copy(bitmap.getConfig(), true);
+
+			int wm = w - 1;
+			int hm = h - 1;
+			int wh = w * h;
+			int div = radius + radius + 1;
+
+			int r[] = new int[wh];
+			int g[] = new int[wh];
+			int b[] = new int[wh];
+			int rsum, gsum, bsum, x, y, i, p, yp, yi, yw;
+			int vmin[] = new int[Math.max(w, h)];
+
+			int divsum = (div + 1) >> 1;
+			divsum *= divsum;
+			int dv[] = new int[256 * divsum];
+			for (i = 0; i < 256 * divsum; i++) {
+				dv[i] = (i / divsum);
+			}
+
+			yw = yi = 0;
+
+			int[][] stack = new int[div][3];
+			int stackpointer;
+			int stackstart;
+			int[] sir;
+			int rbs;
+			int r1 = radius + 1;
+			int routsum, goutsum, boutsum;
+			int rinsum, ginsum, binsum;
+
+			for (y = 0; y < h; y++) {
+				rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
+				for (i = -radius; i <= radius; i++) {
+					p = pix[yi + Math.min(wm, Math.max(i, 0))];
+					sir = stack[i + radius];
+					sir[0] = (p & 0xff0000) >> 16;
+					sir[1] = (p & 0x00ff00) >> 8;
+					sir[2] = (p & 0x0000ff);
+					rbs = r1 - Math.abs(i);
+					rsum += sir[0] * rbs;
+					gsum += sir[1] * rbs;
+					bsum += sir[2] * rbs;
+					if (i > 0) {
+						rinsum += sir[0];
+						ginsum += sir[1];
+						binsum += sir[2];
+					} else {
+						routsum += sir[0];
+						goutsum += sir[1];
+						boutsum += sir[2];
+					}
+				}
+				stackpointer = radius;
+
+				for (x = 0; x < w; x++) {
+
+					r[yi] = dv[rsum];
+					g[yi] = dv[gsum];
+					b[yi] = dv[bsum];
+
+					rsum -= routsum;
+					gsum -= goutsum;
+					bsum -= boutsum;
+
+					stackstart = stackpointer - radius + div;
+					sir = stack[stackstart % div];
+
+					routsum -= sir[0];
+					goutsum -= sir[1];
+					boutsum -= sir[2];
+
+					if (y == 0) {
+						vmin[x] = Math.min(x + radius + 1, wm);
+					}
+					p = pix[yw + vmin[x]];
+
+					sir[0] = (p & 0xff0000) >> 16;
+					sir[1] = (p & 0x00ff00) >> 8;
+					sir[2] = (p & 0x0000ff);
+
+					rinsum += sir[0];
+					ginsum += sir[1];
+					binsum += sir[2];
+
+					rsum += rinsum;
+					gsum += ginsum;
+					bsum += binsum;
+
+					stackpointer = (stackpointer + 1) % div;
+					sir = stack[(stackpointer) % div];
+
+					routsum += sir[0];
+					goutsum += sir[1];
+					boutsum += sir[2];
+
+					rinsum -= sir[0];
+					ginsum -= sir[1];
+					binsum -= sir[2];
+
+					yi++;
+				}
+				yw += w;
+			}
+			for (x = 0; x < w; x++) {
+				rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
+				yp = -radius * w;
+				for (i = -radius; i <= radius; i++) {
+					yi = Math.max(0, yp) + x;
+
+					sir = stack[i + radius];
+
+					sir[0] = r[yi];
+					sir[1] = g[yi];
+					sir[2] = b[yi];
+
+					rbs = r1 - Math.abs(i);
+
+					rsum += r[yi] * rbs;
+					gsum += g[yi] * rbs;
+					bsum += b[yi] * rbs;
+
+					if (i > 0) {
+						rinsum += sir[0];
+						ginsum += sir[1];
+						binsum += sir[2];
+					} else {
+						routsum += sir[0];
+						goutsum += sir[1];
+						boutsum += sir[2];
+					}
+
+					if (i < hm) {
+						yp += w;
+					}
+				}
+				yi = x;
+				stackpointer = radius;
+				for (y = 0; y < h; y++) {
+					// Preserve alpha channel: ( 0xff000000 & pix[yi] )
+					pix[yi] = (0xff000000 & pix[yi]) | (dv[rsum] << 16) | (dv[gsum] << 8) | dv[bsum];
+
+					rsum -= routsum;
+					gsum -= goutsum;
+					bsum -= boutsum;
+
+					stackstart = stackpointer - radius + div;
+					sir = stack[stackstart % div];
+
+					routsum -= sir[0];
+					goutsum -= sir[1];
+					boutsum -= sir[2];
+
+					if (x == 0) {
+						vmin[y] = Math.min(y + r1, hm) * w;
+					}
+					p = x + vmin[y];
+
+					sir[0] = r[p];
+					sir[1] = g[p];
+					sir[2] = b[p];
+
+					rinsum += sir[0];
+					ginsum += sir[1];
+					binsum += sir[2];
+
+					rsum += rinsum;
+					gsum += ginsum;
+					bsum += binsum;
+
+					stackpointer = (stackpointer + 1) % div;
+					sir = stack[stackpointer];
+
+					routsum += sir[0];
+					goutsum += sir[1];
+					boutsum += sir[2];
+
+					rinsum -= sir[0];
+					ginsum -= sir[1];
+					binsum -= sir[2];
+
+					yi += w;
+				}
+			}
+
+			CommonLib.ZLog("pix", w + " " + h + " " + pix.length);
+			blurBitmap.setPixels(pix, 0, w, 0, 0, w, h);
+			return blurBitmap;
+
+		} catch (OutOfMemoryError e) {
+			return bitmap;
+		} catch (Exception e) {
+			return bitmap;
+		}
+	}
+
+	public static Bitmap getBitmapFromDisk(String url, Context ctx) {
+
+		Bitmap defautBitmap = null;
+		try {
+			String filename = constructFileName(url);
+			File filePath = new File(ctx.getCacheDir(), filename);
+
+			if (filePath.exists() && filePath.isFile() && !filePath.isDirectory()) {
+				FileInputStream fi;
+				BitmapFactory.Options opts = new BitmapFactory.Options();
+				opts.inPreferredConfig = Config.RGB_565;
+				fi = new FileInputStream(filePath);
+				defautBitmap = BitmapFactory.decodeStream(fi, null, opts);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+
+		} catch (Exception e) {
+
+		} catch (OutOfMemoryError e) {
+
+		}
+
+		return defautBitmap;
+	}
+
+	public static String constructFileName(String url) {
+		return url.replaceAll("/", "_");
+	}
+
+	public static void writeBitmapToDisk(String url, Bitmap bmp, Context ctx, CompressFormat format) {
+		FileOutputStream fos;
+		String fileName = constructFileName(url);
+		try {
+			if (bmp != null) {
+				fos = new FileOutputStream(new File(ctx.getCacheDir(), fileName));
+				bmp.compress(format, 75, fos);
+				fos.close();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	 /**
-     * Returns the bitmap associated
-     * */
-    public static Bitmap getBitmap(Context mContext, int resId, int width , int height) throws OutOfMemoryError{
-        if(mContext == null)
-            return null;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
+	public static Bitmap getRoundedCornerBitmap(final Bitmap bitmap, final float roundPx) {
 
-        BitmapFactory.decodeResource(mContext.getResources(), resId, options);
-        options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
-        options.inJustDecodeBounds = false;
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
+		if (bitmap != null) {
+			try {
+				final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+				Canvas canvas = new Canvas(output);
 
-        if(!CommonLib.isAndroidL())
-            options.inPurgeable = true;
+				final Paint paint = new Paint();
+				final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+				final RectF rectF = new RectF(rect);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), resId, options);
+				paint.setAntiAlias(true);
+				canvas.drawARGB(0, 0, 0, 0);
+				canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
 
-        return bitmap;
-    }
+				paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+				canvas.drawBitmap(bitmap, rect, rect, paint);
+
+				return output;
+
+			} catch (OutOfMemoryError e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return bitmap;
+	}
+
 
 }

@@ -138,7 +138,7 @@
             android:label="@string/app_name"
             android:parentActivityName="com.application.baatna.views.Home"
             android:screenOrientation="portrait"
-            android:theme="@style/ZomatoActionBarTheme" >
+            android:theme="@style/ZomatoThemeNoTitleBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
