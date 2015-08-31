@@ -13,6 +13,12 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
@@ -87,6 +93,21 @@ public class CommonLib {
 			+ "&app_version=" + VERSION;
 	public static final String CLIENT_ID = "bt_android_client";
 	public static final String APP_TYPE = "bt_android";
+
+	/**
+	 * Thread pool executors
+	 * */
+	private static final int mImageAsyncsMaxSize = 4;
+	public static final BlockingQueue<Runnable> sPoolWorkQueueImage = new LinkedBlockingQueue<Runnable>(128);
+	private static ThreadFactory sThreadFactoryImage = new ThreadFactory() {
+
+		@Override
+		public Thread newThread(Runnable r) {
+			return new Thread(r);
+		}
+	};
+	public static final Executor THREAD_POOL_EXECUTOR_IMAGE = new ThreadPoolExecutor(mImageAsyncsMaxSize, mImageAsyncsMaxSize, 1, TimeUnit.SECONDS, sPoolWorkQueueImage, sThreadFactoryImage);
+
 
 	// AppsFlyer
 	public static final String APPSFLYER_KEY = "ZWajvvuaGUAqqD83ZNauKW";
