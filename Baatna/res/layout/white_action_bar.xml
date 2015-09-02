@@ -8,26 +8,25 @@
         android:id="@+id/home_icon_container"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height60"
-        android:layout_alignParentLeft="true" >
+        android:background="@drawable/baatna_dark_feedback"
+        android:onClick="actionBarSelected" >
 
         <com.application.baatna.utils.IconView
             android:id="@+id/back_icon"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/height60"
-            android:layout_marginRight="@dimen/height2"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:clickable="true"
             android:gravity="center"
-            android:onClick="actionBarSelected"
             android:text="D"
-            android:textColor="@color/zdark"
-            android:textSize="@dimen/size18"/>
+            android:textColor="@color/bt_drawer_green"
+            android:textSize="@dimen/font_size45" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/height60"
-            android:layout_toRightOf="@id/home_icon_subcontainer"
+            android:layout_toRightOf="@id/back_icon"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
@@ -35,7 +34,6 @@
                 android:id="@+id/title"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/baatna_dark_feedback"
                 android:clickable="false"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
@@ -58,5 +56,30 @@
                 android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/tick_container"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/home_icon_container"
+        android:clickable="true"
+        android:gravity="right"
+        android:visibility="gone" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/tick_proceed_icon"
+            android:layout_width="@dimen/toolbar_height"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/radial_oval_feedback"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="proceed"
+            android:text="G"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_size45" />
+    </LinearLayout>
 
 </RelativeLayout>

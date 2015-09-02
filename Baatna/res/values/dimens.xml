@@ -117,7 +117,7 @@
     <dimen name="fab_size_secondary">52dp</dimen>
     <dimen name="fab_actions_spacing">12dp</dimen>
     <dimen name="fab_labels_margin">8dp</dimen>
-    <dimen name="drawer_text_left_padding">60dp</dimen>
+    <dimen name="drawer_text_left_padding">72dp</dimen>
     <item name="drawer_icon_left_padding" type="dimen">28dp</item>
 
     <!-- Drawer dimensions -->
@@ -125,11 +125,21 @@
 
     <!-- Material dimensions -->
     <item name="toolbar_height" type="dimen">@dimen/height46</item>
-    <item name="minimum_clickable_area" type="dimen">48dp</item>
+    <item name="minimum_clickable_area" type="dimen">60dp</item>
+    <item name="minimum_clickable_area_small" type="dimen">48dp</item>
     <item name="toolbar_padding" type="dimen">16dp</item>
     <item name="drawer_user_container_height" type="dimen">140dp</item>
     <item name="shadow_elevation" type="dimen">.15dp</item>
 
     <dimen name="z_circular_image_height">24dp</dimen>
+    
+    <!-- Drawer Icon Sizes -->
+    <item name="topBottomBarArrowSize" type="dimen">11.31dp</item>
+    <item name="thickness" type="dimen">2dp</item>
+    <item name="barSize" type="dimen">18dp</item>
+    <item name="gapBetweenBars" type="dimen">3dp</item>
+    <item name="middleBarArrowSize" type="dimen">16dp</item>
+    <item name="drawableSize" type="dimen">24dp</item>
+    
     
 </resources>

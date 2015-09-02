@@ -13,6 +13,7 @@
     <string name="sign_up">Sign up</string>
     <string name="logout_confirm">Are you sure?</string>
     <string name="rate_app">Rate us on the Play Store</string>
+    <string name="invite_friends">Invite Friends</string>
     <string name="feedback">Send feedback</string>
     <string name="about_us">About</string>
     <string name="login">Login</string>
@@ -56,6 +57,7 @@
     <string name="signup_terms">By creating an account, you agree to Baatna\'s Terms of Service, Privacy Policy and Content Policies.</string>
     <string name="login_terms">By logging in you agree to Baatna\'s Terms of Service, Privacy Policy and Content Policies.</string>
     <string name="wishbox">Wishbox</string>
+    <string name="view_wishbox">View Wishbox</string>
     <string name="wish_title_hint">You wished for a\n</string>
     <string name="wish_delete_text">Are you sure you want to delete the item?</string>
     <string name="your_wishbox">YOUR WISHBOX</string>
@@ -70,4 +72,8 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="make_new_request">Make a new request</string>
+    <string name="toast_share_longpress">Share</string>
+    <string name="share_description">I am inviting you to try this crazy application that let\'s you borrow things for free.</string>
+    <string name="redeem">Redeem</string>
+    <string name="settings">Settings</string>
 </resources>

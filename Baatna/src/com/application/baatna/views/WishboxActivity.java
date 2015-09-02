@@ -8,17 +8,20 @@ import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.IconView;
 import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -28,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,17 +45,21 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	private AsyncTask mAsyncRunning;
 	private Activity mContext;
 	private WishesAdapter mAdapter;
+	LayoutInflater inflater;
+	private int width;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.wishbox_activity);
+		width = getWindowManager().getDefaultDisplay().getWidth();
 
 		prefs = getSharedPreferences("application_settings", 0);
 		mListView = (ListView) findViewById(R.id.wish_list);
 		mListView.setDivider(null);
 		mListView.setDividerHeight(0);
 		mContext = this;
+		inflater = LayoutInflater.from(this);
 		setupActionBar();
 		setListeners();
 		refreshView();
@@ -60,40 +68,54 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 
 	private void setupActionBar() {
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowCustomEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(false);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayUseLogoEnabled(true);
 
-		actionBar.setTitle(getResources().getString(R.string.your_wishbox));
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
 
-		try {
-			int width = getWindowManager().getDefaultDisplay().getWidth();
-			findViewById(android.R.id.home).setPadding(width / 40, 0,
-					width / 40, 0);
-			ViewGroup home = (ViewGroup) findViewById(android.R.id.home)
-					.getParent();
-			home.getChildAt(0).setPadding(width / 40, 0, width / 80, 0);
-		} catch (Exception e) {
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
+		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
+		actionBar.setCustomView(actionBarCustomView);
+
+		SpannableString s = new SpannableString(getString(R.string.your_wishbox));
+		s.setSpan(
+				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
+						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
+				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
+
+		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
+				.setMargins(width / 40, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+		title.setText(s);
+	}
+
+	public void actionBarSelected(View v) {
+		switch (v.getId()) {
+		case R.id.home_icon_container:
+			onBackPressed();
+			break;
+		default:
+			break;
 		}
 	}
 
 	private void setListeners() {
-		findViewById(R.id.empty_view_retry_container).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						refreshView();
-					}
-				});
+		findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				refreshView();
+			}
+		});
 
 	}
 
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	@Override
@@ -109,8 +131,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 
 		// should be handled at ever activity
 		if (prefs.getInt("uid", 0) == 0) {
-			Intent intent = new Intent(WishboxActivity.this,
-					BaatnaActivity.class);
+			Intent intent = new Intent(WishboxActivity.this, BaatnaActivity.class);
 			startActivity(intent);
 			finish();
 		}
@@ -133,16 +154,14 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	private void refreshView() {
 		if (mAsyncRunning != null)
 			mAsyncRunning.cancel(true);
-		mAsyncRunning = new GetWishes()
-				.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+		mAsyncRunning = new GetWishes().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
 
 	private class GetWishes extends AsyncTask<Object, Void, Object> {
 
 		@Override
 		protected void onPreExecute() {
-			findViewById(R.id.wishbox_progress_container).setVisibility(
-					View.VISIBLE);
+			findViewById(R.id.wishbox_progress_container).setVisibility(View.VISIBLE);
 
 			findViewById(R.id.wish_list).setAlpha(1f);
 
@@ -159,8 +178,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
 				url = CommonLib.SERVER + "wish/view?";
-				Object info = RequestWrapper.RequestHttp(url,
-						RequestWrapper.WISH_LIST, RequestWrapper.FAV);
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
 
@@ -175,8 +193,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 			if (destroyed)
 				return;
 
-			findViewById(R.id.wishbox_progress_container).setVisibility(
-					View.GONE);
+			findViewById(R.id.wishbox_progress_container).setVisibility(View.GONE);
 
 			if (result != null) {
 				findViewById(R.id.wish_list).setVisibility(View.VISIBLE);
@@ -184,17 +201,11 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 					setWishes((ArrayList<Wish>) result);
 			} else {
 				if (CommonLib.isNetworkAvailable(mContext)) {
-					Toast.makeText(
-							mContext,
-							mContext.getResources().getString(
-									R.string.error_try_again),
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.error_try_again),
 							Toast.LENGTH_SHORT).show();
 				} else {
-					Toast.makeText(
-							mContext,
-							getResources().getString(
-									R.string.no_internet_message),
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(mContext, getResources().getString(R.string.no_internet_message), Toast.LENGTH_SHORT)
+							.show();
 
 					findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
 
@@ -236,10 +247,8 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 		@Override
 		public View getView(int position, View v, ViewGroup parent) {
 			final Wish wish = wishes.get(position);
-			if (v == null
-					|| v.findViewById(R.id.wishbox_list_item_root) == null) {
-				v = LayoutInflater.from(mContext).inflate(
-						R.layout.wishbox_list_item, null);
+			if (v == null || v.findViewById(R.id.wishbox_list_item_root) == null) {
+				v = LayoutInflater.from(mContext).inflate(R.layout.wishbox_list_item, null);
 			}
 
 			ViewHolder viewHolder = (ViewHolder) v.getTag();
@@ -247,30 +256,21 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 				viewHolder = new ViewHolder();
 				viewHolder.title = (TextView) v.findViewById(R.id.wish_title);
 				viewHolder.date = (TextView) v.findViewById(R.id.wish_date);
-				viewHolder.crossIcon = (IconView) v
-						.findViewById(R.id.cross_icon);
+				viewHolder.crossIcon = (IconView) v.findViewById(R.id.cross_icon);
 				v.setTag(viewHolder);
 			}
 
-			((RelativeLayout.LayoutParams) v.findViewById(
-					R.id.wishbox_list_item).getLayoutParams()).setMargins(
-					width / 20, width / 40, width / 20, width / 40);
+			((RelativeLayout.LayoutParams) v.findViewById(R.id.wishbox_list_item).getLayoutParams())
+					.setMargins(width / 40, width / 40, width / 40, width / 40);
 
-			viewHolder.date.setPadding(width / 20, width / 20, width / 20,
-					width / 40);
-			viewHolder.title.setPadding(width / 20, width / 20, width / 20,
-					width / 40);
-			viewHolder.crossIcon.setPadding(width / 20, width / 20, width / 20,
-					width / 40);
+			viewHolder.date.setPadding(width / 20, width / 20, width / 20, width / 40);
+			viewHolder.title.setPadding(width / 20, width / 40, width / 20, width / 40);
+			((RelativeLayout.LayoutParams) viewHolder.crossIcon.getLayoutParams()).setMargins(0, 0, width / 20, 0);
 			// set the date in hh:mm format
-			viewHolder.date.setText(CommonLib.getDateFromUTC(wish
-					.getTimeOfPost()));
+			viewHolder.date.setText(CommonLib.getDateFromUTC(wish.getTimeOfPost()));
 			// set the span of title
-			String title = mContext.getResources().getString(
-					R.string.wish_title_hint)
-					+ wish.getTitle();
-			SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(
-					title);
+			String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle();
+			SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(title);
 
 			ClickableSpan cs1 = new ClickableSpan() {
 				@Override
@@ -281,8 +281,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 				public void updateDrawState(TextPaint ds) {
 					super.updateDrawState(ds);
 					ds.setUnderlineText(false);
-					ds.setTypeface(CommonLib.getTypeface(
-							getApplicationContext(), CommonLib.Bold));
+					ds.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold));
 					ds.setColor(getResources().getColor(R.color.bt_orange));
 				}
 			};
@@ -295,30 +294,17 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 			viewHolder.crossIcon.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					new AlertDialog.Builder(mContext)
-							.setMessage(
-									getResources().getString(
-											R.string.wish_delete_text))
-							.setPositiveButton(android.R.string.yes,
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											UploadManager.deleteRequest(prefs
-													.getString("access_token",
-															""),
-													wish.getWishId() + "");
-											dialog.dismiss();
-										}
-									})
-							.setNegativeButton(android.R.string.no,
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											dialog.dismiss();
-										}
-									}).show();
+					new AlertDialog.Builder(mContext).setMessage(getResources().getString(R.string.wish_delete_text))
+							.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							UploadManager.deleteRequest(prefs.getString("access_token", ""), wish.getWishId() + "");
+							dialog.dismiss();
+						}
+					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					}).show();
 				}
 			});
 			return v;
@@ -328,14 +314,13 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 
 	// set all the wishes here
 	private void setWishes(ArrayList<Wish> categories) {
-		mAdapter = new WishesAdapter(mContext, R.layout.new_request_fragment,
-				categories);
+		mAdapter = new WishesAdapter(mContext, R.layout.new_request_fragment, categories);
 		mListView.setAdapter(mAdapter);
 	}
 
 	@Override
-	public void uploadFinished(int requestType, int userId, int objectId,
-			Object data, int uploadId, boolean status, String stringId) {
+	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
+			String stringId) {
 		if (requestType == CommonLib.WISH_REMOVE) {
 			if (!destroyed)
 				refreshView();
@@ -343,8 +328,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	}
 
 	@Override
-	public void uploadStarted(int requestType, int objectId, String stringId,
-			Object object) {
+	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
 	}
 
 }

@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="ZomatoActionBarHomeTheme" parent="@style/ZomatoHomeBaseTheme">
+        <item name="android:colorPrimary">@color/action_bar_default</item>
+        <item name="android:colorPrimaryDark">@color/action_bar_default</item>
+        <item name="android:colorAccent">@color/action_bar_default</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">    @transition/change_image_transform</item>
+        <item name="android:windowSharedElementExitTransition">    @transition/change_image_transform</item>
+    </style>
+
 </resources>

@@ -7,36 +7,42 @@
     android:background="@color/zhl_dark"
     android:orientation="vertical" >
 
-    <View
+    <!--  <View
         android:id="@+id/action_bar_blankview"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/height60"
         android:layout_alignParentTop="true" />
+        -->
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/action_bar_blankview" >
+        android:layout_alignParentTop="true" >
 
         <RelativeLayout
             android:id="@+id/home_container"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
 
-            <!-- android:cacheColorHint="#00000000"
-                android:divider="@color/zhl"
-                android:fadingEdge="none"
-                android:overScrollMode="never"
-                android:visibility="gone"
-                android:scrollbars="none"
-                android:scrollingCache="false" -->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height60"
+                android:background="@color/action_bar_default"
+                android:elevation="@dimen/toolbar_elevation"
+                android:minHeight="@dimen/height60"
+                android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+                android:theme="@style/ToolbarBaseTheme"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp" />
+
             <ListView
                 android:id="@+id/feedListView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/feed_bg"/>
-            
+                android:layout_below="@id/toolbar"
+                android:background="@color/feed_bg" />
         </RelativeLayout>
 
         <LinearLayout

@@ -94,7 +94,8 @@
     <item name="drawer_user_container_height" type="dimen">225dp</item>
     <item name="avatar_size" type="dimen">64dp</item>
     <item name="big_avatar_size" type="dimen">96dp</item>
-    <item name="minimum_clickable_area" type="dimen">64dp</item>
+    <item name="minimum_clickable_area" type="dimen">70dp</item>
+    <item name="minimum_clickable_area_small" type="dimen">64dp</item>
     <item name="toolbar_padding" type="dimen">24dp</item>
     <item name="toolbar_text_left_margin" type="dimen">104dp</item>
     <item name="first_toolbar_element_width" type="dimen">56dp</item>

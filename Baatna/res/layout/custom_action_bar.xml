@@ -204,7 +204,7 @@
             android:onClick="proceed"
             android:text="G"
             android:textColor="@color/white"
-            android:textSize="@dimen/size18" />
+            android:textSize="@dimen/font_size45" />
     </LinearLayout>
     
 </RelativeLayout>

@@ -182,5 +182,7 @@
     
     <color name="message_from">#ebfaf7</color>
     <color name="message_to">#f7f7f7</color>
+    <color name="light_stroke_color">#f1f2f2</color>
+    <color name="drawer_lighter">#939598</color>
     
 </resources>

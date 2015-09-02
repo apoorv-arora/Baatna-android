@@ -40,7 +40,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -62,9 +61,11 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -84,7 +85,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Home extends FragmentActivity
+public class Home extends AppCompatActivity
 		implements FacebookConnectCallback, BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener {
 
 	private BaatnaApp zapp;
@@ -119,7 +120,7 @@ public class Home extends FragmentActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+//		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.home_activity);
 		getWindow().setBackgroundDrawable(null);
 		mContext = this;
@@ -129,6 +130,9 @@ public class Home extends FragmentActivity
 		zapp.zll.addCallback(this);
 		width = getWindowManager().getDefaultDisplay().getWidth();
 
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        
 		setupActionBar();
 		setUpDrawer();
 		// initialize list view
@@ -468,7 +472,7 @@ public class Home extends FragmentActivity
 
 	private void setupActionBar() {
 
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
@@ -623,11 +627,11 @@ public class Home extends FragmentActivity
 	private void setUpUserSettingsInDrawer() {
 
 		// user snippet in drawer
-		findViewById(R.id.drawer_user_container).getLayoutParams().height = width / 3;
+//		findViewById(R.id.`).getLayoutParams().height = width / 3;
 		findViewById(R.id.drawer_user_stat_cont).setPadding(3 * width / 80, 0, 0, 0);
 		findViewById(R.id.drawer_user_gradient_bottom).getLayoutParams().height = (12 * width / 90);
-		findViewById(R.id.drawer_user_info_background_image).getLayoutParams().height = width / 3;
-		findViewById(R.id.seperator).getLayoutParams().height = width / 30;
+//		findViewById(R.id.drawer_user_info_background_image).getLayoutParams().height = width / 3;
+//		findViewById(R.id.seperator).getLayoutParams().height = width / 30;
 
 		// user click
 		findViewById(R.id.drawer_user_container).setOnClickListener(new OnClickListener() {
@@ -649,6 +653,7 @@ public class Home extends FragmentActivity
 	public void setImageInDrawer() {
 		// Blurred user image
 		ImageView imageBackground = (ImageView) findViewById(R.id.drawer_user_info_background_image);
+		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "", width, width, false);
 		// imageBackground.getLayoutParams().height = width / 3;
 		//
 		// CommonLib.ZLog("thumbUrl blurred", prefs.getString("thumbUrl", "")
@@ -722,6 +727,17 @@ public class Home extends FragmentActivity
 
 		}
 	}
+	
+	public void inviteFriends(View v) {
+		String userId = "";
+		String shortUrl = " http://baat.na/invite/" + userId;
+		String shareText = getResources().getString(R.string.share_description) + shortUrl;
+
+		Intent i = new Intent(android.content.Intent.ACTION_SEND);
+		i.setType("text/plain");
+		i.putExtra(Intent.EXTRA_TEXT, shareText);
+		startActivity(Intent.createChooser(i, getResources().getString(R.string.toast_share_longpress)));
+    }
 
 	public void openWishbox(View v) {
 		Intent intent = new Intent(this, WishboxActivity.class);
@@ -779,6 +795,10 @@ public class Home extends FragmentActivity
 
 	public void feedback(View v) {
 		startActivity(new Intent(this, FeedbackPage.class));
+	}
+	
+	public void redeem(View v) {
+//		startActivity(new Intent(this, FeedbackPage.class));
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.application.baatna.views;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -10,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -83,33 +85,28 @@ public class AboutUs extends Activity {
 	private void setUpActionBar() {
 
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowCustomEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayUseLogoEnabled(true);
 
-		actionBar.setLogo(R.drawable.ic_launcher);
-		SpannableString s = new SpannableString(getResources().getString(
-				R.string.about_us));
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
+
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
+		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
+		actionBar.setCustomView(actionBarCustomView);
+
+		SpannableString s = new SpannableString(getString(R.string.your_wishbox));
 		s.setSpan(
-				new TypefaceSpan(getApplicationContext(),
-						CommonLib.BOLD_FONT_FILENAME, getResources().getColor(
-								R.color.white), getResources().getDimension(
-								R.dimen.size16)), 0, s.length(),
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
+						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
+				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
 
-		try {
-			int width = getWindowManager().getDefaultDisplay().getWidth();
-			findViewById(android.R.id.home).setPadding(width / 80, 0,
-					width / 40, 0);
-			ViewGroup home = (ViewGroup) findViewById(android.R.id.home)
-					.getParent();
-			home.getChildAt(0).setPadding(width / 80, 0, width / 80, 0);
-		} catch (Exception e) {
-		}
-		actionBar.setTitle(s);
+		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
+				.setMargins(width / 40, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+		title.setText(s);
 	}
 
 	void fixsizes() {
@@ -202,8 +199,7 @@ public class AboutUs extends Activity {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		// overridePendingTransition(R.anim.slide_in_left,
-		// R.anim.slide_out_right);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	@Override

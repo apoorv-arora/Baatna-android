@@ -81,7 +81,7 @@ public class GcmIntentService extends IntentService {
 		String msg = extras.getString("Notification");
 		String type = extras.getString("type");
 		
-		if( type.equals("message")) {
+		if( type!= null && type.equals("message")) {
 			JSONObject message = null;
 			try {
 				message = new JSONObject(msg);
