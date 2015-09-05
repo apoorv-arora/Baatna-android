@@ -59,7 +59,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	private int mWishesTotalCount;
 	private boolean cancelled = false;
 	private boolean loading = false;
-	private int count = 10;
+	private int count = 5;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -176,9 +176,9 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 		protected void onPreExecute() {
 			findViewById(R.id.wishbox_progress_container).setVisibility(View.VISIBLE);
 
-			findViewById(R.id.wish_list).setAlpha(1f);
+			findViewById(R.id.content).setAlpha(1f);
 
-			findViewById(R.id.wish_list).setVisibility(View.GONE);
+			findViewById(R.id.content).setVisibility(View.GONE);
 
 			findViewById(R.id.empty_view).setVisibility(View.GONE);
 			super.onPreExecute();
@@ -190,7 +190,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "wish/view?start=0&count="+count;
+				url = CommonLib.SERVER + "wish/view?start=0&count=" + count;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
@@ -209,7 +209,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 			findViewById(R.id.wishbox_progress_container).setVisibility(View.GONE);
 
 			if (result != null) {
-				findViewById(R.id.wish_list).setVisibility(View.VISIBLE);
+				findViewById(R.id.content).setVisibility(View.VISIBLE);
 				if (result instanceof Object[]) {
 					Object[] arr = (Object[]) result;
 					mWishesTotalCount = (Integer) arr[0];
@@ -225,7 +225,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 
 					findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
 
-					findViewById(R.id.wish_list).setVisibility(View.GONE);
+					findViewById(R.id.content).setVisibility(View.GONE);
 				}
 			}
 
@@ -331,13 +331,6 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	// set all the wishes here
 	private void setWishes(ArrayList<Wish> wishes) {
 		this.wishes = wishes;
-		mAdapter = new WishesAdapter(mContext, R.layout.new_request_fragment, this.wishes);
-		mListView.setAdapter(mAdapter);
-		displayList();
-	}
-
-	private void displayList() {
-		((View) mListView.getParent()).setVisibility(View.VISIBLE);
 		if (wishes != null && wishes.size() > 0 && mWishesTotalCount > wishes.size()
 				&& mListView.getFooterViewsCount() == 0) {
 			mListViewFooter = new LinearLayout(getApplicationContext());
@@ -352,6 +345,8 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 			pbar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			mListView.addFooterView(mListViewFooter);
 		}
+		mAdapter = new WishesAdapter(mContext, R.layout.new_request_fragment, this.wishes);
+		mListView.setAdapter(mAdapter);
 		mListView.setOnScrollListener(new OnScrollListener() {
 
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -364,7 +359,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 						loading = true;
 						new LoadModeWishes().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
 					}
-				} else if (totalItemCount - 1 == mWishesTotalCount) {
+				} else if (totalItemCount - 1 == mWishesTotalCount && mListView.getFooterViewsCount() > 0) {
 					mListView.removeFooterView(mListViewFooter);
 				}
 			}
@@ -408,8 +403,9 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 		protected void onPostExecute(Object result) {
 			if (destroyed)
 				return;
-			if (result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0) {
-				wishes.addAll((ArrayList<Wish>) result);
+			if (result != null && result instanceof Object[]) {
+				Object[] arr = (Object[]) result;
+				wishes.addAll((ArrayList<Wish>) arr[1]);
 				mAdapter.notifyDataSetChanged();
 			}
 			loading = false;

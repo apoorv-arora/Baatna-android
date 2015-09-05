@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bt_grey" >
+    android:background="@color/bt_grey"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/wishbox_progress_container"
@@ -18,11 +18,19 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/wish_list"
+    <LinearLayout
+        android:id="@+id/content"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </ListView>
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/wish_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </ListView>
+        
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/empty_view"
