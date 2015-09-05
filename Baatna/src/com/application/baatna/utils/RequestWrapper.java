@@ -119,9 +119,9 @@ public class RequestWrapper {
 			}
 			return categories;
 		} else if(Type == WISH_LIST) {
-			ArrayList<Wish> categories = null;
+			Object[] categories = null;
 			try{
-				categories = (ArrayList<Wish>) ParserJson.parse_Wishes(result);
+				categories = (Object[]) ParserJson.parse_Wishes(result);
 			} catch(JSONException e) {
 				e.printStackTrace();
 			}

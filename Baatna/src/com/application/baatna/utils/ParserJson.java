@@ -225,11 +225,12 @@ public class ParserJson {
 		return categories;
 	}
 
-	public static ArrayList<Wish> parse_Wishes(InputStream is)
+	public static Object[] parse_Wishes(InputStream is)
 			throws JSONException {
 
+		Object[] objects = new Object[2];
 		ArrayList<Wish> wishes = new ArrayList<Wish>();
-
+		int size = 0;
 		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
 
 		if (responseObject != null && responseObject.has("status")) {
@@ -238,6 +239,8 @@ public class ParserJson {
 						&& responseObject.get("response") instanceof JSONObject) {
 					JSONObject categoriesObject = responseObject
 							.getJSONObject("response");
+					if(categoriesObject.has("total") && categoriesObject.get("total") instanceof Integer)
+						size = categoriesObject.getInt("total");
 					if (categoriesObject.has("wishes")
 							&& categoriesObject.get("wishes") instanceof JSONArray) {
 						JSONArray categoriesArr = categoriesObject
@@ -276,7 +279,9 @@ public class ParserJson {
 				}
 			}
 		}
-		return wishes;
+		objects[0] = size;
+		objects[1] = wishes;
+		return objects;
 	}
 
 	public static ArrayList<String> parse_Institutions(InputStream is)

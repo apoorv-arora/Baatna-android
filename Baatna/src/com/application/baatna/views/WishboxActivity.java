@@ -26,13 +26,18 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,12 +46,20 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 
 	private SharedPreferences prefs;
 	private boolean destroyed = false;
-	private ListView mListView;
 	private AsyncTask mAsyncRunning;
 	private Activity mContext;
 	private WishesAdapter mAdapter;
 	LayoutInflater inflater;
 	private int width;
+
+	// Load more part
+	private ListView mListView;
+	ArrayList<Wish> wishes;
+	LinearLayout mListViewFooter;
+	private int mWishesTotalCount;
+	private boolean cancelled = false;
+	private boolean loading = false;
+	private int count = 10;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -177,7 +190,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "wish/view?";
+				url = CommonLib.SERVER + "wish/view?start=0&count="+count;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
@@ -197,8 +210,11 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 
 			if (result != null) {
 				findViewById(R.id.wish_list).setVisibility(View.VISIBLE);
-				if (result instanceof ArrayList<?>)
-					setWishes((ArrayList<Wish>) result);
+				if (result instanceof Object[]) {
+					Object[] arr = (Object[]) result;
+					mWishesTotalCount = (Integer) arr[0];
+					setWishes((ArrayList<Wish>) arr[1]);
+				}
 			} else {
 				if (CommonLib.isNetworkAvailable(mContext)) {
 					Toast.makeText(mContext, mContext.getResources().getString(R.string.error_try_again),
@@ -313,9 +329,46 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	}
 
 	// set all the wishes here
-	private void setWishes(ArrayList<Wish> categories) {
-		mAdapter = new WishesAdapter(mContext, R.layout.new_request_fragment, categories);
+	private void setWishes(ArrayList<Wish> wishes) {
+		this.wishes = wishes;
+		mAdapter = new WishesAdapter(mContext, R.layout.new_request_fragment, this.wishes);
 		mListView.setAdapter(mAdapter);
+		displayList();
+	}
+
+	private void displayList() {
+		((View) mListView.getParent()).setVisibility(View.VISIBLE);
+		if (wishes != null && wishes.size() > 0 && mWishesTotalCount > wishes.size()
+				&& mListView.getFooterViewsCount() == 0) {
+			mListViewFooter = new LinearLayout(getApplicationContext());
+			mListViewFooter.setBackgroundResource(R.color.white);
+			mListViewFooter.setLayoutParams(new ListView.LayoutParams(LayoutParams.MATCH_PARENT, width / 5));
+			mListViewFooter.setGravity(Gravity.CENTER);
+			mListViewFooter.setOrientation(LinearLayout.HORIZONTAL);
+			ProgressBar pbar = new ProgressBar(getApplicationContext(), null,
+					android.R.attr.progressBarStyleSmallInverse);
+			mListViewFooter.addView(pbar);
+			pbar.setTag("progress");
+			pbar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			mListView.addFooterView(mListViewFooter);
+		}
+		mListView.setOnScrollListener(new OnScrollListener() {
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount - 1 < mWishesTotalCount
+						&& !loading && mListViewFooter != null) {
+					if (mListView.getFooterViewsCount() == 1) {
+						loading = true;
+						new LoadModeWishes().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
+					}
+				} else if (totalItemCount - 1 == mWishesTotalCount) {
+					mListView.removeFooterView(mListViewFooter);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -331,4 +384,35 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
 	}
 
+	private class LoadModeWishes extends AsyncTask<Integer, Void, Object> {
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Integer... params) {
+			int start = params[0];
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "wish/view?start=" + start + "&count=" + count;
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+			if (result != null && result instanceof ArrayList<?> && ((ArrayList<?>) result).size() > 0) {
+				wishes.addAll((ArrayList<Wish>) result);
+				mAdapter.notifyDataSetChanged();
+			}
+			loading = false;
+		}
+	}
 }
