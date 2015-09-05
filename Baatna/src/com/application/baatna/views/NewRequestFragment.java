@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,8 +42,7 @@ public class NewRequestFragment extends Fragment {
 	private SharedPreferences prefs;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mInflater = inflater;
 		rootView = mInflater.inflate(R.layout.new_request_fragment, null);
 		return rootView;
@@ -56,9 +56,9 @@ public class NewRequestFragment extends Fragment {
 		width = mContext.getWindowManager().getDefaultDisplay().getWidth();
 		prefs = mContext.getSharedPreferences(CommonLib.APP_SETTINGS, 0);
 
-		mCategoriesListView = (ListView) rootView
-				.findViewById(R.id.category_list_view);
-		refreshView();
+		mCategoriesListView = (ListView) rootView.findViewById(R.id.category_list_view);
+		// refreshView();
+		setCategories(CommonLib.getCategoriesList());
 		fixSizes();
 		setListeners();
 
@@ -66,98 +66,79 @@ public class NewRequestFragment extends Fragment {
 
 	private void fixSizes() {
 
-		rootView.findViewById(R.id.category_et).setPadding(width / 20,
-				width / 20, width / 20, width / 40);
+		rootView.findViewById(R.id.category_et).setPadding(width / 20, width / 20, width / 20, width / 40);
 
-		((LinearLayout.LayoutParams) rootView.findViewById(
-				R.id.category_separator).getLayoutParams()).setMargins(
-				width / 20, 0, width / 20, 0);
+		((LinearLayout.LayoutParams) rootView.findViewById(R.id.category_separator).getLayoutParams())
+				.setMargins(width / 20, 0, width / 20, 0);
 
-		rootView.findViewById(R.id.description_et).setPadding(width / 20,
-				width / 40, width / 20, width / 40);
+		rootView.findViewById(R.id.description_et).setPadding(width / 20, width / 40, width / 20, width / 40);
 
-		((LinearLayout.LayoutParams) rootView.findViewById(R.id.post)
-				.getLayoutParams()).setMargins(width / 20, width / 40, 0,
-				width / 40);
+		((LinearLayout.LayoutParams) rootView.findViewById(R.id.post).getLayoutParams()).setMargins(width / 20,
+				width / 40, 0, width / 40);
 
-		rootView.findViewById(R.id.post).setPadding(width / 20, width / 40,
-				width / 20, width / 40);
+		rootView.findViewById(R.id.post).setPadding(width / 20, width / 40, width / 20, width / 40);
 
-		rootView.findViewById(R.id.category_selection_label).setPadding(
-				width / 20, width / 40, width / 20, 0);
+		rootView.findViewById(R.id.category_selection_label).setPadding(width / 20, width / 40, width / 20, 0);
 
 		mCategoriesListView.setDivider(null);
 
-		rootView.findViewById(R.id.new_request_progress_container)
-				.setVisibility(View.GONE);
+		rootView.findViewById(R.id.new_request_progress_container).setVisibility(View.GONE);
 	}
 
 	private void setListeners() {
-		rootView.findViewById(R.id.description_et).setOnTouchListener(
-				new OnTouchListener() {
+		rootView.findViewById(R.id.description_et).setOnTouchListener(new OnTouchListener() {
 
-					@Override
-					public boolean onTouch(View v, MotionEvent event) {
-						if (rootView != null) {
-							View scrollView = rootView
-									.findViewById(R.id.new_request_scroll_container);
-							((ScrollView) scrollView)
-									.requestDisallowInterceptTouchEvent(true);
-						}
-						v.onTouchEvent(event);
-						return false;
-					}
-				});
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (rootView != null) {
+					View scrollView = rootView.findViewById(R.id.new_request_scroll_container);
+					((ScrollView) scrollView).requestDisallowInterceptTouchEvent(true);
+				}
+				v.onTouchEvent(event);
+				return false;
+			}
+		});
 
-		rootView.findViewById(R.id.empty_view_retry_container).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						refreshView();
-					}
-				});
+		rootView.findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				refreshView();
+			}
+		});
 
-		rootView.findViewById(R.id.post).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						UploadManager.postNewRequest(prefs.getString(
-								"access_token", ""), ((TextView) rootView
-								.findViewById(R.id.category_et)).getText()
-								.toString(), ((TextView) rootView
-								.findViewById(R.id.description_et)).getText()
-								.toString());
-						try {
-							InputMethodManager imm = (InputMethodManager) mContext
-									.getSystemService(Service.INPUT_METHOD_SERVICE);
-							imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+		rootView.findViewById(R.id.post).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				UploadManager.postNewRequest(prefs.getString("access_token", ""),
+						((TextView) rootView.findViewById(R.id.category_et)).getText().toString(),
+						((TextView) rootView.findViewById(R.id.description_et)).getText().toString());
+				try {
+					InputMethodManager imm = (InputMethodManager) mContext
+							.getSystemService(Service.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
-					}
-				});
+			}
+		});
 	}
 
 	private void refreshView() {
 		if (mAsyncTaskRunning != null)
 			mAsyncTaskRunning.cancel(true);
-		(mAsyncTaskRunning = new GetCategoriesList())
-				.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		(mAsyncTaskRunning = new GetCategoriesList()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	private class GetCategoriesList extends AsyncTask<Object, Void, Object> {
 
 		@Override
 		protected void onPreExecute() {
-			rootView.findViewById(R.id.new_request_progress_container)
-					.setVisibility(View.VISIBLE);
+			rootView.findViewById(R.id.new_request_progress_container).setVisibility(View.VISIBLE);
 
-			rootView.findViewById(R.id.new_request_scroll_container).setAlpha(
-					1f);
+			rootView.findViewById(R.id.new_request_scroll_container).setAlpha(1f);
 
-			rootView.findViewById(R.id.new_request_scroll_container)
-					.setVisibility(View.GONE);
+			rootView.findViewById(R.id.new_request_scroll_container).setVisibility(View.GONE);
 
 			rootView.findViewById(R.id.empty_view).setVisibility(View.GONE);
 			super.onPreExecute();
@@ -170,8 +151,7 @@ public class NewRequestFragment extends Fragment {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
 				url = CommonLib.SERVER + "wish/categories?";
-				Object info = RequestWrapper.RequestHttp(url,
-						RequestWrapper.CATEGORIES_LIST, RequestWrapper.FAV);
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.CATEGORIES_LIST, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
 
@@ -186,33 +166,23 @@ public class NewRequestFragment extends Fragment {
 			if (!isAdded())
 				return;
 
-			rootView.findViewById(R.id.new_request_progress_container)
-					.setVisibility(View.GONE);
+			rootView.findViewById(R.id.new_request_progress_container).setVisibility(View.GONE);
 
 			if (result != null) {
-				rootView.findViewById(R.id.new_request_scroll_container)
-						.setVisibility(View.VISIBLE);
+				rootView.findViewById(R.id.new_request_scroll_container).setVisibility(View.VISIBLE);
 				if (result instanceof ArrayList<?>)
 					setCategories((ArrayList<Categories>) result);
 			} else {
 				if (CommonLib.isNetworkAvailable(mContext)) {
-					Toast.makeText(
-							mContext,
-							mContext.getResources().getString(
-									R.string.error_try_again),
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.error_try_again),
 							Toast.LENGTH_SHORT).show();
 				} else {
-					Toast.makeText(
-							mContext,
-							mContext.getResources().getString(
-									R.string.no_internet_message),
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.no_internet_message),
 							Toast.LENGTH_SHORT).show();
 
-					rootView.findViewById(R.id.empty_view).setVisibility(
-							View.VISIBLE);
+					rootView.findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
 
-					rootView.findViewById(R.id.new_request_scroll_container)
-							.setVisibility(View.GONE);
+					rootView.findViewById(R.id.new_request_scroll_container).setVisibility(View.GONE);
 				}
 			}
 
@@ -220,8 +190,7 @@ public class NewRequestFragment extends Fragment {
 	}
 
 	private void setCategories(ArrayList<Categories> categories) {
-		mCategoriesAdapter = new RequestCategoryAdapter(mContext,
-				R.layout.new_request_fragment, categories);
+		mCategoriesAdapter = new RequestCategoryAdapter(mContext, R.layout.new_request_fragment, categories);
 		mCategoriesListView.setAdapter(mCategoriesAdapter);
 		setListViewHeightBasedOnChildren(mCategoriesListView);
 	}
@@ -241,8 +210,7 @@ public class NewRequestFragment extends Fragment {
 		}
 
 		ViewGroup.LayoutParams params = listView.getLayoutParams();
-		params.height = totalHeight
-				+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+		params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
 		listView.setLayoutParams(params);
 		listView.requestLayout();
 	}
@@ -253,8 +221,7 @@ public class NewRequestFragment extends Fragment {
 		private Activity mContext;
 		private int width;
 
-		public RequestCategoryAdapter(Activity context, int resourceId,
-				List<Categories> categories) {
+		public RequestCategoryAdapter(Activity context, int resourceId, List<Categories> categories) {
 			super(context.getApplicationContext(), resourceId, categories);
 			mContext = context;
 			this.categories = categories;
@@ -276,32 +243,32 @@ public class NewRequestFragment extends Fragment {
 
 		@Override
 		public View getView(int position, View v, ViewGroup parent) {
-			final String categoryName = categories.get(position).getCategory();
+			final Categories categoryName = categories.get(position);
 			if (v == null || v.findViewById(R.id.request_category_root) == null) {
-				v = LayoutInflater.from(mContext).inflate(
-						R.layout.request_category_adapter, null);
+				v = LayoutInflater.from(mContext).inflate(R.layout.request_category_adapter, null);
 			}
 
 			ViewHolder viewHolder = (ViewHolder) v.getTag();
 			if (viewHolder == null) {
 				viewHolder = new ViewHolder();
-				viewHolder.category_label = (TextView) v
-						.findViewById(R.id.category_title);
+				viewHolder.category_label = (TextView) v.findViewById(R.id.category_title);
 				v.setTag(viewHolder);
 			}
 
-			viewHolder.category_label.setText(categoryName);
-			viewHolder.category_label.setPadding(width / 20, width / 40,
-					width / 20, width / 40);
-			viewHolder.category_label
-					.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							TextView view = (TextView) v;
-							if (view != null && view.getText() != null)
-								setSelectedCategory(view.getText().toString());
-						}
-					});
+			viewHolder.category_label.setText(categoryName.getCategory());
+			viewHolder.category_label.setPadding(width / 20, width / 40, width / 20, width / 40);
+			viewHolder.category_label.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					TextView view = (TextView) v;
+					if (view != null && view.getText() != null) {
+						setSelectedCategory(view.getText().toString());
+						Intent intent = new Intent(mContext, CategoryItemSelectionFragment.class);
+						intent.putExtra("category_id", categoryName.getCategoryId());
+						mContext.startActivityForResult(intent, CategoryItemSelectionFragment.requestCode);
+					}
+				}
+			});
 
 			return v;
 		}
@@ -310,14 +277,25 @@ public class NewRequestFragment extends Fragment {
 
 	private void setSelectedCategory(String category) {
 		if (rootView != null) {
-			((TextView) rootView.findViewById(R.id.category_et))
-					.setText(category);
+			((TextView) rootView.findViewById(R.id.category_et)).setText(category);
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == CategoryItemSelectionFragment.requestCode) {
+			if (resultCode == CategoryItemSelectionFragment.RESULT_ITEM_SELECTED && data != null) {
+				if (data.hasExtra("title")) {
+					((TextView) rootView.findViewById(R.id.category_et))
+							.setText(String.valueOf(data.getStringExtra("title")));
+				}
+			}
 		}
 	}
 
 	public String getSelectedCategory() {
-		return ((TextView) rootView.findViewById(R.id.category_et)).getText()
-				.toString();
+		return ((TextView) rootView.findViewById(R.id.category_et)).getText().toString();
 	}
 
 }

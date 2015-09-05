@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -24,19 +25,22 @@ import java.util.zip.GZIPInputStream;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 
+import com.application.baatna.data.Categories;
+import com.application.baatna.data.CategoryItems;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
@@ -57,8 +61,8 @@ public class CommonLib {
 	// "52.76.6.41:8080/BaatnaServer/rest/";
 	// public static String SERVER_WITHOUT_VERSION =
 	// "http://52.76.6.41:8080/BaatnaServer/rest/";
-	public static final String SERVER_BODY = "192.168.43.86:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.43.86:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "192.168.1.3:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.3:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -96,7 +100,7 @@ public class CommonLib {
 
 	/**
 	 * Thread pool executors
-	 * */
+	 */
 	private static final int mImageAsyncsMaxSize = 4;
 	public static final BlockingQueue<Runnable> sPoolWorkQueueImage = new LinkedBlockingQueue<Runnable>(128);
 	private static ThreadFactory sThreadFactoryImage = new ThreadFactory() {
@@ -106,8 +110,8 @@ public class CommonLib {
 			return new Thread(r);
 		}
 	};
-	public static final Executor THREAD_POOL_EXECUTOR_IMAGE = new ThreadPoolExecutor(mImageAsyncsMaxSize, mImageAsyncsMaxSize, 1, TimeUnit.SECONDS, sPoolWorkQueueImage, sThreadFactoryImage);
-
+	public static final Executor THREAD_POOL_EXECUTOR_IMAGE = new ThreadPoolExecutor(mImageAsyncsMaxSize,
+			mImageAsyncsMaxSize, 1, TimeUnit.SECONDS, sPoolWorkQueueImage, sThreadFactoryImage);
 
 	// AppsFlyer
 	public static final String APPSFLYER_KEY = "ZWajvvuaGUAqqD83ZNauKW";
@@ -691,7 +695,7 @@ public class CommonLib {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Bitmap getRoundedCornerBitmap(final Bitmap bitmap, final float roundPx) {
 
 		if (bitmap != null) {
@@ -721,5 +725,194 @@ public class CommonLib {
 		return bitmap;
 	}
 
+	public static ArrayList<Categories> getCategoriesList() {
+
+		ArrayList<Categories> finalCategoryList = new ArrayList<Categories>();
+
+		Categories categoryBookSports = new Categories();
+		categoryBookSports.setCategoryId(1);
+		categoryBookSports.setCategory("Books and Sports");
+
+		ArrayList<CategoryItems> categoryItemsList1 = new ArrayList<CategoryItems>();
+//		categoryItemsList1.add(new CategoryItems(1, "Book", -1));
+//		categoryItemsList1.add(new CategoryItems(2, "Cricket Bat", -1));
+//		categoryItemsList1.add(new CategoryItems(3, "Football", -1));
+//		categoryItemsList1.add(new CategoryItems(4, "Tennis Racquet", -1));
+//		categoryItemsList1.add(new CategoryItems(5, "Badminton Racquet", -1));
+//		categoryItemsList1.add(new CategoryItems(6, "Golf Kit", -1));
+//		categoryItemsList1.add(new CategoryItems(7, "BasketBall", -1));
+		categoryBookSports.setCategoryItems(categoryItemsList1);
+
+		finalCategoryList.add(categoryBookSports);
+
+		Categories categorygames = new Categories();
+		categorygames.setCategoryId(2);
+		categorygames.setCategory("Games");
+
+		ArrayList<CategoryItems> categoryItemsList2 = new ArrayList<CategoryItems>();
+//		categoryItemsList2.add(new CategoryItems(1, "Play-station", -1));
+//		categoryItemsList2.add(new CategoryItems(2, "Playing cards", -1));
+//		categoryItemsList2.add(new CategoryItems(3, "Scrabble", -1));
+//		categoryItemsList2.add(new CategoryItems(4, "Chess", -1));
+//		categoryItemsList2.add(new CategoryItems(5, "Badminton Racquet", -1));
+//		categoryItemsList2.add(new CategoryItems(6, "Scotland Yard", -1));
+		categorygames.setCategoryItems(categoryItemsList2);
+
+		finalCategoryList.add(categorygames);
+
+		Categories categoryMusic = new Categories();
+		categoryMusic.setCategoryId(4);
+		categoryMusic.setCategory("Music");
+
+		ArrayList<CategoryItems> categoryItemsList3 = new ArrayList<CategoryItems>();
+//		categoryItemsList3.add(new CategoryItems(1, "Acoustic Guitar", -1));
+//		categoryItemsList3.add(new CategoryItems(2, "Electric Guitar", -1));
+//		categoryItemsList3.add(new CategoryItems(3, "Drum-kit", -1));
+//		categoryItemsList3.add(new CategoryItems(4, "Snares", -1));
+//		categoryItemsList3.add(new CategoryItems(5, "Peddle", -1));
+//		categoryItemsList3.add(new CategoryItems(6, "Microphone", -1));
+//		categoryItemsList3.add(new CategoryItems(7, "Amplifier", -1));
+//		categoryItemsList3.add(new CategoryItems(8, "Keyboard", -1));
+//		categoryItemsList3.add(new CategoryItems(9, "Guitar pedals", -1));
+		categoryMusic.setCategoryItems(categoryItemsList3);
+
+		finalCategoryList.add(categoryMusic);
+
+		Categories categoryTravelHoliday = new Categories();
+		categoryTravelHoliday.setCategoryId(4);
+		categoryTravelHoliday.setCategory("Travel and Holiday");
+
+		ArrayList<CategoryItems> categoryItemsList4 = new ArrayList<CategoryItems>();
+//		categoryItemsList4.add(new CategoryItems(1, "Helmet", -1));
+//		categoryItemsList4.add(new CategoryItems(2, "Tavel Bag", -1));
+//		categoryItemsList4.add(new CategoryItems(3, "go pro", -1));
+//		categoryItemsList4.add(new CategoryItems(4, "Camping Chair", -1));
+//		categoryItemsList4.add(new CategoryItems(5, "Tent", -1));
+//		categoryItemsList4.add(new CategoryItems(6, "Suitcase", -1));
+//		categoryItemsList4.add(new CategoryItems(7, "Sleeping bag", -1));
+//		categoryItemsList4.add(new CategoryItems(8, "Inflatable Bed", -1));
+		categoryTravelHoliday.setCategoryItems(categoryItemsList4);
+
+		finalCategoryList.add(categoryTravelHoliday);
+
+		Categories categoryParty = new Categories();
+		categoryParty.setCategoryId(1);
+		categoryParty.setCategory("Party");
+
+		ArrayList<CategoryItems> categoryItemsList5 = new ArrayList<CategoryItems>();
+//		categoryItemsList5.add(new CategoryItems(1, "Disco Ball", -1));
+//		categoryItemsList5.add(new CategoryItems(2, "Poker Set", -1));
+//		categoryItemsList5.add(new CategoryItems(3, "Dj Set", -1));
+//		categoryItemsList5.add(new CategoryItems(4, "Lights", -1));
+//		categoryItemsList5.add(new CategoryItems(5, "Speakers", -1));
+//		categoryItemsList5.add(new CategoryItems(6, "Fancy Chairs", -1));
+		categoryParty.setCategoryItems(categoryItemsList5);
+
+		finalCategoryList.add(categoryParty);
+
+		Categories categoryBakingCooking = new Categories();
+		categoryBakingCooking.setCategoryId(1);
+		categoryBakingCooking.setCategory("Baking and cooking");
+
+		ArrayList<CategoryItems> categoryItemsList6 = new ArrayList<CategoryItems>();
+//		categoryItemsList6.add(new CategoryItems(1, "Blender", -1));
+//		categoryItemsList6.add(new CategoryItems(2, "Hand blender", -1));
+//		categoryItemsList6.add(new CategoryItems(3, "Microwave", -1));
+//		categoryItemsList6.add(new CategoryItems(4, "Cooking Pot", -1));
+//		categoryItemsList6.add(new CategoryItems(5, "Ice bucket", -1));
+//		categoryItemsList6.add(new CategoryItems(6, "Cutlery", -1));
+//		categoryItemsList6.add(new CategoryItems(7, "Cakepan", -1));
+		categoryBakingCooking.setCategoryItems(categoryItemsList6);
+
+		finalCategoryList.add(categoryBakingCooking);
+
+		Categories categoryHomeImprovement = new Categories();
+		categoryHomeImprovement.setCategoryId(1);
+		categoryHomeImprovement.setCategory("Home Improvement");
+
+		ArrayList<CategoryItems> categoryItemsList7 = new ArrayList<CategoryItems>();
+//		categoryItemsList7.add(new CategoryItems(1, "Drill", -1));
+//		categoryItemsList7.add(new CategoryItems(2, "Hammer", -1));
+//		categoryItemsList7.add(new CategoryItems(3, "Pincers", -1));
+//		categoryItemsList7.add(new CategoryItems(4, "Iron (Press)", -1));
+//		categoryItemsList7.add(new CategoryItems(5, "Screwdriver", -1));
+//		categoryItemsList7.add(new CategoryItems(6, "Step Ladder", -1));
+		categoryHomeImprovement.setCategoryItems(categoryItemsList1);
+
+		finalCategoryList.add(categoryHomeImprovement);
+		return finalCategoryList;
+	}
+
+	public static ArrayList<CategoryItems> getCategoryItems(int catId) {
+
+		ArrayList<CategoryItems> finalCategoryList = new ArrayList<CategoryItems>();
+
+		switch (catId) {
+		case 1:
+			finalCategoryList.add(new CategoryItems(1, "Book", ""));
+			finalCategoryList.add(new CategoryItems(2, "Cricket Bat", ""));
+			finalCategoryList.add(new CategoryItems(3, "Football", ""));
+			finalCategoryList.add(new CategoryItems(4, "Tennis Racquet", ""));
+			finalCategoryList.add(new CategoryItems(5, "Badminton Racquet", ""));
+			finalCategoryList.add(new CategoryItems(6, "Golf Kit", ""));
+			finalCategoryList.add(new CategoryItems(7, "BasketBall", ""));
+			break;
+		case 2:
+			finalCategoryList.add(new CategoryItems(1, "Play-station", ""));
+			finalCategoryList.add(new CategoryItems(2, "Playing cards", ""));
+			finalCategoryList.add(new CategoryItems(3, "Scrabble", ""));
+			finalCategoryList.add(new CategoryItems(4, "Chess", ""));
+			finalCategoryList.add(new CategoryItems(5, "Badminton Racquet", ""));
+			finalCategoryList.add(new CategoryItems(6, "Scotland Yard", ""));
+			break;
+		case 3:
+			finalCategoryList.add(new CategoryItems(1, "Acoustic Guitar", ""));
+			finalCategoryList.add(new CategoryItems(2, "Electric Guitar", ""));
+			finalCategoryList.add(new CategoryItems(3, "Drum-kit", ""));
+			finalCategoryList.add(new CategoryItems(4, "Snares", ""));
+			finalCategoryList.add(new CategoryItems(5, "Peddle", ""));
+			finalCategoryList.add(new CategoryItems(6, "Microphone", ""));
+			finalCategoryList.add(new CategoryItems(7, "Amplifier", ""));
+			finalCategoryList.add(new CategoryItems(8, "Keyboard", ""));
+			finalCategoryList.add(new CategoryItems(9, "Guitar pedals", ""));
+			break;
+		case 4:
+			finalCategoryList.add(new CategoryItems(1, "Helmet", ""));
+			finalCategoryList.add(new CategoryItems(2, "Tavel Bag", ""));
+			finalCategoryList.add(new CategoryItems(3, "go pro", ""));
+			finalCategoryList.add(new CategoryItems(4, "Camping Chair", ""));
+			finalCategoryList.add(new CategoryItems(5, "Tent", ""));
+			finalCategoryList.add(new CategoryItems(6, "Suitcase", ""));
+			finalCategoryList.add(new CategoryItems(7, "Sleeping bag", ""));
+			finalCategoryList.add(new CategoryItems(8, "Inflatable Bed", ""));
+			break;
+		case 5:
+			finalCategoryList.add(new CategoryItems(1, "Disco Ball", ""));
+			finalCategoryList.add(new CategoryItems(2, "Poker Set", ""));
+			finalCategoryList.add(new CategoryItems(3, "Dj Set", ""));
+			finalCategoryList.add(new CategoryItems(4, "Lights", ""));
+			finalCategoryList.add(new CategoryItems(5, "Speakers", ""));
+			finalCategoryList.add(new CategoryItems(6, "Fancy Chairs", ""));
+			break;
+		case 6:
+			finalCategoryList.add(new CategoryItems(1, "Blender", ""));
+			finalCategoryList.add(new CategoryItems(2, "Hand blender", ""));
+			finalCategoryList.add(new CategoryItems(3, "Microwave", ""));
+			finalCategoryList.add(new CategoryItems(4, "Cooking Pot", ""));
+			finalCategoryList.add(new CategoryItems(5, "Ice bucket", ""));
+			finalCategoryList.add(new CategoryItems(6, "Cutlery", ""));
+			finalCategoryList.add(new CategoryItems(7, "Cakepan", ""));
+			break;
+		case 7:
+			finalCategoryList.add(new CategoryItems(1, "Drill", ""));
+			finalCategoryList.add(new CategoryItems(2, "Hammer", ""));
+			finalCategoryList.add(new CategoryItems(3, "Pincers", ""));
+			finalCategoryList.add(new CategoryItems(4, "Iron (Press)", ""));
+			finalCategoryList.add(new CategoryItems(5, "Screwdriver", ""));
+			finalCategoryList.add(new CategoryItems(6, "Step Ladder", ""));
+			break;
+		}
+		return finalCategoryList;
+	}
 
 }

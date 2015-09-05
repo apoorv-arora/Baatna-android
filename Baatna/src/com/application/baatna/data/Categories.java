@@ -1,11 +1,13 @@
 package com.application.baatna.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Categories implements Serializable {
 	
 	private int categoryId;
 	private String category;
+	private ArrayList<CategoryItems> categoryItems;
 	
 	public Categories(){
 		categoryId = 0;
@@ -33,4 +35,12 @@ public class Categories implements Serializable {
 		this.category = category;
 	}
 
+	public ArrayList<CategoryItems> getCategoryItems() {
+		return categoryItems;
+	}
+
+	public void setCategoryItems(ArrayList<CategoryItems> categoryItems) {
+		this.categoryItems = categoryItems;
+	}
+	
 }
