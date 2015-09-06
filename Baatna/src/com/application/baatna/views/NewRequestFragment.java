@@ -3,6 +3,12 @@ package com.application.baatna.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.application.baatna.R;
+import com.application.baatna.data.Categories;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.UploadManager;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
@@ -24,12 +30,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.application.baatna.R;
-import com.application.baatna.data.Categories;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.RequestWrapper;
-import com.application.baatna.utils.UploadManager;
-
 public class NewRequestFragment extends Fragment {
 
 	private View rootView;
@@ -40,7 +40,7 @@ public class NewRequestFragment extends Fragment {
 	private RequestCategoryAdapter mCategoriesAdapter;
 	private GetCategoriesList mAsyncTaskRunning;
 	private SharedPreferences prefs;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mInflater = inflater;
@@ -109,6 +109,8 @@ public class NewRequestFragment extends Fragment {
 		rootView.findViewById(R.id.post).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
+				
 				UploadManager.postNewRequest(prefs.getString("access_token", ""),
 						((TextView) rootView.findViewById(R.id.category_et)).getText().toString(),
 						((TextView) rootView.findViewById(R.id.description_et)).getText().toString());

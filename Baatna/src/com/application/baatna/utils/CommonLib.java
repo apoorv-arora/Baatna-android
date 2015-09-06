@@ -140,6 +140,7 @@ public class CommonLib {
 	public static final int UPDATE_INSTITUTION = 207;
 	public static final int WISH_UPDATE_STATUS = 208;
 	public static final int SEND_MESSAGE = 209;
+	public static final int LOCATION_UPDATE = 210;
 
 	/**
 	 * Feed types

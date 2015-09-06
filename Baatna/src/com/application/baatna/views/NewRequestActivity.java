@@ -9,6 +9,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 	private NewRequestFragment mFragment;
 	private boolean isChecked = true;
 	private boolean isDestroyed = false;
+	private ProgressDialog z_ProgressDialog;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -117,6 +119,9 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 				isChecked = false;
 				onBackPressed();
 			}
+			if (!isDestroyed && z_ProgressDialog != null) {
+				z_ProgressDialog.dismiss();
+			}
 		}
 	}
 
@@ -131,5 +136,14 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 
 	@Override
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
+		if (requestType == CommonLib.WISH_ADD) {
+			if (!isDestroyed) {
+				z_ProgressDialog = ProgressDialog
+						.show(NewRequestActivity.this, null,
+								getResources().getString(R.string.verifying_creds),
+								true, false);
+				z_ProgressDialog.setCancelable(false);
+			}
+		}
 	}
 }

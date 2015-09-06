@@ -114,6 +114,18 @@ public class UploadManager {
 
 	}
 	
+	public static void updateLocation(String accessToken, double lat, double lon) {
+		for (UploadManagerCallback callback : callbacks) {
+			callback.uploadStarted(CommonLib.LOCATION_UPDATE, 0, accessToken, null);
+		}
+
+		new UpdateLocation().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				new Object[] { accessToken, lat, lon});
+
+	}
+	
+	
+	
 	public static void updateInstitution(String accessToken, String institutionId, String studentId) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.UPDATE_INSTITUTION, 0, accessToken, null);
@@ -416,6 +428,48 @@ public class UploadManager {
 			}
 		}
 	}
+
+	private static class UpdateLocation extends AsyncTask<Object, Void, Object[]> {
+
+		private String accessToken;
+		private double lat;
+		private double lon;
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+
+			Object result[] = null;
+			accessToken = (String) params[0];
+			lat = (Double) params[1];
+			lon = (Double) params[2];
+			
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
+			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
+			nameValuePairs.add(new BasicNameValuePair("latitude", lat+""));
+			nameValuePairs.add(new BasicNameValuePair("longitude", lon+""));
+			
+			try {
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/location?", nameValuePairs, PostWrapper.LOCATION_UPDATE, context);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return result;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Object[] arg) {
+			if (arg[0].equals("failure"))
+				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
+
+			for (UploadManagerCallback callback : callbacks) {
+				callback.uploadFinished(CommonLib.LOCATION_UPDATE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+			}
+		}
+	}
+
 	
 	private static class UpdateInstitutionId extends AsyncTask<Object, Void, Object[]> {
 

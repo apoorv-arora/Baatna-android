@@ -22,7 +22,6 @@ import com.application.baatna.mapUtils.GoogleMapRenderer;
 import com.application.baatna.mapUtils.SimpleRestaurantPin;
 import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.FacebookConnectCallback;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.fab.FABControl;
@@ -87,7 +86,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Home extends AppCompatActivity
-		implements FacebookConnectCallback, BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener {
+		implements BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -765,6 +764,9 @@ public class Home extends AppCompatActivity
 
 	@Override
 	public void onCoordinatesIdentified(Location loc) {
+		if( loc != null ) {
+			UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
+		}
 	}
 
 	@Override
@@ -789,11 +791,6 @@ public class Home extends AppCompatActivity
 
 	@Override
 	public void onNetworkError() {
-	}
-
-	@Override
-	public void response(Bundle bundle) {
-
 	}
 
 	public void aboutus(View view) {
