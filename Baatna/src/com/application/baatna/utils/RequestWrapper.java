@@ -143,9 +143,9 @@ public class RequestWrapper {
 			}
 			return categories;
 		} else if(Type == NEWS_FEED) {
-			ArrayList<FeedItem> feedItems = null;
+			Object[] feedItems = null;
 			try{
-				feedItems = (ArrayList<FeedItem>) ParserJson.parse_NewsFeedResponse(result);
+				feedItems = (Object[]) ParserJson.parse_NewsFeedResponse(result);
 			} catch(JSONException e) {
 				e.printStackTrace();
 			}

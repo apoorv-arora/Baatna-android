@@ -59,7 +59,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 	private int mWishesTotalCount;
 	private boolean cancelled = false;
 	private boolean loading = false;
-	private int count = 5;
+	private int count = 10;
 
 	@Override
 	protected void onCreate(Bundle arg0) {

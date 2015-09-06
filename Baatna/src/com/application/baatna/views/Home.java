@@ -66,10 +66,12 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
@@ -115,6 +117,13 @@ public class Home extends AppCompatActivity
 	private int mScrollState;
 	ArrayList<GetImage> getImageArray = new ArrayList<GetImage>();
 	private ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
+	
+	ArrayList<FeedItem> wishes;
+	LinearLayout mListViewFooter;
+	private int mWishesTotalCount;
+	private boolean cancelled = false;
+	private boolean loading = false;
+	private int count = 10;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -129,7 +138,7 @@ public class Home extends AppCompatActivity
 		zapp.zll.addCallback(this);
 		width = getWindowManager().getDefaultDisplay().getWidth();
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(toolbar);
         
 		setupActionBar();
@@ -1248,7 +1257,7 @@ public class Home extends AppCompatActivity
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "newsfeed/get?";
+				url = CommonLib.SERVER + "newsfeed/get/?start=0&count="+count;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.NEWS_FEED, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
@@ -1265,11 +1274,11 @@ public class Home extends AppCompatActivity
 				return;
 
 			if (result != null) {
-				if (result instanceof ArrayList<?>) {
+				if (result instanceof Object[]) {
 					findViewById(R.id.feedListView).setVisibility(View.VISIBLE);
-					feedListAdapter = new NewsFeedAdapter(mContext, R.layout.feed_list_item_snippet,
-							(ArrayList<FeedItem>) result);
-					feedListView.setAdapter(feedListAdapter);
+					Object[] arr = (Object[]) result;
+					mWishesTotalCount = (Integer) arr[0];
+					setWishes((ArrayList<FeedItem>) arr[1]);
 				}
 			} else {
 				if (CommonLib.isNetworkAvailable(mContext)) {
@@ -1286,6 +1295,76 @@ public class Home extends AppCompatActivity
 		}
 	}
 	
+	private void setWishes(ArrayList<FeedItem> wishes) {
+		this.wishes = wishes;
+		if (wishes != null && wishes.size() > 0 && mWishesTotalCount > wishes.size()
+				&& feedListView.getFooterViewsCount() == 0) {
+			mListViewFooter = new LinearLayout(getApplicationContext());
+			mListViewFooter.setBackgroundResource(R.color.white);
+			mListViewFooter.setLayoutParams(new ListView.LayoutParams(LayoutParams.MATCH_PARENT, width / 5));
+			mListViewFooter.setGravity(Gravity.CENTER);
+			mListViewFooter.setOrientation(LinearLayout.HORIZONTAL);
+			ProgressBar pbar = new ProgressBar(getApplicationContext(), null,
+					android.R.attr.progressBarStyleSmallInverse);
+			mListViewFooter.addView(pbar);
+			pbar.setTag("progress");
+			pbar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			feedListView.addFooterView(mListViewFooter);
+		}
+		feedListAdapter = new NewsFeedAdapter(mContext, R.layout.new_request_fragment, this.wishes);
+		feedListView.setAdapter(feedListAdapter);
+		feedListView.setOnScrollListener(new OnScrollListener() {
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount - 1 < mWishesTotalCount
+						&& !loading && mListViewFooter != null) {
+					if (feedListView.getFooterViewsCount() == 1) {
+						loading = true;
+						new LoadModeFeed().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
+					}
+				} else if (totalItemCount - 1 == mWishesTotalCount && feedListView.getFooterViewsCount() > 0) {
+					feedListView.removeFooterView(mListViewFooter);
+				}
+			}
+		});
+	}
+	
+	private class LoadModeFeed extends AsyncTask<Integer, Void, Object> {
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Integer... params) {
+			int start = params[0];
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "newsfeed/get?start=" + start + "&count=" + count;
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.NEWS_FEED, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+			if (result != null && result instanceof Object[]) {
+				Object[] arr = (Object[]) result;
+				wishes.addAll((ArrayList<FeedItem>) arr[1]);
+				feedListAdapter.notifyDataSetChanged();
+			}
+			loading = false;
+		}
+	}
+
 	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width, int height, boolean useDiskCache) {
 
 		if (cancelPotentialWork(url, imageView)) {

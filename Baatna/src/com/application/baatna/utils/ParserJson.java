@@ -465,9 +465,9 @@ public class ParserJson {
 
 
 	
-	public static ArrayList<FeedItem> parse_NewsFeedResponse(InputStream is)
+	public static Object[] parse_NewsFeedResponse(InputStream is)
 			throws JSONException {
-
+		Object[] response = new Object[2];
 		ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
 
 		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
@@ -481,7 +481,8 @@ public class ParserJson {
 
 					JSONObject newsFeedObject = responseObject
 							.getJSONObject("response");
-
+					if(newsFeedObject.has("total") && newsFeedObject.get("total") instanceof Integer)
+						response[0] = newsFeedObject.getInt("total"); 
 					if (newsFeedObject.has("newsFeed")
 							&& newsFeedObject.get("newsFeed") instanceof JSONArray) {
 						JSONArray categoriesArr = newsFeedObject
@@ -546,7 +547,8 @@ public class ParserJson {
 				}
 			}
 		}
-		return feedItems;
+		response[1] = feedItems;
+		return response;
 	}
 
 }
