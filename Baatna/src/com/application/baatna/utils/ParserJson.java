@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.Parser;
 
 import com.application.baatna.data.Categories;
 import com.application.baatna.data.FeedItem;
@@ -17,8 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class ParserJson {
 
 	@SuppressWarnings("resource")
-	public static JSONObject convertInputStreamToJSON(InputStream is)
-			throws JSONException {
+	public static JSONObject convertInputStreamToJSON(InputStream is) throws JSONException {
 		java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
 		String responseJSON = s.hasNext() ? s.next() : "";
 
@@ -28,8 +28,7 @@ public class ParserJson {
 		return map;
 	}
 
-	public static Object[] parseSignupResponse(InputStream is)
-			throws JSONException {
+	public static Object[] parseSignupResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
 
@@ -49,8 +48,7 @@ public class ParserJson {
 		return output;
 	}
 
-	public static Object[] parseInstitutionResponse(InputStream is)
-			throws JSONException {
+	public static Object[] parseInstitutionResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
 
@@ -70,8 +68,7 @@ public class ParserJson {
 		return output;
 	}
 
-	public static Object[] parseLoginResponse(InputStream is)
-			throws JSONException {
+	public static Object[] parseLoginResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
 
@@ -92,8 +89,7 @@ public class ParserJson {
 		return output;
 	}
 
-	public static JSONObject parseFBLoginResponse(InputStream is)
-			throws JSONException {
+	public static JSONObject parseFBLoginResponse(InputStream is) throws JSONException {
 
 		JSONObject output = new JSONObject();
 
@@ -103,21 +99,18 @@ public class ParserJson {
 			String out = responseObject.getString("status");
 			if (out.equals("success")) {
 				if (responseObject.has("response")) {
-					output = new JSONObject(String.valueOf(responseObject
-							.get("response")));
+					output = new JSONObject(String.valueOf(responseObject.get("response")));
 				}
 			} else {
 				if (responseObject.has("errorMessage")) {
-					output.put("error",
-							responseObject.getString("errorMessage"));
+					output.put("error", responseObject.getString("errorMessage"));
 				}
 			}
 		}
 		return output;
 	}
 
-	public static Object[] parseLogoutResponse(InputStream is)
-			throws JSONException {
+	public static Object[] parseLogoutResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
 
@@ -138,8 +131,7 @@ public class ParserJson {
 		return output;
 	}
 
-	public static Object[] parseWishPostResponse(InputStream is)
-			throws JSONException {
+	public static Object[] parseWishPostResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
 
@@ -160,8 +152,7 @@ public class ParserJson {
 		return output;
 	}
 
-	public static Object[] parseWishDeletePostResponse(InputStream is)
-			throws JSONException {
+	public static Object[] parseWishDeletePostResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
 
@@ -182,8 +173,7 @@ public class ParserJson {
 		return output;
 	}
 
-	public static ArrayList<Categories> parse_Categories(InputStream is)
-			throws JSONException {
+	public static ArrayList<Categories> parse_Categories(InputStream is) throws JSONException {
 
 		ArrayList<Categories> categories = new ArrayList<Categories>();
 
@@ -191,30 +181,20 @@ public class ParserJson {
 
 		if (responseObject != null && responseObject.has("status")) {
 			if (responseObject.getString("status").equals("success")) {
-				if (responseObject.has("response")
-						&& responseObject.get("response") instanceof JSONObject) {
-					JSONObject categoriesObject = responseObject
-							.getJSONObject("response");
-					if (categoriesObject.has("categories")
-							&& categoriesObject.get("categories") instanceof JSONArray) {
-						JSONArray categoriesArr = categoriesObject
-								.getJSONArray("categories");
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject categoriesObject = responseObject.getJSONObject("response");
+					if (categoriesObject.has("categories") && categoriesObject.get("categories") instanceof JSONArray) {
+						JSONArray categoriesArr = categoriesObject.getJSONArray("categories");
 						for (int i = 0; i < categoriesArr.length(); i++) {
 							Categories category = new Categories();
-							JSONObject categoryJson = categoriesArr
-									.getJSONObject(i);
-							if (categoryJson.has("category")
-									&& categoryJson.get("category") instanceof JSONObject) {
-								categoryJson = categoryJson
-										.getJSONObject("category");
+							JSONObject categoryJson = categoriesArr.getJSONObject(i);
+							if (categoryJson.has("category") && categoryJson.get("category") instanceof JSONObject) {
+								categoryJson = categoryJson.getJSONObject("category");
 								if (categoryJson.has("category_id")
 										&& categoryJson.get("category_id") instanceof Integer)
-									category.setCategoryId(categoryJson
-											.getInt("category_id"));
+									category.setCategoryId(categoryJson.getInt("category_id"));
 								if (categoryJson.has("category_name"))
-									category.setCategory(String
-											.valueOf(categoryJson
-													.get("category_name")));
+									category.setCategory(String.valueOf(categoryJson.get("category_name")));
 								categories.add(category);
 							}
 						}
@@ -225,8 +205,7 @@ public class ParserJson {
 		return categories;
 	}
 
-	public static Object[] parse_Wishes(InputStream is)
-			throws JSONException {
+	public static Object[] parse_Wishes(InputStream is) throws JSONException {
 
 		Object[] objects = new Object[2];
 		ArrayList<Wish> wishes = new ArrayList<Wish>();
@@ -235,43 +214,27 @@ public class ParserJson {
 
 		if (responseObject != null && responseObject.has("status")) {
 			if (responseObject.getString("status").equals("success")) {
-				if (responseObject.has("response")
-						&& responseObject.get("response") instanceof JSONObject) {
-					JSONObject categoriesObject = responseObject
-							.getJSONObject("response");
-					if(categoriesObject.has("total") && categoriesObject.get("total") instanceof Integer)
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject categoriesObject = responseObject.getJSONObject("response");
+					if (categoriesObject.has("total") && categoriesObject.get("total") instanceof Integer)
 						size = categoriesObject.getInt("total");
-					if (categoriesObject.has("wishes")
-							&& categoriesObject.get("wishes") instanceof JSONArray) {
-						JSONArray categoriesArr = categoriesObject
-								.getJSONArray("wishes");
+					if (categoriesObject.has("wishes") && categoriesObject.get("wishes") instanceof JSONArray) {
+						JSONArray categoriesArr = categoriesObject.getJSONArray("wishes");
 						for (int i = 0; i < categoriesArr.length(); i++) {
 							Wish category = new Wish();
-							JSONObject categoryJson = categoriesArr
-									.getJSONObject(i);
-							if (categoryJson.has("wish")
-									&& categoryJson.get("wish") instanceof JSONObject) {
-								categoryJson = categoryJson
-										.getJSONObject("wish");
+							JSONObject categoryJson = categoriesArr.getJSONObject(i);
+							if (categoryJson.has("wish") && categoryJson.get("wish") instanceof JSONObject) {
+								categoryJson = categoryJson.getJSONObject("wish");
 								if (categoryJson.has("title"))
-									category.setTitle(String
-											.valueOf(categoryJson.get("title")));
+									category.setTitle(String.valueOf(categoryJson.get("title")));
 								if (categoryJson.has("description"))
-									category.setDescription(String
-											.valueOf(categoryJson
-													.get("description")));
-								if (categoryJson.has("time_post")
-										&& categoryJson.get("time_post") instanceof Long)
-									category.setTimeOfPost(categoryJson
-											.getLong("time_post"));
-								if (categoryJson.has("user_id")
-										&& categoryJson.get("user_id") instanceof Integer)
-									category.setUserId(categoryJson
-											.getInt("user_id"));
-								if (categoryJson.has("wish_id")
-										&& categoryJson.get("wish_id") instanceof Integer)
-									category.setWishId(categoryJson
-											.getInt("wish_id"));
+									category.setDescription(String.valueOf(categoryJson.get("description")));
+								if (categoryJson.has("time_post") && categoryJson.get("time_post") instanceof Long)
+									category.setTimeOfPost(categoryJson.getLong("time_post"));
+								if (categoryJson.has("user_id") && categoryJson.get("user_id") instanceof Integer)
+									category.setUserId(categoryJson.getInt("user_id"));
+								if (categoryJson.has("wish_id") && categoryJson.get("wish_id") instanceof Integer)
+									category.setWishId(categoryJson.getInt("wish_id"));
 								wishes.add(category);
 							}
 						}
@@ -284,8 +247,7 @@ public class ParserJson {
 		return objects;
 	}
 
-	public static ArrayList<String> parse_Institutions(InputStream is)
-			throws JSONException {
+	public static ArrayList<String> parse_Institutions(InputStream is) throws JSONException {
 
 		ArrayList<String> wishes = new ArrayList<String>();
 
@@ -293,25 +255,19 @@ public class ParserJson {
 
 		if (responseObject != null && responseObject.has("status")) {
 			if (responseObject.getString("status").equals("success")) {
-				if (responseObject.has("response")
-						&& responseObject.get("response") instanceof JSONObject) {
-					JSONObject categoriesObject = responseObject
-							.getJSONObject("response");
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject categoriesObject = responseObject.getJSONObject("response");
 					if (categoriesObject.has("institutions")
 							&& categoriesObject.get("institutions") instanceof JSONArray) {
-						JSONArray categoriesArr = categoriesObject
-								.getJSONArray("institutions");
+						JSONArray categoriesArr = categoriesObject.getJSONArray("institutions");
 						for (int i = 0; i < categoriesArr.length(); i++) {
 							String institution = "";
-							JSONObject categoryJson = categoriesArr
-									.getJSONObject(i);
+							JSONObject categoryJson = categoriesArr.getJSONObject(i);
 							if (categoryJson.has("institution")
 									&& categoryJson.get("institution") instanceof JSONObject) {
-								categoryJson = categoryJson
-										.getJSONObject("institution");
+								categoryJson = categoryJson.getJSONObject("institution");
 								if (categoryJson.has("name")) {
-									institution = String.valueOf(categoryJson
-											.get("name"));
+									institution = String.valueOf(categoryJson.get("name"));
 									wishes.add(institution);
 								}
 							}
@@ -323,8 +279,7 @@ public class ParserJson {
 		return wishes;
 	}
 
-	public static ArrayList<LatLng> parse_NearbyUsers(InputStream is)
-			throws JSONException {
+	public static ArrayList<LatLng> parse_NearbyUsers(InputStream is) throws JSONException {
 
 		ArrayList<LatLng> wishes = new ArrayList<LatLng>();
 
@@ -332,34 +287,22 @@ public class ParserJson {
 
 		if (responseObject != null && responseObject.has("status")) {
 			if (responseObject.getString("status").equals("success")) {
-				if (responseObject.has("response")
-						&& responseObject.get("response") instanceof JSONObject) {
-					JSONObject categoriesObject = responseObject
-							.getJSONObject("response");
-					if (categoriesObject.has("users")
-							&& categoriesObject.get("users") instanceof JSONArray) {
-						JSONArray categoriesArr = categoriesObject
-								.getJSONArray("users");
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject categoriesObject = responseObject.getJSONObject("response");
+					if (categoriesObject.has("users") && categoriesObject.get("users") instanceof JSONArray) {
+						JSONArray categoriesArr = categoriesObject.getJSONArray("users");
 						for (int i = 0; i < categoriesArr.length(); i++) {
-							JSONObject categoryJson = categoriesArr
-									.getJSONObject(i);
-							if (categoryJson.has("session")
-									&& categoryJson.get("session") instanceof JSONObject) {
-								categoryJson = categoryJson
-										.getJSONObject("session");
+							JSONObject categoryJson = categoriesArr.getJSONObject(i);
+							if (categoryJson.has("session") && categoryJson.get("session") instanceof JSONObject) {
+								categoryJson = categoryJson.getJSONObject("session");
 								double latitude = 0, longitude = 0;
-								if (categoryJson.has("latitude")
-										&& categoryJson.get("latitude") instanceof Double) {
-									latitude = categoryJson
-											.getDouble("latitude");
+								if (categoryJson.has("latitude") && categoryJson.get("latitude") instanceof Double) {
+									latitude = categoryJson.getDouble("latitude");
 								}
-								if (categoryJson.has("longitude")
-										&& categoryJson.get("longitude") instanceof Double) {
-									longitude = categoryJson
-											.getDouble("longitude");
+								if (categoryJson.has("longitude") && categoryJson.get("longitude") instanceof Double) {
+									longitude = categoryJson.getDouble("longitude");
 								}
-								LatLng location = new LatLng(latitude,
-										longitude);
+								LatLng location = new LatLng(latitude, longitude);
 								wishes.add(location);
 							}
 						}
@@ -381,16 +324,12 @@ public class ParserJson {
 				wish.setTitle(String.valueOf(wishObject.get("title")));
 
 			if (wishObject.has("description"))
-				wish.setDescription(String.valueOf(wishObject
-						.get("description")));
-			if (wishObject.has("time_post")
-					&& wishObject.get("time_post") instanceof Long)
+				wish.setDescription(String.valueOf(wishObject.get("description")));
+			if (wishObject.has("time_post") && wishObject.get("time_post") instanceof Long)
 				wish.setTimeOfPost(wishObject.getLong("time_post"));
-			if (wishObject.has("user_id")
-					&& wishObject.get("user_id") instanceof Integer)
+			if (wishObject.has("user_id") && wishObject.get("user_id") instanceof Integer)
 				wish.setUserId(wishObject.getInt("user_id"));
-			if (wishObject.has("wish_id")
-					&& wishObject.get("wish_id") instanceof Integer)
+			if (wishObject.has("wish_id") && wishObject.get("wish_id") instanceof Integer)
 				wish.setWishId(wishObject.getInt("wish_id"));
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -404,8 +343,7 @@ public class ParserJson {
 
 		User returnUser = new User();
 		try {
-			if (userObject.has("user_id")
-					&& userObject.get("user_id") instanceof Integer) {
+			if (userObject.has("user_id") && userObject.get("user_id") instanceof Integer) {
 				returnUser.setUserId(userObject.getInt("user_id"));
 			}
 
@@ -414,13 +352,11 @@ public class ParserJson {
 			}
 
 			if (userObject.has("profile_pic")) {
-				returnUser.setImageUrl(String.valueOf(userObject
-						.get("profile_pic")));
+				returnUser.setImageUrl(String.valueOf(userObject.get("profile_pic")));
 			}
 
 			if (userObject.has("user_name")) {
-				returnUser.setUserName(String.valueOf(userObject
-						.get("user_name")));
+				returnUser.setUserName(String.valueOf(userObject.get("user_name")));
 			}
 
 		} catch (JSONException e) {
@@ -436,23 +372,23 @@ public class ParserJson {
 
 		Message returnMessage = new Message();
 		try {
-			if(messageObject.has("to_user") && messageObject.get("to_user") instanceof JSONObject) {
+			if (messageObject.has("to_user") && messageObject.get("to_user") instanceof JSONObject) {
 				returnMessage.setToUser(parse_User(messageObject.getJSONObject("to_user")));
 			}
-			
-			if(messageObject.has("from_user") && messageObject.get("from_user") instanceof JSONObject) {
+
+			if (messageObject.has("from_user") && messageObject.get("from_user") instanceof JSONObject) {
 				returnMessage.setFromUser(parse_User(messageObject.getJSONObject("from_user")));
 			}
-			
-			if(messageObject.has("message_id") && messageObject.get("message_id") instanceof Integer) {
+
+			if (messageObject.has("message_id") && messageObject.get("message_id") instanceof Integer) {
 				returnMessage.setMessageId(messageObject.getInt("message_id"));
 			}
-			
-			if(messageObject.has("from_to") && messageObject.get("from_to") instanceof Integer) {
+
+			if (messageObject.has("from_to") && messageObject.get("from_to") instanceof Integer) {
 				returnMessage.setMessageId(messageObject.getInt("message_id"));
 			}
-			
-			if(messageObject.has("message") ) {
+
+			if (messageObject.has("message")) {
 				returnMessage.setMessage(String.valueOf(messageObject.get("message")));
 			}
 
@@ -463,10 +399,7 @@ public class ParserJson {
 		return returnMessage;
 	}
 
-
-	
-	public static Object[] parse_NewsFeedResponse(InputStream is)
-			throws JSONException {
+	public static Object[] parse_NewsFeedResponse(InputStream is) throws JSONException {
 		Object[] response = new Object[2];
 		ArrayList<FeedItem> feedItems = new ArrayList<FeedItem>();
 
@@ -476,34 +409,27 @@ public class ParserJson {
 
 			if (responseObject.getString("status").equals("success")) {
 
-				if (responseObject.has("response")
-						&& responseObject.get("response") instanceof JSONObject) {
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
 
-					JSONObject newsFeedObject = responseObject
-							.getJSONObject("response");
-					if(newsFeedObject.has("total") && newsFeedObject.get("total") instanceof Integer)
-						response[0] = newsFeedObject.getInt("total"); 
-					if (newsFeedObject.has("newsFeed")
-							&& newsFeedObject.get("newsFeed") instanceof JSONArray) {
-						JSONArray categoriesArr = newsFeedObject
-								.getJSONArray("newsFeed");
+					JSONObject newsFeedObject = responseObject.getJSONObject("response");
+					if (newsFeedObject.has("total") && newsFeedObject.get("total") instanceof Integer)
+						response[0] = newsFeedObject.getInt("total");
+					if (newsFeedObject.has("newsFeed") && newsFeedObject.get("newsFeed") instanceof JSONArray) {
+						JSONArray categoriesArr = newsFeedObject.getJSONArray("newsFeed");
 
 						for (int i = 0; i < categoriesArr.length(); i++) {
-							
-							JSONObject categoryJson = categoriesArr
-									.getJSONObject(i);
+
+							JSONObject categoryJson = categoriesArr.getJSONObject(i);
 
 							FeedItem feedItem = new FeedItem();
 
-							if (categoryJson.has("userFirst")
-									&& categoryJson.get("userFirst") instanceof JSONObject) {
+							if (categoryJson.has("userFirst") && categoryJson.get("userFirst") instanceof JSONObject) {
 
 								JSONObject userFirstJSONObject = new JSONObject();
-								userFirstJSONObject = categoryJson
-										.getJSONObject("userFirst");
+								userFirstJSONObject = categoryJson.getJSONObject("userFirst");
 
-								
-								if(userFirstJSONObject.has("user") && userFirstJSONObject.get("user") instanceof JSONObject ) {
+								if (userFirstJSONObject.has("user")
+										&& userFirstJSONObject.get("user") instanceof JSONObject) {
 									User userFirst = parse_User(userFirstJSONObject.getJSONObject("user"));
 									feedItem.setUserFirst(userFirst);
 								}
@@ -512,30 +438,27 @@ public class ParserJson {
 							if (categoryJson.has("userSecond")
 									&& categoryJson.get("userSecond") instanceof JSONObject) {
 
-								
 								JSONObject userSecondJSONObject = new JSONObject();
-								userSecondJSONObject = categoryJson
-										.getJSONObject("userSecond");
+								userSecondJSONObject = categoryJson.getJSONObject("userSecond");
 
-								if(userSecondJSONObject.has("user") && userSecondJSONObject.get("user") instanceof JSONObject ) {
+								if (userSecondJSONObject.has("user")
+										&& userSecondJSONObject.get("user") instanceof JSONObject) {
 									User userSecond = parse_User(userSecondJSONObject.getJSONObject("user"));
 									feedItem.setUserSecond(userSecond);
 								}
 							}
 
-							if (categoryJson.has("type")
-									&& categoryJson.get("type") instanceof Integer) {
+							if (categoryJson.has("type") && categoryJson.get("type") instanceof Integer) {
 								feedItem.setType(categoryJson.getInt("type"));
 							}
 
-							if (categoryJson.has("wish")
-									&& categoryJson.get("wish") instanceof JSONObject) {
+							if (categoryJson.has("wish") && categoryJson.get("wish") instanceof JSONObject) {
 
 								JSONObject userSecondJSONObject = new JSONObject();
-								userSecondJSONObject = categoryJson
-										.getJSONObject("wish");
+								userSecondJSONObject = categoryJson.getJSONObject("wish");
 
-								if(userSecondJSONObject.has("wish") && userSecondJSONObject.get("wish") instanceof JSONObject) {
+								if (userSecondJSONObject.has("wish")
+										&& userSecondJSONObject.get("wish") instanceof JSONObject) {
 									Wish wish = parse_Wish(userSecondJSONObject.getJSONObject("wish"));
 									feedItem.setWish(wish);
 								}
@@ -551,4 +474,25 @@ public class ParserJson {
 		return response;
 	}
 
+	public static User parse_UserResponse(InputStream is) throws JSONException {
+		User response = new User();
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+
+			if (responseObject.getString("status").equals("success")) {
+
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+
+					JSONObject responseObj = responseObject.getJSONObject("response");
+					if (responseObj != null && responseObj.has("user")
+							&& responseObj.get("user") instanceof JSONObject) {
+						response = ParserJson.parse_User(responseObj.getJSONObject("user"));
+					}
+				}
+			}
+		}
+		return response;
+	}
 }

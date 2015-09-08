@@ -21,6 +21,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 
 import com.application.baatna.db.MessageDBWrapper;
+import com.application.baatna.services.LocationUpdateService;
 import com.application.baatna.utils.BaatnaLocationListener;
 import com.application.baatna.utils.CacheCleanerService;
 import com.application.baatna.utils.CommonLib;
@@ -100,6 +101,7 @@ public class BaatnaApp extends Application {
 			deleteDatabase("UPLOADDB");
 
 			startCacheCleanerService();
+			startLocationUpdateService();
 
 		} else {
 			firstLaunch = prefs.getBoolean("firstLaunch", true);
@@ -113,6 +115,15 @@ public class BaatnaApp extends Application {
 
 				if (!alarmUp)
 					startCacheCleanerService();
+			}
+			
+			if (!isMyServiceRunning(LocationUpdateService.class)) {
+				boolean alarmUp = (PendingIntent.getService(this, 0,
+						new Intent(this, LocationUpdateService.class),
+						PendingIntent.FLAG_NO_CREATE) != null);
+
+				if (!alarmUp)
+					startLocationUpdateService();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -173,6 +184,21 @@ public class BaatnaApp extends Application {
 	private void startCacheCleanerService() {
 
 		Intent intent = new Intent(this, CacheCleanerService.class);
+		PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, 04);
+		calendar.set(Calendar.MINUTE, 00);
+		calendar.set(Calendar.SECOND, 00);
+
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
+				24 * 60 * 60 * 1000, pintent);
+	}
+	
+	private void startLocationUpdateService() {
+
+		Intent intent = new Intent(this, LocationUpdateService.class);
 		PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
 
 		Calendar calendar = Calendar.getInstance();

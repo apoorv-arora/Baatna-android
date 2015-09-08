@@ -18,15 +18,14 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.data.Categories;
-import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.Message;
-import com.application.baatna.data.Wish;
+import com.application.baatna.data.User;
 import com.google.android.gms.maps.model.LatLng;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class RequestWrapper {
 	private static SharedPreferences prefs;
@@ -46,6 +45,7 @@ public class RequestWrapper {
 	public static final String INSTITUTIONS_LIST = "institutions_list";
 	public static final String NEARBY_USERS = "nearby_users";
 	public static final String NEWS_FEED = "news_feed";
+	public static final String USER_INFO = "user_info";
 
 	public static void Initialize(Context context) {
 		prefs = context.getSharedPreferences("application_settings", 0);
@@ -150,7 +150,16 @@ public class RequestWrapper {
 				e.printStackTrace();
 			}
 			return feedItems;
-		} 
+		} else if(Type == USER_INFO) {
+			User feedItems = null;
+			try{
+				feedItems = (User) ParserJson.parse_UserResponse(result);
+			} catch(JSONException e) {
+				e.printStackTrace();
+			}
+			return feedItems;
+		}  
+		
 		return o;
 	}
 	

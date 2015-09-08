@@ -140,7 +140,7 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 			if (!isDestroyed) {
 				z_ProgressDialog = ProgressDialog
 						.show(NewRequestActivity.this, null,
-								getResources().getString(R.string.verifying_creds),
+								getResources().getString(R.string.wish_post_dialog),
 								true, false);
 				z_ProgressDialog.setCancelable(false);
 			}

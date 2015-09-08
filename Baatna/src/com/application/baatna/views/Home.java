@@ -85,8 +85,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Home extends AppCompatActivity
-		implements BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener {
+public class Home extends AppCompatActivity implements BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -116,7 +115,7 @@ public class Home extends AppCompatActivity
 	private int mScrollState;
 	ArrayList<GetImage> getImageArray = new ArrayList<GetImage>();
 	private ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-	
+
 	ArrayList<FeedItem> wishes;
 	LinearLayout mListViewFooter;
 	private int mWishesTotalCount;
@@ -127,7 +126,7 @@ public class Home extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-//		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+		// requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.home_activity);
 		getWindow().setBackgroundDrawable(null);
 		mContext = this;
@@ -138,8 +137,8 @@ public class Home extends AppCompatActivity
 		width = getWindowManager().getDefaultDisplay().getWidth();
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        setSupportActionBar(toolbar);
-        
+		setSupportActionBar(toolbar);
+
 		setupActionBar();
 		setUpDrawer();
 		// initialize list view
@@ -398,6 +397,10 @@ public class Home extends AppCompatActivity
 						editor.putString("thumbUrl", "");
 						editor.putString("access_token", "");
 						editor.remove("username");
+						editor.remove("profile_pic");
+						editor.remove("HSLogin");
+						editor.remove("INSTITUTION_NAME");
+						editor.remove("STUDENT_ID");
 						editor.putBoolean("facebook_post_permission", false);
 						editor.putBoolean("post_to_facebook_flag", false);
 						editor.putBoolean("facebook_connect_flag", false);
@@ -634,11 +637,12 @@ public class Home extends AppCompatActivity
 	private void setUpUserSettingsInDrawer() {
 
 		// user snippet in drawer
-//		findViewById(R.id.`).getLayoutParams().height = width / 3;
+		// findViewById(R.id.`).getLayoutParams().height = width / 3;
 		findViewById(R.id.drawer_user_stat_cont).setPadding(3 * width / 80, 0, 0, 0);
 		findViewById(R.id.drawer_user_gradient_bottom).getLayoutParams().height = (12 * width / 90);
-//		findViewById(R.id.drawer_user_info_background_image).getLayoutParams().height = width / 3;
-//		findViewById(R.id.seperator).getLayoutParams().height = width / 30;
+		// findViewById(R.id.drawer_user_info_background_image).getLayoutParams().height
+		// = width / 3;
+		// findViewById(R.id.seperator).getLayoutParams().height = width / 30;
 
 		// user click
 		findViewById(R.id.drawer_user_container).setOnClickListener(new OnClickListener() {
@@ -734,7 +738,7 @@ public class Home extends AppCompatActivity
 
 		}
 	}
-	
+
 	public void inviteFriends(View v) {
 		String userId = "";
 		String shortUrl = " http://baat.na/invite/" + userId;
@@ -744,7 +748,7 @@ public class Home extends AppCompatActivity
 		i.setType("text/plain");
 		i.putExtra(Intent.EXTRA_TEXT, shareText);
 		startActivity(Intent.createChooser(i, getResources().getString(R.string.toast_share_longpress)));
-    }
+	}
 
 	public void openWishbox(View v) {
 		Intent intent = new Intent(this, WishboxActivity.class);
@@ -764,7 +768,7 @@ public class Home extends AppCompatActivity
 
 	@Override
 	public void onCoordinatesIdentified(Location loc) {
-		if( loc != null ) {
+		if (loc != null) {
 			UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
 		}
 	}
@@ -801,9 +805,9 @@ public class Home extends AppCompatActivity
 	public void feedback(View v) {
 		startActivity(new Intent(this, FeedbackPage.class));
 	}
-	
+
 	public void redeem(View v) {
-//		startActivity(new Intent(this, FeedbackPage.class));
+		// startActivity(new Intent(this, FeedbackPage.class));
 	}
 
 	@Override
@@ -1103,6 +1107,7 @@ public class Home extends AppCompatActivity
 		private List<FeedItem> feedItems;
 		private Activity mContext;
 		private int width;
+		private int descriptionPos = -1;
 
 		public NewsFeedAdapter(Activity context, int resourceId, List<FeedItem> feedItems) {
 			super(context.getApplicationContext(), resourceId, feedItems);
@@ -1133,7 +1138,7 @@ public class Home extends AppCompatActivity
 		}
 
 		@Override
-		public View getView(int position, View v, ViewGroup parent) {
+		public View getView(final int position, View v, ViewGroup parent) {
 			final FeedItem feedItem = feedItems.get(position);
 
 			if (v == null || v.findViewById(R.id.feed_item_root) == null) {
@@ -1158,7 +1163,7 @@ public class Home extends AppCompatActivity
 
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
 					.setMargins(width / 40, 0, width / 40, 0);
-			User user = feedItem.getUserIdFirst();
+			final User user = feedItem.getUserIdFirst();
 
 			User user2 = feedItem.getUserSecond();
 
@@ -1166,17 +1171,52 @@ public class Home extends AppCompatActivity
 
 			viewHolder.time.setText(CommonLib.getDateFromUTC(feedItem.getTimestamp()));
 
+			viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(Home.this, UserPageActivity.class);
+					if (user != null && user.getUserId() != prefs.getInt("uid", 0))
+						intent.putExtra("uid", user.getUserId());
+					startActivity(intent);
+				}
+			});
+			v.findViewById(R.id.feed_item).setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (((LinearLayout) v.getParent()).getChildAt(1) == null) {
+						if (feedItem != null && feedItem.getWish() != null
+								&& feedItem.getWish().getDescription() != null) {
+							String description = feedItem.getWish().getDescription();
+							TextView descriptionTextView = new TextView(Home.this);
+							LayoutParams params = new LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+									LinearLayout.LayoutParams.WRAP_CONTENT);
+							descriptionTextView.setLayoutParams(params);
+							descriptionTextView.setGravity(Gravity.CENTER);
+							descriptionTextView.setText(description);
+							descriptionTextView.setBackgroundColor(getResources().getColor(R.color.white));
+							((LinearLayout) v.getParent()).addView(descriptionTextView);
+							descriptionPos = position;
+						}
+					} else {
+						if (((LinearLayout) v.getParent()).getChildAt(1) != null
+								&& ((LinearLayout) v.getParent()).getChildAt(1) instanceof TextView)
+							((LinearLayout) v.getParent()).removeViewAt(1);
+					}
+
+				}
+			});
+
 			switch (feedItem.getType()) {
 
 			case CommonLib.FEED_TYPE_NEW_USER:
 				if (user != null) {
 					String description = getResources().getString(R.string.feed_user_joined, user.getUserName() + " ");
-					
+
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false);
-					
+
 					viewHolder.userName.setText(description);
-					viewHolder.bar
-							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
 					viewHolder.accept.setVisibility(View.INVISIBLE);
 					viewHolder.decline.setVisibility(View.INVISIBLE);
 					viewHolder.bar
@@ -1187,9 +1227,9 @@ public class Home extends AppCompatActivity
 				if (user != null && wish != null) {
 					String description = getResources().getString(R.string.feed_user_requested,
 							user.getUserName() + " ", wish.getTitle() + " ");
-					
+
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
-					
+
 					viewHolder.userName.setText(description);
 					viewHolder.bar
 							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
@@ -1218,14 +1258,13 @@ public class Home extends AppCompatActivity
 			case CommonLib.FEED_TYPE_REQUEST_FULFILLED:
 				String description = getResources().getString(R.string.feed_requested_fulfilled,
 						user.getUserName() + " ", wish.getTitle() + " ", user2.getUserName());
-				
+
 				setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
-				
+
 				viewHolder.userName.setText(description);
-				viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange)));
+				viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
 				viewHolder.accept.setVisibility(View.INVISIBLE);
 				viewHolder.decline.setVisibility(View.INVISIBLE);
-				viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.feed_offered)));
 				break;
 
 			}
@@ -1254,7 +1293,7 @@ public class Home extends AppCompatActivity
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "newsfeed/get/?start=0&count="+count;
+				url = CommonLib.SERVER + "newsfeed/get/?start=0&count=" + count;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.NEWS_FEED, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
@@ -1291,7 +1330,7 @@ public class Home extends AppCompatActivity
 
 		}
 	}
-	
+
 	private void setWishes(ArrayList<FeedItem> wishes) {
 		this.wishes = wishes;
 		if (wishes != null && wishes.size() > 0 && mWishesTotalCount > wishes.size()
@@ -1328,7 +1367,7 @@ public class Home extends AppCompatActivity
 			}
 		});
 	}
-	
+
 	private class LoadModeFeed extends AsyncTask<Integer, Void, Object> {
 
 		// execute the api
@@ -1362,7 +1401,8 @@ public class Home extends AppCompatActivity
 		}
 	}
 
-	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width, int height, boolean useDiskCache) {
+	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width,
+			int height, boolean useDiskCache) {
 
 		if (cancelPotentialWork(url, imageView)) {
 
@@ -1370,10 +1410,10 @@ public class Home extends AppCompatActivity
 
 			final AsyncDrawable asyncDrawable = new AsyncDrawable(Home.this.getResources(), zapp.cache.get(url), task);
 			imageView.setImageDrawable(asyncDrawable);
-			if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup 
-				&& ((ViewGroup) imageView.getParent()).getChildAt(1) != null
-				&& ((ViewGroup) imageView.getParent()).getChildAt(1) instanceof ProgressBar) {
-					((ViewGroup) imageView.getParent()).getChildAt(1).setVisibility(View.GONE);
+			if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
+					&& ((ViewGroup) imageView.getParent()).getChildAt(1) != null
+					&& ((ViewGroup) imageView.getParent()).getChildAt(1) instanceof ProgressBar) {
+				((ViewGroup) imageView.getParent()).getChildAt(1).setVisibility(View.GONE);
 			}
 			if (zapp.cache.get(url) == null) {
 				try {
@@ -1386,9 +1426,10 @@ public class Home extends AppCompatActivity
 				imageView.setBackgroundResource(0);
 
 			}
-		} else if ( imageView != null && imageView.getDrawable() != null && ((BitmapDrawable) imageView.getDrawable()).getBitmap() != null) {
+		} else if (imageView != null && imageView.getDrawable() != null
+				&& ((BitmapDrawable) imageView.getDrawable()).getBitmap() != null) {
 			imageView.setBackgroundResource(0);
-			if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup 
+			if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
 					&& ((ViewGroup) imageView.getParent()).getChildAt(1) != null
 					&& ((ViewGroup) imageView.getParent()).getChildAt(1) instanceof ProgressBar) {
 				((ViewGroup) imageView.getParent()).getChildAt(1).setVisibility(View.GONE);

@@ -542,6 +542,8 @@ public class FacebookConnect {
 								}
 								if(res.has("username")) {
 									uname = String.valueOf(res.get("username"));
+								} else if(res.has("user_name")) {
+									uname = String.valueOf(res.get("username"));
 								}
 							}
 						}

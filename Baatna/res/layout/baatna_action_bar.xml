@@ -8,16 +8,14 @@
         android:id="@+id/home_icon_container"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height60"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/baatna_dark_feedback" >
+        android:layout_alignParentLeft="true">
 
         <RelativeLayout
             android:id="@+id/home_icon_subcontainer"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/baatna_dark_feedback" >
+            android:layout_centerVertical="true" >
 
             <ImageView
                 android:id="@+id/ic_drawer"
@@ -51,7 +49,6 @@
             android:id="@+id/back_icon"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/height60"
-            android:background="@drawable/baatna_dark_feedback"
             android:clickable="true"
             android:gravity="center"
             android:onClick="actionBarSelected"
@@ -73,7 +70,6 @@
                 android:id="@+id/title"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/baatna_dark_feedback"
                 android:clickable="false"
                 android:ellipsize="end"
                 android:gravity="center_vertical"

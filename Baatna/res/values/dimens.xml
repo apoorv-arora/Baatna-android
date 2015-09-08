@@ -141,5 +141,6 @@
     <item name="middleBarArrowSize" type="dimen">16dp</item>
     <item name="drawableSize" type="dimen">24dp</item>
     
+    <item name="toolbar_elevation" type="dimen">4dp</item>
     
 </resources>

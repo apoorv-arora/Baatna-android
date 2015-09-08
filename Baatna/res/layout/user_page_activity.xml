@@ -21,7 +21,9 @@
     <RelativeLayout
         android:id="@+id/content_container"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+         >
 
         <FrameLayout
             android:id="@+id/user_info_top_frame"
@@ -83,6 +85,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/user_info_top_frame"
             android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:text="name"
             android:textSize="@dimen/size14" />
 
         <com.application.baatna.utils.TextViewSemiBold
@@ -91,6 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
             android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
             android:textSize="@dimen/size14" />
     </RelativeLayout>
 

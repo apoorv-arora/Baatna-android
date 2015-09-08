@@ -202,6 +202,8 @@ public class BaatnaActivity extends Activity implements
 					editor.putString("thumbUrl", bundle.getString("thumbUrl"));
 				if (bundle.containsKey("profile_pic"))
 					editor.putString("profile_pic", bundle.getString("profile_pic"));
+				if (bundle.containsKey("user_name"))
+					editor.putString("username", bundle.getString("username"));
 				String token = bundle.getString("access_token");
 				System.out.println(token);
 				editor.putString("access_token",

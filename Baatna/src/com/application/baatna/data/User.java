@@ -6,11 +6,12 @@ public class User implements Serializable{
 
 	private int userId;
 	private int isVerified;
-	private String email;
-	private String imageUrl;
-	private String userName;
+	private String email = "";
+	private String imageUrl = "";
+	private String userName = "";
 	private Double latitude;
 	private Double longitude;
+	private String bio = "";
 
 	public double getLatitude() {
 		return latitude;
@@ -74,6 +75,14 @@ public class User implements Serializable{
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
+	}
+
+	public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
 	}
 
 }

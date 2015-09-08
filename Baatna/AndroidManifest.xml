@@ -7,7 +7,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="22" />
 
     <supports-screens android:smallScreens="false" />
 
@@ -219,7 +219,8 @@
         </receiver>
 
         <!-- Services -->
-        <service android:name="com.application.zomato.utils.CacheCleanerService" />
+        <service android:name="com.application.baatna.utils.CacheCleanerService" />
+        <service android:name="com.application.baatna.services.LocationUpdateService" />
         <service android:name="com.application.baatna.services.GcmIntentService" />
         <service android:name="com.application.baatna.services.IMService" />
 

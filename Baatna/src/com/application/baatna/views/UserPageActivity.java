@@ -7,7 +7,9 @@ import java.net.URL;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
+import com.application.baatna.data.User;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.RequestWrapper;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Displays user name, bio and profile pic
@@ -36,6 +39,10 @@ public class UserPageActivity extends Activity {
 	private int width;
 	private boolean destroyed = false;
 	private BaatnaApp zapp;
+	private int userId;
+	boolean isSecondProfile = false;
+	ImageView imageView;
+	AsyncTask mAsyncRunning;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -45,7 +52,87 @@ public class UserPageActivity extends Activity {
 
 		prefs = getSharedPreferences("application_settings", 0);
 		width = getWindowManager().getDefaultDisplay().getWidth();
+		if (getIntent() != null && getIntent().getExtras() != null) {
+			Bundle extras = getIntent().getExtras();
+			if (extras.containsKey("uid")) {
+				userId = extras.getInt("uid");
+				isSecondProfile = true;
+				// start the loader
+				findViewById(R.id.userpage_progress_container).setVisibility(View.VISIBLE);
+				findViewById(R.id.content_container).setVisibility(View.GONE);
+				findViewById(R.id.empty_view).setVisibility(View.GONE);
+				refreshView(); 
+			}
+		}
+		if (!isSecondProfile)
+			userId = prefs.getInt("uid", 0);
 		fixSizes();
+		setListeners();
+	}
+	
+	private void refreshView() {
+		if (mAsyncRunning != null)
+			mAsyncRunning.cancel(true);
+		mAsyncRunning = new GetUserDetails().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+	}
+
+
+	private class GetUserDetails extends AsyncTask<Object, Void, Object> {
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Object... params) {
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "user/details?user_id="+userId;
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.USER_INFO, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+			findViewById(R.id.userpage_progress_container).setVisibility(View.GONE);
+			
+			if (result != null) {
+				if (result instanceof User) {
+					User user = (User)result;
+					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
+					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "", width, width, false);
+					((TextView) findViewById(R.id.name)).setText(user.getUserName());
+					((TextView) findViewById(R.id.description)).setText(user.getBio());
+				}
+			} else {
+				findViewById(R.id.empty_view).setVisibility(View.GONE);
+				findViewById(R.id.content_container).setVisibility(View.GONE);
+				if (CommonLib.isNetworkAvailable(UserPageActivity.this)) {
+					Toast.makeText(UserPageActivity.this, getResources().getString(R.string.error_try_again),
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(UserPageActivity.this, getResources().getString(R.string.no_internet_message),
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+
+		}
+	}
+	
+	private void setListeners() {
+		findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				refreshView();
+			}
+		});
+
 	}
 
 	@Override
@@ -78,24 +165,30 @@ public class UserPageActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 	ImageView imageViewBlur;
 
 	private void fixSizes() {
 		findViewById(R.id.name).setPadding(width / 20, width / 20, width / 20, width / 20);
 		findViewById(R.id.description).setPadding(width / 20, width / 20, width / 20, width / 20);
-		ImageView imageView = ((ImageView) findViewById(R.id.user_image));
+		imageView = ((ImageView) findViewById(R.id.user_image));
 		imageViewBlur = (ImageView) findViewById(R.id.drawer_user_info_background_image);
-		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageView, "", width, width, false);
-		
-		((TextView)findViewById(R.id.name)).setText(prefs.getString("username", ""));
-		((RelativeLayout.LayoutParams) findViewById(R.id.back_icon).getLayoutParams()).setMargins(width / 20, width / 20, width / 20, width / 20);
-	
+
+		((RelativeLayout.LayoutParams) findViewById(R.id.back_icon).getLayoutParams()).setMargins(width / 20,
+				width / 20, width / 20, width / 20);
+
 		findViewById(R.id.back_icon).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onBackPressed();
 			}
 		});
+
+		if(!isSecondProfile) {
+			setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageView, "", width, width, false);
+			((TextView) findViewById(R.id.name)).setText(prefs.getString("username", ""));
+			((TextView) findViewById(R.id.description)).setText(prefs.getString("description", ""));
+		}
 	}
 
 	@Override
@@ -123,10 +216,10 @@ public class UserPageActivity extends Activity {
 					&& ((BitmapDrawable) imageView.getDrawable()).getBitmap() != null) {
 				imageView.setBackgroundResource(0);
 				Bitmap blurBitmap = null;
-				if(imageViewBlur != null) {
+				if (imageViewBlur != null) {
 					blurBitmap = CommonLib.fastBlur(((BitmapDrawable) imageView.getDrawable()).getBitmap(), 4);
 				}
-				if(imageViewBlur != null && blurBitmap != null) {
+				if (imageViewBlur != null && blurBitmap != null) {
 					imageViewBlur.setImageBitmap(blurBitmap);
 				}
 				if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
@@ -256,11 +349,11 @@ public class UserPageActivity extends Activity {
 					synchronized (zapp.cache) {
 						zapp.cache.put(url2, bitmap);
 					}
-					if(imageViewBlur != null){
+					if (imageViewBlur != null) {
 						blurBitmap = CommonLib.fastBlur(bitmap, 4);
 					}
 				}
-				
+
 			} catch (Exception e) {
 			}
 
@@ -285,7 +378,7 @@ public class UserPageActivity extends Activity {
 						}
 					}
 				}
-				if(imageViewBlur != null && blurBitmap != null) {
+				if (imageViewBlur != null && blurBitmap != null) {
 					imageViewBlur.setImageBitmap(blurBitmap);
 				}
 			}
