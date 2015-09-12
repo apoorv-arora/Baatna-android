@@ -294,8 +294,11 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 				@Override
 				public void onClick(View v) {
-					// TODO: send him to messages page.
-
+					Intent intent = new Intent(FriendListActivity.this, MessagesActivity.class);
+					intent.putExtra("user", user);
+					intent.putExtra("wish", wish);
+					startActivity(intent);
+					overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 				}
 			});
 
@@ -304,7 +307,8 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 			case CommonLib.CURRENT_USER_WISH_ACCEPTED:
 				if (user != null) {
 
-					String description = getResources().getString(R.string.feed_user_requested, user.getUserName() + " ", wish.getTitle());
+					String description = getResources().getString(R.string.feed_user_requested,
+							user.getUserName() + " ", wish.getTitle());
 
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false);
 
@@ -316,7 +320,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 				break;
 			case CommonLib.WISH_ACCEPTED_CURRENT_USER:
 				if (user != null && wish != null) {
-					String description = getResources().getString(R.string.feed_user_requested,
+					String description = getResources().getString(R.string.message_requested_fulfilled,
 							user.getUserName() + " ", wish.getTitle() + " ");
 
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
