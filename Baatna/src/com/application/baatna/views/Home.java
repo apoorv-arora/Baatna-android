@@ -67,6 +67,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -150,7 +152,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 		feedListView.addHeaderView(headerView);
 		feedListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
 		feedListView.setDividerHeight(width / 40);
-
+		
 		headerView.findViewById(R.id.search_map).getLayoutParams().width = width;
 
 		headerView.findViewById(R.id.search_map).setOnClickListener(new View.OnClickListener() {
@@ -161,7 +163,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 				startActivity(intent);
 			}
 		});
-
+		
 		((RelativeLayout.LayoutParams) headerView.findViewById(R.id.request_icon).getLayoutParams())
 				.setMargins(width / 20 + width / 80, 0, 0, 0);
 		headerView.findViewById(R.id.make_request_container).setOnClickListener(new View.OnClickListener() {
@@ -1361,7 +1363,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 						loading = true;
 						new LoadModeFeed().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
 					}
-				} else if (totalItemCount - 1 == mWishesTotalCount && feedListView.getFooterViewsCount() > 0) {
+				} else if (totalItemCount - 1 == mWishesTotalCount) {
 					feedListView.removeFooterView(mListViewFooter);
 				}
 			}

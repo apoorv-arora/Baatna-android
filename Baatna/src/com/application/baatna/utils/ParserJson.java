@@ -12,6 +12,7 @@ import com.application.baatna.data.Categories;
 import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
+import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -489,6 +490,46 @@ public class ParserJson {
 					if (responseObj != null && responseObj.has("user")
 							&& responseObj.get("user") instanceof JSONObject) {
 						response = ParserJson.parse_User(responseObj.getJSONObject("user"));
+					}
+				}
+			}
+		}
+		return response;
+	}
+
+	public static ArrayList<UserComactMessage> parse_UserCompactMessageResponse(InputStream is) throws JSONException {
+		ArrayList<UserComactMessage> response = new ArrayList<UserComactMessage>();
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+
+			if (responseObject.getString("status").equals("success")) {
+
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+
+					JSONObject responseObj = responseObject.getJSONObject("response");
+					if (responseObj != null && responseObj.has("messages")
+							&& responseObj.get("messages") instanceof JSONArray) {
+						JSONArray messagesArr = new JSONArray();
+						messagesArr = responseObj.getJSONArray("messages");
+						for (int i = 0; i < messagesArr.length(); i++) {
+							JSONObject object = messagesArr.getJSONObject(i);
+							if (object.has("message")) {
+								UserComactMessage messageObj = new UserComactMessage();
+								object = object.getJSONObject("message");
+								if (object.has("wish"))
+									if(object.getJSONObject("wish").has("wish"))
+										messageObj.setWish(parse_Wish(object.getJSONObject("wish").getJSONObject("wish")));
+								if (object.has("user")) {
+									if(object.getJSONObject("user").has("user"))
+										messageObj.setUser(parse_User(object.getJSONObject("user").getJSONObject("user")));
+								}
+								if (object.has("type") && object.get("type") instanceof Integer)
+									messageObj.setType(object.getInt("type"));
+								response.add(messageObj);
+							}
+						}
 					}
 				}
 			}

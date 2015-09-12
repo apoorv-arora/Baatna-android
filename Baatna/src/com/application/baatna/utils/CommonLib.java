@@ -89,6 +89,9 @@ public class CommonLib {
 	public final static String APP_SETTINGS = "application_settings";
 	public static final String PROPERTY_REG_ID = "registration_id";
 	public static final String PROPERTY_APP_VERSION = "appVersion";
+	
+	public static final int CURRENT_USER_WISH_ACCEPTED = 1;
+	public static final int WISH_ACCEPTED_CURRENT_USER = 2;
 
 	public static String BOLD_FONT_FILENAME = "BOLD_FONT_FILENAME";
 

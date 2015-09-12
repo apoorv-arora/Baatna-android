@@ -22,6 +22,7 @@ import com.application.baatna.BaatnaApp;
 import com.application.baatna.data.Categories;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
+import com.application.baatna.data.UserComactMessage;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.content.Context;
@@ -45,6 +46,7 @@ public class RequestWrapper {
 	public static final String INSTITUTIONS_LIST = "institutions_list";
 	public static final String NEARBY_USERS = "nearby_users";
 	public static final String NEWS_FEED = "news_feed";
+	public static final String MESSAGES_COMPACT = "messages_compact";
 	public static final String USER_INFO = "user_info";
 
 	public static void Initialize(Context context) {
@@ -158,6 +160,14 @@ public class RequestWrapper {
 				e.printStackTrace();
 			}
 			return feedItems;
+		}  else if(Type == MESSAGES_COMPACT) {
+			ArrayList<UserComactMessage> items = null;
+			try {
+				items = (ArrayList<UserComactMessage>) ParserJson.parse_UserCompactMessageResponse(result);
+			} catch(JSONException e) {
+				e.printStackTrace();
+			}
+			return items;
 		}  
 		
 		return o;

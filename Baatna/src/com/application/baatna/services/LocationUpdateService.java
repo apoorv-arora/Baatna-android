@@ -26,6 +26,8 @@ public class LocationUpdateService extends IntentService implements BaatnaLocati
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		//start location check in background
+		if(zapp == null)
+			zapp = (BaatnaApp) getApplication();
 		zapp.zll.addCallback(this);
 	}
 	
