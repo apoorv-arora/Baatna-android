@@ -146,13 +146,13 @@ public class UploadManager {
 
 	}
 	
-	public static void sendMessage(String userId, String message) {
+	public static void sendMessage(String userId, String message, String wishId) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.SIGNUP, 0, userId, null);
 		}
 
 		new SendMessage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { userId, message});
+				new Object[] { userId, message, wishId});
 
 	}
 
@@ -516,6 +516,7 @@ public class UploadManager {
 
 		private String userId;
 		private String message;
+		private String wishId;
 
 		@Override
 		protected Object[] doInBackground(Object... params) {
@@ -523,11 +524,14 @@ public class UploadManager {
 			Object result[] = null;
 			userId = (String) params[0];
 			message = (String) params[1];
+			wishId = (String) params[2];
 			
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("userId", userId));
 			nameValuePairs.add(new BasicNameValuePair("message", message));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("wishId", wishId));
+			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
 			
 			try {

@@ -14,12 +14,11 @@ public class MessageDBWrapper {
 		helper = new MessageDBManager(context);
 	}
 
-	public static int addMessage(Message location, int userId,
-			long timestamp) {
-		return helper.addMessage(location, userId, timestamp);
+	public static int addMessage(Message location, int userId, int wishId, long timestamp) {
+		return helper.addMessage(location, userId, wishId, timestamp);
 	}
 
-	public static ArrayList<Message> getMessages( int userId) {
-		return helper.getMessages(userId);
+	public static ArrayList<Message> getMessages(int userId, int wishId) {
+		return helper.getMessages(userId, wishId);
 	}
 }

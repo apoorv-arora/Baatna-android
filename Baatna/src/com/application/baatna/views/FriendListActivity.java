@@ -307,7 +307,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 			case CommonLib.CURRENT_USER_WISH_ACCEPTED:
 				if (user != null) {
 
-					String description = getResources().getString(R.string.feed_user_requested,
+					String description = getResources().getString(R.string.message_user_requested,
 							user.getUserName() + " ", wish.getTitle());
 
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false);
@@ -321,7 +321,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 			case CommonLib.WISH_ACCEPTED_CURRENT_USER:
 				if (user != null && wish != null) {
 					String description = getResources().getString(R.string.message_requested_fulfilled,
-							user.getUserName() + " ", wish.getTitle() + " ");
+							wish.getTitle() + " ", user.getUserName() + " ");
 
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
 

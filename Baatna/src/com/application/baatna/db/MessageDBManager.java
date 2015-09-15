@@ -18,6 +18,7 @@ public class MessageDBManager extends SQLiteOpenHelper {
 
 	private static final String ID = "ID";
 	private static final String MESSAGEID = "MessageID";
+	private static final String WISHID = "WishID";
 	private static final String TYPE = "Type";
 	private static final String TIMESTAMP = "Timestamp";
 	private static final String BUNDLE = "Bundle";
@@ -26,8 +27,10 @@ public class MessageDBManager extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 2;
 	private static final String CACHE_TABLE_NAME = "MESSAGES";
 	private static final String DICTIONARY_TABLE_CREATE = "CREATE TABLE " + CACHE_TABLE_NAME + " (" + ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + MESSAGEID + " INTEGER, " + TIMESTAMP + " INTEGER, "
-			+ TYPE + " INTEGER, " + BUNDLE + " BLOB);";
+			+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + MESSAGEID + " INTEGER, " + WISHID + " INTEGER, "
+			+ TIMESTAMP + " INTEGER, " + TYPE + " INTEGER, " + BUNDLE + " BLOB);";
+	
+	
 	private static final String DATABASE_NAME = "MESSAGESDB";
 	Context ctx;
 
@@ -50,9 +53,9 @@ public class MessageDBManager extends SQLiteOpenHelper {
 
 	}
 
-	public int addMessage(Message location, int userId, long timestamp) {
+	public int addMessage(Message location, int userId, int wishId, long timestamp) {
 
-		ArrayList<Message> locations = getMessages(userId);
+		ArrayList<Message> locations = getMessages(userId, wishId);
 		int result = -1;
 
 		try {
@@ -75,6 +78,7 @@ public class MessageDBManager extends SQLiteOpenHelper {
 				byte[] bundle = RequestWrapper.Serialize_Object(location);
 
 				values.put(MESSAGEID, userId);
+				values.put(WISHID, wishId);
 				values.put(TYPE, location.getMessageId());
 				values.put(BUNDLE, bundle);
 
@@ -97,7 +101,7 @@ public class MessageDBManager extends SQLiteOpenHelper {
 		// Closing database connection
 	}
 
-	public ArrayList<Message> getMessages(int userId) {
+	public ArrayList<Message> getMessages(int userId, int wishId) {
 		Message location;
 		this.getReadableDatabase();
 		SQLiteDatabase db = null;
@@ -107,16 +111,18 @@ public class MessageDBManager extends SQLiteOpenHelper {
 		try {
 			db = ctx.openOrCreateDatabase("/data/data/com.application.baatna/databases/" + DATABASE_NAME,
 					SQLiteDatabase.OPEN_READONLY, null);
-			cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, MESSAGEID, TIMESTAMP, TYPE, BUNDLE },
-					MESSAGEID + "=?",
-					new String[] { Integer.toString(userId) }, null, null,
-					TIMESTAMP + " DESC", "20");
+			
+//			*CITYID + "=? AND " +*/ USERID + "=?",
+//            new String[] { /*Integer.toString(cityId),*/ Integer.toString(userId) }
+			
+			cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, MESSAGEID, WISHID, TIMESTAMP, TYPE, BUNDLE },
+					WISHID + "=? AND " + MESSAGEID + "=?", new String[] {Integer.toString(wishId), Integer.toString(userId)}, null, null, TIMESTAMP + " ASC", null);
 			if (cursor != null)
 				cursor.moveToFirst();
 
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
-				location = (Message) RequestWrapper.Deserialize_Object(cursor.getBlob(4), "");
+				location = (Message) RequestWrapper.Deserialize_Object(cursor.getBlob(5), "");
 				queries.add(location);
 			}
 

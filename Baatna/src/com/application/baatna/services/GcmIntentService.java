@@ -12,6 +12,7 @@ import com.application.baatna.db.MessageDBWrapper;
 import com.application.baatna.receivers.GcmBroadcastReceiver;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.ParserJson;
+import com.application.baatna.views.MessagesActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
@@ -80,27 +81,34 @@ public class GcmIntentService extends IntentService {
 
 		String msg = extras.getString("Notification");
 		String type = extras.getString("type");
-		
-		if( type!= null && type.equals("message")) {
+		Intent notificationActivity = null;
+		if (type != null && type.equals("message")) {
 			JSONObject message = null;
 			try {
 				message = new JSONObject(msg);
 				Message messageObj = ParserJson.parse_Message(message);
-				MessageDBWrapper.addMessage(messageObj, prefs.getInt("uid", 0), System.currentTimeMillis());
-			} catch(JSONException e) {
+				if (messageObj != null && messageObj.getFromUser() != null && messageObj.getWish() != null) {
+					MessageDBWrapper.addMessage(messageObj, messageObj.getFromUser().getUserId(),
+							messageObj.getWish().getWishId(), System.currentTimeMillis());
+					msg = messageObj.getFromUser().getUserName() + " has sent you a message";
+					notificationActivity = new Intent(this, MessagesActivity.class);
+					notificationActivity.putExtra("user", messageObj.getFromUser());
+					notificationActivity.putExtra("wish", messageObj.getWish());
+				}
+				
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-		//check if app is alive, do not push the message notifiication then
+		// check if app is alive, do not push the message notifiication then
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-		Intent notificationActivity = new Intent(this, Splash.class);
-		notificationActivity.putExtra("", "");
+		if(notificationActivity == null)
+			notificationActivity = new Intent(this, Splash.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationActivity, 0);
 		Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Baatna").setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-				.setContentText(msg)
-				.setSound(soundUri);
+				.setContentText(msg).setSound(soundUri);
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 	}

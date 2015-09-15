@@ -6,6 +6,7 @@ public class Message implements Serializable{
 
 	private User fromUser;
 	private User toUser;
+	private Wish wish;
 	private boolean isGroupChat;
 	private boolean fromTo;
 	private String message;
@@ -58,7 +59,13 @@ public class Message implements Serializable{
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+
+	public Wish getWish() {
+		return wish;
+	}
+
+	public void setWish(Wish wish) {
+		this.wish = wish;
+	}
 
 }

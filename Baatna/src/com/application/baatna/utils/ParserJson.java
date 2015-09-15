@@ -374,23 +374,35 @@ public class ParserJson {
 		Message returnMessage = new Message();
 		try {
 			if (messageObject.has("to_user") && messageObject.get("to_user") instanceof JSONObject) {
-				returnMessage.setToUser(parse_User(messageObject.getJSONObject("to_user")));
+				JSONObject object = messageObject.getJSONObject("to_user");
+				if(object.has("user")) {
+					returnMessage.setToUser(parse_User(object.getJSONObject("user")));
+				}
 			}
 
 			if (messageObject.has("from_user") && messageObject.get("from_user") instanceof JSONObject) {
-				returnMessage.setFromUser(parse_User(messageObject.getJSONObject("from_user")));
+				JSONObject object = messageObject.getJSONObject("from_user");
+				if(object.has("user")) {
+					returnMessage.setFromUser(parse_User(object.getJSONObject("user")));
+				}
 			}
 
 			if (messageObject.has("message_id") && messageObject.get("message_id") instanceof Integer) {
 				returnMessage.setMessageId(messageObject.getInt("message_id"));
 			}
 
-			if (messageObject.has("from_to") && messageObject.get("from_to") instanceof Integer) {
-				returnMessage.setMessageId(messageObject.getInt("message_id"));
+			if (messageObject.has("from_to") && messageObject.get("from_to") instanceof Boolean) {
+				returnMessage.setFromTo(messageObject.getBoolean("from_to"));
 			}
 
 			if (messageObject.has("message")) {
 				returnMessage.setMessage(String.valueOf(messageObject.get("message")));
+			}
+
+			if (messageObject.has("wish")) {
+				JSONObject object = messageObject.getJSONObject("wish");
+				if(object.has("wish"))
+					returnMessage.setWish(parse_Wish(object.getJSONObject("wish")));
 			}
 
 		} catch (JSONException e) {
@@ -519,11 +531,13 @@ public class ParserJson {
 								UserComactMessage messageObj = new UserComactMessage();
 								object = object.getJSONObject("message");
 								if (object.has("wish"))
-									if(object.getJSONObject("wish").has("wish"))
-										messageObj.setWish(parse_Wish(object.getJSONObject("wish").getJSONObject("wish")));
+									if (object.getJSONObject("wish").has("wish"))
+										messageObj.setWish(
+												parse_Wish(object.getJSONObject("wish").getJSONObject("wish")));
 								if (object.has("user")) {
-									if(object.getJSONObject("user").has("user"))
-										messageObj.setUser(parse_User(object.getJSONObject("user").getJSONObject("user")));
+									if (object.getJSONObject("user").has("user"))
+										messageObj.setUser(
+												parse_User(object.getJSONObject("user").getJSONObject("user")));
 								}
 								if (object.has("type") && object.get("type") instanceof Integer)
 									messageObj.setType(object.getInt("type"));

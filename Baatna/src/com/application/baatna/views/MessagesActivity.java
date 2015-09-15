@@ -6,6 +6,7 @@ import java.util.List;
 import com.application.baatna.R;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
+import com.application.baatna.data.Wish;
 import com.application.baatna.db.MessageDBWrapper;
 import com.application.baatna.services.IMService;
 import com.application.baatna.utils.CommonLib;
@@ -49,7 +50,8 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	LayoutInflater inflater;
 	private MessagesAdapter mAdapter;
 	private boolean destroyed = false;
-	private User user;
+	private User currentUser;
+	private Wish currentWish;
 
 	private SharedPreferences prefs;
 	private Activity mContext;
@@ -66,22 +68,21 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		inflater = LayoutInflater.from(this);
 		messageList = (ListView) findViewById(R.id.messageList);
 		width = getWindowManager().getDefaultDisplay().getWidth();
-		user = (User) getIntent().getExtras().getSerializable("user");
+
+		currentUser = (User) getIntent().getExtras().getSerializable("user");
+		currentWish = (Wish) getIntent().getExtras().getSerializable("wish");
 
 		setUpActionBar();
 
 		messageText = (EditText) findViewById(R.id.message);
 
-		messageText.requestFocus();
-
 		sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
-
-		Bundle extras = this.getIntent().getExtras();
 
 		sendMessageButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
-				UploadManager.sendMessage(user.getUserId() + "", messageText.getText().toString());
+				UploadManager.sendMessage(currentUser.getUserId() + "", messageText.getText().toString(),
+						currentWish.getWishId() + "");
 			}
 		});
 
@@ -93,34 +94,8 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 				}
 				return false;
 			}
-
 		});
 		UploadManager.addCallback(this);
-
-		Message message = new Message();
-		message.setFromTo(true);
-		message.setFromUser(new User());
-		message.setMessageId(prefs.getInt("uid", 0));
-		message.setMessage("hello dude");
-		message.setToUser(new User());
-
-		Message message1 = new Message();
-		message1.setFromTo(false);
-		message1.setFromUser(new User());
-		message.setMessageId(prefs.getInt("uid", 0));
-		message1.setMessage("how are you dude");
-		message1.setToUser(new User());
-
-		Message message2 = new Message();
-		message2.setFromTo(false);
-		message2.setFromUser(new User());
-		message.setMessageId(prefs.getInt("uid", 0));
-		message2.setMessage("i am doing good");
-		message2.setToUser(new User());
-
-		MessageDBWrapper.addMessage(message, prefs.getInt("uid", 0), System.currentTimeMillis());
-		MessageDBWrapper.addMessage(message1, prefs.getInt("uid", 0), System.currentTimeMillis() + 200);
-		MessageDBWrapper.addMessage(message2, prefs.getInt("uid", 0), System.currentTimeMillis() + 400);
 
 		new GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
@@ -178,7 +153,6 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		unregisterReceiver(messageReceiver);
 	}
 
 	@Override
@@ -190,27 +164,7 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		IntentFilter i = new IntentFilter();
-		i.addAction(IMService.TAKE_MESSAGE);
-
-		registerReceiver(messageReceiver, i);
-
 	}
-
-	public class MessageReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Bundle extra = intent.getExtras();
-			String username = extra.getString(FriendInfo.USERNAME);
-			String message = extra.getString(FriendInfo.MESSAGE);
-
-		}
-
-	};
-
-	private MessageReceiver messageReceiver = new MessageReceiver();
 
 	@Override
 	public void onBackPressed() {
@@ -301,10 +255,14 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 			String stringId) {
 		if (requestType == CommonLib.SEND_MESSAGE) {
 			if (!destroyed) {
-				if (status) // add to DB with the message Id
-					;
-				else// show retry button
-					;
+				if (status) { // add to DB with the message Id
+					if (data != null && data instanceof Message) {
+						MessageDBWrapper.addMessage((Message) data, ((Message) data).getFromUser().getUserId(),
+								((Message) data).getWish().getWishId(), System.currentTimeMillis());
+					}
+				} else {// show retry button
+					Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 	}
@@ -319,7 +277,7 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		@Override
 		protected Object doInBackground(Object... params) {
 			try {
-				messages = MessageDBWrapper.getMessages(prefs.getInt("uid", 0));
+				messages = MessageDBWrapper.getMessages(currentUser.getUserId(), currentWish.getWishId());
 				return messages;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -336,6 +294,7 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 				if (messages instanceof ArrayList<?>) {
 					mAdapter = new MessagesAdapter(mContext, R.layout.chat_item_snippet, messages);
 					messageList.setAdapter(mAdapter);
+					messageList.setSelection(messages.size()-1);
 				}
 			} else {
 				if (CommonLib.isNetworkAvailable(MessagesActivity.this)) {
