@@ -18,6 +18,12 @@
             android:gravity="center_vertical"
             android:layoutDirection="ltr" >
 
+            <ImageView
+                android:id="@+id/drawer_user_info_blur_background_image"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="centerCrop" />
+            
             <com.application.baatna.utils.ZCircularImageView
                 android:id="@+id/drawer_user_info_background_image"
                 android:layout_width="wrap_content"
@@ -27,7 +33,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginBottom="30dp"
                 android:scaleType="centerCrop" />
-
+            
             <View
                 android:id="@+id/drawer_user_info_background_image_overlay"
                 android:layout_width="fill_parent"

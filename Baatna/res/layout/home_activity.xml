@@ -7,13 +7,6 @@
     android:background="@color/zhl_dark"
     android:orientation="vertical" >
 
-    <!--  <View
-        android:id="@+id/action_bar_blankview"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/height60"
-        android:layout_alignParentTop="true" />
-        -->
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"

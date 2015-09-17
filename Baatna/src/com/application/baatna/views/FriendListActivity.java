@@ -297,6 +297,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 					Intent intent = new Intent(FriendListActivity.this, MessagesActivity.class);
 					intent.putExtra("user", user);
 					intent.putExtra("wish", wish);
+					intent.putExtra("type", feedItem.getType());
 					startActivity(intent);
 					overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 				}

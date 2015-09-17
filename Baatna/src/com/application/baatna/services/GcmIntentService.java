@@ -8,11 +8,14 @@ import org.json.JSONObject;
 import com.application.baatna.R;
 import com.application.baatna.Splash;
 import com.application.baatna.data.Message;
+import com.application.baatna.data.User;
+import com.application.baatna.data.Wish;
 import com.application.baatna.db.MessageDBWrapper;
 import com.application.baatna.receivers.GcmBroadcastReceiver;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.ParserJson;
 import com.application.baatna.views.MessagesActivity;
+import com.application.baatna.views.WishboxActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
@@ -95,14 +98,34 @@ public class GcmIntentService extends IntentService {
 					notificationActivity.putExtra("user", messageObj.getFromUser());
 					notificationActivity.putExtra("wish", messageObj.getWish());
 				}
-				
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else if (type != null && type.equals("wish")) {
+			JSONObject message = null;
+			try {
+				message = new JSONObject(msg);
+				if (message.has("wish") && message.getJSONObject("wish").has("wish")) {
+					Wish messageObj = ParserJson.parse_Wish(message.getJSONObject("wish").getJSONObject("wish"));
+					if (messageObj != null) {
+						if (message.has("from_user") && message.getJSONObject("from_user").has("user")) {
+							User user = ParserJson.parse_User(message.getJSONObject("from_user").getJSONObject("user"));
+							msg = user.getUserName() + " offered you a " + messageObj.getTitle() + ". Start chatting!";
+							notificationActivity = new Intent(this, MessagesActivity.class);
+							notificationActivity.putExtra("user", user);
+							notificationActivity.putExtra("wish", messageObj);
+						}
+					}
+				}
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
 		// check if app is alive, do not push the message notifiication then
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-		if(notificationActivity == null)
+		if (notificationActivity == null)
 			notificationActivity = new Intent(this, Splash.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationActivity, 0);
 		Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

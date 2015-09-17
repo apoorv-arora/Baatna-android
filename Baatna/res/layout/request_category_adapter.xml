@@ -3,13 +3,35 @@
     android:id="@+id/request_category_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@drawable/whitebuttoncustomback"
+    android:orientation="horizontal" >
 
-    <com.application.baatna.utils.TextViewSemiBold
+    <com.application.baatna.utils.IconView
+        android:id="@+id/category_image"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:text="K"
+        android:gravity="center_vertical"
+        android:textColor="@color/category_icon_color"
+        android:textSize="@dimen/size45" />
+
+    <com.application.baatna.utils.TextViewRegular
         android:id="@+id/category_title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/font_color"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="sfdsdfzsdfdsf"
+        android:textColor="@color/default_font_color"
         android:textSize="@dimen/size15" />
+
+    <com.application.baatna.utils.IconView
+        android:id="@+id/proceed_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:text="N"
+        android:gravity="center_vertical"
+        android:textColor="@color/category_icon_color"
+        android:textSize="@dimen/size45" />
 
 </LinearLayout>

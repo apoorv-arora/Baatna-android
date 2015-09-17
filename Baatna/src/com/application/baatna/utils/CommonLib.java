@@ -736,6 +736,7 @@ public class CommonLib {
 		Categories categoryBookSports = new Categories();
 		categoryBookSports.setCategoryId(1);
 		categoryBookSports.setCategory("Books and Sports");
+		categoryBookSports.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList1 = new ArrayList<CategoryItems>();
 //		categoryItemsList1.add(new CategoryItems(1, "Book", -1));
@@ -752,6 +753,7 @@ public class CommonLib {
 		Categories categorygames = new Categories();
 		categorygames.setCategoryId(2);
 		categorygames.setCategory("Games");
+		categorygames.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList2 = new ArrayList<CategoryItems>();
 //		categoryItemsList2.add(new CategoryItems(1, "Play-station", -1));
@@ -767,6 +769,7 @@ public class CommonLib {
 		Categories categoryMusic = new Categories();
 		categoryMusic.setCategoryId(4);
 		categoryMusic.setCategory("Music");
+		categoryMusic.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList3 = new ArrayList<CategoryItems>();
 //		categoryItemsList3.add(new CategoryItems(1, "Acoustic Guitar", -1));
@@ -785,6 +788,7 @@ public class CommonLib {
 		Categories categoryTravelHoliday = new Categories();
 		categoryTravelHoliday.setCategoryId(4);
 		categoryTravelHoliday.setCategory("Travel and Holiday");
+		categoryTravelHoliday.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList4 = new ArrayList<CategoryItems>();
 //		categoryItemsList4.add(new CategoryItems(1, "Helmet", -1));
@@ -802,6 +806,7 @@ public class CommonLib {
 		Categories categoryParty = new Categories();
 		categoryParty.setCategoryId(1);
 		categoryParty.setCategory("Party");
+		categoryParty.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList5 = new ArrayList<CategoryItems>();
 //		categoryItemsList5.add(new CategoryItems(1, "Disco Ball", -1));
@@ -817,6 +822,7 @@ public class CommonLib {
 		Categories categoryBakingCooking = new Categories();
 		categoryBakingCooking.setCategoryId(1);
 		categoryBakingCooking.setCategory("Baking and cooking");
+		categoryBakingCooking.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList6 = new ArrayList<CategoryItems>();
 //		categoryItemsList6.add(new CategoryItems(1, "Blender", -1));
@@ -833,6 +839,7 @@ public class CommonLib {
 		Categories categoryHomeImprovement = new Categories();
 		categoryHomeImprovement.setCategoryId(1);
 		categoryHomeImprovement.setCategory("Home Improvement");
+		categoryHomeImprovement.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList7 = new ArrayList<CategoryItems>();
 //		categoryItemsList7.add(new CategoryItems(1, "Drill", -1));

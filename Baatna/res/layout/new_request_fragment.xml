@@ -32,18 +32,18 @@
             android:background="@color/white"
             android:orientation="vertical" >
 
-            <EditText
+            <com.application.baatna.utils.EditTextRegular
                 android:id="@+id/category_et"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/height60"
                 android:background="@drawable/white_background"
-                android:gravity="top|left"
+                android:gravity="bottom|left"
                 android:hint="@string/category_hint"
                 android:inputType="textAutoCorrect|textAutoComplete"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textColor="@color/zhl_darkest"
-                android:textColorHint="@color/zhl_darkest_custom"
+                android:textColor="@color/default_font_color"
+                android:textColorHint="@color/default_font_color"
                 android:textSize="@dimen/size16" />
 
             <View
@@ -52,10 +52,10 @@
                 android:layout_height=".5dp"
                 android:background="@color/zomato_red" />
 
-            <EditText
+            <com.application.baatna.utils.EditTextRegular
                 android:id="@+id/description_et"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/height200"
                 android:background="@drawable/all_round_cornered_zhl_button"
                 android:gravity="top|left"
                 android:hint="@string/description_hint"
@@ -63,26 +63,27 @@
                 android:lines="4"
                 android:maxLines="4"
                 android:singleLine="false"
-                android:textColor="@color/zhl_darkest"
-                android:textColorHint="@color/zhl_darkest_custom"
+                android:textColor="@color/default_font_color"
+                android:textColorHint="@color/default_font_color"
                 android:textSize="@dimen/size16" />
 
             <com.application.baatna.utils.TextViewRegular
                 android:id="@+id/post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/greenbuttonfeedback"
+                android:layout_width="@dimen/size110"
+                android:layout_height="@dimen/size60"
+                android:background="@drawable/green_gradient"
                 android:clickable="true"
                 android:text="@string/post"
+                android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/size14" />
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/category_selection_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/or_select_from_categories"
-                android:textColor="@color/zhl_darkest"
+                android:textColor="@color/default_font_color"
                 android:textSize="@dimen/size14" />
 
             <ListView

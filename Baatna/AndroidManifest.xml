@@ -125,6 +125,7 @@
             android:hardwareAccelerated="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/ZomatoMessageTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" >

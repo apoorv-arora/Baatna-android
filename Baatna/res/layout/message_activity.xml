@@ -1,34 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="10dip" >
-
-    <ListView 
-        android:id="@+id/messageList"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+    android:background="@color/white"
+    android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/bottom_container"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/height60"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/message"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@color/message_to"
+            android:hint="@string/your_message"
+            android:inputType="textAutoCorrect"
             android:maxLines="4"
-            android:layout_weight="1" />
+            android:padding="@dimen/size5"
+            android:textColor="@color/font_color" />
 
-        <Button
-            android:id="@+id/sendMessageButton"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/send_container"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="3"
-            android:text="Send" />
-    </LinearLayout>
+            android:background="@drawable/baatna_dark_feedback"
+            android:clickable="true" >
 
-</LinearLayout>
+            <com.application.baatna.utils.IconView
+                android:id="@+id/send_icon"
+                android:layout_width="@dimen/toolbar_height"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="N"
+                android:textColor="@color/zhl"
+                android:textSize="@dimen/font_size45" />
+        </LinearLayout>
+    </LinearLayout>
+    
+    <ListView
+        android:id="@+id/messageList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/bottom_container"
+        android:divider="@color/white" />
+    
+    <RelativeLayout
+        android:id="@+id/dropdown_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:id="@+id/dropdown_setting_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/delete_message"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/whitebuttoncustomback"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <com.application.baatna.utils.TextViewItalics
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete_message"
+                    android:textColor="@color/zdark" />
+
+                <com.application.baatna.utils.IconView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="@dimen/height5"
+                    android:layout_marginRight="@dimen/height5"
+                    android:text="S"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size15"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sort_by_recency"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/whitebuttoncustomback"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <com.application.baatna.utils.TextViewRegular
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report_scam"
+                    android:textColor="@color/zdark" />
+
+                <com.application.baatna.utils.IconView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="@dimen/height5"
+                    android:layout_marginRight="@dimen/height5"
+                    android:text="S"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size15"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+    
+
+</RelativeLayout>

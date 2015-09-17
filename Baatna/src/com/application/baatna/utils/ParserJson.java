@@ -196,6 +196,8 @@ public class ParserJson {
 									category.setCategoryId(categoryJson.getInt("category_id"));
 								if (categoryJson.has("category_name"))
 									category.setCategory(String.valueOf(categoryJson.get("category_name")));
+								if (categoryJson.has("category_icon"))
+									category.setCategoryIcon(String.valueOf(categoryJson.get("category_icon")));
 								categories.add(category);
 							}
 						}

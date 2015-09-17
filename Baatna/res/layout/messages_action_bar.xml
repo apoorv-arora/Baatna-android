@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height60"
+    android:layout_gravity="fill_horizontal" >
+
+    <LinearLayout
+        android:id="@id/tick_container"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:clickable="true" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/tick_proceed_icon"
+            android:layout_width="@dimen/toolbar_height"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/radial_oval_feedback"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="M"
+            android:textColor="@color/zdark"
+            android:textSize="@dimen/font_size45" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/home_icon_container"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height60"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/whitebuttoncustomback"
+        android:onClick="actionBarSelected" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/back_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height60"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="D"
+            android:textColor="@color/zdark"
+            android:textSize="@dimen/font_size45" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height60"
+            android:layout_toRightOf="@id/back_icon"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <com.application.baatna.utils.TextViewBold
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:onClick="actionBarSelected"
+                android:paddingLeft="0dp"
+                android:paddingRight="@dimen/height2"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size16" />
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/subtitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size14" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/user_image_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/tick_container" >
+
+        <com.application.baatna.utils.ZCircularImageView
+            android:id="@+id/user_chat_head"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/profile_icon"
+            android:gravity=""
+            android:scaleType="centerCrop" />
+    </FrameLayout>
+
+</RelativeLayout>

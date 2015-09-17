@@ -24,6 +24,7 @@ import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
 import com.application.baatna.utils.fab.FABControl;
 import com.application.baatna.utils.fab.FABControl.OnFloatingActionsMenuUpdateListener;
 import com.crashlytics.android.Crashlytics;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.plus.PlusOneButton;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -43,6 +45,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -67,7 +70,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -83,11 +85,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Home extends AppCompatActivity implements BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener {
+public class Home extends AppCompatActivity
+		implements BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener, UploadManagerCallback {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -124,6 +126,10 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 	private boolean cancelled = false;
 	private boolean loading = false;
 	private int count = 10;
+	private ProgressDialog z_ProgressDialog;
+
+	// rate us on the play store
+	private PlusOneButton mPlusOneButton;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -152,7 +158,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 		feedListView.addHeaderView(headerView);
 		feedListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
 		feedListView.setDividerHeight(width / 40);
-		
+
 		headerView.findViewById(R.id.search_map).getLayoutParams().width = width;
 
 		headerView.findViewById(R.id.search_map).setOnClickListener(new View.OnClickListener() {
@@ -163,7 +169,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 				startActivity(intent);
 			}
 		});
-		
+
 		((RelativeLayout.LayoutParams) headerView.findViewById(R.id.request_icon).getLayoutParams())
 				.setMargins(width / 20 + width / 80, 0, 0, 0);
 		headerView.findViewById(R.id.make_request_container).setOnClickListener(new View.OnClickListener() {
@@ -210,7 +216,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 
 															GetImage gi = new GetImage(task.url,
 																	task.imageViewReference.get(), task.width,
-																	task.height, task.useDiskCache, task.type);
+																	task.height, task.useDiskCache, task.type, false);
 															// gi.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 															try {
 																gi.executeOnExecutor(
@@ -235,7 +241,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 
 															GetImage gi = new GetImage(task.url2,
 																	task.imageViewReference.get(), task.width,
-																	task.height, task.useDiskCache, task.type);
+																	task.height, task.useDiskCache, task.type, false);
 															// gi.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 															try {
 																gi.executeOnExecutor(
@@ -277,6 +283,26 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 
 			}
 		});
+		rateDialogShow = prefs.getBoolean("rate_dialog_show", true);
+		if (rateDialogShow) {
+			int rateDialogCounter = prefs.getInt("rate_dialog", 1);
+			int rateDialogCounterTrigger = prefs.getInt("rate_dialog_trigger", 3);
+
+			if (rateDialogCounter == rateDialogCounterTrigger) {
+				showRateUsDialog();
+				CommonLib.ZLog("rate dialog", "show dialog rateDialogCounterTrigger = " + rateDialogCounterTrigger);
+			}
+
+			rateDialogCounter++;
+			Editor edit = prefs.edit();
+			edit.putInt("rate_dialog", rateDialogCounter);
+			edit.commit();
+
+			CommonLib.ZLog("rate dialog", "rate_dialog is now  " + rateDialogCounter);
+			CommonLib.ZLog("rate dialog", "rate_dialog_trigger is now " + rateDialogCounterTrigger);
+		}
+
+		UploadManager.addCallback(this);
 	}
 
 	private void setUpFAB() {
@@ -495,6 +521,8 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 		v.findViewById(R.id.action_buttons).setVisibility(View.VISIBLE);
 		v.findViewById(R.id.home_icon_zomato).setVisibility(View.VISIBLE);
 
+		v.findViewById(R.id.open_messages).setPadding(width / 20, width / 40, width / 20, width / 40);
+
 		v.findViewById(R.id.open_messages).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -656,8 +684,6 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 		});
 
 		setImageInDrawer();
-		updateUserInfoInDrawer();
-
 	}
 
 	// called from
@@ -666,62 +692,10 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 	public void setImageInDrawer() {
 		// Blurred user image
 		ImageView imageBackground = (ImageView) findViewById(R.id.drawer_user_info_background_image);
-		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "", width, width, false);
-		// imageBackground.getLayoutParams().height = width / 3;
-		//
-		// CommonLib.ZLog("thumbUrl blurred", prefs.getString("thumbUrl", "")
-		// + ".");
-		// if (!prefs.getString("thumbUrl", "").equals("")
-		// && prefs.getString("thumbUrl", "").length() > 0) {
-		// FetchBackgroundImage task = new FetchBackgroundImage(
-		// imageBackground, prefs.getString("thumbUrl", ""), width,
-		// width / 3);
-		// task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		//
-		// } else {
-		// setBackgroundColor(imageBackground);
-		// }
+		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "", width, width, false, false);
 
-	}
-
-	// called from
-	// 1. Home when drawer is being set.
-	// 2. Me fragment after the user object is populated.
-	public void updateUserInfoInDrawer() {
-		//
-		//
-		// String userNameString = prefs.getString("username", "");
-		//
-		// // user name, followers, reviews
-		// if ((!userNameString.equals("") && userNameString.length() > 0)
-		// && prefs.contains("numReviews")
-		// && prefs.contains("numFollowers")) {
-		//
-		// TextView userName = (TextView) findViewById(R.id.drawer_user_name);
-		// userName.setText(userNameString);
-		//
-		// TextView userStats = (TextView) findViewById(R.id.drawer_user_stats);
-		// int followerCount = prefs.getInt("numFollowers", 0);
-		// int reviewCount = prefs.getInt("numReviews", 0);
-		//
-		// if ((followerCount > 0 && reviewCount > 0)
-		// || (reviewCount == 0 && followerCount == 0)
-		// || (reviewCount == 0 && followerCount > 0)
-		// || (reviewCount > 0 && followerCount == 0))
-		// userStats.setText(String.format(
-		// getResources().getString(R.string.user_stats),
-		// reviewCount, followerCount));
-		// else if (reviewCount > 0 && followerCount == 1)
-		// userStats.setText(String.format(
-		// getResources().getString(
-		// R.string.user_stats_single_follower),
-		// reviewCount, followerCount));
-		// else if (reviewCount == 1 && followerCount > 0)
-		// userStats.setText(String.format(
-		// getResources().getString(
-		// R.string.user_stats_single_review),
-		// reviewCount, followerCount));
-		// }
+		ImageView imageBlur = (ImageView) findViewById(R.id.drawer_user_info_blur_background_image);
+		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBlur, "", width, width, false, true);
 	}
 
 	// public void feedback(View v) {
@@ -765,6 +739,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 		mDrawerLayout = null;
 		zapp.zll.removeCallback(this);
 		zapp.cache.clear();
+		UploadManager.removeCallback(this);
 		super.onDestroy();
 	}
 
@@ -1165,6 +1140,9 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
 					.setMargins(width / 40, 0, width / 40, 0);
+			viewHolder.accept.setPadding(width / 20, 0, width / 20, width / 20);
+			viewHolder.decline.setPadding(width / 20, 0, width / 20, width / 20);
+			
 			final User user = feedItem.getUserIdFirst();
 
 			User user2 = feedItem.getUserSecond();
@@ -1216,7 +1194,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 				if (user != null) {
 					String description = getResources().getString(R.string.feed_user_joined, user.getUserName() + " ");
 
-					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false);
+					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false, false);
 
 					viewHolder.userName.setText(description);
 					viewHolder.accept.setVisibility(View.INVISIBLE);
@@ -1230,7 +1208,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 					String description = getResources().getString(R.string.feed_user_requested,
 							user.getUserName() + " ", wish.getTitle() + " ");
 
-					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
+					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false, false);
 
 					viewHolder.userName.setText(description);
 					viewHolder.bar
@@ -1240,6 +1218,9 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 
 						@Override
 						public void onClick(View v) {
+							z_ProgressDialog = ProgressDialog.show(Home.this, null,
+									getResources().getString(R.string.sending_request), true, false);
+							z_ProgressDialog.setCancelable(false);
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
 									"" + wish.getWishId(), "1");
 						}
@@ -1261,7 +1242,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 				String description = getResources().getString(R.string.feed_requested_fulfilled,
 						user.getUserName() + " ", wish.getTitle() + " ", user2.getUserName());
 
-				setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
+				setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false, false);
 
 				viewHolder.userName.setText(description);
 				viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
@@ -1404,11 +1385,11 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 	}
 
 	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width,
-			int height, boolean useDiskCache) {
+			int height, boolean useDiskCache, boolean fastBlur) {
 
 		if (cancelPotentialWork(url, imageView)) {
 
-			GetImage task = new GetImage(url, imageView, width, height, useDiskCache, type);
+			GetImage task = new GetImage(url, imageView, width, height, useDiskCache, type, fastBlur);
 
 			final AsyncDrawable asyncDrawable = new AsyncDrawable(Home.this.getResources(), zapp.cache.get(url), task);
 			imageView.setImageDrawable(asyncDrawable);
@@ -1426,7 +1407,18 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 				getImageArray.add(task);
 			} else {
 				imageView.setBackgroundResource(0);
-
+				Bitmap blurBitmap = null;
+				if (imageView != null) {
+					blurBitmap = CommonLib.fastBlur(((BitmapDrawable) imageView.getDrawable()).getBitmap(), 4);
+				}
+				if (imageView != null && blurBitmap != null) {
+					imageView.setImageBitmap(blurBitmap);
+				}
+				if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
+						&& ((ViewGroup) imageView.getParent()).getChildAt(2) != null
+						&& ((ViewGroup) imageView.getParent()).getChildAt(2) instanceof ProgressBar) {
+					((ViewGroup) imageView.getParent()).getChildAt(2).setVisibility(View.GONE);
+				}
 			}
 		} else if (imageView != null && imageView.getDrawable() != null
 				&& ((BitmapDrawable) imageView.getDrawable()).getBitmap() != null) {
@@ -1448,14 +1440,17 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 		boolean useDiskCache;
 		String type;
 		String url2 = "";
+		boolean fastBlur = false;
 
-		public GetImage(String url, ImageView imageView, int width, int height, boolean useDiskCache, String type) {
+		public GetImage(String url, ImageView imageView, int width, int height, boolean useDiskCache, String type,
+				boolean fastBlur) {
 			this.url = url;
 			imageViewReference = new WeakReference<ImageView>(imageView);
 			this.width = width;
 			this.height = height;
 			this.useDiskCache = true;// useDiskCache;
 			this.type = type;
+			this.fastBlur = fastBlur;
 		}
 
 		@Override
@@ -1494,6 +1489,8 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 								bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null,
 										opts);
 
+								if (fastBlur)
+									bitmap = CommonLib.fastBlur(bitmap, 4);
 								if (useDiskCache) {
 									if (CommonLib.shouldScaleDownBitmap(Home.this, bitmap)) {
 										bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
@@ -1552,7 +1549,7 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 
 					if ((!url.equals("")) && currentTask != null
 							&& (currentTask.url.equals(url) || currentTask.url2.equals(url))) {
-						GetImage task = new GetImage(url, imageView, width, height, true, type);
+						GetImage task = new GetImage(url, imageView, width, height, true, type, fastBlur);
 						final AsyncDrawable asyncDrawable = new AsyncDrawable(getResources(), bitmap, task);
 						imageView.setImageDrawable(asyncDrawable);
 						imageView.setBackgroundResource(0);
@@ -1639,6 +1636,130 @@ public class Home extends AppCompatActivity implements BaatnaLocationCallback, O
 		// No task associated with the ImageView, or an existing task was
 		// cancelled
 		return true;
+	}
+
+	@Override
+	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
+			String stringId) {
+		if (destroyed)
+			return;
+		if (requestType == CommonLib.WISH_UPDATE_STATUS) {
+			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
+				z_ProgressDialog.dismiss();
+		}
+	}
+
+	@Override
+	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
+	}
+
+	private void showRateUsDialog() {
+		try {
+			View customView = inflater.inflate(R.layout.rate_dialog, null);
+			mPlusOneButton = (PlusOneButton) customView.findViewById(R.id.plus_one_button);
+			mPlusOneButton.initialize("https://market.android.com/details?id=" + getPackageName(), 0);
+
+			final AlertDialog dialog = new AlertDialog.Builder(Home.this, AlertDialog.THEME_HOLO_LIGHT)
+					.setCancelable(true).setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							CommonLib.ZLog("rate dialog", "onCancel");
+							int rateDialogCounterTrigger = prefs.getInt("rate_dialog_trigger", 3);
+							CommonLib.ZLog("rate dialog",
+									"onCancel() rateDialogCounterTrigger = " + rateDialogCounterTrigger);
+
+							if (rateDialogCounterTrigger == 3)
+								rateDialogCounterTrigger = 8;
+							else if (rateDialogCounterTrigger == 8)
+								rateDialogCounterTrigger = 13;
+							else if (rateDialogCounterTrigger == 13)
+								rateDialogCounterTrigger = 20;
+							else if (rateDialogCounterTrigger > 13)
+								rateDialogCounterTrigger = rateDialogCounterTrigger + 10;
+
+							Editor edit = prefs.edit();
+							edit.putInt("rate_dialog_trigger", rateDialogCounterTrigger);
+							edit.commit();
+
+							CommonLib.ZLog("rate dialog",
+									"onCancel() rateDialogCounterTrigger is now " + rateDialogCounterTrigger);
+						}
+					})
+
+			// .setTitle(getResources().getString(R.string.rate_dialog_title))
+					.setView(customView)
+					// .setMessage(getResources().getString(R.string.rate_dialog_message))
+					.create();
+
+			dialog.setCanceledOnTouchOutside(true);
+			dialog.show();
+
+			customView.findViewById(R.id.rate_dialog_rate_now).setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
+					CommonLib.ZLog("rate dialog", "rate now");
+
+					try {
+						Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+								Uri.parse("market://details?id=" + getPackageName()));
+						startActivity(browserIntent);
+
+					} catch (ActivityNotFoundException e) {
+					} catch (Exception e) {
+					}
+
+					Editor edit = prefs.edit();
+					edit.putBoolean("rate_dialog_show", false);
+					edit.commit();
+					dialog.dismiss();
+				}
+			});
+
+			customView.findViewById(R.id.rate_dialog_remind).setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
+					int rateDialogCounterTrigger = prefs.getInt("rate_dialog_trigger", 3);
+					CommonLib.ZLog("rate dialog", "remind rateDialogCounterTrigger = " + rateDialogCounterTrigger);
+
+					if (rateDialogCounterTrigger == 3)
+						rateDialogCounterTrigger = 8;
+					else if (rateDialogCounterTrigger == 8)
+						rateDialogCounterTrigger = 13;
+					else if (rateDialogCounterTrigger == 13)
+						rateDialogCounterTrigger = 20;
+					else if (rateDialogCounterTrigger > 13)
+						rateDialogCounterTrigger = rateDialogCounterTrigger + 10;
+
+					Editor edit = prefs.edit();
+					edit.putInt("rate_dialog_trigger", rateDialogCounterTrigger);
+					edit.commit();
+					dialog.dismiss();
+					CommonLib.ZLog("rate dialog", "rateDialogCounterTrigger is now at " + rateDialogCounterTrigger);
+				}
+			});
+
+			customView.findViewById(R.id.rate_dialog_never).setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					CommonLib.ZLog("rate dialog", "never");
+
+					Editor edit = prefs.edit();
+					edit.putBoolean("rate_dialog_show", false);
+					edit.commit();
+
+					dialog.dismiss();
+				}
+			});
+
+		} catch (Exception e) {
+
+		}
 	}
 
 }

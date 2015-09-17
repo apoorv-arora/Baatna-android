@@ -22,6 +22,8 @@
         android:id="@+id/feedListView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:headerDividersEnabled="true"
+        android:footerDividersEnabled="true"
         android:background="@color/feed_bg" />
 
     <LinearLayout

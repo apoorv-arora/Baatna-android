@@ -186,4 +186,7 @@
     <color name="light_stroke_color">#f1f2f2</color>
     <color name="drawer_lighter">#939598</color>
     
+    <color name="category_icon_color">#d1d3d4</color>
+    <color name="default_font_color">#6d6e71</color>
+    
 </resources>

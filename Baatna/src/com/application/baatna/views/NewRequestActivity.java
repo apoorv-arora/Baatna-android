@@ -14,8 +14,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewRequestActivity extends Activity implements UploadManagerCallback {
@@ -25,6 +30,8 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 	private boolean isChecked = true;
 	private boolean isDestroyed = false;
 	private ProgressDialog z_ProgressDialog;
+	LayoutInflater inflater;
+	private int width;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -32,6 +39,8 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 		setContentView(R.layout.single_fragment_container);
 
 		prefs = getSharedPreferences("application_settings", 0);
+		width = getWindowManager().getDefaultDisplay().getWidth();
+		inflater = LayoutInflater.from(this);
 		setupActionBar();
 		mFragment = new NewRequestFragment();
 		mFragment.setArguments(getIntent().getExtras());
@@ -42,21 +51,26 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 
 	private void setupActionBar() {
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowCustomEnabled(false);
+		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayUseLogoEnabled(true);
-		actionBar.setLogo(R.drawable.ic_launcher);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
 
-		try {
-			int width = getWindowManager().getDefaultDisplay().getWidth();
-			findViewById(android.R.id.home).setPadding(width / 80, 0, width / 40, 0);
-			ViewGroup home = (ViewGroup) findViewById(android.R.id.home).getParent();
-			home.getChildAt(0).setPadding(width / 80, 0, width / 80, 0);
-		} catch (Exception e) {
-		}
+		View v = inflater.inflate(R.layout.green_action_bar, null);
+
+		v.findViewById(R.id.back_icon).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+			}
+		});
+		actionBar.setCustomView(v);
+
+		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
+
+		// user handle
+		TextView title = (TextView) v.findViewById(R.id.title);
+		title.setPadding(width / 80, 0, width / 40, 0);
 	}
 
 	@Override
@@ -138,10 +152,8 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
 		if (requestType == CommonLib.WISH_ADD) {
 			if (!isDestroyed) {
-				z_ProgressDialog = ProgressDialog
-						.show(NewRequestActivity.this, null,
-								getResources().getString(R.string.wish_post_dialog),
-								true, false);
+				z_ProgressDialog = ProgressDialog.show(NewRequestActivity.this, null,
+						getResources().getString(R.string.wish_post_dialog), true, false);
 				z_ProgressDialog.setCancelable(false);
 			}
 		}

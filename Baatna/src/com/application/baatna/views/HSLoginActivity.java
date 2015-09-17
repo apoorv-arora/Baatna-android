@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -41,6 +42,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	private Activity mActivity;
 	private ListView mSubzoneSearchListView;
 	SimpleListAdapter adapter1;
+	private ProgressDialog z_ProgressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,6 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		setListeners();
 		setUpActionBar();
 		UploadManager.addCallback(this);
-
 	}
 
 	private void setUpActionBar() {
@@ -175,6 +176,11 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 								.getText().toString();
 						String studentId = ((TextView) findViewById(R.id.studentIdEt))
 								.getText().toString();
+						z_ProgressDialog = ProgressDialog
+								.show(HSLoginActivity.this, null,
+										getResources().getString(R.string.verifying_creds),
+										true, false);
+						z_ProgressDialog.setCancelable(false);
 						UploadManager.updateInstitution(
 								prefs.getString("access_token", ""),
 								institutionName, studentId);
@@ -247,6 +253,8 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	public void uploadFinished(int requestType, int userId, int objectId,
 			Object data, int uploadId, boolean status, String stringId) {
 		if (requestType == CommonLib.UPDATE_INSTITUTION) {
+			if(z_ProgressDialog != null && z_ProgressDialog.isShowing())
+				z_ProgressDialog.dismiss();
 			if (status && !destroyed) {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putBoolean("HSLogin", false).commit();

@@ -31,6 +31,8 @@
     <dimen name="size46">46dp</dimen>
     <dimen name="size47">47dp</dimen>
     <dimen name="size50">50dp</dimen>
+    <dimen name="size60">60dp</dimen>
+    <dimen name="size110">110dp</dimen>
     <dimen name="size11_user">11dp</dimen>
     <dimen name="size18_user">18dp</dimen>
     <dimen name="size_tabs">12dp</dimen>
@@ -62,6 +64,7 @@
     <dimen name="height125">125dp</dimen>
     <dimen name="height150">150dp</dimen>
     <dimen name="height170">170dp</dimen>
+    <dimen name="height200">200dp</dimen>
     <dimen name="height300">300dp</dimen>
     <dimen name="speedial_circle_size">60dp</dimen>
     <dimen name="size30_res">32dp</dimen>

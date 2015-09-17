@@ -7,6 +7,7 @@ public class Categories implements Serializable {
 	
 	private int categoryId;
 	private String category;
+	private String categoryIcon;
 	private ArrayList<CategoryItems> categoryItems;
 	
 	public Categories(){
@@ -41,6 +42,14 @@ public class Categories implements Serializable {
 
 	public void setCategoryItems(ArrayList<CategoryItems> categoryItems) {
 		this.categoryItems = categoryItems;
+	}
+
+	public String getCategoryIcon() {
+		return categoryIcon;
+	}
+
+	public void setCategoryIcon(String categoryIcon) {
+		this.categoryIcon = categoryIcon;
 	}
 	
 }

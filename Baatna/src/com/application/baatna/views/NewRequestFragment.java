@@ -6,6 +6,7 @@ import java.util.List;
 import com.application.baatna.R;
 import com.application.baatna.data.Categories;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.IconView;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 
@@ -14,6 +15,7 @@ import android.app.Fragment;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,14 +73,14 @@ public class NewRequestFragment extends Fragment {
 		((LinearLayout.LayoutParams) rootView.findViewById(R.id.category_separator).getLayoutParams())
 				.setMargins(width / 20, 0, width / 20, 0);
 
-		rootView.findViewById(R.id.description_et).setPadding(width / 20, width / 40, width / 20, width / 40);
+		rootView.findViewById(R.id.description_et).setPadding(width / 20, width / 10, width / 20, width / 40);
 
 		((LinearLayout.LayoutParams) rootView.findViewById(R.id.post).getLayoutParams()).setMargins(width / 20,
-				width / 40, 0, width / 40);
+				width / 20, 0, width / 20);
 
 		rootView.findViewById(R.id.post).setPadding(width / 20, width / 40, width / 20, width / 40);
 
-		rootView.findViewById(R.id.category_selection_label).setPadding(width / 20, width / 40, width / 20, 0);
+		rootView.findViewById(R.id.category_selection_label).setPadding(width / 20, width / 40, width / 20, width / 20);
 
 		mCategoriesListView.setDivider(null);
 
@@ -241,6 +243,7 @@ public class NewRequestFragment extends Fragment {
 
 		protected class ViewHolder {
 			TextView category_label;
+			IconView category_image;
 		}
 
 		@Override
@@ -254,11 +257,22 @@ public class NewRequestFragment extends Fragment {
 			if (viewHolder == null) {
 				viewHolder = new ViewHolder();
 				viewHolder.category_label = (TextView) v.findViewById(R.id.category_title);
+				viewHolder.category_image = (IconView) v.findViewById(R.id.category_image);
 				v.setTag(viewHolder);
 			}
 
+			if(position % 2 == 0) {
+				v.findViewById(R.id.request_category_root).setBackgroundResource(R.color.zhl_light);
+			} else {
+				v.findViewById(R.id.request_category_root).setBackgroundResource(R.color.white);
+			}
+			
+			v.findViewById(R.id.proceed_icon).setPadding(width / 20, 0, width / 20, 0);
+			
 			viewHolder.category_label.setText(categoryName.getCategory());
-			viewHolder.category_label.setPadding(width / 20, width / 40, width / 20, width / 40);
+			viewHolder.category_image.setText(categoryName.getCategoryIcon());
+			viewHolder.category_label.setPadding(width / 40, width / 40, width / 20, width / 40);
+			viewHolder.category_image.setPadding(width / 20, width / 40, width / 40, width / 40);
 			viewHolder.category_label.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
