@@ -1243,7 +1243,7 @@ public class BaatnaActivity extends Activity implements
 
 	public void navigateToHome() {
 		if (prefs.getInt("uid", 0) != 0) {
-			if (prefs.getBoolean("HSLogin", true)) {
+			if (prefs.getBoolean("instutionLogin", true) && prefs.getBoolean("HSLogin", true)) {
 				Intent intent = new Intent(this, HSLoginActivity.class);
 				startActivity(intent);
 				finish();

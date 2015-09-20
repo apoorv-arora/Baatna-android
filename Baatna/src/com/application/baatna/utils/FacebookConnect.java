@@ -530,6 +530,25 @@ public class FacebookConnect {
 						status = 1;
 						accessToken = res.getString("access_token"); 
 						uid = res.getInt("user_id");
+						if(res.has("HSLogin") && res.get("HSLogin") instanceof Boolean) {
+							SharedPreferences prefs = ((Context)callback).getSharedPreferences("application_settings", 0);
+							SharedPreferences.Editor editor = prefs.edit();
+							editor.putBoolean("HSLogin",
+									res.getBoolean("HSLogin"));
+							if (res.has("instutionLogin")) {
+								editor.putBoolean("instutionLogin",
+										res.getBoolean("instutionLogin"));
+							}
+							if (res.has("INSTITUTION_NAME")) {
+								editor.putString("INSTITUTION_NAME",
+										res.getString("INSTITUTION_NAME"));
+							}
+							if (res.has("STUDENT_ID")) {
+								editor.putString("STUDENT_ID",
+										res.getString("STUDENT_ID"));
+							}
+							editor.commit();
+						}
 						if(res.has("user")) {
 							res = res.getJSONObject("user");
 							if(res.has("user")) {
@@ -543,7 +562,7 @@ public class FacebookConnect {
 								if(res.has("username")) {
 									uname = String.valueOf(res.get("username"));
 								} else if(res.has("user_name")) {
-									uname = String.valueOf(res.get("username"));
+									uname = String.valueOf(res.get("user_name"));
 								}
 							}
 						}

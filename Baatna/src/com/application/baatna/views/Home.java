@@ -1188,6 +1188,8 @@ public class Home extends AppCompatActivity
 				}
 			});
 
+			viewHolder.distance.setText(CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0), feedItem.getLatitude(), feedItem.getLongitude()) + " km");
+			
 			switch (feedItem.getType()) {
 
 			case CommonLib.FEED_TYPE_NEW_USER:
@@ -1492,9 +1494,9 @@ public class Home extends AppCompatActivity
 								if (fastBlur)
 									bitmap = CommonLib.fastBlur(bitmap, 4);
 								if (useDiskCache) {
-									if (CommonLib.shouldScaleDownBitmap(Home.this, bitmap)) {
-										bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-									}
+//									if (CommonLib.shouldScaleDownBitmap(Home.this, bitmap)) {
+//										bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+//									}
 									CommonLib.writeBitmapToDisk(url, bitmap, Home.this.getApplicationContext(),
 											Bitmap.CompressFormat.JPEG);
 								}

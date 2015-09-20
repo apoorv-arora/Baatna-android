@@ -63,7 +63,7 @@
     <string name="your_wishbox">YOUR WISHBOX</string>
     <string name="err_occurred">An error occurred. Please try again.</string>
     <string name="institution">Institution</string>
-    <string name="roll_number_hint">Enter Roll Number</string>
+    <string name="roll_number_hint">Invide code</string>
     <string name="select_an_option">Select an option</string>
     <string name="verifying_creds">Verifying credentials..</string>
     <string name="feed_user_joined">%1$s joined your neighborhood</string>

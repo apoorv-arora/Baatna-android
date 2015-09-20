@@ -1,7 +1,14 @@
 package com.application.baatna.views;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
+
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.R;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -18,17 +25,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.R;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.RequestWrapper;
-import com.application.baatna.utils.UploadManager;
-import com.application.baatna.utils.UploadManagerCallback;
 
 public class HSLoginActivity extends Activity implements UploadManagerCallback {
 
@@ -73,10 +74,8 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 
 		try {
 			int width = getWindowManager().getDefaultDisplay().getWidth();
-			findViewById(android.R.id.home).setPadding(width / 80, 0,
-					width / 40, 0);
-			ViewGroup home = (ViewGroup) findViewById(android.R.id.home)
-					.getParent();
+			findViewById(android.R.id.home).setPadding(width / 80, 0, width / 40, 0);
+			ViewGroup home = (ViewGroup) findViewById(android.R.id.home).getParent();
 			home.getChildAt(0).setPadding(width / 80, 0, width / 80, 0);
 		} catch (Exception e) {
 		}
@@ -88,8 +87,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		// disconnect facebook
 		try {
 
-			com.facebook.Session fbSession = com.facebook.Session
-					.getActiveSession();
+			com.facebook.Session fbSession = com.facebook.Session.getActiveSession();
 			if (fbSession != null) {
 				fbSession.closeAndClearTokenInformation();
 			}
@@ -117,8 +115,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 			Intent intent = new Intent(zapp, BaatnaActivity.class);
 			startActivity(intent);
 			finish();
-			overridePendingTransition(R.anim.slide_in_left,
-					R.anim.slide_out_right);
+			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 		} else
 			super.onBackPressed();
 	}
@@ -149,76 +146,59 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	}
 
 	private void fixSizes() {
-		findViewById(R.id.institutionEt).setPadding(width / 20, width / 10,
-				width / 20, width / 40);
-		findViewById(R.id.studentIdEt).setPadding(width / 20, width / 40,
-				width / 20, width / 20);
-		findViewById(R.id.submit_button).setPadding(0, width / 20, 0,
-				width / 20);
+		findViewById(R.id.institutionEt).setPadding(width / 20, width / 10, width / 20, width / 40);
+		findViewById(R.id.studentIdEt).setPadding(width / 20, width / 40, width / 20, width / 20);
+		findViewById(R.id.submit_button).setPadding(0, width / 20, 0, width / 20);
 
-		((LinearLayout.LayoutParams) findViewById(R.id.institutionEt)
-				.getLayoutParams()).setMargins(width / 20, width / 20,
-				width / 20, width / 40);
-		((LinearLayout.LayoutParams) findViewById(R.id.studentIdEt)
-				.getLayoutParams()).setMargins(width / 20, width / 40,
-				width / 20, width / 20);
-		((LinearLayout.LayoutParams) findViewById(R.id.submit_button)
-				.getLayoutParams()).setMargins(width / 20, width / 40,
-				width / 20, 0);
+		((LinearLayout.LayoutParams) findViewById(R.id.institutionEt).getLayoutParams()).setMargins(width / 20,
+				width / 20, width / 20, width / 40);
+		((LinearLayout.LayoutParams) findViewById(R.id.studentIdEt).getLayoutParams()).setMargins(width / 20,
+				width / 40, width / 20, width / 20);
+		((LinearLayout.LayoutParams) findViewById(R.id.submit_button).getLayoutParams()).setMargins(width / 20,
+				width / 40, width / 20, 0);
 	}
 
 	private void setListeners() {
-		findViewById(R.id.submit_button).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						String institutionName = ((TextView) findViewById(R.id.institutionEt))
-								.getText().toString();
-						String studentId = ((TextView) findViewById(R.id.studentIdEt))
-								.getText().toString();
-						z_ProgressDialog = ProgressDialog
-								.show(HSLoginActivity.this, null,
-										getResources().getString(R.string.verifying_creds),
-										true, false);
-						z_ProgressDialog.setCancelable(false);
-						UploadManager.updateInstitution(
-								prefs.getString("access_token", ""),
-								institutionName, studentId);
-					}
-				});
-		findViewById(R.id.empty_view_retry_container).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						refreshView();
-					}
-				});
+		findViewById(R.id.submit_button).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String institutionName = ((TextView) findViewById(R.id.institutionEt)).getText().toString();
+				String studentId = ((TextView) findViewById(R.id.studentIdEt)).getText().toString();
+				z_ProgressDialog = ProgressDialog.show(HSLoginActivity.this, null,
+						getResources().getString(R.string.verifying_creds), true, false);
+				z_ProgressDialog.setCancelable(false);
+				UploadManager.updateInstitution(prefs.getString("access_token", ""), institutionName, studentId);
+			}
+		});
+		findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				refreshView();
+			}
+		});
 
-		((TextView) findViewById(R.id.institutionEt))
-				.addTextChangedListener(new TextWatcher() {
+		((TextView) findViewById(R.id.institutionEt)).addTextChangedListener(new TextWatcher() {
 
-					@Override
-					public void onTextChanged(CharSequence arg0, int arg1,
-							int arg2, int arg3) {
-						adapter1.getFilter().filter(arg0);
-					}
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				adapter1.getFilter().filter(arg0);
+			}
 
-					@Override
-					public void beforeTextChanged(CharSequence arg0, int arg1,
-							int arg2, int arg3) {
-						// TODO Auto-generated method stub
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				// TODO Auto-generated method stub
 
-					}
+			}
 
-					@Override
-					public void afterTextChanged(Editable arg0) {
-						// TODO Auto-generated method stub
-						if(arg0.length() > 0)
-							findViewById(R.id.subzone_search_list_view_container).setVisibility(View.VISIBLE);
-						else
-							findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
-					}
-				});
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				// TODO Auto-generated method stub
+				if (arg0.length() > 0)
+					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.VISIBLE);
+				else
+					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
+			}
+		});
 	}
 
 	@Override
@@ -231,8 +211,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	private void refreshView() {
 		if (mAsyncTaskRunning != null)
 			mAsyncTaskRunning.cancel(true);
-		(mAsyncTaskRunning = new GetCategoriesList())
-				.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		(mAsyncTaskRunning = new GetCategoriesList()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	public void navigateToHome() {
@@ -250,10 +229,10 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	}
 
 	@Override
-	public void uploadFinished(int requestType, int userId, int objectId,
-			Object data, int uploadId, boolean status, String stringId) {
+	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
+			String stringId) {
 		if (requestType == CommonLib.UPDATE_INSTITUTION) {
-			if(z_ProgressDialog != null && z_ProgressDialog.isShowing())
+			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
 				z_ProgressDialog.dismiss();
 			if (status && !destroyed) {
 				SharedPreferences.Editor editor = prefs.edit();
@@ -265,8 +244,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	}
 
 	@Override
-	public void uploadStarted(int requestType, int objectId, String stringId,
-			Object object) {
+	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
 
 	}
 
@@ -275,8 +253,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 
 		@Override
 		protected void onPreExecute() {
-			findViewById(R.id.login_progress_container).setVisibility(
-					View.VISIBLE);
+			findViewById(R.id.login_progress_container).setVisibility(View.VISIBLE);
 
 			findViewById(R.id.content).setAlpha(1f);
 
@@ -293,8 +270,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
 				url = CommonLib.SERVER + "user/institutions?";
-				Object info = RequestWrapper.RequestHttp(url,
-						RequestWrapper.INSTITUTIONS_LIST, RequestWrapper.FAV);
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.INSTITUTIONS_LIST, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
 
@@ -309,25 +285,19 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 			if (destroyed)
 				return;
 
-			findViewById(R.id.login_progress_container).setVisibility(
-					View.GONE);
+			findViewById(R.id.login_progress_container).setVisibility(View.GONE);
 
 			if (result != null) {
-				findViewById(R.id.content).setVisibility(
-						View.VISIBLE);
+				findViewById(R.id.content).setVisibility(View.VISIBLE);
 				if (result instanceof ArrayList<?>) {
-					setInstitutions((ArrayList<String>)result);
+					setInstitutions((ArrayList<String>) result);
 				}
 			} else {
 				if (CommonLib.isNetworkAvailable(HSLoginActivity.this)) {
-					Toast.makeText(HSLoginActivity.this,
-							getResources().getString(R.string.error_try_again),
+					Toast.makeText(HSLoginActivity.this, getResources().getString(R.string.error_try_again),
 							Toast.LENGTH_SHORT).show();
 				} else {
-					Toast.makeText(
-							HSLoginActivity.this,
-							getResources().getString(
-									R.string.no_internet_message),
+					Toast.makeText(HSLoginActivity.this, getResources().getString(R.string.no_internet_message),
 							Toast.LENGTH_SHORT).show();
 
 					findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
@@ -339,22 +309,32 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		}
 	}
 
-	private void setInstitutions(List<String> categories) {
-		adapter1 = new SimpleListAdapter(mActivity,
-				R.layout.simple_list_item, categories);
+	private void setInstitutions(ArrayList<String> categories) {
+		adapter1 = new SimpleListAdapter(mActivity, R.layout.simple_list_item, categories);
 		mSubzoneSearchListView.setAdapter(adapter1);
 	}
-	
-	private class SimpleListAdapter  extends ArrayAdapter<String> {
 
-		private List<String> wishes;
+	private class SimpleListAdapter extends ArrayAdapter<String> {
+
+		private ArrayList<String> wishes;
 		private Activity mContext;
 		private int width;
+		private ArrayList<String> filtered;
+		private Filter filter;
 
-		public SimpleListAdapter(Activity context, int resourceId, List<String> wishes) {
+		@Override
+		public Filter getFilter() {
+			if (filter == null) {
+				filter = new CityFilter();
+			}
+			return filter;
+		}
+
+		public SimpleListAdapter(Activity context, int resourceId, ArrayList<String> wishes) {
 			super(context.getApplicationContext(), resourceId, wishes);
 			mContext = context;
 			this.wishes = wishes;
+			this.filtered = (ArrayList<String>) this.wishes.clone();
 			width = mContext.getWindowManager().getDefaultDisplay().getWidth();
 		}
 
@@ -374,10 +354,8 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		@Override
 		public View getView(int position, View v, ViewGroup parent) {
 			final String wish = wishes.get(position);
-			if (v == null
-					|| v.findViewById(R.id.list_root) == null) {
-				v = LayoutInflater.from(mContext).inflate(
-						R.layout.simple_list_item, null);
+			if (v == null || v.findViewById(R.id.list_root) == null) {
+				v = LayoutInflater.from(mContext).inflate(R.layout.simple_list_item, null);
 			}
 
 			ViewHolder viewHolder = (ViewHolder) v.getTag();
@@ -387,16 +365,103 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 				v.setTag(viewHolder);
 			}
 
+			viewHolder.text.setPadding(width / 20, width / 20, width / 20, width / 20);
+			
 			viewHolder.text.setText(wish);
 			viewHolder.text.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					((TextView)findViewById(R.id.institutionEt)).setText(((TextView)v).getText().toString());
+					((TextView) findViewById(R.id.institutionEt)).setText(((TextView) v).getText().toString());
 					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
 				}
 			});
 			return v;
 		}
+
+		private class CityFilter extends Filter {
+			@Override
+			protected android.widget.Filter.FilterResults performFiltering(CharSequence constraint) {
+
+				constraint = constraint.toString().toLowerCase(Locale.getDefault());
+
+				FilterResults result = new FilterResults();
+
+				if (constraint != null && constraint.toString().length() > 0) {
+					ArrayList<String> filt = new ArrayList<String>();
+					ArrayList<String> first = new ArrayList<String>();
+					ArrayList<String> lItems = new ArrayList<String>();
+					synchronized (this) {
+						lItems.addAll(wishes);
+					}
+
+					String r;
+					String name;
+					int relevent_count = 0;
+
+					if (constraint.toString().contains(" ")) {
+
+						for (int i = 0, l = lItems.size(); i < l; i++) {
+							r = lItems.get(i);
+							name = r;
+
+							if (name.toLowerCase(Locale.getDefault()).startsWith((String) constraint)) {
+								first.add(r);
+							}
+						}
+
+					} else {
+						for (int i = 0, l = lItems.size(); i < l; i++) {
+							r = lItems.get(i);
+							name = r;
+
+							String[] nameTag = name.split(" ");
+							if (nameTag != null && nameTag.length > 0) {
+
+								for (int j = 0; j < nameTag.length; j++) {
+									if (nameTag[j].toLowerCase(Locale.getDefault()).startsWith((String) constraint)) {
+										if (j == 0)
+											first.add(relevent_count++, r);
+										else
+											first.add(r);
+										break;
+									}
+								}
+							} else {
+								if (name.toLowerCase(Locale.getDefault()).startsWith((String) constraint)) {
+									first.add(relevent_count++, r);
+								}
+							}
+						}
+					}
+					filt.addAll(first);
+
+					result.count = filt.size();
+					result.values = filt;
+
+				} else {
+					synchronized (this) {
+						result.values = wishes;
+						result.count = wishes.size();
+					}
+				}
+				return result;
+			}
+
+			@Override
+			protected void publishResults(CharSequence constraint, android.widget.Filter.FilterResults results) {
+				wishes = (ArrayList<String>) results.values;
+				if (wishes.size() == 0) {
+					wishes = (filtered);
+				}
+				if (results.count > 0) {
+					adapter1.notifyDataSetChanged();
+				} else {
+					adapter1.notifyDataSetChanged();
+					// notifyDataSetInvalidated();
+				}
+			}
+
+		}
 	}
-	
+
 }

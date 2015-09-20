@@ -443,6 +443,13 @@ public class UploadManager {
 			lat = (Double) params[1];
 			lon = (Double) params[2];
 			
+			if( lat != 0 || lon != 0 ) {
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putFloat("lat", (float)lat);
+				editor.putFloat("lat", (float)lon);
+				editor.commit();
+			}
+			
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));

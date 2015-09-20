@@ -257,7 +257,7 @@ public class Splash extends Activity implements BaatnaLocationCallback {
 
 	private void navigateToHomeOrLogin() {
 		if (prefs.getInt("uid", 0) != 0) {
-			if (prefs.getBoolean("HSLogin", true)) {
+			if (prefs.getBoolean("instutionLogin", true) && prefs.getBoolean("HSLogin", true) ) {
 				Intent intent = new Intent(this, HSLoginActivity.class);
 				startActivity(intent);
 			} else {

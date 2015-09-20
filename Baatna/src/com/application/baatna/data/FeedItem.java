@@ -25,6 +25,12 @@ public class FeedItem {
 	 * */
 	private Wish wish;
 
+	/**
+	 * Location of the feed item
+	 * */
+	private double latitude;
+	private double longitude;
+
 	public int getType() {
 		return type;
 	}
@@ -72,4 +78,21 @@ public class FeedItem {
 	public void setFeedId(int feedId) {
 		this.feedId = feedId;
 	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
 }

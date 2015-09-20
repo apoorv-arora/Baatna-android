@@ -466,6 +466,14 @@ public class ParserJson {
 							if (categoryJson.has("type") && categoryJson.get("type") instanceof Integer) {
 								feedItem.setType(categoryJson.getInt("type"));
 							}
+							
+							if (categoryJson.has("latitude") && categoryJson.get("latitude") instanceof Double) {
+								feedItem.setLatitude(categoryJson.getDouble("latitude"));
+							}
+							
+							if (categoryJson.has("longitude") && categoryJson.get("longitude") instanceof Double) {
+								feedItem.setLongitude(categoryJson.getDouble("longitude"));
+							}
 
 							if (categoryJson.has("wish") && categoryJson.get("wish") instanceof JSONObject) {
 
