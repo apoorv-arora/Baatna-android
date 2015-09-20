@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
@@ -27,7 +28,10 @@ import org.apache.http.HttpResponse;
 
 import com.application.baatna.data.Categories;
 import com.application.baatna.data.CategoryItems;
+import com.application.baatna.views.MessagesActivity;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -925,5 +929,12 @@ public class CommonLib {
 		}
 		return finalCategoryList;
 	}
-
+	
+	public static boolean getCurrentActiveActivity(Context context) {
+		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	    List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+	    Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
+	    ComponentName componentInfo = taskInfo.get(0).topActivity;
+	    return (componentInfo.equals(MessagesActivity.class));
+	}
 }

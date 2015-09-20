@@ -69,6 +69,28 @@ public class ParserJson {
 		return output;
 	}
 
+	public static Object[] parseSendMessageResponse(InputStream is) throws JSONException {
+
+		Object[] output = new Object[] { "failed", "", null };
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+			output[0] = responseObject.getString("status");
+			if (output[0].equals("success")) {
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject object = responseObject.getJSONObject("response");
+					output[1] = parse_Message(object);
+				}
+			} else {
+				if (responseObject.has("errorMessage")) {
+					output[1] = responseObject.getString("errorMessage");
+				}
+			}
+		}
+		return output;
+	}
+
 	public static Object[] parseLoginResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
@@ -377,14 +399,14 @@ public class ParserJson {
 		try {
 			if (messageObject.has("to_user") && messageObject.get("to_user") instanceof JSONObject) {
 				JSONObject object = messageObject.getJSONObject("to_user");
-				if(object.has("user")) {
+				if (object.has("user")) {
 					returnMessage.setToUser(parse_User(object.getJSONObject("user")));
 				}
 			}
 
 			if (messageObject.has("from_user") && messageObject.get("from_user") instanceof JSONObject) {
 				JSONObject object = messageObject.getJSONObject("from_user");
-				if(object.has("user")) {
+				if (object.has("user")) {
 					returnMessage.setFromUser(parse_User(object.getJSONObject("user")));
 				}
 			}
@@ -403,7 +425,7 @@ public class ParserJson {
 
 			if (messageObject.has("wish")) {
 				JSONObject object = messageObject.getJSONObject("wish");
-				if(object.has("wish"))
+				if (object.has("wish"))
 					returnMessage.setWish(parse_Wish(object.getJSONObject("wish")));
 			}
 
@@ -466,11 +488,11 @@ public class ParserJson {
 							if (categoryJson.has("type") && categoryJson.get("type") instanceof Integer) {
 								feedItem.setType(categoryJson.getInt("type"));
 							}
-							
+
 							if (categoryJson.has("latitude") && categoryJson.get("latitude") instanceof Double) {
 								feedItem.setLatitude(categoryJson.getDouble("latitude"));
 							}
-							
+
 							if (categoryJson.has("longitude") && categoryJson.get("longitude") instanceof Double) {
 								feedItem.setLongitude(categoryJson.getDouble("longitude"));
 							}

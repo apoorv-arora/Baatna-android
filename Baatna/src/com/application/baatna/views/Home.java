@@ -1128,8 +1128,7 @@ public class Home extends AppCompatActivity
 				// viewHolder.userImage = (RoundedImageView) v
 				// .findViewById(R.id.user_image);
 				viewHolder.time = (TextView) v.findViewById(R.id.time);
-				// viewHolder.distance = (TextView)
-				// v.findViewById(R.id.distance);
+				 viewHolder.distance = (TextView) v.findViewById(R.id.distance);
 				viewHolder.bar = v.findViewById(R.id.left_bar);
 				viewHolder.accept = (TextView) v.findViewById(R.id.accept_button);
 				viewHolder.decline = (TextView) v.findViewById(R.id.decline_button);
@@ -1199,8 +1198,8 @@ public class Home extends AppCompatActivity
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false, false);
 
 					viewHolder.userName.setText(description);
-					viewHolder.accept.setVisibility(View.INVISIBLE);
-					viewHolder.decline.setVisibility(View.INVISIBLE);
+					viewHolder.accept.setVisibility(View.GONE);
+					viewHolder.decline.setVisibility(View.GONE);
 					viewHolder.bar
 							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.feed_joined)));
 				}
@@ -1248,8 +1247,8 @@ public class Home extends AppCompatActivity
 
 				viewHolder.userName.setText(description);
 				viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
-				viewHolder.accept.setVisibility(View.INVISIBLE);
-				viewHolder.decline.setVisibility(View.INVISIBLE);
+				viewHolder.accept.setVisibility(View.GONE);
+				viewHolder.decline.setVisibility(View.GONE);
 				break;
 
 			}

@@ -97,6 +97,13 @@ public class GcmIntentService extends IntentService {
 					notificationActivity = new Intent(this, MessagesActivity.class);
 					notificationActivity.putExtra("user", messageObj.getFromUser());
 					notificationActivity.putExtra("wish", messageObj.getWish());
+					notificationActivity.putExtra("type", type);
+					
+//					boolean object = CommonLib.getCurrentActiveActivity(context);
+//					if(object) {
+//						Intent intent = new Intent();
+//					}
+					
 				}
 
 			} catch (JSONException e) {

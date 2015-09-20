@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -66,6 +67,15 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	private BaatnaApp zapp;
 	private int type;
 
+//	@Override
+//	protected void onNewIntent(Intent intent) {
+//		super.onNewIntent(intent);
+//		
+//		if(intent != null && intent.getExtras() != null && intent.hasExtra("message")) {
+//			mAdapter.notifyDataSetChanged();
+//		}
+//	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,8 +104,10 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		sendMessageButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
-				UploadManager.sendMessage(currentUser.getUserId() + "", messageText.getText().toString(),
+				String message = messageText.getText().toString();
+				UploadManager.sendMessage(currentUser.getUserId() + "", message,
 						currentWish.getWishId() + "");
+				messageText.setText("");
 			}
 		});
 
@@ -187,9 +199,9 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 		title.setText(currentUser.getUserName());
 		if(type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
-			subtitle.setText("Offered YOU A"+ currentWish.getTitle());
+			subtitle.setText("Offered YOU A "+ currentWish.getTitle());
 		} else if(type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
-			subtitle.setText("REQUESTED FOR A"+ currentWish.getTitle());
+			subtitle.setText("REQUESTED FOR A "+ currentWish.getTitle());
 		}
 		
 		ImageView imageView = (ImageView) v.findViewById(R.id.user_chat_head);
@@ -303,8 +315,18 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 			if (!destroyed) {
 				if (status) { // add to DB with the message Id
 					if (data != null && data instanceof Message) {
-						MessageDBWrapper.addMessage((Message) data, ((Message) data).getFromUser().getUserId(),
+//						Message message = new Message();
+//						message.setFromTo(true);
+//						message.setFromUser(currentUser);
+//						message.setMessage(messageText.getText().toString());
+//						message.setMessageId(Integer.parseInt(String.valueOf(data)));
+//						message.setToUser(currentUser);
+//						message.setWish(currentWish);
+						MessageDBWrapper.addMessage((Message) data, ((Message) data).getToUser().getUserId(),
 								((Message) data).getWish().getWishId(), System.currentTimeMillis());
+						messages.add((Message) data);
+						mAdapter.notifyDataSetChanged();
+						messageList.setSelection(messages.size()-1);
 					}
 				} else {// show retry button
 					Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();
