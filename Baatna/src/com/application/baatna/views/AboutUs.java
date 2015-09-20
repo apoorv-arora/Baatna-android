@@ -212,4 +212,18 @@ public class AboutUs extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void actionBarSelected(View v) {
+
+		switch (v.getId()) {
+
+		case R.id.home_icon_container:
+			onBackPressed();
+
+		default:
+			break;
+		}
+
+	}
+
 }

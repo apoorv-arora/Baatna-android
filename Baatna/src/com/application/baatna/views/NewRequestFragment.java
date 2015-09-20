@@ -262,9 +262,9 @@ public class NewRequestFragment extends Fragment {
 			}
 
 			if(position % 2 == 0) {
-				v.findViewById(R.id.request_category_root).setBackgroundResource(R.color.zhl_light);
+				v.findViewById(R.id.request_category_root).setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.zhlbuttonfollow));
 			} else {
-				v.findViewById(R.id.request_category_root).setBackgroundResource(R.color.white);
+				v.findViewById(R.id.request_category_root).setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.whitebuttoncustomback));
 			}
 			
 			v.findViewById(R.id.proceed_icon).setPadding(width / 20, 0, width / 20, 0);
@@ -278,7 +278,7 @@ public class NewRequestFragment extends Fragment {
 				public void onClick(View v) {
 					TextView view = (TextView) v;
 					if (view != null && view.getText() != null) {
-						setSelectedCategory(view.getText().toString());
+//						setSelectedCategory(view.getText().toString());
 						Intent intent = new Intent(mContext, CategoryItemSelectionFragment.class);
 						intent.putExtra("category_id", categoryName.getCategoryId());
 						mContext.startActivityForResult(intent, CategoryItemSelectionFragment.requestCode);
