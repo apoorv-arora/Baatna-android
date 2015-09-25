@@ -15,7 +15,7 @@
             android:id="@+id/feed_item_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height125"
-            android:background="@color/white"
+            android:background="@drawable/whitebuttoncustomback"
             android:elevation="@dimen/shadow_elevation" >
 
             <com.application.baatna.utils.ZCircularImageView

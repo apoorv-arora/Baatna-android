@@ -39,7 +39,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -67,14 +66,17 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	private BaatnaApp zapp;
 	private int type;
 
-//	@Override
-//	protected void onNewIntent(Intent intent) {
-//		super.onNewIntent(intent);
-//		
-//		if(intent != null && intent.getExtras() != null && intent.hasExtra("message")) {
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		
+		if(intent != null && intent.getExtras() != null && intent.hasExtra("message")) {
+			new GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 //			mAdapter.notifyDataSetChanged();
-//		}
-//	}
+//			messageList.setSelection(mAdapter.getCount() - 1);
+		}
+		
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

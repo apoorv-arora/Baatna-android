@@ -122,6 +122,7 @@ public class GcmIntentService extends IntentService {
 							notificationActivity = new Intent(this, MessagesActivity.class);
 							notificationActivity.putExtra("user", user);
 							notificationActivity.putExtra("wish", messageObj);
+							notificationActivity.putExtra("type", type);
 						}
 					}
 				}
