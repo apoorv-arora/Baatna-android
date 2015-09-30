@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
-import com.application.baatna.data.FeedItem;
+import com.application.baatna.Splash;
 import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
@@ -135,7 +135,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 		// should be handled at ever activity
 		if (prefs.getInt("uid", 0) == 0) {
-			Intent intent = new Intent(FriendListActivity.this, BaatnaActivity.class);
+			Intent intent = new Intent(FriendListActivity.this, Splash.class);
 			startActivity(intent);
 			finish();
 		}

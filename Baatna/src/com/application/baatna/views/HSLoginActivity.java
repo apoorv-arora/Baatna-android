@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
+import com.application.baatna.Splash;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
@@ -112,7 +113,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		editor.commit();
 
 		if (prefs.getInt("uid", 0) == 0) {
-			Intent intent = new Intent(zapp, BaatnaActivity.class);
+			Intent intent = new Intent(zapp, Splash.class);
 			startActivity(intent);
 			finish();
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

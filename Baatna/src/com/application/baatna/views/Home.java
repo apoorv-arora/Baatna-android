@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
+import com.application.baatna.Splash;
 import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
@@ -437,7 +438,7 @@ public class Home extends AppCompatActivity
 						editor.commit();
 
 						if (prefs.getInt("uid", 0) == 0) {
-							Intent intent = new Intent(zapp, BaatnaActivity.class);
+							Intent intent = new Intent(zapp, Splash.class);
 							startActivity(intent);
 							finish();
 						}

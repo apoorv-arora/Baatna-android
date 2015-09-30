@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.application.baatna.R;
+import com.application.baatna.Splash;
 import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.IconView;
@@ -144,7 +145,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 
 		// should be handled at ever activity
 		if (prefs.getInt("uid", 0) == 0) {
-			Intent intent = new Intent(WishboxActivity.this, BaatnaActivity.class);
+			Intent intent = new Intent(WishboxActivity.this, Splash.class);
 			startActivity(intent);
 			finish();
 		}

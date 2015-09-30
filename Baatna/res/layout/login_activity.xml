@@ -9,7 +9,7 @@
         android:id="@+id/baatna_logo"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
     
      <ImageView
         android:id="@+id/baatna_text"
@@ -27,7 +27,8 @@
         android:clickable="true"
         android:gravity="center"
         android:onClick="facebookAction"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <LinearLayout
             android:id="@+id/login_page_facebook_icon_container"
@@ -64,7 +65,8 @@
         android:layout_below="@id/login_page_layout_connect_using_facebook"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:visibility="gone" />
 
     <!--
     <com.application.baatna.utils.TextViewBold
