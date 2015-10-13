@@ -454,8 +454,10 @@ public class FacebookConnect {
 					if(profile_pic != null)
 						nameValuePairs.add(new BasicNameValuePair("profile_pic", profile_pic));
 					JSONObject fbData = new JSONObject();
-					if(fbDataJson.has("id"))
+					
+					if(fbDataJson.has("id")) {
 						fbData.put("id", String.valueOf(fbDataJson.get("id")));
+					}
 					if(fbDataJson.has("email"))
 						fbData.put("email", String.valueOf(fbDataJson.get("email")));
 					if(fbDataJson.has("name"))
@@ -483,6 +485,12 @@ public class FacebookConnect {
 					CommonLib.ZLog("FC", "FBLogin Inside the callback check ");
 					SharedPreferences prefs = ((Activity) callback).getSharedPreferences("application_settings", 0);
 					regId = prefs.getString("registration_id", "");
+					
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString("fb_token", params[3]);
+					editor.putString("fbId", params[0]);
+					editor.commit();
+					
 					if (!regId.equals("")) {
 						CommonLib.ZLog("FC", "FBLogin Sending UUID ");
 						regIdSent = true;

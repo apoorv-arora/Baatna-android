@@ -86,6 +86,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity);
+		
 		prefs = getSharedPreferences("application_settings", 0);
 		context = getApplicationContext();
 		zapp = (BaatnaApp) getApplication();

@@ -6,20 +6,25 @@ import java.util.Locale;
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.Splash;
+import com.application.baatna.data.Institution;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +48,9 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	private LayoutInflater inflater;
 	private BaatnaApp zapp;
 	private Activity mActivity;
-	private ListView mSubzoneSearchListView;
+	private ListView mSubzoneSearchListView, mBranchListView;
 	SimpleListAdapter adapter1;
+	BranchListAdapter branchAdapter;
 	private ProgressDialog z_ProgressDialog;
 
 	@Override
@@ -57,6 +64,8 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		height = getWindowManager().getDefaultDisplay().getHeight();
 		zapp = (BaatnaApp) getApplication();
 		mSubzoneSearchListView = (ListView) findViewById(R.id.subzone_search_list_view);
+		mBranchListView = (ListView) findViewById(R.id.branch_list_view);
+
 		refreshView();
 		fixSizes();
 		setListeners();
@@ -66,21 +75,28 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 
 	private void setUpActionBar() {
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowCustomEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayUseLogoEnabled(true);
 
-		try {
-			int width = getWindowManager().getDefaultDisplay().getWidth();
-			findViewById(android.R.id.home).setPadding(width / 80, 0, width / 40, 0);
-			ViewGroup home = (ViewGroup) findViewById(android.R.id.home).getParent();
-			home.getChildAt(0).setPadding(width / 80, 0, width / 80, 0);
-		} catch (Exception e) {
-		}
-		actionBar.setTitle(getResources().getString(R.string.login));
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
+
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
+		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
+		actionBar.setCustomView(actionBarCustomView);
+
+		SpannableString s = new SpannableString(getString(R.string.login));
+		s.setSpan(
+				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
+						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
+				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
+
+		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
+				.setMargins(width / 40, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+		title.setText(s);
 	}
 
 	@Override
@@ -148,13 +164,12 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 
 	private void fixSizes() {
 		findViewById(R.id.institutionEt).setPadding(width / 20, width / 10, width / 20, width / 40);
-		findViewById(R.id.studentIdEt).setPadding(width / 20, width / 40, width / 20, width / 20);
+		findViewById(R.id.phone_number).setPadding(width / 20, width / 40, width / 20, width / 20);
+		findViewById(R.id.year_selector).setPadding(width / 20, width / 40, width / 20, width / 20);
 		findViewById(R.id.submit_button).setPadding(0, width / 20, 0, width / 20);
 
 		((LinearLayout.LayoutParams) findViewById(R.id.institutionEt).getLayoutParams()).setMargins(width / 20,
 				width / 20, width / 20, width / 40);
-		((LinearLayout.LayoutParams) findViewById(R.id.studentIdEt).getLayoutParams()).setMargins(width / 20,
-				width / 40, width / 20, width / 20);
 		((LinearLayout.LayoutParams) findViewById(R.id.submit_button).getLayoutParams()).setMargins(width / 20,
 				width / 40, width / 20, 0);
 	}
@@ -164,11 +179,14 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 			@Override
 			public void onClick(View v) {
 				String institutionName = ((TextView) findViewById(R.id.institutionEt)).getText().toString();
-				String studentId = ((TextView) findViewById(R.id.studentIdEt)).getText().toString();
+				String branchName = ((TextView) findViewById(R.id.branch_Et)).getText().toString();
+				int year = Integer.parseInt(((TextView) findViewById(R.id.year_selector)).getText().toString());
+				String phoneNumber = ((TextView) findViewById(R.id.phone_number)).getText().toString();
 				z_ProgressDialog = ProgressDialog.show(HSLoginActivity.this, null,
 						getResources().getString(R.string.verifying_creds), true, false);
 				z_ProgressDialog.setCancelable(false);
-				UploadManager.updateInstitution(prefs.getString("access_token", ""), institutionName, studentId);
+				UploadManager.updateInstitution(prefs.getString("access_token", ""), institutionName, "", year,
+						branchName, phoneNumber);
 			}
 		});
 		findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
@@ -198,6 +216,29 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.VISIBLE);
 				else
 					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
+			}
+		});
+
+		((TextView) findViewById(R.id.branch_Et)).addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				adapter1.getFilter().filter(arg0);
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				// TODO Auto-generated method stub
+				if (arg0.length() > 0)
+					findViewById(R.id.branch_list_container).setVisibility(View.VISIBLE);
+				else
+					findViewById(R.id.branch_list_container).setVisibility(View.GONE);
 			}
 		});
 	}
@@ -291,7 +332,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 			if (result != null) {
 				findViewById(R.id.content).setVisibility(View.VISIBLE);
 				if (result instanceof ArrayList<?>) {
-					setInstitutions((ArrayList<String>) result);
+					setInstitutions((ArrayList<Institution>) result);
 				}
 			} else {
 				if (CommonLib.isNetworkAvailable(HSLoginActivity.this)) {
@@ -310,32 +351,82 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		}
 	}
 
-	private void setInstitutions(ArrayList<String> categories) {
+	private void setInstitutions(ArrayList<Institution> categories) {
 		adapter1 = new SimpleListAdapter(mActivity, R.layout.simple_list_item, categories);
 		mSubzoneSearchListView.setAdapter(adapter1);
+		
 	}
 
-	private class SimpleListAdapter extends ArrayAdapter<String> {
+	private class SimpleListAdapter extends ArrayAdapter<Institution> {
+
+		private ArrayList<Institution> wishes;
+		private Activity mContext;
+		private int width;
+
+		public SimpleListAdapter(Activity context, int resourceId, ArrayList<Institution> wishes) {
+			super(context.getApplicationContext(), resourceId, wishes);
+			mContext = context;
+			this.wishes = wishes;
+			width = mContext.getWindowManager().getDefaultDisplay().getWidth();
+		}
+
+		@Override
+		public int getCount() {
+			if (wishes == null) {
+				return 0;
+			} else {
+				return wishes.size();
+			}
+		}
+
+		protected class ViewHolder {
+			TextView text;
+		}
+
+		@Override
+		public View getView(int position, View v, ViewGroup parent) {
+			final Institution wish = wishes.get(position);
+			if (v == null || v.findViewById(R.id.list_root) == null) {
+				v = LayoutInflater.from(mContext).inflate(R.layout.simple_list_item, null);
+			}
+
+			ViewHolder viewHolder = (ViewHolder) v.getTag();
+			if (viewHolder == null) {
+				viewHolder = new ViewHolder();
+				viewHolder.text = (TextView) v.findViewById(R.id.text1);
+				v.setTag(viewHolder);
+			}
+
+			viewHolder.text.setPadding(width / 20, width / 20, width / 20, width / 20);
+
+			viewHolder.text.setText(wish.getInstitutionName());
+			viewHolder.text.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((TextView) findViewById(R.id.institutionEt)).setText(((TextView) v).getText().toString());
+					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
+					
+					branchAdapter = new BranchListAdapter(mActivity, R.layout.simple_list_item, wish.getBranches());
+					mBranchListView.setAdapter(branchAdapter);
+					
+					findViewById(R.id.branch_Et).requestFocus();
+				}
+			});
+			return v;
+		}
+
+	}
+	
+	private class BranchListAdapter extends ArrayAdapter<String> {
 
 		private ArrayList<String> wishes;
 		private Activity mContext;
 		private int width;
-		private ArrayList<String> filtered;
-		private Filter filter;
 
-		@Override
-		public Filter getFilter() {
-			if (filter == null) {
-				filter = new CityFilter();
-			}
-			return filter;
-		}
-
-		public SimpleListAdapter(Activity context, int resourceId, ArrayList<String> wishes) {
+		public BranchListAdapter(Activity context, int resourceId, ArrayList<String> wishes) {
 			super(context.getApplicationContext(), resourceId, wishes);
 			mContext = context;
 			this.wishes = wishes;
-			this.filtered = (ArrayList<String>) this.wishes.clone();
 			width = mContext.getWindowManager().getDefaultDisplay().getWidth();
 		}
 
@@ -367,102 +458,18 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 			}
 
 			viewHolder.text.setPadding(width / 20, width / 20, width / 20, width / 20);
-			
+
 			viewHolder.text.setText(wish);
 			viewHolder.text.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					((TextView) findViewById(R.id.institutionEt)).setText(((TextView) v).getText().toString());
-					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
+					((TextView) findViewById(R.id.branch_Et)).setText(((TextView) v).getText().toString());
+					findViewById(R.id.branch_list_container).setVisibility(View.GONE);
 				}
 			});
 			return v;
 		}
 
-		private class CityFilter extends Filter {
-			@Override
-			protected android.widget.Filter.FilterResults performFiltering(CharSequence constraint) {
-
-				constraint = constraint.toString().toLowerCase(Locale.getDefault());
-
-				FilterResults result = new FilterResults();
-
-				if (constraint != null && constraint.toString().length() > 0) {
-					ArrayList<String> filt = new ArrayList<String>();
-					ArrayList<String> first = new ArrayList<String>();
-					ArrayList<String> lItems = new ArrayList<String>();
-					synchronized (this) {
-						lItems.addAll(wishes);
-					}
-
-					String r;
-					String name;
-					int relevent_count = 0;
-
-					if (constraint.toString().contains(" ")) {
-
-						for (int i = 0, l = lItems.size(); i < l; i++) {
-							r = lItems.get(i);
-							name = r;
-
-							if (name.toLowerCase(Locale.getDefault()).startsWith((String) constraint)) {
-								first.add(r);
-							}
-						}
-
-					} else {
-						for (int i = 0, l = lItems.size(); i < l; i++) {
-							r = lItems.get(i);
-							name = r;
-
-							String[] nameTag = name.split(" ");
-							if (nameTag != null && nameTag.length > 0) {
-
-								for (int j = 0; j < nameTag.length; j++) {
-									if (nameTag[j].toLowerCase(Locale.getDefault()).startsWith((String) constraint)) {
-										if (j == 0)
-											first.add(relevent_count++, r);
-										else
-											first.add(r);
-										break;
-									}
-								}
-							} else {
-								if (name.toLowerCase(Locale.getDefault()).startsWith((String) constraint)) {
-									first.add(relevent_count++, r);
-								}
-							}
-						}
-					}
-					filt.addAll(first);
-
-					result.count = filt.size();
-					result.values = filt;
-
-				} else {
-					synchronized (this) {
-						result.values = wishes;
-						result.count = wishes.size();
-					}
-				}
-				return result;
-			}
-
-			@Override
-			protected void publishResults(CharSequence constraint, android.widget.Filter.FilterResults results) {
-				wishes = (ArrayList<String>) results.values;
-				if (wishes.size() == 0) {
-					wishes = (filtered);
-				}
-				if (results.count > 0) {
-					adapter1.notifyDataSetChanged();
-				} else {
-					adapter1.notifyDataSetChanged();
-					// notifyDataSetInvalidated();
-				}
-			}
-
-		}
 	}
 
 }

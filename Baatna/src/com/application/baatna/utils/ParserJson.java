@@ -10,6 +10,7 @@ import org.xml.sax.Parser;
 
 import com.application.baatna.data.Categories;
 import com.application.baatna.data.FeedItem;
+import com.application.baatna.data.Institution;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
@@ -272,9 +273,9 @@ public class ParserJson {
 		return objects;
 	}
 
-	public static ArrayList<String> parse_Institutions(InputStream is) throws JSONException {
+	public static ArrayList<Institution> parse_Institutions(InputStream is) throws JSONException {
 
-		ArrayList<String> wishes = new ArrayList<String>();
+		ArrayList<Institution> wishes = new ArrayList<Institution>();
 
 		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
 
@@ -286,15 +287,23 @@ public class ParserJson {
 							&& categoriesObject.get("institutions") instanceof JSONArray) {
 						JSONArray categoriesArr = categoriesObject.getJSONArray("institutions");
 						for (int i = 0; i < categoriesArr.length(); i++) {
-							String institution = "";
+							Institution institution = new Institution();
 							JSONObject categoryJson = categoriesArr.getJSONObject(i);
 							if (categoryJson.has("institution")
 									&& categoryJson.get("institution") instanceof JSONObject) {
 								categoryJson = categoryJson.getJSONObject("institution");
 								if (categoryJson.has("name")) {
-									institution = String.valueOf(categoryJson.get("name"));
-									wishes.add(institution);
+									institution.setInstitutionName(String.valueOf(categoryJson.get("name")));
 								}
+								if (categoryJson.has("branches") && categoryJson.get("branches") instanceof JSONArray) {
+									JSONArray branchArr = categoryJson.getJSONArray("branches");
+									ArrayList<String> branches = new ArrayList<String>();
+									for(int j=0 ;j<branchArr.length();j++) {
+										branches.add(String.valueOf(branchArr.get(i)));
+									}
+									institution.setBranches(branches);
+								}
+								wishes.add(institution);
 							}
 						}
 					}
@@ -356,6 +365,8 @@ public class ParserJson {
 				wish.setUserId(wishObject.getInt("user_id"));
 			if (wishObject.has("wish_id") && wishObject.get("wish_id") instanceof Integer)
 				wish.setWishId(wishObject.getInt("wish_id"));
+			if (wishObject.has("status") && wishObject.get("status") instanceof Integer)
+				wish.setStatus(wishObject.getInt("status"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -383,7 +394,15 @@ public class ParserJson {
 			if (userObject.has("user_name")) {
 				returnUser.setUserName(String.valueOf(userObject.get("user_name")));
 			}
-
+			
+			if (userObject.has("fbId")) {
+				returnUser.setFbId(String.valueOf(userObject.get("fbId")));
+			}
+			
+			if (userObject.has("contact")) {
+				returnUser.setContact(String.valueOf(userObject.get("contact")));
+			}
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

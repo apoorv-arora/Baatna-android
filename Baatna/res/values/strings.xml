@@ -40,7 +40,7 @@
     <string name="no_email_clients">There are no email clients installed.</string>
     <string name="feedback_title">Feedback</string>
     <string name="no_internet_message">Seems like you are not connected to the internet. Please try again later.</string>
-    <string name="about_version">v1.0.1</string>
+    <string name="about_version">v1.0.3</string>
     <string name="about_text">Baatna is a platform that lets you borrow stuff instantly by shouting out your need to your neighbours, friends and people in your surroundings.</string>
     <string name="about_us_terms_of_use">Terms of Service</string>
     <string name="about_us_privacypolicy">Privacy Policy</string>
@@ -89,5 +89,9 @@
     
     <string name="delete_message">Delete</string>
     <string name="report_scam">Report scam</string>
+    <string name="year">Year</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="branch">Branch</string>
+    <string name="hang_on">Hang on boss, we are sending the request..</string>
 
 </resources>

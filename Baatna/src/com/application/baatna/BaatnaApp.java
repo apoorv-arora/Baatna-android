@@ -50,16 +50,15 @@ public class BaatnaApp extends Application {
 	public boolean isNetworkProviderEnabled = false;
 	public boolean isGpsProviderEnabled = false;
 	public boolean firstLaunch = false;
-	
+
 	public ArrayList<DeletePendingUploadCallback> pendingUploadCallbacks = new ArrayList<DeletePendingUploadCallback>();
 
 	private CheckLocationTimeoutAsync checkLocationTimeoutThread;
-	
+
 	public void onCreate() {
 		super.onCreate();
 
-		SharedPreferences prefs = getSharedPreferences("application_settings",
-				0);
+		SharedPreferences prefs = getSharedPreferences("application_settings", 0);
 		try {
 			lat = Double.parseDouble(prefs.getString("lat1", "0"));
 			lon = Double.parseDouble(prefs.getString("lon1", "0"));
@@ -109,17 +108,15 @@ public class BaatnaApp extends Application {
 
 		try {
 			if (!isMyServiceRunning(CacheCleanerService.class)) {
-				boolean alarmUp = (PendingIntent.getService(this, 0,
-						new Intent(this, CacheCleanerService.class),
+				boolean alarmUp = (PendingIntent.getService(this, 0, new Intent(this, CacheCleanerService.class),
 						PendingIntent.FLAG_NO_CREATE) != null);
 
 				if (!alarmUp)
 					startCacheCleanerService();
 			}
-			
+
 			if (!isMyServiceRunning(LocationUpdateService.class)) {
-				boolean alarmUp = (PendingIntent.getService(this, 0,
-						new Intent(this, LocationUpdateService.class),
+				boolean alarmUp = (PendingIntent.getService(this, 0, new Intent(this, LocationUpdateService.class),
 						PendingIntent.FLAG_NO_CREATE) != null);
 
 				if (!alarmUp)
@@ -133,13 +130,12 @@ public class BaatnaApp extends Application {
 		UploadManager.setContext(getApplicationContext());
 		PostWrapper.Initialize(getApplicationContext());
 		RequestWrapper.Initialize(getApplicationContext());
-		
-		//DB Initialize
+
+		// DB Initialize
 		MessageDBWrapper.Initialize(getApplicationContext());
 		cache = new LruCache<String, Bitmap>(30);
 
-//		new ThirdPartyInitAsync()
-//				.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		new ThirdPartyInitAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 		getTracker(CommonLib.TrackerName.GLOBAL_TRACKER);
 
@@ -155,7 +151,7 @@ public class BaatnaApp extends Application {
 				Fabric.with(getApplicationContext(), new Crashlytics());
 				Crashlytics.setString("version", CommonLib.CRASHLYTICS_VERSION_STRING);
 
-				//AppsFlyerLib Initialize
+				// AppsFlyerLib Initialize
 				AppsFlyerLib.setAppsFlyerKey(CommonLib.APPSFLYER_KEY);
 				AppsFlyerLib.setCurrencyCode("INR");
 				AppsFlyerLib.setUseHTTPFalback(true);
@@ -172,8 +168,7 @@ public class BaatnaApp extends Application {
 
 	public boolean isMyServiceRunning(Class<?> serviceClass) {
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager
-				.getRunningServices(Integer.MAX_VALUE)) {
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 			if (serviceClass.getName().equals(service.service.getClassName())) {
 				return true;
 			}
@@ -192,10 +187,9 @@ public class BaatnaApp extends Application {
 		calendar.set(Calendar.SECOND, 00);
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
-				24 * 60 * 60 * 1000, pintent);
+		alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 24 * 60 * 60 * 1000, pintent);
 	}
-	
+
 	private void startLocationUpdateService() {
 
 		Intent intent = new Intent(this, LocationUpdateService.class);
@@ -207,13 +201,11 @@ public class BaatnaApp extends Application {
 		calendar.set(Calendar.SECOND, 00);
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
-				24 * 60 * 60 * 1000, pintent);
+		alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 24 * 60 * 60 * 1000, pintent);
 	}
 
 	public void onLowMemory() {
-		SharedPreferences prefs = getSharedPreferences("application_settings",
-				0);
+		SharedPreferences prefs = getSharedPreferences("application_settings", 0);
 		Editor editor = prefs.edit();
 		editor.putString("lat1", lat + "");
 		editor.putString("lon1", lon + "");
@@ -225,8 +217,7 @@ public class BaatnaApp extends Application {
 	}
 
 	public void onTrimLevel(int i) {
-		SharedPreferences prefs = getSharedPreferences("application_settings",
-				0);
+		SharedPreferences prefs = getSharedPreferences("application_settings", 0);
 		Editor editor = prefs.edit();
 		editor.putString("lat1", lat + "");
 		editor.putString("lon1", lon + "");
@@ -238,8 +229,7 @@ public class BaatnaApp extends Application {
 
 	public void setLocationString(String lstr) {
 		location = lstr;
-		SharedPreferences prefs = getSharedPreferences("application_settings",
-				0);
+		SharedPreferences prefs = getSharedPreferences("application_settings", 0);
 		Editor editor = prefs.edit();
 		editor.putString("location", location);
 		editor.commit();
@@ -265,8 +255,7 @@ public class BaatnaApp extends Application {
 
 	public void startLocationCheck() {
 
-		int result = GooglePlayServicesUtil
-				.isGooglePlayServicesAvailable(getApplicationContext());
+		int result = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
 		if (result == ConnectionResult.SUCCESS) {
 			zll.getFusedLocation(this);
@@ -279,8 +268,7 @@ public class BaatnaApp extends Application {
 
 		CommonLib.ZLog("zll", "getAndroidLocation");
 
-		locationManager = (LocationManager) this
-				.getSystemService(Context.LOCATION_SERVICE);
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		List<String> providers = locationManager.getProviders(true);
 
 		if (providers != null) {
@@ -295,19 +283,16 @@ public class BaatnaApp extends Application {
 		if (isNetworkProviderEnabled || isGpsProviderEnabled) {
 
 			if (isGpsProviderEnabled)
-				locationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 1000L, 500.0f, zll);
+				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, zll);
 			if (isNetworkProviderEnabled)
-				locationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 1000L, 500.0f, zll);
+				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 500.0f, zll);
 
 			if (checkLocationTimeoutThread != null) {
 				checkLocationTimeoutThread.interrupt = false;
 			}
 
 			checkLocationTimeoutThread = new CheckLocationTimeoutAsync();
-			checkLocationTimeoutThread
-					.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			checkLocationTimeoutThread.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 		} else {
 			zll.locationNotEnabled();
@@ -339,13 +324,11 @@ public class BaatnaApp extends Application {
 		return (isNetworkProviderEnabled || isGpsProviderEnabled);
 	}
 
-	public void addPendingUploadCallback(
-			DeletePendingUploadCallback pendingUploadCallback) {
+	public void addPendingUploadCallback(DeletePendingUploadCallback pendingUploadCallback) {
 		pendingUploadCallbacks.add(pendingUploadCallback);
 	}
 
-	public void removePendingUploadCallback(
-			DeletePendingUploadCallback pendingUploadCallback) {
+	public void removePendingUploadCallback(DeletePendingUploadCallback pendingUploadCallback) {
 		pendingUploadCallbacks.remove(pendingUploadCallback);
 	}
 
@@ -356,9 +339,8 @@ public class BaatnaApp extends Application {
 
 		if (!mTrackers.containsKey(trackerId)) {
 			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-			Tracker t = trackerId == CommonLib.TrackerName.APPLICATION_TRACKER ? analytics
-					.newTracker("UA-19617341-61") : analytics
-					.newTracker(R.xml.global_tracker);
+			Tracker t = trackerId == CommonLib.TrackerName.APPLICATION_TRACKER ? analytics.newTracker("UA-19617341-61")
+					: analytics.newTracker(R.xml.global_tracker);
 			mTrackers.put(trackerId, t);
 		}
 		return mTrackers.get(trackerId);

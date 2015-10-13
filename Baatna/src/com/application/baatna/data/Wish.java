@@ -9,6 +9,7 @@ public class Wish implements Serializable {
 	private long timeOfPost;
 	private int wishId;
 	private int userId;
+	private int status;
 
 	public Wish() {
 	}
@@ -53,4 +54,12 @@ public class Wish implements Serializable {
 		this.userId = userId;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
 }

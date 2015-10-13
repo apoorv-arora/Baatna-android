@@ -126,13 +126,13 @@ public class UploadManager {
 	
 	
 	
-	public static void updateInstitution(String accessToken, String institutionId, String studentId) {
+	public static void updateInstitution(String accessToken, String institutionId, String studentId, int year, String branchName, String phoneNumber) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.UPDATE_INSTITUTION, 0, accessToken, null);
 		}
 
 		new UpdateInstitutionId().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, institutionId, studentId});
+				new Object[] { accessToken, institutionId, studentId, year, branchName, phoneNumber});
 
 	}
 	
@@ -145,6 +145,18 @@ public class UploadManager {
 				new Object[] { accessToken, wishId, action});
 
 	}
+	
+
+	public static void updateWishOfferedStatus(String accessToken, String wishId, String action) {
+		for (UploadManagerCallback callback : callbacks) {
+			callback.uploadStarted(CommonLib.WISH_OFFERED_STATUS, 0, accessToken, null);
+		}
+
+		new UpdateStatusOffered().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				new Object[] { accessToken, wishId, action});
+
+	}
+
 	
 	public static void sendMessage(String userId, String message, String wishId) {
 		for (UploadManagerCallback callback : callbacks) {
@@ -391,6 +403,48 @@ public class UploadManager {
 		}
 	}
 
+	private static class UpdateStatusOffered extends AsyncTask<Object, Void, Object[]> {
+
+		private String accessToken;
+		private String wishId;
+		private String action;
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+
+			Object result[] = null;
+			accessToken = (String) params[0];
+			wishId = (String) params[1];
+			action = (String) params[2];
+			
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
+			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
+			nameValuePairs.add(new BasicNameValuePair("wishId", wishId));
+			nameValuePairs.add(new BasicNameValuePair("action", action));
+			
+			try {
+				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/updateStatus?", nameValuePairs, PostWrapper.WISH_STATUS_UPDATE, context);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return result;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Object[] arg) {
+			if (arg[0].equals("failure"))
+				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
+
+			for (UploadManagerCallback callback : callbacks) {
+				callback.uploadFinished(CommonLib.WISH_OFFERED_STATUS, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+			}
+		}
+	}
+
+	
 	private static class UpdateRegistrationId extends AsyncTask<Object, Void, Object[]> {
 
 		private String accessToken;
@@ -483,6 +537,10 @@ public class UploadManager {
 		private String accessToken;
 		private String institutionId;
 		private String studentId;
+		private int year;
+		private String branchName;
+		private String phoneNumber;
+		
 
 		@Override
 		protected Object[] doInBackground(Object... params) {
@@ -491,13 +549,20 @@ public class UploadManager {
 			accessToken = (String) params[0];
 			institutionId = (String) params[1];
 			studentId = (String) params[2];
+			year = (Integer) params[3];
+			branchName = (String) params[4];
+			phoneNumber = (String) params[5];
 			
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
-			nameValuePairs.add(new BasicNameValuePair("institution_id", institutionId));
+			nameValuePairs.add(new BasicNameValuePair("institution_name", institutionId));
 			nameValuePairs.add(new BasicNameValuePair("student_id", studentId));
+			
+			nameValuePairs.add(new BasicNameValuePair("branch_name", branchName));
+			nameValuePairs.add(new BasicNameValuePair("phone_number", phoneNumber));
+			nameValuePairs.add(new BasicNameValuePair("year", year+""));
 			
 			try {
 				result = PostWrapper.postRequest(CommonLib.SERVER + "user/institution?", nameValuePairs, PostWrapper.INSTITUTION_ID, context);

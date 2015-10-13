@@ -6,52 +6,67 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/bottom_container"
+        android:id="@+id/bottom_parent"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/height60"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/message"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:background="@color/message_to"
-            android:hint="@string/your_message"
-            android:inputType="textAutoCorrect"
-            android:maxLines="4"
-            android:padding="@dimen/size5"
+        <com.application.baatna.utils.TextViewSemiBold
+            android:id="@+id/product_status"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height60"
+            android:gravity="center"
+            android:clickable="true"
             android:textColor="@color/font_color" />
 
         <LinearLayout
-            android:id="@+id/send_container"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:background="@drawable/baatna_dark_feedback"
-            android:clickable="true" >
+            android:id="@+id/bottom_container"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/height60"
+            android:orientation="horizontal" >
 
-            <com.application.baatna.utils.IconView
-                android:id="@+id/send_icon"
-                android:layout_width="@dimen/toolbar_height"
+            <EditText
+                android:id="@+id/message"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="N"
-                android:textColor="@color/zhl"
-                android:textSize="@dimen/font_size45" />
+                android:layout_weight="1"
+                android:background="@color/message_to"
+                android:hint="@string/your_message"
+                android:inputType="textAutoCorrect"
+                android:maxLines="4"
+                android:padding="@dimen/size5"
+                android:textColor="@color/font_color" />
+
+            <LinearLayout
+                android:id="@+id/send_container"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@drawable/baatna_dark_feedback"
+                android:clickable="true" >
+
+                <com.application.baatna.utils.IconView
+                    android:id="@+id/send_icon"
+                    android:layout_width="@dimen/toolbar_height"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="N"
+                    android:textColor="@color/zhl"
+                    android:textSize="@dimen/font_size45" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    
+
     <ListView
         android:id="@+id/messageList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_above="@id/bottom_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/bottom_container"
         android:divider="@color/white" />
-    
+
     <RelativeLayout
         android:id="@+id/dropdown_setting"
         android:layout_width="wrap_content"
@@ -65,8 +80,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:visibility="gone"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <LinearLayout
                 android:id="@+id/delete_message"
@@ -121,6 +136,5 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-    
 
 </RelativeLayout>

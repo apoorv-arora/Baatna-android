@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
+import com.application.baatna.Splash;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
@@ -21,6 +22,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -65,6 +67,7 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	private ArrayList<Message> messages = new ArrayList<Message>();
 	private BaatnaApp zapp;
 	private int type;
+	private ProgressDialog zProgressDialog;
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -130,11 +133,57 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		messageList.setHeaderDividersEnabled(true);
 		messageList.setFooterDividersEnabled(true);
 		setListeners();
+		
+		if(type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
+//			subtitle.setText("Offered YOU A "+ currentWish.getTitle());
+			if ( currentWish.getStatus() == CommonLib.STATUS_OFFERED ) {
+				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView)findViewById(R.id.product_status)).setText("Product received");
+			} else if ( currentWish.getStatus() == CommonLib.STATUS_RECEIVED ) {
+				//check if the product is received
+			} else if ( currentWish.getStatus() == CommonLib.STATUS_ACTIVE ) {
+				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView)findViewById(R.id.product_status)).setText("Product received");
+			} else {
+				((TextView)findViewById(R.id.product_status)).setVisibility(View.GONE);
+			}
+		} else if(type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
+//			subtitle.setText("REQUESTED FOR A "+ currentWish.getTitle());
+			if ( currentWish.getStatus() == CommonLib.STATUS_OFFERED ) {
+				//check if this user is in the accepted list, if it is, make the view gone, else visible
+			} else if ( currentWish.getStatus() == CommonLib.STATUS_RECEIVED ) {
+				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView)findViewById(R.id.product_status)).setText("Product offered");
+			} else if ( currentWish.getStatus() == CommonLib.STATUS_ACTIVE ) {
+				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView)findViewById(R.id.product_status)).setText("Product offered");
+			} else {
+				((TextView)findViewById(R.id.product_status)).setVisibility(View.GONE);
+			}
+		}
+		
 	}
 
 	private void setListeners() {
 		
 		findViewById(R.id.dropdown_setting).setVisibility(View.VISIBLE);
+		
+		findViewById(R.id.product_status).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				int action = -1;
+				if(type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
+					action = CommonLib.ACTION_WISH_RECEIVED;
+					UploadManager.updateWishOfferedStatus(prefs.getString("access_token", ""),
+							"" + currentWish.getWishId(), action+"");
+				} else if(type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
+					action = CommonLib.ACTION_WISH_OFFERED;
+					UploadManager.updateWishOfferedStatus(prefs.getString("access_token", ""),
+							"" + currentWish.getWishId(), action+"");
+				}
+			}
+		});
 	}
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -218,6 +267,8 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	@Override
 	protected void onDestroy() {
 		destroyed = true;
+		if (zProgressDialog != null && zProgressDialog.isShowing())
+			zProgressDialog.dismiss();
 		super.onDestroy();
 	}
 
@@ -334,11 +385,20 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 					Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();
 				}
 			}
+		} else if(requestType == CommonLib.WISH_OFFERED_STATUS && !destroyed) {
+			if (zProgressDialog != null && zProgressDialog.isShowing())
+				zProgressDialog.dismiss();
+			findViewById(R.id.product_status).setVisibility(View.GONE);
 		}
 	}
 
 	@Override
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
+		if(requestType == CommonLib.WISH_OFFERED_STATUS && !destroyed) {
+			zProgressDialog = ProgressDialog.show(MessagesActivity.this, null, getResources().getString(R.string.hang_on),
+					true, false);
+			zProgressDialog.setCancelable(true);
+		}
 	}
 
 	private class GetMessages extends AsyncTask<Object, Void, Object> {

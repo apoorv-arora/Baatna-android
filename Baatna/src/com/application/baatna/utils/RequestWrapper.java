@@ -20,6 +20,7 @@ import org.json.JSONException;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.data.Categories;
+import com.application.baatna.data.Institution;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
@@ -129,9 +130,9 @@ public class RequestWrapper {
 			}
 			return categories;
 		} else if(Type == INSTITUTIONS_LIST) {
-			ArrayList<String> categories = null;
+			ArrayList<Institution> categories = null;
 			try{
-				categories = (ArrayList<String>) ParserJson.parse_Institutions(result);
+				categories = (ArrayList<Institution>) ParserJson.parse_Institutions(result);
 			} catch(JSONException e) {
 				e.printStackTrace();
 			}

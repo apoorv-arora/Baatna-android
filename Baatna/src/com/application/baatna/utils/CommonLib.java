@@ -30,10 +30,13 @@ import com.application.baatna.data.Categories;
 import com.application.baatna.data.CategoryItems;
 import com.application.baatna.views.MessagesActivity;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
@@ -47,11 +50,13 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class CommonLib {
 
@@ -65,8 +70,8 @@ public class CommonLib {
 	// "52.76.6.41:8080/BaatnaServer/rest/";
 	// public static String SERVER_WITHOUT_VERSION =
 	// "http://52.76.6.41:8080/BaatnaServer/rest/";
-	public static final String SERVER_BODY = "192.168.1.37:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.37:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "192.168.2.19:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.19:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -82,18 +87,18 @@ public class CommonLib {
 	/** GCM Sender ID */
 	public static final String GCM_SENDER_ID = "531855430941";
 
-	public final static boolean BaatnaLog = true;
+	public final static boolean BaatnaLog = false;
 	private static SharedPreferences prefs;
 
 	/** Application version */
-	public static final int VERSION = 2;
-	public static final String VERSION_STRING = "1.0.2";
+	public static final int VERSION = 3;
+	public static final String VERSION_STRING = "1.0.3";
 
 	/** Preferences */
 	public final static String APP_SETTINGS = "application_settings";
 	public static final String PROPERTY_REG_ID = "registration_id";
 	public static final String PROPERTY_APP_VERSION = "appVersion";
-	
+
 	public static final int CURRENT_USER_WISH_ACCEPTED = 1;
 	public static final int WISH_ACCEPTED_CURRENT_USER = 2;
 
@@ -104,6 +109,22 @@ public class CommonLib {
 			+ "&app_version=" + VERSION;
 	public static final String CLIENT_ID = "bt_android_client";
 	public static final String APP_TYPE = "bt_android";
+
+	/**
+	 * Wish status
+	 */
+	public static final int STATUS_DELETED = 0;
+	public static final int STATUS_ACTIVE = 1;
+	public static final int STATUS_ACCEPTED = 2;
+	public static final int STATUS_OFFERED = 3;
+	public static final int STATUS_RECEIVED = 4;
+	public static final int STATUS_FULLFILLED = 5;
+
+	/**
+	 * Wish actions
+	 */
+	public static final int ACTION_WISH_OFFERED = 3;
+	public static final int ACTION_WISH_RECEIVED = 4;
 
 	/**
 	 * Thread pool executors
@@ -148,6 +169,7 @@ public class CommonLib {
 	public static final int WISH_UPDATE_STATUS = 208;
 	public static final int SEND_MESSAGE = 209;
 	public static final int LOCATION_UPDATE = 210;
+	public static final int WISH_OFFERED_STATUS = 211;
 
 	/**
 	 * Feed types
@@ -743,13 +765,14 @@ public class CommonLib {
 		categoryBookSports.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList1 = new ArrayList<CategoryItems>();
-//		categoryItemsList1.add(new CategoryItems(1, "Book", -1));
-//		categoryItemsList1.add(new CategoryItems(2, "Cricket Bat", -1));
-//		categoryItemsList1.add(new CategoryItems(3, "Football", -1));
-//		categoryItemsList1.add(new CategoryItems(4, "Tennis Racquet", -1));
-//		categoryItemsList1.add(new CategoryItems(5, "Badminton Racquet", -1));
-//		categoryItemsList1.add(new CategoryItems(6, "Golf Kit", -1));
-//		categoryItemsList1.add(new CategoryItems(7, "BasketBall", -1));
+		// categoryItemsList1.add(new CategoryItems(1, "Book", -1));
+		// categoryItemsList1.add(new CategoryItems(2, "Cricket Bat", -1));
+		// categoryItemsList1.add(new CategoryItems(3, "Football", -1));
+		// categoryItemsList1.add(new CategoryItems(4, "Tennis Racquet", -1));
+		// categoryItemsList1.add(new CategoryItems(5, "Badminton Racquet",
+		// -1));
+		// categoryItemsList1.add(new CategoryItems(6, "Golf Kit", -1));
+		// categoryItemsList1.add(new CategoryItems(7, "BasketBall", -1));
 		categoryBookSports.setCategoryItems(categoryItemsList1);
 
 		finalCategoryList.add(categoryBookSports);
@@ -760,12 +783,13 @@ public class CommonLib {
 		categorygames.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList2 = new ArrayList<CategoryItems>();
-//		categoryItemsList2.add(new CategoryItems(1, "Play-station", -1));
-//		categoryItemsList2.add(new CategoryItems(2, "Playing cards", -1));
-//		categoryItemsList2.add(new CategoryItems(3, "Scrabble", -1));
-//		categoryItemsList2.add(new CategoryItems(4, "Chess", -1));
-//		categoryItemsList2.add(new CategoryItems(5, "Badminton Racquet", -1));
-//		categoryItemsList2.add(new CategoryItems(6, "Scotland Yard", -1));
+		// categoryItemsList2.add(new CategoryItems(1, "Play-station", -1));
+		// categoryItemsList2.add(new CategoryItems(2, "Playing cards", -1));
+		// categoryItemsList2.add(new CategoryItems(3, "Scrabble", -1));
+		// categoryItemsList2.add(new CategoryItems(4, "Chess", -1));
+		// categoryItemsList2.add(new CategoryItems(5, "Badminton Racquet",
+		// -1));
+		// categoryItemsList2.add(new CategoryItems(6, "Scotland Yard", -1));
 		categorygames.setCategoryItems(categoryItemsList2);
 
 		finalCategoryList.add(categorygames);
@@ -776,15 +800,15 @@ public class CommonLib {
 		categoryMusic.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList3 = new ArrayList<CategoryItems>();
-//		categoryItemsList3.add(new CategoryItems(1, "Acoustic Guitar", -1));
-//		categoryItemsList3.add(new CategoryItems(2, "Electric Guitar", -1));
-//		categoryItemsList3.add(new CategoryItems(3, "Drum-kit", -1));
-//		categoryItemsList3.add(new CategoryItems(4, "Snares", -1));
-//		categoryItemsList3.add(new CategoryItems(5, "Peddle", -1));
-//		categoryItemsList3.add(new CategoryItems(6, "Microphone", -1));
-//		categoryItemsList3.add(new CategoryItems(7, "Amplifier", -1));
-//		categoryItemsList3.add(new CategoryItems(8, "Keyboard", -1));
-//		categoryItemsList3.add(new CategoryItems(9, "Guitar pedals", -1));
+		// categoryItemsList3.add(new CategoryItems(1, "Acoustic Guitar", -1));
+		// categoryItemsList3.add(new CategoryItems(2, "Electric Guitar", -1));
+		// categoryItemsList3.add(new CategoryItems(3, "Drum-kit", -1));
+		// categoryItemsList3.add(new CategoryItems(4, "Snares", -1));
+		// categoryItemsList3.add(new CategoryItems(5, "Peddle", -1));
+		// categoryItemsList3.add(new CategoryItems(6, "Microphone", -1));
+		// categoryItemsList3.add(new CategoryItems(7, "Amplifier", -1));
+		// categoryItemsList3.add(new CategoryItems(8, "Keyboard", -1));
+		// categoryItemsList3.add(new CategoryItems(9, "Guitar pedals", -1));
 		categoryMusic.setCategoryItems(categoryItemsList3);
 
 		finalCategoryList.add(categoryMusic);
@@ -795,14 +819,14 @@ public class CommonLib {
 		categoryTravelHoliday.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList4 = new ArrayList<CategoryItems>();
-//		categoryItemsList4.add(new CategoryItems(1, "Helmet", -1));
-//		categoryItemsList4.add(new CategoryItems(2, "Tavel Bag", -1));
-//		categoryItemsList4.add(new CategoryItems(3, "go pro", -1));
-//		categoryItemsList4.add(new CategoryItems(4, "Camping Chair", -1));
-//		categoryItemsList4.add(new CategoryItems(5, "Tent", -1));
-//		categoryItemsList4.add(new CategoryItems(6, "Suitcase", -1));
-//		categoryItemsList4.add(new CategoryItems(7, "Sleeping bag", -1));
-//		categoryItemsList4.add(new CategoryItems(8, "Inflatable Bed", -1));
+		// categoryItemsList4.add(new CategoryItems(1, "Helmet", -1));
+		// categoryItemsList4.add(new CategoryItems(2, "Tavel Bag", -1));
+		// categoryItemsList4.add(new CategoryItems(3, "go pro", -1));
+		// categoryItemsList4.add(new CategoryItems(4, "Camping Chair", -1));
+		// categoryItemsList4.add(new CategoryItems(5, "Tent", -1));
+		// categoryItemsList4.add(new CategoryItems(6, "Suitcase", -1));
+		// categoryItemsList4.add(new CategoryItems(7, "Sleeping bag", -1));
+		// categoryItemsList4.add(new CategoryItems(8, "Inflatable Bed", -1));
 		categoryTravelHoliday.setCategoryItems(categoryItemsList4);
 
 		finalCategoryList.add(categoryTravelHoliday);
@@ -813,12 +837,12 @@ public class CommonLib {
 		categoryParty.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList5 = new ArrayList<CategoryItems>();
-//		categoryItemsList5.add(new CategoryItems(1, "Disco Ball", -1));
-//		categoryItemsList5.add(new CategoryItems(2, "Poker Set", -1));
-//		categoryItemsList5.add(new CategoryItems(3, "Dj Set", -1));
-//		categoryItemsList5.add(new CategoryItems(4, "Lights", -1));
-//		categoryItemsList5.add(new CategoryItems(5, "Speakers", -1));
-//		categoryItemsList5.add(new CategoryItems(6, "Fancy Chairs", -1));
+		// categoryItemsList5.add(new CategoryItems(1, "Disco Ball", -1));
+		// categoryItemsList5.add(new CategoryItems(2, "Poker Set", -1));
+		// categoryItemsList5.add(new CategoryItems(3, "Dj Set", -1));
+		// categoryItemsList5.add(new CategoryItems(4, "Lights", -1));
+		// categoryItemsList5.add(new CategoryItems(5, "Speakers", -1));
+		// categoryItemsList5.add(new CategoryItems(6, "Fancy Chairs", -1));
 		categoryParty.setCategoryItems(categoryItemsList5);
 
 		finalCategoryList.add(categoryParty);
@@ -829,13 +853,13 @@ public class CommonLib {
 		categoryBakingCooking.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList6 = new ArrayList<CategoryItems>();
-//		categoryItemsList6.add(new CategoryItems(1, "Blender", -1));
-//		categoryItemsList6.add(new CategoryItems(2, "Hand blender", -1));
-//		categoryItemsList6.add(new CategoryItems(3, "Microwave", -1));
-//		categoryItemsList6.add(new CategoryItems(4, "Cooking Pot", -1));
-//		categoryItemsList6.add(new CategoryItems(5, "Ice bucket", -1));
-//		categoryItemsList6.add(new CategoryItems(6, "Cutlery", -1));
-//		categoryItemsList6.add(new CategoryItems(7, "Cakepan", -1));
+		// categoryItemsList6.add(new CategoryItems(1, "Blender", -1));
+		// categoryItemsList6.add(new CategoryItems(2, "Hand blender", -1));
+		// categoryItemsList6.add(new CategoryItems(3, "Microwave", -1));
+		// categoryItemsList6.add(new CategoryItems(4, "Cooking Pot", -1));
+		// categoryItemsList6.add(new CategoryItems(5, "Ice bucket", -1));
+		// categoryItemsList6.add(new CategoryItems(6, "Cutlery", -1));
+		// categoryItemsList6.add(new CategoryItems(7, "Cakepan", -1));
 		categoryBakingCooking.setCategoryItems(categoryItemsList6);
 
 		finalCategoryList.add(categoryBakingCooking);
@@ -846,12 +870,12 @@ public class CommonLib {
 		categoryHomeImprovement.setCategoryIcon("a");
 
 		ArrayList<CategoryItems> categoryItemsList7 = new ArrayList<CategoryItems>();
-//		categoryItemsList7.add(new CategoryItems(1, "Drill", -1));
-//		categoryItemsList7.add(new CategoryItems(2, "Hammer", -1));
-//		categoryItemsList7.add(new CategoryItems(3, "Pincers", -1));
-//		categoryItemsList7.add(new CategoryItems(4, "Iron (Press)", -1));
-//		categoryItemsList7.add(new CategoryItems(5, "Screwdriver", -1));
-//		categoryItemsList7.add(new CategoryItems(6, "Step Ladder", -1));
+		// categoryItemsList7.add(new CategoryItems(1, "Drill", -1));
+		// categoryItemsList7.add(new CategoryItems(2, "Hammer", -1));
+		// categoryItemsList7.add(new CategoryItems(3, "Pincers", -1));
+		// categoryItemsList7.add(new CategoryItems(4, "Iron (Press)", -1));
+		// categoryItemsList7.add(new CategoryItems(5, "Screwdriver", -1));
+		// categoryItemsList7.add(new CategoryItems(6, "Step Ladder", -1));
 		categoryHomeImprovement.setCategoryItems(categoryItemsList1);
 
 		finalCategoryList.add(categoryHomeImprovement);
@@ -929,12 +953,36 @@ public class CommonLib {
 		}
 		return finalCategoryList;
 	}
-	
+
 	public static boolean getCurrentActiveActivity(Context context) {
 		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-	    List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-	    Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
-	    ComponentName componentInfo = taskInfo.get(0).topActivity;
-	    return (componentInfo.equals(MessagesActivity.class));
+		List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+		Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
+		ComponentName componentInfo = taskInfo.get(0).topActivity;
+		return (componentInfo.equals(MessagesActivity.class));
+	}
+
+	public static boolean hasContact(Context mContext, String contact) {
+		ContentResolver cr = mContext.getContentResolver();
+		Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		if (cur.getCount() > 0) {
+			while (cur.moveToNext()) {
+				String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+				String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+				if (Integer
+						.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+					Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+							ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { id }, null);
+					while (pCur.moveToNext()) {
+						String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+						if(phoneNo.contains(contact) || contact.contains(phoneNo)) {
+							return true;
+						}
+					}
+					pCur.close();
+				}
+			}
+		} 
+		return false;
 	}
 }

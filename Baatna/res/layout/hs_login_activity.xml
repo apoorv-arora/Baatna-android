@@ -53,12 +53,52 @@
                 android:divider="@color/zhl_darker"
                 android:dividerHeight="@dimen/height1"/>
         </LinearLayout>
-
+        
         <com.application.baatna.utils.EditTextRegular
-            android:id="@+id/studentIdEt"
+            android:id="@+id/branch_Et"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/roll_number_hint"
+            android:hint="@string/branch"
+            android:textColor="@color/zdhl6"
+            android:textSize="@dimen/size15" />
+        
+        <LinearLayout
+            android:id="@+id/branch_list_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/zhl"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/separator_color" />
+
+            <ListView
+                android:id="@+id/branch_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/zhl"
+                android:cacheColorHint="@android:color/transparent"
+                android:childDivider="@color/transparent1"
+                android:divider="@color/zhl_darker"
+                android:dividerHeight="@dimen/height1"/>
+        </LinearLayout>
+
+        <com.application.baatna.utils.EditTextRegular
+            android:id="@+id/year_selector"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/year"
+            android:textColor="@color/zdhl6"
+            android:textSize="@dimen/size15" />
+        
+         <com.application.baatna.utils.EditTextRegular
+            android:id="@+id/phone_number"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contact_number"
             android:textColor="@color/zdhl6"
             android:textSize="@dimen/size15" />
 

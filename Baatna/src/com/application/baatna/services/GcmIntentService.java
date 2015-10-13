@@ -14,6 +14,7 @@ import com.application.baatna.db.MessageDBWrapper;
 import com.application.baatna.receivers.GcmBroadcastReceiver;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.ParserJson;
+import com.application.baatna.utils.facebook.FriendChecker;
 import com.application.baatna.views.MessagesActivity;
 import com.application.baatna.views.WishboxActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -85,6 +86,7 @@ public class GcmIntentService extends IntentService {
 		String msg = extras.getString("Notification");
 		String type = extras.getString("type");
 		Intent notificationActivity = null;
+		boolean showNotification = true;
 		if (type != null && type.equals("message")) {
 			JSONObject message = null;
 			try {
@@ -111,6 +113,7 @@ public class GcmIntentService extends IntentService {
 			}
 		} else if (type != null && type.equals("wish")) {
 			JSONObject message = null;
+			 
 			try {
 				message = new JSONObject(msg);
 				if (message.has("wish") && message.getJSONObject("wish").has("wish")) {
@@ -118,11 +121,21 @@ public class GcmIntentService extends IntentService {
 					if (messageObj != null) {
 						if (message.has("from_user") && message.getJSONObject("from_user").has("user")) {
 							User user = ParserJson.parse_User(message.getJSONObject("from_user").getJSONObject("user"));
-							msg = user.getUserName() + " offered you a " + messageObj.getTitle() + ". Start chatting!";
-							notificationActivity = new Intent(this, MessagesActivity.class);
-							notificationActivity.putExtra("user", user);
-							notificationActivity.putExtra("wish", messageObj);
-							notificationActivity.putExtra("type", type);
+							boolean isFriendOnFacebook = FriendChecker.isFriendOnFacebook ( prefs.getString("fbId", ""), user.getFbId(), prefs.getString("fb_token", "") ) ;
+							if(isFriendOnFacebook) {
+								msg = user.getUserName() + " offered you a " + messageObj.getTitle() + ". Start chatting!";
+								notificationActivity = new Intent(this, MessagesActivity.class);
+								notificationActivity.putExtra("user", user);
+								notificationActivity.putExtra("wish", messageObj);
+								notificationActivity.putExtra("type", type);
+							} else if ( CommonLib.hasContact(this, user.getContact()) ){
+								msg = user.getUserName() + " offered you a " + messageObj.getTitle() + ". Start chatting!";
+								notificationActivity = new Intent(this, MessagesActivity.class);
+								notificationActivity.putExtra("user", user);
+								notificationActivity.putExtra("wish", messageObj);
+								notificationActivity.putExtra("type", type);
+							} else 
+								showNotification = false;
 						}
 					}
 				}
@@ -141,7 +154,8 @@ public class GcmIntentService extends IntentService {
 				.setContentTitle("Baatna").setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
 				.setContentText(msg).setSound(soundUri);
 		mBuilder.setContentIntent(contentIntent);
-		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+		if(showNotification)
+			mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 	}
 
 	public static String decompress(byte[] compressed, int len) {

@@ -2,6 +2,10 @@ package com.application.baatna.data;
 
 import java.io.Serializable;
 
+/**
+ * @author apoorvarora
+ *
+ */
 public class User implements Serializable{
 
 	private int userId;
@@ -12,6 +16,8 @@ public class User implements Serializable{
 	private Double latitude;
 	private Double longitude;
 	private String bio = "";
+	private String fbId = "";
+	private String contact = "";
 
 	public double getLatitude() {
 		return latitude;
@@ -85,4 +91,20 @@ public class User implements Serializable{
 		this.bio = bio;
 	}
 
+	public String getFbId() {
+		return fbId;
+	}
+
+	public void setFbId(String fbId) {
+		this.fbId = fbId;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	
 }

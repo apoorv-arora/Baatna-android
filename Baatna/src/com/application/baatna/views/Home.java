@@ -26,7 +26,6 @@ import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
-import com.application.baatna.utils.fab.FABControl;
 import com.application.baatna.utils.fab.FABControl.OnFloatingActionsMenuUpdateListener;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,6 +52,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -64,11 +64,13 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -308,14 +310,15 @@ public class Home extends AppCompatActivity
 
 	private void setUpFAB() {
 
-		((FABControl) findViewById(R.id.multiple_actions)).setOnFloatingActionsMenuUpdateListener(this);
+		// ((FABControl)
+		// findViewById(R.id.multiple_actions)).setOnFloatingActionsMenuUpdateListener(this);
 		// overlay behind FAB
 		mFABOverlay = findViewById(R.id.fab_overlay);
 		mFABOverlay.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				toggleFAB();
+				// toggleFAB();
 			}
 		});
 		mFABOverlay.setClickable(false);
@@ -324,7 +327,7 @@ public class Home extends AppCompatActivity
 	}
 
 	private void toggleFAB() {
-		((FABControl) findViewById(R.id.multiple_actions)).toggle();
+		// ((FABControl) findViewById(R.id.multiple_actions)).toggle();
 	}
 
 	// makes FAB visible.
@@ -333,10 +336,10 @@ public class Home extends AppCompatActivity
 		if (!mFABVisible) {
 			mFABVisible = true;
 
-			findViewById(R.id.multiple_actions).setVisibility(View.VISIBLE);
+			findViewById(R.id.fab_post_request).setVisibility(View.VISIBLE);
 
 			if (delayed) {
-				ViewPropertyAnimator animator = findViewById(R.id.fab_expand_menu_button).animate().scaleX(1).scaleY(1)
+				ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
 						.setDuration(250).setInterpolator(new AccelerateInterpolator()).setStartDelay(700);
 				// required | dont remove
 				animator.setListener(new AnimatorListener() {
@@ -365,7 +368,7 @@ public class Home extends AppCompatActivity
 
 			} else {
 
-				ViewPropertyAnimator animator = findViewById(R.id.fab_expand_menu_button).animate().scaleX(1).scaleY(1)
+				ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
 						.setDuration(200).setInterpolator(new AccelerateInterpolator());
 				// required | dont remove
 				animator.setListener(new AnimatorListener() {
@@ -460,7 +463,7 @@ public class Home extends AppCompatActivity
 		if (mFABVisible) {
 			mFABVisible = false;
 
-			ViewPropertyAnimator animator = findViewById(R.id.fab_expand_menu_button).animate().scaleX(0).scaleY(0)
+			ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(0).scaleY(0)
 					.setDuration(50).setStartDelay(0).setInterpolator(new AccelerateInterpolator());
 
 			animator.setListener(new AnimatorListener() {
@@ -475,7 +478,7 @@ public class Home extends AppCompatActivity
 
 				@Override
 				public void onAnimationEnd(Animator animation) {
-					findViewById(R.id.multiple_actions).setVisibility(View.GONE);
+					findViewById(R.id.fab_post_request).setVisibility(View.GONE);
 				}
 
 				@Override
@@ -489,22 +492,22 @@ public class Home extends AppCompatActivity
 	private void scaleFAB(float input) {
 		if (input < .7f) {
 
-			if (findViewById(R.id.multiple_actions).getVisibility() != View.VISIBLE)
-				findViewById(R.id.multiple_actions).setVisibility(View.VISIBLE);
+			if (findViewById(R.id.fab_post_request).getVisibility() != View.VISIBLE)
+				findViewById(R.id.fab_post_request).setVisibility(View.VISIBLE);
 
-			findViewById(R.id.fab_expand_menu_button).setScaleX(1 - input);
-			findViewById(R.id.fab_expand_menu_button).setScaleY(1 - input);
+			findViewById(R.id.fab_post_request).setScaleX(1 - input);
+			findViewById(R.id.fab_post_request).setScaleY(1 - input);
 
 		} else {
 
-			if (findViewById(R.id.fab_expand_menu_button).getScaleX() != 0)
-				findViewById(R.id.fab_expand_menu_button).setScaleX(0);
+			if (findViewById(R.id.fab_post_request).getScaleX() != 0)
+				findViewById(R.id.fab_post_request).setScaleX(0);
 
-			if (findViewById(R.id.fab_expand_menu_button).getScaleY() != 0)
-				findViewById(R.id.fab_expand_menu_button).setScaleY(0);
+			if (findViewById(R.id.fab_post_request).getScaleY() != 0)
+				findViewById(R.id.fab_post_request).setScaleY(0);
 
-			if (findViewById(R.id.multiple_actions).getVisibility() != View.GONE)
-				findViewById(R.id.multiple_actions).setVisibility(View.GONE);
+			if (findViewById(R.id.fab_post_request).getVisibility() != View.GONE)
+				findViewById(R.id.fab_post_request).setVisibility(View.GONE);
 		}
 
 	}
@@ -722,9 +725,44 @@ public class Home extends AppCompatActivity
 		String shareText = getResources().getString(R.string.share_description) + shortUrl;
 
 		Intent i = new Intent(android.content.Intent.ACTION_SEND);
-		i.setType("text/plain");
-		i.putExtra(Intent.EXTRA_TEXT, shareText);
-		startActivity(Intent.createChooser(i, getResources().getString(R.string.toast_share_longpress)));
+		// i.setType("text/plain");
+		// i.putExtra(Intent.EXTRA_TEXT, shareText);
+		// startActivity(Intent.createChooser(i,
+		// getResources().getString(R.string.toast_share_longpress)));
+
+		List<Intent> targetedShareIntents = new ArrayList<Intent>();
+		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+		shareIntent.setType("text/plain");
+		shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+		List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(shareIntent, 0);
+		if (!resInfo.isEmpty()) {
+			for (ResolveInfo resolveInfo : resInfo) {
+				String packageName = resolveInfo.activityInfo.packageName;
+				Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
+				targetedShareIntent.setType("text/plain");
+				shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+				// if (TextUtils.equals(packageName, "com.facebook.katana")) {
+				// targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+				// "http://link-to-be-shared.com");
+				// } else {
+				// targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+				// "text message to shared");
+				// }
+				if (packageName.equalsIgnoreCase("com.whatsapp") || packageName.equalsIgnoreCase("com.facebook.katana")
+						|| packageName.equalsIgnoreCase("com.facebook.orca")
+						|| packageName.equalsIgnoreCase("com.twitter.android")
+						|| packageName.equalsIgnoreCase("com.tencent.mm")
+						|| packageName.equalsIgnoreCase("com.viber.voip")
+						|| packageName.equalsIgnoreCase("com.skype.raider")) {
+					targetedShareIntent.setPackage(packageName);
+					targetedShareIntents.add(targetedShareIntent);
+				}
+			}
+			Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Invite using");
+			chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[] {}));
+			startActivity(chooserIntent);
+		}
+
 	}
 
 	public void openWishbox(View v) {
@@ -1129,7 +1167,7 @@ public class Home extends AppCompatActivity
 				// viewHolder.userImage = (RoundedImageView) v
 				// .findViewById(R.id.user_image);
 				viewHolder.time = (TextView) v.findViewById(R.id.time);
-				 viewHolder.distance = (TextView) v.findViewById(R.id.distance);
+				viewHolder.distance = (TextView) v.findViewById(R.id.distance);
 				viewHolder.bar = v.findViewById(R.id.left_bar);
 				viewHolder.accept = (TextView) v.findViewById(R.id.accept_button);
 				viewHolder.decline = (TextView) v.findViewById(R.id.decline_button);
@@ -1142,7 +1180,7 @@ public class Home extends AppCompatActivity
 					.setMargins(width / 40, 0, width / 40, 0);
 			viewHolder.accept.setPadding(width / 20, 0, width / 20, width / 20);
 			viewHolder.decline.setPadding(width / 20, 0, width / 20, width / 20);
-			
+
 			final User user = feedItem.getUserIdFirst();
 
 			User user2 = feedItem.getUserSecond();
@@ -1188,8 +1226,9 @@ public class Home extends AppCompatActivity
 				}
 			});
 
-			viewHolder.distance.setText(CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0), feedItem.getLatitude(), feedItem.getLongitude()) + " km");
-			
+			viewHolder.distance.setText(CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+					feedItem.getLatitude(), feedItem.getLongitude()) + " km");
+
 			switch (feedItem.getType()) {
 
 			case CommonLib.FEED_TYPE_NEW_USER:
@@ -1494,9 +1533,13 @@ public class Home extends AppCompatActivity
 								if (fastBlur)
 									bitmap = CommonLib.fastBlur(bitmap, 4);
 								if (useDiskCache) {
-//									if (CommonLib.shouldScaleDownBitmap(Home.this, bitmap)) {
-//										bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-//									}
+									// if
+									// (CommonLib.shouldScaleDownBitmap(Home.this,
+									// bitmap)) {
+									// bitmap =
+									// Bitmap.createScaledBitmap(bitmap, width,
+									// height, false);
+									// }
 									CommonLib.writeBitmapToDisk(url, bitmap, Home.this.getApplicationContext(),
 											Bitmap.CompressFormat.JPEG);
 								}
