@@ -82,6 +82,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -160,17 +161,6 @@ public class Home extends AppCompatActivity
 		feedListView.addHeaderView(headerView);
 		feedListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
 		feedListView.setDividerHeight(width / 40);
-
-		headerView.findViewById(R.id.search_map).getLayoutParams().width = width;
-
-		headerView.findViewById(R.id.search_map).setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(Home.this, MapActivity.class);
-				startActivity(intent);
-			}
-		});
 
 		((RelativeLayout.LayoutParams) headerView.findViewById(R.id.request_icon).getLayoutParams())
 				.setMargins(width / 20 + width / 80, 0, 0, 0);
@@ -304,6 +294,7 @@ public class Home extends AppCompatActivity
 			CommonLib.ZLog("rate dialog", "rate_dialog_trigger is now " + rateDialogCounterTrigger);
 		}
 
+		zapp.startLocationCheck();
 		UploadManager.addCallback(this);
 	}
 
@@ -784,6 +775,7 @@ public class Home extends AppCompatActivity
 	@Override
 	public void onCoordinatesIdentified(Location loc) {
 		if (loc != null) {
+			displayAddressMap((ImageView)headerView.findViewById(R.id.search_map), loc);
 			UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
 		}
 	}
@@ -870,9 +862,9 @@ public class Home extends AppCompatActivity
 			Crashlytics.logException(e);
 		}
 
-		View inflatedView = inflater.inflate(R.layout.google_map_view_layout, null);
-		mMapView = (MapView) headerView.findViewById(R.id.search_map);
-		mMapView.onCreate(savedInstanceState);
+//		View inflatedView = inflater.inflate(R.layout.google_map_view_layout, null);
+//		mMapView = (MapView) headerView.findViewById(R.id.search_map);
+//		mMapView.onCreate(savedInstanceState);
 
 		prefs = getSharedPreferences("application_settings", 0);
 		zapp = (BaatnaApp) getApplication();
@@ -883,7 +875,7 @@ public class Home extends AppCompatActivity
 		lat = zapp.lat;
 		lon = zapp.lon;
 
-		refreshMap();
+//		refreshMap();
 		new GetCategoriesList().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
 
@@ -1857,5 +1849,34 @@ public class Home extends AppCompatActivity
 
 		}
 	}
+	
+	private void displayAddressMap(ImageView addressMap, Location loc) {
+
+        addressMap.getLayoutParams().width = width;
+
+//        ((FrameLayout) addressMap.getParent()).getLayoutParams().height = 3 * width / 10;
+        ((FrameLayout) addressMap.getParent()).getLayoutParams().width = width;
+        addressMap.getLayoutParams().width = width;
+//        addressMap.getLayoutParams().width = mapWidth;
+
+//        ((RelativeLayout.LayoutParams) ((FrameLayout) addressMap.getParent()).getLayoutParams()).setMargins(0, width / 40, 0, 0);
+
+        String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + loc.getLatitude() + "," + loc.getLongitude()
+                + "&zoom=14&size=320x160&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|" + loc.getLatitude() + ","
+                + loc.getLongitude();
+
+        //CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type, mapWidth, height, useDiskCache, fastBlur);
+        setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width, width / 2, false, false);
+
+        // click
+        ((FrameLayout) addressMap.getParent()).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            	Intent intent = new Intent(Home.this, MapActivity.class);
+				startActivity(intent);
+            }
+        });
+
+    }
 
 }
