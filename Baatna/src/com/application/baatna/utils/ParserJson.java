@@ -299,7 +299,7 @@ public class ParserJson {
 									JSONArray branchArr = categoryJson.getJSONArray("branches");
 									ArrayList<String> branches = new ArrayList<String>();
 									for(int j=0 ;j<branchArr.length();j++) {
-										branches.add(String.valueOf(branchArr.get(i)));
+										branches.add( String.valueOf(branchArr.get(j)) );
 									}
 									institution.setBranches(branches);
 								}

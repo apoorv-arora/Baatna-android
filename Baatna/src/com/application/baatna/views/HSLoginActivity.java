@@ -1,7 +1,6 @@
 package com.application.baatna.views;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
@@ -31,7 +30,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -164,14 +162,22 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 
 	private void fixSizes() {
 		findViewById(R.id.institutionEt).setPadding(width / 20, width / 10, width / 20, width / 40);
-		findViewById(R.id.phone_number).setPadding(width / 20, width / 40, width / 20, width / 20);
-		findViewById(R.id.year_selector).setPadding(width / 20, width / 40, width / 20, width / 20);
+		findViewById(R.id.branch_Et).setPadding(width / 20, width / 40, width / 20, width / 40);
+		findViewById(R.id.phone_number).setPadding(width / 20, width / 40, width / 20, width / 40);
+		findViewById(R.id.year_selector).setPadding(width / 20, width / 40, width / 20, width / 40);
 		findViewById(R.id.submit_button).setPadding(0, width / 20, 0, width / 20);
 
 		((LinearLayout.LayoutParams) findViewById(R.id.institutionEt).getLayoutParams()).setMargins(width / 20,
 				width / 20, width / 20, width / 40);
+		((LinearLayout.LayoutParams) findViewById(R.id.branch_Et).getLayoutParams()).setMargins(width / 20,
+				width / 20, width / 20, width / 40);
+		((LinearLayout.LayoutParams) findViewById(R.id.year_selector).getLayoutParams()).setMargins(width / 20,
+				width / 20, width / 20, width / 40);
+		((LinearLayout.LayoutParams) findViewById(R.id.phone_number).getLayoutParams()).setMargins(width / 20,
+				width / 20, width / 20, width / 20);
+		
 		((LinearLayout.LayoutParams) findViewById(R.id.submit_button).getLayoutParams()).setMargins(width / 20,
-				width / 40, width / 20, 0);
+				width / 20, width / 20, 0);
 	}
 
 	private void setListeners() {

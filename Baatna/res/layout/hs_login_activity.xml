@@ -29,7 +29,7 @@
             android:hint="@string/institution"
             android:textColor="@color/zdhl6"
             android:textSize="@dimen/size15" />
-        
+
         <LinearLayout
             android:id="@+id/subzone_search_list_view_container"
             android:layout_width="fill_parent"
@@ -51,9 +51,9 @@
                 android:cacheColorHint="@android:color/transparent"
                 android:childDivider="@color/transparent1"
                 android:divider="@color/zhl_darker"
-                android:dividerHeight="@dimen/height1"/>
+                android:dividerHeight="@dimen/height1" />
         </LinearLayout>
-        
+
         <com.application.baatna.utils.EditTextRegular
             android:id="@+id/branch_Et"
             android:layout_width="fill_parent"
@@ -61,7 +61,7 @@
             android:hint="@string/branch"
             android:textColor="@color/zdhl6"
             android:textSize="@dimen/size15" />
-        
+
         <LinearLayout
             android:id="@+id/branch_list_container"
             android:layout_width="fill_parent"
@@ -83,7 +83,7 @@
                 android:cacheColorHint="@android:color/transparent"
                 android:childDivider="@color/transparent1"
                 android:divider="@color/zhl_darker"
-                android:dividerHeight="@dimen/height1"/>
+                android:dividerHeight="@dimen/height1" />
         </LinearLayout>
 
         <com.application.baatna.utils.EditTextRegular
@@ -91,18 +91,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/year"
+            android:inputType="number"
             android:textColor="@color/zdhl6"
             android:textSize="@dimen/size15" />
-        
-         <com.application.baatna.utils.EditTextRegular
+
+        <com.application.baatna.utils.EditTextRegular
             android:id="@+id/phone_number"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/contact_number"
+            android:inputType="number"
             android:textColor="@color/zdhl6"
             android:textSize="@dimen/size15" />
 
-        <com.application.baatna.utils.TextViewBold
+        <com.application.baatna.utils.TextViewSemiBold
             android:id="@+id/submit_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -113,8 +115,7 @@
             android:singleLine="true"
             android:text="@string/Login"
             android:textColor="@color/white"
-            android:textSize="@dimen/size17" />
-
+            android:textSize="@dimen/size18" />
     </LinearLayout>
     <!-- For no internet connection which has retry -->
 
