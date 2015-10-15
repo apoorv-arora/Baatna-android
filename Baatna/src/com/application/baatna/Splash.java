@@ -80,13 +80,13 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 	String regId;
 	int hardwareRegistered = 0;
 
-	ImageView img;
+	ImageView imgBg, imgLogo, imgText;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity);
-		
+
 		prefs = getSharedPreferences("application_settings", 0);
 		context = getApplicationContext();
 		zapp = (BaatnaApp) getApplication();
@@ -95,21 +95,35 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 		width = getWindowManager().getDefaultDisplay().getWidth();
 		height = getWindowManager().getDefaultDisplay().getHeight();
 
-		img = (ImageView) findViewById(R.id.baatna_logo);
+		imgBg = (ImageView) findViewById(R.id.baatna_background);
+		imgLogo = (ImageView) findViewById(R.id.baatna_logo);
+		imgText = (ImageView) findViewById(R.id.baatna_text);
 
 		try {
 			int imageWidth = width;
 			int imageHeight = height;
 
-			Bitmap searchBitmap = CommonLib.getBitmap(this, R.drawable.splash_final, imageWidth, imageHeight);
-			img.getLayoutParams().width = imageWidth;
-			img.getLayoutParams().height = imageHeight;
-			img.setImageBitmap(searchBitmap);
+			Bitmap bgBitmap = CommonLib.getBitmap(this, R.drawable.baatna_background, imageWidth, imageHeight);
+			imgBg.getLayoutParams().width = imageWidth;
+			imgBg.getLayoutParams().height = imageHeight;
+			imgBg.setImageBitmap(bgBitmap);
+
+			Bitmap logoBitmap = CommonLib.getBitmap(this, R.drawable.baatna_splash_logo, imageWidth / 2,
+					imageWidth / 2);
+			imgLogo.getLayoutParams().width = imageWidth / 2;
+			imgLogo.getLayoutParams().height = imageWidth / 2;
+			imgLogo.setImageBitmap(logoBitmap);
+
+			Bitmap textBitmap = CommonLib.getBitmap(this, R.drawable.baatna_splash_text, imageWidth / 2, imageWidth / 10);
+			imgText.getLayoutParams().width = imageWidth / 2;
+			imgText.getLayoutParams().height = imageWidth / 10;
+			imgText.setImageBitmap(textBitmap);
+
 		} catch (OutOfMemoryError e) {
 			e.printStackTrace();
 		}
 
-		img.postDelayed(new Runnable() {
+		imgBg.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				startLocationCheck();
@@ -124,7 +138,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 
 	private void animate() {
 		try {
-			img.setVisibility(View.INVISIBLE);
+			imgBg.setVisibility(View.VISIBLE);
 
 			animation2 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 			animation2.setDuration(700);
@@ -141,8 +155,13 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 
 				@Override
 				public void onAnimationEnd(Animation animation) {
-					findViewById(R.id.login_page_layout_connect_using_facebook).setVisibility(View.VISIBLE);
-					findViewById(R.id.layout_login_separator).setVisibility(View.VISIBLE);
+					imgText.setVisibility(View.VISIBLE);
+					if (prefs.getInt("uid", 0) == 0) {
+						findViewById(R.id.login_page_layout_connect_using_facebook).setVisibility(View.VISIBLE);
+						findViewById(R.id.layout_login_separator).setVisibility(View.VISIBLE);
+					} else {
+						checkPlayServices();
+					}
 				}
 			});
 			animation2.scaleCurrentDuration(1);
@@ -162,20 +181,21 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 
 				@Override
 				public void onAnimationEnd(Animation animation) {
-					img.setVisibility(View.VISIBLE);
-					if (prefs.getInt("uid", 0) == 0) {
-						findViewById(R.id.login_page_layout_connect_using_facebook).startAnimation(animation2);
-						findViewById(R.id.login_page_layout_connect_using_facebook).setVisibility(View.VISIBLE);
-					} else {
-						checkPlayServices();
-					}
+					imgLogo.setVisibility(View.VISIBLE);
+					imgText.setVisibility(View.VISIBLE);
+					imgText.startAnimation(animation2);
 				}
 			});
 			animation1.scaleCurrentDuration(1);
-			img.startAnimation(animation1);
+			imgLogo.startAnimation(animation1);
+			imgLogo.setVisibility(View.VISIBLE);
 
 		} catch (Exception e) {
-			img.setVisibility(View.VISIBLE);
+			imgBg.setVisibility(View.VISIBLE);
+			imgLogo.setVisibility(View.VISIBLE);
+			imgText.setVisibility(View.VISIBLE);
+			findViewById(R.id.login_page_layout_connect_using_facebook).setVisibility(View.VISIBLE);
+			findViewById(R.id.layout_login_separator).setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -349,22 +369,22 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 	private void fixSizes() {
 
 		// setting the logo
-		final ImageView img = (ImageView) findViewById(R.id.baatna_logo);
-
-		try {
-			int imageWidth = width;
-			int imageHeight = height;
-
-			Bitmap searchBitmap = CommonLib.getBitmap(this, R.drawable.splash_final, imageWidth, imageHeight);
-			img.getLayoutParams().width = imageWidth;
-			img.getLayoutParams().height = imageHeight;
-			img.setImageBitmap(searchBitmap);
-
-		} catch (OutOfMemoryError e) {
-			e.printStackTrace();
-		}
-		// ((RelativeLayout.LayoutParams) img.getLayoutParams()).setMargins(0,
-		// height / 2 - height / 5, 0, width / 20);
+		// final ImageView img = (ImageView) findViewById(R.id.baatna_logo);
+		//
+		// try {
+		// int imageWidth = width;
+		// int imageHeight = height;
+		//
+		// Bitmap searchBitmap = CommonLib.getBitmap(this,
+		// R.drawable.splash_final, imageWidth, imageHeight);
+		// img.getLayoutParams().width = imageWidth;
+		// img.getLayoutParams().height = imageHeight;
+		// img.setImageBitmap(searchBitmap);
+		//
+		// } catch (OutOfMemoryError e) {
+		// e.printStackTrace();
+		// }
+		((RelativeLayout.LayoutParams) imgLogo.getLayoutParams()).setMargins(0, height / 5, 0, width / 20);
 
 		int buttonHeight = (11 * 9 * width) / (80 * 10);
 		// fb button
