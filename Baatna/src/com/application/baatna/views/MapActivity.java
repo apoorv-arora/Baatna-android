@@ -2,12 +2,6 @@ package com.application.baatna.views;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.data.User;
@@ -15,6 +9,9 @@ import com.application.baatna.mapUtils.Cluster;
 import com.application.baatna.mapUtils.ClusterManager;
 import com.application.baatna.mapUtils.GoogleMapRenderer;
 import com.application.baatna.mapUtils.SimpleRestaurantPin;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.TypefaceSpan;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,12 +23,27 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 public class MapActivity extends Activity {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
 	private int width;
 	private LayoutInflater inflater;
+	private AsyncTask mAsyncRunning;
 
 	/** Map Object */
 	private boolean mapRefreshed = false;
@@ -56,11 +68,14 @@ public class MapActivity extends Activity {
 	private double lon;
 
 	private ArrayList<User> mapResultList;
+	private boolean destroyed = false;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.google_map_view_layout);
-
+		
+		width = getWindowManager().getDefaultDisplay().getWidth();
+		
 		inflater = LayoutInflater.from(this);
 
 		try {
@@ -68,16 +83,49 @@ public class MapActivity extends Activity {
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 		}
-
-		View inflatedView = inflater.inflate(R.layout.google_map_view_layout,
-				null);
+		
 		mMapView = (MapView) findViewById(R.id.search_map);
 		mMapView.onCreate(savedInstanceState);
+		
+		setupActionBar();
 
 		prefs = getSharedPreferences("application_settings", 0);
 		zapp = (BaatnaApp) getApplication();
 		init();
+		refreshView();
 
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+	}
+
+	private void setupActionBar() {
+		ActionBar actionBar = getActionBar();
+
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
+
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
+		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
+		actionBar.setCustomView(actionBarCustomView);
+
+		SpannableString s = new SpannableString(getString(R.string.your_neighbourhood));
+		s.setSpan(
+				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
+						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
+				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
+
+		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
+				.setMargins(width / 40, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+		title.setText(s);
 	}
 
 	private void init() {
@@ -88,20 +136,6 @@ public class MapActivity extends Activity {
 		double lng = -0.1270060;
 		this.lat = lat;
 		this.lon = lng;
-
-		mapResultList = new ArrayList<User>();
-		// Add ten cluster items in close proximity, for purposes of this
-		// example.
-		for (int i = 0; i < 10; i++) {
-			double offset = i / 60d;
-			lat = lat + offset;
-			lng = lng + offset;
-			User offsetItem = new User();
-			offsetItem.setLatitude(lat);
-			offsetItem.setLongitude(lon);
-			mapResultList.add(offsetItem);
-		}
-		refreshMap();
 	}
 
 	private void setUpMapIfNeeded() {
@@ -123,22 +157,26 @@ public class MapActivity extends Activity {
 			mMap.getUiSettings().setCompassEnabled(false);
 			mMap.setMyLocationEnabled(true);
 			mMap.setBuildingsEnabled(true);
-			
+
 			CameraPosition cameraPosition;
 			if (targetCoords != null) {
-				cameraPosition = new CameraPosition.Builder()
-						.target(targetCoords) // Sets the center of the map to
-												// Mountain View
+				cameraPosition = new CameraPosition.Builder().target(targetCoords) // Sets
+																					// the
+																					// center
+																					// of
+																					// the
+																					// map
+																					// to
+																					// Mountain
+																					// View
 						.zoom(defaultMapZoomLevel) // Sets the zoom
 						.build(); // Creates a CameraPosition from the builder
 
 				try {
-					mMap.animateCamera(CameraUpdateFactory
-							.newCameraPosition(cameraPosition));
+					mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 				} catch (Exception e) {
 					MapsInitializer.initialize(MapActivity.this);
-					mMap.animateCamera(CameraUpdateFactory
-							.newCameraPosition(cameraPosition));
+					mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 				}
 			}
 
@@ -191,6 +229,7 @@ public class MapActivity extends Activity {
 		if (mMapView != null)
 			mMapView.onDestroy();
 
+		destroyed = true;
 		// if (zapp != null && zapp.cacheForMarkerImages != null)
 		// zapp.cacheForMarkerImages.clear();
 		super.onDestroy();
@@ -208,8 +247,7 @@ public class MapActivity extends Activity {
 
 			// Clearing The current clustering restaurant dataset
 
-			if (mMap != null && mapResultList != null
-					&& !mapResultList.isEmpty()) {
+			if (mMap != null && mapResultList != null && !mapResultList.isEmpty()) {
 
 				LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
@@ -218,8 +256,7 @@ public class MapActivity extends Activity {
 					if (r.getLatitude() != 0.0 || r.getLongitude() != 0.0) {
 						// if (type.equals(MAP_LOCATION_SEARCH)
 						// || (!type.equals(MAP_DRAW_SEARCH)))
-						builder.include(new LatLng(r.getLatitude(), r
-								.getLongitude()));
+						builder.include(new LatLng(r.getLatitude(), r.getLongitude()));
 						SimpleRestaurantPin pin = new SimpleRestaurantPin();
 						pin.setRestaurant(r);
 						clusterPins.add(pin);
@@ -267,15 +304,12 @@ public class MapActivity extends Activity {
 	private void dynamicZoom(LatLngBounds bounds) throws IllegalStateException {
 
 		if (mapResultList != null && mapResultList.size() == 1) {
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,
-					width / 40 + width / 15 + width / 15));
+			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, width / 40 + width / 15 + width / 15));
 		} else if (mMap != null)
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,
-					width / 40 + width / 15));
+			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, width / 40 + width / 15));
 	}
 
-	private class mRenderer extends GoogleMapRenderer implements
-			GoogleMap.OnCameraChangeListener {
+	private class mRenderer extends GoogleMapRenderer implements GoogleMap.OnCameraChangeListener {
 
 		public mRenderer() {
 			super(mMap, plotManager);
@@ -286,28 +320,98 @@ public class MapActivity extends Activity {
 		}
 
 		@Override
-		protected void onBeforeClusterItemRendered(SimpleRestaurantPin item,
-				MarkerOptions markerOptions) {
+		protected void onBeforeClusterItemRendered(SimpleRestaurantPin item, MarkerOptions markerOptions) {
 
 		}
 
 		@Override
-		protected void onBeforeClusterRendered(
-				Cluster<SimpleRestaurantPin> cluster,
-				MarkerOptions markerOptions) {
+		protected void onBeforeClusterRendered(Cluster<SimpleRestaurantPin> cluster, MarkerOptions markerOptions) {
 
 		}
 
 		@Override
-		protected void onClusterRendered(Cluster<SimpleRestaurantPin> cluster,
-				Marker marker) {
+		protected void onClusterRendered(Cluster<SimpleRestaurantPin> cluster, Marker marker) {
 		}
 
 		@Override
-		protected void onClusterItemRendered(SimpleRestaurantPin clusterItem,
-				Marker marker) {
+		protected void onClusterItemRendered(SimpleRestaurantPin clusterItem, Marker marker) {
 		}
 
+	}
+
+	private void refreshView() {
+		if (mAsyncRunning != null)
+			mAsyncRunning.cancel(true);
+		mAsyncRunning = new GetCategoriesList().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+	}
+
+	private class GetCategoriesList extends AsyncTask<Object, Void, Object> {
+
+		@Override
+		protected void onPreExecute() {
+			findViewById(R.id.wishbox_progress_container).setVisibility(View.VISIBLE);
+
+			findViewById(R.id.content).setAlpha(1f);
+
+			findViewById(R.id.content).setVisibility(View.GONE);
+
+			findViewById(R.id.empty_view).setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Object... params) {
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "user/nearbyusers?";
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.NEARBY_USERS, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+			findViewById(R.id.wishbox_progress_container).setVisibility(View.GONE);
+			if (result != null) {
+				findViewById(R.id.content).setVisibility(View.VISIBLE);
+				if (result instanceof ArrayList<?>) {
+					mapResultList = (ArrayList<User>) result;
+					refreshMap();
+				}
+			} else {
+				if (CommonLib.isNetworkAvailable(MapActivity.this)) {
+					Toast.makeText(MapActivity.this, getResources().getString(R.string.error_try_again),
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(MapActivity.this, getResources().getString(R.string.no_internet_message),
+							Toast.LENGTH_SHORT).show();
+					findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+
+					findViewById(R.id.content).setVisibility(View.GONE);
+
+				}
+			}
+
+		}
+	}
+
+	public void actionBarSelected(View v) {
+		switch (v.getId()) {
+		case R.id.home_icon_container:
+			onBackPressed();
+			break;
+		default:
+			break;
+		}
 	}
 
 }

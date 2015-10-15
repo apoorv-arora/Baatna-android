@@ -313,9 +313,9 @@ public class ParserJson {
 		return wishes;
 	}
 
-	public static ArrayList<LatLng> parse_NearbyUsers(InputStream is) throws JSONException {
+	public static ArrayList<User> parse_NearbyUsers(InputStream is) throws JSONException {
 
-		ArrayList<LatLng> wishes = new ArrayList<LatLng>();
+		ArrayList<User> wishes = new ArrayList<User>();
 
 		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
 
@@ -336,7 +336,9 @@ public class ParserJson {
 								if (categoryJson.has("longitude") && categoryJson.get("longitude") instanceof Double) {
 									longitude = categoryJson.getDouble("longitude");
 								}
-								LatLng location = new LatLng(latitude, longitude);
+								User location = new User();
+								location.setLatitude(latitude);
+								location.setLongitude(longitude);
 								wishes.add(location);
 							}
 						}

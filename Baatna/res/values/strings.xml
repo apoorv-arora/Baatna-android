@@ -95,5 +95,6 @@
     <string name="hang_on">Hang on boss, we are sending the request..</string>
     <string name="update_message">We just rolled out another feature. You will have to update your application to see it.</string>
     <string name="update">Update</string>
+    <string name="your_neighbourhood">Your neighborhood</string>
 
 </resources>

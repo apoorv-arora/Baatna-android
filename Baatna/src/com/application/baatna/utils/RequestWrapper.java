@@ -139,9 +139,9 @@ public class RequestWrapper {
 			}
 			return categories;
 		} else if(Type == NEARBY_USERS) {
-			ArrayList<LatLng> categories = null;
+			ArrayList<User> categories = null;
 			try{
-				categories = (ArrayList<LatLng>) ParserJson.parse_NearbyUsers(result);
+				categories = (ArrayList<User>) ParserJson.parse_NearbyUsers(result);
 			} catch(JSONException e) {
 				e.printStackTrace();
 			}

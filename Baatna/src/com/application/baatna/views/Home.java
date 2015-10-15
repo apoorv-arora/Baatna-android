@@ -294,8 +294,8 @@ public class Home extends AppCompatActivity
 			CommonLib.ZLog("rate dialog", "rate_dialog_trigger is now " + rateDialogCounterTrigger);
 		}
 
-		zapp.startLocationCheck();
 		UploadManager.addCallback(this);
+		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
 	}
 
 	private void setUpFAB() {
@@ -775,7 +775,6 @@ public class Home extends AppCompatActivity
 	@Override
 	public void onCoordinatesIdentified(Location loc) {
 		if (loc != null) {
-			displayAddressMap((ImageView)headerView.findViewById(R.id.search_map), loc);
 			UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
 		}
 	}
@@ -862,9 +861,10 @@ public class Home extends AppCompatActivity
 			Crashlytics.logException(e);
 		}
 
-//		View inflatedView = inflater.inflate(R.layout.google_map_view_layout, null);
-//		mMapView = (MapView) headerView.findViewById(R.id.search_map);
-//		mMapView.onCreate(savedInstanceState);
+		// View inflatedView = inflater.inflate(R.layout.google_map_view_layout,
+		// null);
+		// mMapView = (MapView) headerView.findViewById(R.id.search_map);
+		// mMapView.onCreate(savedInstanceState);
 
 		prefs = getSharedPreferences("application_settings", 0);
 		zapp = (BaatnaApp) getApplication();
@@ -875,8 +875,8 @@ public class Home extends AppCompatActivity
 		lat = zapp.lat;
 		lon = zapp.lon;
 
-//		refreshMap();
-		new GetCategoriesList().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+		// refreshMap();
+//		new GetCategoriesList().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
 
 	private void updateMapPoints(ArrayList<LatLng> locations) {
@@ -1849,34 +1849,38 @@ public class Home extends AppCompatActivity
 
 		}
 	}
-	
-	private void displayAddressMap(ImageView addressMap, Location loc) {
 
-        addressMap.getLayoutParams().width = width;
+	private void displayAddressMap(ImageView addressMap, double lot, double lon) {
 
-//        ((FrameLayout) addressMap.getParent()).getLayoutParams().height = 3 * width / 10;
-        ((FrameLayout) addressMap.getParent()).getLayoutParams().width = width;
-        addressMap.getLayoutParams().width = width;
-//        addressMap.getLayoutParams().width = mapWidth;
+		addressMap.getLayoutParams().width = width;
 
-//        ((RelativeLayout.LayoutParams) ((FrameLayout) addressMap.getParent()).getLayoutParams()).setMargins(0, width / 40, 0, 0);
+		// ((FrameLayout) addressMap.getParent()).getLayoutParams().height = 3 *
+		// width / 10;
+		((FrameLayout) addressMap.getParent()).getLayoutParams().width = width;
+		addressMap.getLayoutParams().width = width;
+		// addressMap.getLayoutParams().width = mapWidth;
 
-        String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + loc.getLatitude() + "," + loc.getLongitude()
-                + "&zoom=14&size=320x160&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|" + loc.getLatitude() + ","
-                + loc.getLongitude();
+		// ((RelativeLayout.LayoutParams) ((FrameLayout)
+		// addressMap.getParent()).getLayoutParams()).setMargins(0, width / 40,
+		// 0, 0);
 
-        //CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type, mapWidth, height, useDiskCache, fastBlur);
-        setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width, width / 2, false, false);
+		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon
+				+ "&zoom=14&size=320x160&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|"
+				+ lat + "," + lon;
 
-        // click
-        ((FrameLayout) addressMap.getParent()).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	Intent intent = new Intent(Home.this, MapActivity.class);
+		// CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type,
+		// mapWidth, height, useDiskCache, fastBlur);
+		setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width, width / 2, false, false);
+
+		// click
+		((FrameLayout) addressMap.getParent()).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Home.this, MapActivity.class);
 				startActivity(intent);
-            }
-        });
+			}
+		});
 
-    }
+	}
 
 }
