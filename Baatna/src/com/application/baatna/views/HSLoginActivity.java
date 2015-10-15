@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -69,6 +70,26 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		setListeners();
 		setUpActionBar();
 		UploadManager.addCallback(this);
+	}
+	
+	private void setListViewHeightBasedOnChildren(ListView listView) {
+		ListAdapter listAdapter = listView.getAdapter();
+		if (listAdapter == null) {
+			// pre-condition
+			return;
+		}
+
+		int totalHeight = 0;
+		for (int i = 0; i < listAdapter.getCount(); i++) {
+			View listItem = listAdapter.getView(i, null, listView);
+			listItem.measure(0, 0);
+			totalHeight += listItem.getMeasuredHeight();
+		}
+
+		ViewGroup.LayoutParams params = listView.getLayoutParams();
+		params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+		listView.setLayoutParams(params);
+		listView.requestLayout();
 	}
 
 	private void setUpActionBar() {
@@ -169,13 +190,13 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 
 		((LinearLayout.LayoutParams) findViewById(R.id.institutionEt).getLayoutParams()).setMargins(width / 20,
 				width / 20, width / 20, width / 40);
-		((LinearLayout.LayoutParams) findViewById(R.id.branch_Et).getLayoutParams()).setMargins(width / 20,
-				width / 20, width / 20, width / 40);
+		((LinearLayout.LayoutParams) findViewById(R.id.branch_Et).getLayoutParams()).setMargins(width / 20, width / 20,
+				width / 20, width / 40);
 		((LinearLayout.LayoutParams) findViewById(R.id.year_selector).getLayoutParams()).setMargins(width / 20,
 				width / 20, width / 20, width / 40);
 		((LinearLayout.LayoutParams) findViewById(R.id.phone_number).getLayoutParams()).setMargins(width / 20,
 				width / 20, width / 20, width / 20);
-		
+
 		((LinearLayout.LayoutParams) findViewById(R.id.submit_button).getLayoutParams()).setMargins(width / 20,
 				width / 20, width / 20, 0);
 	}
@@ -360,7 +381,8 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	private void setInstitutions(ArrayList<Institution> categories) {
 		adapter1 = new SimpleListAdapter(mActivity, R.layout.simple_list_item, categories);
 		mSubzoneSearchListView.setAdapter(adapter1);
-		
+		setListViewHeightBasedOnChildren(mSubzoneSearchListView);
+
 	}
 
 	private class SimpleListAdapter extends ArrayAdapter<Institution> {
@@ -411,10 +433,11 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 				public void onClick(View v) {
 					((TextView) findViewById(R.id.institutionEt)).setText(((TextView) v).getText().toString());
 					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
-					
+
 					branchAdapter = new BranchListAdapter(mActivity, R.layout.simple_list_item, wish.getBranches());
 					mBranchListView.setAdapter(branchAdapter);
-					
+					setListViewHeightBasedOnChildren(mBranchListView);
+
 					findViewById(R.id.branch_Et).requestFocus();
 				}
 			});
@@ -422,7 +445,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		}
 
 	}
-	
+
 	private class BranchListAdapter extends ArrayAdapter<String> {
 
 		private ArrayList<String> wishes;
