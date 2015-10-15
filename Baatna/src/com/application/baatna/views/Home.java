@@ -70,7 +70,6 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1803,6 +1802,58 @@ public class Home extends AppCompatActivity
 			});
 
 		} catch (Exception e) {
+
+		}
+	}
+
+	// get institution name list...
+	private class AppConfig extends AsyncTask<Object, Void, Object> {
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Object... params) {
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "appConfig/version?";
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.APP_CONFIG_VERSION, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+
+			if (result != null) {
+				// if true show the dialog, else do not show the dialog
+				new AlertDialog.Builder(mContext).setMessage(getResources().getString(R.string.update_message))
+						.setPositiveButton(getResources().getString(R.string.update),
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+										CommonLib.ZLog("Update", "update now");
+										try {
+											Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+													Uri.parse("market://details?id=" + getPackageName()));
+											startActivity(browserIntent);
+										} catch (ActivityNotFoundException e) {
+										} catch (Exception e) {
+										}
+										dialog.dismiss();
+									}
+								})
+						.show();
+				// if (result instanceof ArrayList<?>) {
+				// updateMapPoints((ArrayList<LatLng>) result);
+				// }
+			} else {
+			}
 
 		}
 	}

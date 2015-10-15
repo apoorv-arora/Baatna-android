@@ -49,6 +49,7 @@ public class RequestWrapper {
 	public static final String NEWS_FEED = "news_feed";
 	public static final String MESSAGES_COMPACT = "messages_compact";
 	public static final String USER_INFO = "user_info";
+	public static final String APP_CONFIG_VERSION = "appConfig_version";
 
 	public static void Initialize(Context context) {
 		prefs = context.getSharedPreferences("application_settings", 0);
