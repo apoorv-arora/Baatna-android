@@ -296,6 +296,8 @@ public class Home extends AppCompatActivity
 
 		UploadManager.addCallback(this);
 		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
+		
+		new AppConfig().execute(null, null, null);
 	}
 
 	private void setUpFAB() {
@@ -876,7 +878,7 @@ public class Home extends AppCompatActivity
 		lon = zapp.lon;
 
 		// refreshMap();
-//		new GetCategoriesList().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+		// new GetCategoriesList().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
 
 	private void updateMapPoints(ArrayList<LatLng> locations) {
@@ -1823,27 +1825,26 @@ public class Home extends AppCompatActivity
 			if (destroyed)
 				return;
 
-			if (result != null) {
-				// if true show the dialog, else do not show the dialog
-				new AlertDialog.Builder(mContext).setMessage(getResources().getString(R.string.update_message))
-						.setPositiveButton(getResources().getString(R.string.update),
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int which) {
-										CommonLib.ZLog("Update", "update now");
-										try {
-											Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-													Uri.parse("market://details?id=" + getPackageName()));
-											startActivity(browserIntent);
-										} catch (ActivityNotFoundException e) {
-										} catch (Exception e) {
+			if (result != null && result instanceof Boolean) {
+				if (!(Boolean) result) {
+					// if true show the dialog, else do not show the dialog
+					new AlertDialog.Builder(mContext).setMessage(getResources().getString(R.string.update_message))
+							.setCancelable(false).setPositiveButton(getResources().getString(R.string.update),
+									new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog, int which) {
+											CommonLib.ZLog("Update", "update now");
+											try {
+												Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+														Uri.parse("market://details?id=" + getPackageName()));
+												startActivity(browserIntent);
+											} catch (ActivityNotFoundException e) {
+											} catch (Exception e) {
+											}
+											dialog.dismiss();
 										}
-										dialog.dismiss();
-									}
-								})
-						.show();
-				// if (result instanceof ArrayList<?>) {
-				// updateMapPoints((ArrayList<LatLng>) result);
-				// }
+									})
+							.show();
+				}
 			} else {
 			}
 

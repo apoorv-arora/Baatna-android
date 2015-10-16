@@ -32,15 +32,15 @@ import android.content.SharedPreferences;
 public class RequestWrapper {
 	private static SharedPreferences prefs;
 	private static BaatnaApp zapp;
-	
-	//cache time
+
+	// cache time
 	public static final int FAV = -1;
 	public static final int TEMP = 86400;
 	public static final int CONSTANT = 1209600;
 	public static final int ONE_HOUR = 3600;
 	public static final int THREE_HOURS = 3600 * 3;
-	
-	//contant identifiers
+
+	// contant identifiers
 	public static final String USER_MESSAGES = "user_messages";
 	public static final String CATEGORIES_LIST = "categories_list";
 	public static final String WISH_LIST = "wish_list";
@@ -54,7 +54,7 @@ public class RequestWrapper {
 	public static void Initialize(Context context) {
 		prefs = context.getSharedPreferences("application_settings", 0);
 	}
-	
+
 	public static InputStream fetchhttp(String urlstring) {
 
 		String value = null;
@@ -69,18 +69,20 @@ public class RequestWrapper {
 			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
-			
+			nameValuePairs.add(new BasicNameValuePair("version", CommonLib.VERSION_STRING));
+
 			nameValuePairs.add(new BasicNameValuePair("latitude", prefs.getString("latitude", "0")));
 			nameValuePairs.add(new BasicNameValuePair("longitude", prefs.getString("longitude", "0")));
-			
+
 			if (nameValuePairs != null)
 				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 			CommonLib.ZLog("AccessToken: ", prefs.getString("access_token", ""));
 
-//			if (CommonLib.isTestBuild)
-//				httpPost.addHeader(new BasicHeader("Authorization", "Basic emRldjpvSnU0Rm9oY2hvb20zY2hhPWcmbw==")); // ZDEV (new)
-//			else
-//				httpPost.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
+			// if (CommonLib.isTestBuild)
+			// httpPost.addHeader(new BasicHeader("Authorization", "Basic
+			// emRldjpvSnU0Rm9oY2hvb20zY2hhPWcmbw==")); // ZDEV (new)
+			// else
+			// httpPost.addHeader(new BasicHeader("Accept-Encoding", "gzip"));
 
 			long timeBeforeApiCall = System.currentTimeMillis();
 			HttpResponse response = HttpManager.execute(httpPost);
@@ -100,81 +102,89 @@ public class RequestWrapper {
 		}
 		return null;
 	}
-	
+
 	public static Object RequestHttp(String url, String Object_Type, int status) {
 		Object o = null;
 		InputStream http_result;
 
-		http_result = fetchhttp(url);		
+		http_result = fetchhttp(url);
 		o = parse(http_result, Object_Type);
 		return o;
 	}
-	
+
 	public static Object parse(InputStream result, String Type) {
 
 		Object o = null;
 
 		if (Type == CATEGORIES_LIST) {
 			ArrayList<Categories> categories = null;
-			try{
+			try {
 				categories = (ArrayList<Categories>) ParserJson.parse_Categories(result);
-			} catch(JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return categories;
-		} else if(Type == WISH_LIST) {
+		} else if (Type == WISH_LIST) {
 			Object[] categories = null;
-			try{
+			try {
 				categories = (Object[]) ParserJson.parse_Wishes(result);
-			} catch(JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return categories;
-		} else if(Type == INSTITUTIONS_LIST) {
+		} else if (Type == INSTITUTIONS_LIST) {
 			ArrayList<Institution> categories = null;
-			try{
+			try {
 				categories = (ArrayList<Institution>) ParserJson.parse_Institutions(result);
-			} catch(JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return categories;
-		} else if(Type == NEARBY_USERS) {
+		} else if (Type == NEARBY_USERS) {
 			ArrayList<User> categories = null;
-			try{
+			try {
 				categories = (ArrayList<User>) ParserJson.parse_NearbyUsers(result);
-			} catch(JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return categories;
-		} else if(Type == NEWS_FEED) {
+		} else if (Type == NEWS_FEED) {
 			Object[] feedItems = null;
-			try{
+			try {
 				feedItems = (Object[]) ParserJson.parse_NewsFeedResponse(result);
-			} catch(JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return feedItems;
-		} else if(Type == USER_INFO) {
+		} else if (Type == USER_INFO) {
 			User feedItems = null;
-			try{
+			try {
 				feedItems = (User) ParserJson.parse_UserResponse(result);
-			} catch(JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return feedItems;
-		}  else if(Type == MESSAGES_COMPACT) {
+		} else if (Type == MESSAGES_COMPACT) {
 			ArrayList<UserComactMessage> items = null;
 			try {
 				items = (ArrayList<UserComactMessage>) ParserJson.parse_UserCompactMessageResponse(result);
-			} catch(JSONException e) {
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return items;
-		}  
-		
+		} else if (Type == APP_CONFIG_VERSION) {
+			boolean latestVersion = true;
+			try {
+				latestVersion = (Boolean) ParserJson.parse_AppConfig(result);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return latestVersion;
+		}
+
 		return o;
 	}
-	
+
 	public static byte[] Serialize_Object(Object O) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream out = new ObjectOutputStream(bos);
@@ -201,7 +211,7 @@ public class RequestWrapper {
 			in.close();
 			return null;
 		}
-		
+
 	}
 
 }

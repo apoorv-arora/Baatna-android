@@ -298,8 +298,8 @@ public class ParserJson {
 								if (categoryJson.has("branches") && categoryJson.get("branches") instanceof JSONArray) {
 									JSONArray branchArr = categoryJson.getJSONArray("branches");
 									ArrayList<String> branches = new ArrayList<String>();
-									for(int j=0 ;j<branchArr.length();j++) {
-										branches.add( String.valueOf(branchArr.get(j)) );
+									for (int j = 0; j < branchArr.length(); j++) {
+										branches.add(String.valueOf(branchArr.get(j)));
 									}
 									institution.setBranches(branches);
 								}
@@ -396,15 +396,15 @@ public class ParserJson {
 			if (userObject.has("user_name")) {
 				returnUser.setUserName(String.valueOf(userObject.get("user_name")));
 			}
-			
+
 			if (userObject.has("fbId")) {
 				returnUser.setFbId(String.valueOf(userObject.get("fbId")));
 			}
-			
+
 			if (userObject.has("contact")) {
 				returnUser.setContact(String.valueOf(userObject.get("contact")));
 			}
-			
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -603,4 +603,22 @@ public class ParserJson {
 		}
 		return response;
 	}
+
+	public static boolean parse_AppConfig(InputStream is) throws JSONException {
+		boolean response = true;
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+
+			if (responseObject.getString("status").equals("success")) {
+
+				if (responseObject.has("response") && responseObject.get("response") instanceof Boolean) {
+					response = responseObject.getBoolean("response");
+				}
+			}
+		}
+		return response;
+	}
+
 }
