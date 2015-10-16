@@ -69,7 +69,7 @@ public class RequestWrapper {
 			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
-			nameValuePairs.add(new BasicNameValuePair("version", CommonLib.VERSION_STRING));
+			nameValuePairs.add(new BasicNameValuePair("app_version", CommonLib.VERSION_STRING));
 
 			nameValuePairs.add(new BasicNameValuePair("latitude", prefs.getString("latitude", "0")));
 			nameValuePairs.add(new BasicNameValuePair("longitude", prefs.getString("longitude", "0")));

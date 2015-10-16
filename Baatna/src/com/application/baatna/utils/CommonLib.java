@@ -70,8 +70,8 @@ public class CommonLib {
 	// "52.76.6.41:8080/BaatnaServer/rest/";
 	// public static String SERVER_WITHOUT_VERSION =
 	// "http://52.76.6.41:8080/BaatnaServer/rest/";
-	public static final String SERVER_BODY = "192.168.1.35:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.35:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "192.168.2.19:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.19:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 

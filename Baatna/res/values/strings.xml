@@ -96,5 +96,6 @@
     <string name="update_message">We just rolled out another feature. You will have to update your application to see it.</string>
     <string name="update">Update</string>
     <string name="your_neighbourhood">Your neighborhood</string>
+    <string name="help_out">Help %1$s out</string>
 
 </resources>

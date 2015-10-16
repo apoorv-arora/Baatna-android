@@ -16,6 +16,7 @@ import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.ParserJson;
 import com.application.baatna.utils.facebook.FriendChecker;
 import com.application.baatna.views.MessagesActivity;
+import com.application.baatna.views.WishActivity;
 import com.application.baatna.views.WishboxActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -100,20 +101,45 @@ public class GcmIntentService extends IntentService {
 					notificationActivity.putExtra("user", messageObj.getFromUser());
 					notificationActivity.putExtra("wish", messageObj.getWish());
 					notificationActivity.putExtra("type", type);
-					
-//					boolean object = CommonLib.getCurrentActiveActivity(context);
-//					if(object) {
-//						Intent intent = new Intent();
-//					}
-					
+
+					// boolean object =
+					// CommonLib.getCurrentActiveActivity(context);
+					// if(object) {
+					// Intent intent = new Intent();
+					// }
+
 				}
 
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+		} else if (type != null && type.equals("newWish")) {
+			JSONObject message = null;
+			try {
+				message = new JSONObject(msg);
+				notificationActivity = new Intent(this, WishActivity.class);
+				User mUser = null;
+				Wish mWish = null;
+				if (message.has("message")) {
+					msg = String.valueOf(message.get("message"));
+				}
+				if (message.has("wish") && message.get("wish") instanceof JSONObject
+						&& message.getJSONObject("wish").has("wish")) {
+					mWish = ParserJson.parse_Wish(message.getJSONObject("wish").getJSONObject("wish"));
+				}
+
+				if (message.has("user") && message.getJSONObject("user").has("user")) {
+					mUser = ParserJson.parse_User(message.getJSONObject("user").getJSONObject("user"));
+				}
+
+				notificationActivity.putExtra("user", mUser);
+				notificationActivity.putExtra("wish", mWish);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		} else if (type != null && type.equals("wish")) {
 			JSONObject message = null;
-			 
+
 			try {
 				message = new JSONObject(msg);
 				if (message.has("wish") && message.getJSONObject("wish").has("wish")) {
@@ -121,20 +147,23 @@ public class GcmIntentService extends IntentService {
 					if (messageObj != null) {
 						if (message.has("from_user") && message.getJSONObject("from_user").has("user")) {
 							User user = ParserJson.parse_User(message.getJSONObject("from_user").getJSONObject("user"));
-							boolean isFriendOnFacebook = FriendChecker.isFriendOnFacebook ( prefs.getString("fbId", ""), user.getFbId(), prefs.getString("fb_token", "") ) ;
-							if(isFriendOnFacebook) {
-								msg = user.getUserName() + " offered you a " + messageObj.getTitle() + ". Start chatting!";
+							boolean isFriendOnFacebook = FriendChecker.isFriendOnFacebook(prefs.getString("fbId", ""),
+									user.getFbId(), prefs.getString("fb_token", ""));
+							if (isFriendOnFacebook) {
+								msg = user.getUserName() + " offered you a " + messageObj.getTitle()
+										+ ". Start chatting!";
 								notificationActivity = new Intent(this, MessagesActivity.class);
 								notificationActivity.putExtra("user", user);
 								notificationActivity.putExtra("wish", messageObj);
 								notificationActivity.putExtra("type", type);
-							} else if ( CommonLib.hasContact(this, user.getContact()) ){
-								msg = user.getUserName() + " offered you a " + messageObj.getTitle() + ". Start chatting!";
+							} else if (CommonLib.hasContact(this, user.getContact())) {
+								msg = user.getUserName() + " offered you a " + messageObj.getTitle()
+										+ ". Start chatting!";
 								notificationActivity = new Intent(this, MessagesActivity.class);
 								notificationActivity.putExtra("user", user);
 								notificationActivity.putExtra("wish", messageObj);
 								notificationActivity.putExtra("type", type);
-							} else 
+							} else
 								showNotification = false;
 						}
 					}
@@ -154,7 +183,7 @@ public class GcmIntentService extends IntentService {
 				.setContentTitle("Baatna").setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
 				.setContentText(msg).setSound(soundUri);
 		mBuilder.setContentIntent(contentIntent);
-		if(showNotification)
+		if (showNotification)
 			mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 	}
 

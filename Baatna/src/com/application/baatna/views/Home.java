@@ -1171,8 +1171,8 @@ public class Home extends AppCompatActivity
 
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
 					.setMargins(width / 40, 0, width / 40, 0);
-			viewHolder.accept.setPadding(width / 20, 0, width / 20, width / 20);
-			viewHolder.decline.setPadding(width / 20, 0, width / 20, width / 20);
+			viewHolder.accept.setPadding(width / 20, 0, width / 20, 0);
+			viewHolder.decline.setPadding(width / 20, 0, width / 20, 0);
 
 			final User user = feedItem.getUserIdFirst();
 
