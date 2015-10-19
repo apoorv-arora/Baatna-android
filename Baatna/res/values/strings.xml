@@ -97,5 +97,8 @@
     <string name="update">Update</string>
     <string name="your_neighbourhood">Your neighborhood</string>
     <string name="help_out">Help %1$s out</string>
+    <string name="terms">Terms</string>
+    <string name="redeem_request">Fulfill a Request to Redeem</string>
+    <string name="redeem_fulfill">Redeem the coupon</string>
 
 </resources>

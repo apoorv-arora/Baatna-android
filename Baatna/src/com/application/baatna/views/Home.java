@@ -296,7 +296,7 @@ public class Home extends AppCompatActivity
 
 		UploadManager.addCallback(this);
 		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
-		
+
 		new AppConfig().execute(null, null, null);
 	}
 
@@ -815,7 +815,7 @@ public class Home extends AppCompatActivity
 	}
 
 	public void redeem(View v) {
-		// startActivity(new Intent(this, FeedbackPage.class));
+		startActivity(new Intent(this, RedeemPage.class));
 	}
 
 	@Override

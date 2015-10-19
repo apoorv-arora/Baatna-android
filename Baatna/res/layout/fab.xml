@@ -35,7 +35,7 @@
             android:onClick="actionBarSelected"
             fab:fab_colorNormal="@color/zomato_red"
             fab:fab_colorPressed="@color/zomato_red_secondary"
-            fab:fab_icon="@drawable/fab_check_in"
+            fab:fab_icon="@drawable/fab_icon"
             fab:fab_labelStyle="@style/fab_labels_style"
             fab:fab_size="normal"
             fab:fab_title="@string/post_request" />
