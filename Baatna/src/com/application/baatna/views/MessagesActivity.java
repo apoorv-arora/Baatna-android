@@ -109,10 +109,22 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		sendMessageButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
+				long objectId = System.currentTimeMillis();
 				String message = messageText.getText().toString();
 				UploadManager.sendMessage(currentUser.getUserId() + "", message,
-						currentWish.getWishId() + "");
+						currentWish.getWishId() + "", objectId);
 				messageText.setText("");
+				
+				Message msg = new Message();
+				msg.setFromTo(true);
+				msg.setMessage(message);
+				msg.setToUser(currentUser);
+				msg.setWish(currentWish);
+				msg.setMessageId(objectId);
+				
+				messages.add(msg);
+				mAdapter.notifyDataSetChanged();
+				messageList.setSelection(messages.size()-1);
 			}
 		});
 
@@ -368,18 +380,11 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 			if (!destroyed) {
 				if (status) { // add to DB with the message Id
 					if (data != null && data instanceof Message) {
-//						Message message = new Message();
-//						message.setFromTo(true);
-//						message.setFromUser(currentUser);
-//						message.setMessage(messageText.getText().toString());
-//						message.setMessageId(Integer.parseInt(String.valueOf(data)));
-//						message.setToUser(currentUser);
-//						message.setWish(currentWish);
 						MessageDBWrapper.addMessage((Message) data, ((Message) data).getToUser().getUserId(),
 								((Message) data).getWish().getWishId(), System.currentTimeMillis());
-						messages.add((Message) data);
-						mAdapter.notifyDataSetChanged();
-						messageList.setSelection(messages.size()-1);
+//						messages.add((Message) data);
+//						mAdapter.notifyDataSetChanged();
+//						messageList.setSelection(messages.size()-1);
 					}
 				} else {// show retry button
 					Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();

@@ -158,13 +158,13 @@ public class UploadManager {
 	}
 
 	
-	public static void sendMessage(String userId, String message, String wishId) {
+	public static void sendMessage(String userId, String message, String wishId, long objectId) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.SIGNUP, 0, userId, null);
 		}
 
 		new SendMessage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { userId, message, wishId});
+				new Object[] { userId, message, wishId, ""+objectId});
 
 	}
 
@@ -589,6 +589,7 @@ public class UploadManager {
 		private String userId;
 		private String message;
 		private String wishId;
+		private String objectId;
 
 		@Override
 		protected Object[] doInBackground(Object... params) {
@@ -597,6 +598,7 @@ public class UploadManager {
 			userId = (String) params[0];
 			message = (String) params[1];
 			wishId = (String) params[2];
+			objectId = (String) params[3];
 			
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("userId", userId));
