@@ -57,6 +57,8 @@ public class WishFragment extends Fragment implements UploadManagerCallback {
 	private boolean cancelled = false;
 	private boolean loading = false;
 	private int count = 10;
+	
+	public static final int WISH_OWN = 2;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +78,10 @@ public class WishFragment extends Fragment implements UploadManagerCallback {
 		height = getActivity().getWindowManager().getDefaultDisplay().getHeight();
 		vi = LayoutInflater.from(activity.getApplicationContext());
 
+		mListView = (ListView) getView.findViewById(R.id.wish_list);
+		mListView.setDivider(null);
+		mListView.setDividerHeight(0);
+		
 		setListeners();
 		refreshView();
 		UploadManager.addCallback(this);
@@ -125,7 +131,7 @@ public class WishFragment extends Fragment implements UploadManagerCallback {
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "wish/view?start=0&count=" + count;
+				url = CommonLib.SERVER + "wish/get?type="+WISH_OWN+"&start=0&count=" + count;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
@@ -323,7 +329,7 @@ public class WishFragment extends Fragment implements UploadManagerCallback {
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "wish/view?start=" + start + "&count=" + count;
+				url = CommonLib.SERVER + "wish/get?type="+WISH_OWN+"&start="+start+"&count=" + count;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;

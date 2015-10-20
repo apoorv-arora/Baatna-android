@@ -13,11 +13,14 @@ import com.application.baatna.utils.pager.ZTabClickCallback;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.SparseArray;
@@ -30,10 +33,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class WishHistoryActivity extends ActionBarActivity implements ZTabClickCallback {
+public class WishHistoryActivity extends FragmentActivity implements ZTabClickCallback {
 
-	public static final int WISH_OFFERED = 1;
-	public static final int WISH_OWN = 2;
+	public static final int WISH_OFFERED = 0;
+	public static final int WISH_OWN = 1;
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -55,8 +58,8 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 
 		homePager = (NoSwipeViewPager) findViewById(R.id.home_pager);
 		homePager.setAdapter(new HomePagerAdapter(getSupportFragmentManager()));
-		homePager.setOffscreenPageLimit(1);
-		homePager.setCurrentItem(WISH_OWN);
+		homePager.setOffscreenPageLimit(2);
+		homePager.setCurrentItem(WISH_OFFERED);
 		homePager.setSwipeable(true);
 		setupActionBar();
 		setUpTabs();
@@ -68,15 +71,15 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 		tabs.setmZomatoHome(true);
 		tabs.setAllCaps(false);
 		tabs.setForegroundGravity(Gravity.LEFT);
-		tabs.setShouldExpand(false);
+		tabs.setShouldExpand(true);
 		tabs.setViewPager(homePager);
-		tabs.setDividerColor(getResources().getColor(R.color.transparent1));
-		tabs.setBackgroundColor(getResources().getColor(R.color.zomato_red_secondary));
+		tabs.setDividerColor(getResources().getColor(R.color.zhl_dark));
+		tabs.setBackgroundColor(getResources().getColor(R.color.white));
 		tabs.setUnderlineColor(getResources().getColor(R.color.zhl_dark));
 		tabs.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold), 0);
-		tabs.setIndicatorColor(getResources().getColor(R.color.white));
+		tabs.setIndicatorColor(getResources().getColor(R.color.zhl_darker));
 		tabs.setIndicatorHeight((int) getResources().getDimension(R.dimen.height3));
-		tabs.setTextSize((int) getResources().getDimension(R.dimen.size15));
+		tabs.setTextSize((int) getResources().getDimension(R.dimen.size16));
 		tabs.setUnderlineHeight(0);
 		tabs.setTabPaddingLeftRight(12);
 		tabs.setInterfaceForClick(this);
@@ -84,16 +87,14 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 		final int tabsUnselectedColor = R.color.zhl_darker;
 		final int tabsSelectedColor = R.color.white;
 
-		final TextView homeSearchHeader = (TextView) ((LinearLayout) tabs.getChildAt(0)).getChildAt(WISH_OFFERED);
-		final TextView homeNearbyHeader = (TextView) ((LinearLayout) tabs.getChildAt(0)).getChildAt(WISH_OWN);
+//		final TextView homeSearchHeader = (TextView) ((LinearLayout) tabs.getChildAt(0)).getChildAt(WISH_OWN);
+		final TextView homeFeedHeader = (TextView) ((LinearLayout) tabs.getChildAt(0)).getChildAt(WISH_OFFERED);
 
-		homeSearchHeader.setTextColor(getResources().getColor(tabsSelectedColor));
-		homeNearbyHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
-
-		// setPageChangeListenerOnTabs(tabs, tabsUnselectedColor,
-		// tabsSelectedColor, homeSearchHeader, homeNearbyHeader);
+//		homeSearchHeader.setTextColor(getResources().getColor(tabsSelectedColor));
+		homeFeedHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
+		setPageChangeListenerOnTabs(tabs, tabsUnselectedColor, tabsSelectedColor, homeFeedHeader);
 	}
-	
+
 	private void setupActionBar() {
 		ActionBar actionBar = getActionBar();
 
@@ -107,7 +108,7 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(actionBarCustomView);
 
-		SpannableString s = new SpannableString(getString(R.string.your_wishbox));
+		SpannableString s = new SpannableString(getString(R.string.your_history));
 		s.setSpan(
 				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
 						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
@@ -129,7 +130,6 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 			break;
 		}
 	}
-
 
 	private class HomePagerAdapter extends FragmentStatePagerAdapter {
 
@@ -236,7 +236,7 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 		}
 
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -251,5 +251,138 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 		}
 	}
 
+	private void setPageChangeListenerOnTabs(PagerSlidingTabStrip tabs, final int tabsUnselectedColor,
+			final int tabsSelectedColor, final TextView homeFeedHeader) {
+		tabs.setOnPageChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int arg0) {
+
+				currentPageSelected = arg0;
+
+				// FeedFragment - Wish offered
+				if (fragments.get(WISH_OFFERED) != null) {
+					WishOfferedFragment upf = (WishOfferedFragment) fragments.get(WISH_OFFERED).get();
+					if (upf != null) {
+						// upf.stopRefreshing();
+					}
+
+				} else {
+					HomePagerAdapter hAdapter = (HomePagerAdapter) homePager.getAdapter();
+					if (hAdapter != null) {
+						try {
+							WishOfferedFragment fragMent = (WishOfferedFragment) hAdapter.instantiateItem(homePager,
+									WISH_OFFERED);
+							if (fragMent != null) {
+								// fragMent.stopRefreshing();
+							}
+						} catch (Exception e) {
+						}
+					}
+				}
+
+				// SearchFragment - Wish Fragment
+				if (arg0 == WISH_OWN) {
+
+					if (fragments.get(WISH_OWN) != null) {
+
+						if (fragments.get(WISH_OWN).get() instanceof WishFragment) {
+							WishFragment srf = (WishFragment) fragments.get(WISH_OWN).get();
+							if (srf != null) {
+
+								// if (!srf.searchCallsInitiatedFromHome)
+								// srf.initiateSearchCallFromHome();
+
+							}
+						}
+
+					} else {
+						HomePagerAdapter hAdapter = (HomePagerAdapter) homePager.getAdapter();
+						if (hAdapter != null) {
+							try {
+								WishFragment fragMent = (WishFragment) hAdapter.instantiateItem(homePager, WISH_OWN);
+								if (fragMent != null) {
+
+									// if
+									// (!fragMent.searchCallsInitiatedFromHome)
+									// fragMent.initiateSearchCallFromHome();
+
+								}
+							} catch (Exception e) {
+								// Crashlytics.logException(e);
+							}
+						}
+					}
+
+//					homeSearchHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
+					homeFeedHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
+
+				} else if (arg0 == WISH_OFFERED) {
+
+//					homeSearchHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
+					homeFeedHeader.setTextColor(getResources().getColor(tabsSelectedColor));
+
+					if (fragments != null && fragments.get(WISH_OFFERED) != null) {
+
+						if (fragments.get(WISH_OFFERED).get() instanceof WishOfferedFragment) {
+							WishOfferedFragment ff = (WishOfferedFragment) fragments.get(WISH_OFFERED).get();
+							if (ff != null) {
+								try {
+									// if (!ff.feedDisplayed) {
+									// ff.feedDisplayed = true;
+									// ff.displayFeed();
+									// }
+								} catch (Exception e) {
+									// Crashlytics.logException(e);
+								}
+							}
+						}
+
+					} else {
+						HomePagerAdapter hAdapter = (HomePagerAdapter) homePager.getAdapter();
+						if (hAdapter != null) {
+							try {
+								WishOfferedFragment fragMent = (WishOfferedFragment) hAdapter.instantiateItem(homePager,
+										WISH_OFFERED);
+								if (fragMent != null) {
+									// if (!fragMent.feedDisplayed) {
+									// fragMent.feedDisplayed = true;
+									// fragMent.displayFeed();
+									// }
+								}
+							} catch (Exception e) {
+								// Crashlytics.logException(e);
+							}
+						}
+					}
+
+					try {
+						((DrawerLayout) findViewById(R.id.drawer_layout))
+								.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+					} catch (Exception e) {
+					}
+
+				}
+			}
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+				if (position == 0) {
+
+					int alphaValueUnderline = (int) ((((positionOffset - 0) * (255 - 0)) / (1 - 0)) + 0);
+					((PagerSlidingTabStrip) findViewById(R.id.tabs))
+							.setUnderlineColor(Color.argb(alphaValueUnderline, 228, 228, 228));
+
+				} else if (position > 0) {
+					((PagerSlidingTabStrip) findViewById(R.id.tabs)).setUnderlineColor(Color.argb(255, 228, 228, 228));
+				}
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+			}
+		});
+	}
 
 }

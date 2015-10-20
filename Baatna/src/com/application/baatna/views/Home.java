@@ -758,7 +758,8 @@ public class Home extends AppCompatActivity
 	}
 
 	public void openWishbox(View v) {
-		Intent intent = new Intent(this, WishboxActivity.class);
+//		Intent intent = new Intent(this, WishboxActivity.class);
+		Intent intent = new Intent(this, WishHistoryActivity.class);
 		startActivity(intent);
 	}
 
