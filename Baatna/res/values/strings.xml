@@ -100,5 +100,8 @@
     <string name="terms">Terms</string>
     <string name="redeem_request">Fulfill a Request to Redeem</string>
     <string name="redeem_fulfill">Redeem the coupon</string>
+    
+    <string name="your_wishes">Your wishes</string>
+    <string name="your_offers">Your offers</string>
 
 </resources>
