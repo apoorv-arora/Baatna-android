@@ -26,6 +26,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
+                android:scaleType="fitXY"
                 android:layout_toRightOf="@+id/left_bar"
                 android:src="@drawable/profile_icon" />
 

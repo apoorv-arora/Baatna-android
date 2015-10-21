@@ -1867,12 +1867,12 @@ public class Home extends AppCompatActivity
 		// 0, 0);
 
 		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon
-				+ "&zoom=14&size=320x160&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|"
+				+ "&zoom=14&size="+width+"x"+getResources().getDimensionPixelSize(R.dimen.height125)+"&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|"
 				+ lat + "," + lon;
 
 		// CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type,
 		// mapWidth, height, useDiskCache, fastBlur);
-		setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width, width / 2, false, false);
+		setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width, getResources().getDimensionPixelSize(R.dimen.height125), false, false);
 
 		// click
 		((FrameLayout) addressMap.getParent()).setOnClickListener(new OnClickListener() {

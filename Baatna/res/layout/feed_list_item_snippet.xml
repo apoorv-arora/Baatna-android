@@ -63,6 +63,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_toRightOf="@+id/left_bar"
+                android:scaleType="fitXY"
                 android:src="@drawable/profile_icon" />
 
             <com.application.baatna.utils.TextViewRegular

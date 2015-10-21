@@ -92,7 +92,7 @@
             android:layout_gravity="center"
             android:background="@drawable/profile_icon"
             android:gravity=""
-            android:scaleType="centerCrop" />
+            android:scaleType="fitXY" />
     </FrameLayout>
 
 </RelativeLayout>

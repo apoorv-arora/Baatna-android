@@ -37,7 +37,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="30dp"
                 android:layout_marginLeft="15dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="fitXY" />
 
             <View
                 android:id="@+id/drawer_user_info_background_image_overlay"
