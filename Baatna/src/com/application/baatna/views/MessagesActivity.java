@@ -240,12 +240,12 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 			
 			@Override
 			public void onClick(View v) {
-				View reviewDropDown = findViewById(R.id.dropdown_setting_layout);
-	            if (reviewDropDown.isShown())
-	                reviewDropDown.setVisibility(View.GONE);
-	            else {
-	                reviewDropDown.setVisibility(View.VISIBLE);
-	            }
+//				View reviewDropDown = findViewById(R.id.dropdown_setting_layout);
+//	            if (reviewDropDown.isShown())
+//	                reviewDropDown.setVisibility(View.GONE);
+//	            else {
+//	                reviewDropDown.setVisibility(View.VISIBLE);
+//	            }
 			}
 		});
 		

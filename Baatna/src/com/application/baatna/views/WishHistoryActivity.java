@@ -35,8 +35,8 @@ import android.widget.TextView;
 
 public class WishHistoryActivity extends FragmentActivity implements ZTabClickCallback {
 
-	public static final int WISH_OFFERED = 0;
-	public static final int WISH_OWN = 1;
+	public static final int WISH_OWN = 0;
+	public static final int WISH_OFFERED = 1;
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -59,7 +59,7 @@ public class WishHistoryActivity extends FragmentActivity implements ZTabClickCa
 		homePager = (NoSwipeViewPager) findViewById(R.id.home_pager);
 		homePager.setAdapter(new HomePagerAdapter(getSupportFragmentManager()));
 		homePager.setOffscreenPageLimit(2);
-		homePager.setCurrentItem(WISH_OFFERED);
+		homePager.setCurrentItem(WISH_OWN);
 		homePager.setSwipeable(true);
 		setupActionBar();
 		setUpTabs();
