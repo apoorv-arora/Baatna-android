@@ -42,7 +42,7 @@ public class NewRequestFragment extends Fragment {
 	private RequestCategoryAdapter mCategoriesAdapter;
 	private GetCategoriesList mAsyncTaskRunning;
 	private SharedPreferences prefs;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mInflater = inflater;
@@ -111,11 +111,22 @@ public class NewRequestFragment extends Fragment {
 		rootView.findViewById(R.id.post).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				String title = ((TextView) rootView.findViewById(R.id.category_et)).getText().toString();
+				String description = ((TextView) rootView.findViewById(R.id.description_et)).getText().toString();
+
+				if (title == null || title.length() < 1) {
+					Toast.makeText(mContext, "Please enter title of the request", Toast.LENGTH_SHORT).show();
+					((TextView) rootView.findViewById(R.id.category_et)).requestFocus();
+					return;
+				}
+
+				if (description == null || description.length() < 1) {
+					Toast.makeText(mContext, "Please enter description of the request", Toast.LENGTH_SHORT).show();
+					((TextView) rootView.findViewById(R.id.description_et)).requestFocus();
+					return;
+				}
 				
-				
-				UploadManager.postNewRequest(prefs.getString("access_token", ""),
-						((TextView) rootView.findViewById(R.id.category_et)).getText().toString(),
-						((TextView) rootView.findViewById(R.id.description_et)).getText().toString());
+				UploadManager.postNewRequest(prefs.getString("access_token", ""), title, description);
 				try {
 					InputMethodManager imm = (InputMethodManager) mContext
 							.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -261,14 +272,16 @@ public class NewRequestFragment extends Fragment {
 				v.setTag(viewHolder);
 			}
 
-			if(position % 2 == 0) {
-				v.findViewById(R.id.request_category_root).setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.zhlbuttonfollow));
+			if (position % 2 == 0) {
+				v.findViewById(R.id.request_category_root)
+						.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.zhlbuttonfollow));
 			} else {
-				v.findViewById(R.id.request_category_root).setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.whitebuttoncustomback));
+				v.findViewById(R.id.request_category_root)
+						.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.whitebuttoncustomback));
 			}
-			
+
 			v.findViewById(R.id.proceed_icon).setPadding(width / 20, 0, width / 20, 0);
-			
+
 			viewHolder.category_label.setText(categoryName.getCategory());
 			viewHolder.category_image.setText(categoryName.getCategoryIcon());
 			viewHolder.category_label.setPadding(width / 40, width / 40, width / 20, width / 40);
@@ -278,7 +291,7 @@ public class NewRequestFragment extends Fragment {
 				public void onClick(View v) {
 					TextView view = (TextView) v;
 					if (view != null && view.getText() != null) {
-//						setSelectedCategory(view.getText().toString());
+						// setSelectedCategory(view.getText().toString());
 						Intent intent = new Intent(mContext, CategoryItemSelectionFragment.class);
 						intent.putExtra("category_id", categoryName.getCategoryId());
 						mContext.startActivityForResult(intent, CategoryItemSelectionFragment.requestCode);
