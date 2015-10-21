@@ -25,16 +25,21 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class HSLoginActivity extends Activity implements UploadManagerCallback {
@@ -71,7 +76,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		setUpActionBar();
 		UploadManager.addCallback(this);
 	}
-	
+
 	private void setListViewHeightBasedOnChildren(ListView listView) {
 		ListAdapter listAdapter = listView.getAdapter();
 		if (listAdapter == null) {
@@ -205,21 +210,43 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		findViewById(R.id.submit_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String institutionName = ((TextView) findViewById(R.id.institutionEt)).getText().toString();
-				String branchName = ((TextView) findViewById(R.id.branch_Et)).getText().toString();
-				int year = Integer.parseInt(((TextView) findViewById(R.id.year_selector)).getText().toString());
-				String phoneNumber = ((TextView) findViewById(R.id.phone_number)).getText().toString();
-				z_ProgressDialog = ProgressDialog.show(HSLoginActivity.this, null,
-						getResources().getString(R.string.verifying_creds), true, false);
-				z_ProgressDialog.setCancelable(false);
-				UploadManager.updateInstitution(prefs.getString("access_token", ""), institutionName, "", year,
-						branchName, phoneNumber);
+				makeLoginCall();
 			}
 		});
 		findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				refreshView();
+			}
+		});
+
+		((TextView) findViewById(R.id.institutionEt)).setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					if (((TextView) v).length() >= 0)
+						findViewById(R.id.subzone_search_list_view_container).setVisibility(View.VISIBLE);
+					else
+						findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
+				} else {
+					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
+				}
+			}
+		});
+
+		((TextView) findViewById(R.id.branch_Et)).setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					if (((TextView) v).length() >= 0)
+						findViewById(R.id.branch_list_container).setVisibility(View.VISIBLE);
+					else
+						findViewById(R.id.branch_list_container).setVisibility(View.GONE);
+				} else {
+					findViewById(R.id.branch_list_container).setVisibility(View.GONE);
+				}
 			}
 		});
 
@@ -239,7 +266,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 			@Override
 			public void afterTextChanged(Editable arg0) {
 				// TODO Auto-generated method stub
-				if (arg0.length() > 0)
+				if (arg0.length() >= 0)
 					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.VISIBLE);
 				else
 					findViewById(R.id.subzone_search_list_view_container).setVisibility(View.GONE);
@@ -262,10 +289,20 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 			@Override
 			public void afterTextChanged(Editable arg0) {
 				// TODO Auto-generated method stub
-				if (arg0.length() > 0)
+				if (arg0.length() >= 0)
 					findViewById(R.id.branch_list_container).setVisibility(View.VISIBLE);
 				else
 					findViewById(R.id.branch_list_container).setVisibility(View.GONE);
+			}
+		});
+
+		((EditText)findViewById(R.id.phone_number)).setOnEditorActionListener(new OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_DONE) {
+					makeLoginCall();
+					return true;
+				}
+				return false;
 			}
 		});
 	}
@@ -438,7 +475,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 					mBranchListView.setAdapter(branchAdapter);
 					setListViewHeightBasedOnChildren(mBranchListView);
 
-					findViewById(R.id.branch_Et).requestFocus();
+					((TextView)findViewById(R.id.branch_Et)).requestFocus();
 				}
 			});
 			return v;
@@ -494,11 +531,60 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 				public void onClick(View v) {
 					((TextView) findViewById(R.id.branch_Et)).setText(((TextView) v).getText().toString());
 					findViewById(R.id.branch_list_container).setVisibility(View.GONE);
+
+					((TextView)findViewById(R.id.year_selector)).requestFocus();
 				}
 			});
 			return v;
 		}
 
+	}
+
+	private void makeLoginCall() {
+		String institutionName = ((TextView) findViewById(R.id.institutionEt)).getText().toString();
+		String branchName = ((TextView) findViewById(R.id.branch_Et)).getText().toString();
+		String phoneNumber = ((TextView) findViewById(R.id.phone_number)).getText().toString();
+		
+		if(institutionName == null || institutionName.length() < 1) {
+			Toast.makeText(mActivity, "Invalid institution name", Toast.LENGTH_SHORT).show();
+			((TextView) findViewById(R.id.institutionEt)).requestFocus();
+			return;
+		}
+		
+		if(branchName == null || branchName.length() < 1) {
+			Toast.makeText(mActivity, "Invalid branch name", Toast.LENGTH_SHORT).show();
+			((TextView) findViewById(R.id.branch_Et)).requestFocus();
+			return;
+		}
+		
+		int year = -1;
+		try {
+			year = Integer.parseInt(((TextView) findViewById(R.id.year_selector)).getText().toString());
+		} catch( NumberFormatException e) {
+			e.printStackTrace();
+			Toast.makeText(mActivity, "Invalid year", Toast.LENGTH_SHORT).show();
+			((TextView) findViewById(R.id.year_selector)).requestFocus();
+			return;
+		}
+		
+		if(year == -1 || ((TextView) findViewById(R.id.year_selector)).getText().toString().length() == 0) {
+			Toast.makeText(mActivity, "Invalid year", Toast.LENGTH_SHORT).show();
+			((TextView) findViewById(R.id.year_selector)).requestFocus();
+			return;
+		}
+		
+		if(phoneNumber == null || phoneNumber.length() < 1) {
+			Toast.makeText(mActivity, "Invalid phone number", Toast.LENGTH_SHORT).show();
+			((TextView) findViewById(R.id.phone_number)).requestFocus();
+			return;
+		}
+		
+		
+		z_ProgressDialog = ProgressDialog.show(HSLoginActivity.this, null,
+				getResources().getString(R.string.verifying_creds), true, false);
+		z_ProgressDialog.setCancelable(false);
+		UploadManager.updateInstitution(prefs.getString("access_token", ""), institutionName, "", year, branchName,
+				phoneNumber);
 	}
 
 }

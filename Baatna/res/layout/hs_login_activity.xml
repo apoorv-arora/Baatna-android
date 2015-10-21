@@ -30,7 +30,10 @@
                 android:id="@+id/institutionEt"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:hint="@string/institution"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/zdhl6"
                 android:textSize="@dimen/size15" />
 
@@ -62,7 +65,10 @@
                 android:id="@+id/branch_Et"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:hint="@string/branch"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/zdhl6"
                 android:textSize="@dimen/size15" />
 
@@ -94,8 +100,12 @@
                 android:id="@+id/year_selector"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:hint="@string/year"
+                android:imeOptions="actionNext"
                 android:inputType="number"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/zdhl6"
                 android:textSize="@dimen/size15" />
 
@@ -103,8 +113,13 @@
                 android:id="@+id/phone_number"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:hint="@string/contact_number"
+                android:imeActionLabel="@string/Login"
+                android:imeOptions="actionGo"
                 android:inputType="number"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/zdhl6"
                 android:textSize="@dimen/size15" />
 
