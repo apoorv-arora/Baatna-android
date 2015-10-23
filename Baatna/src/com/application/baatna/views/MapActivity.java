@@ -91,7 +91,8 @@ public class MapActivity extends Activity {
 
 		prefs = getSharedPreferences("application_settings", 0);
 		zapp = (BaatnaApp) getApplication();
-		init();
+		lat = zapp.lat;
+		lon = zapp.lon;
 		refreshView();
 
 	}
@@ -126,16 +127,6 @@ public class MapActivity extends Activity {
 				.setMargins(width / 40, 0, 0, 0);
 		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
 		title.setText(s);
-	}
-
-	private void init() {
-		lat = zapp.lat;
-		lon = zapp.lon;
-
-		double lat = 51.5145160;
-		double lng = -0.1270060;
-		this.lat = lat;
-		this.lon = lng;
 	}
 
 	private void setUpMapIfNeeded() {

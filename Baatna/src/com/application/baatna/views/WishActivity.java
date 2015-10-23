@@ -16,8 +16,10 @@ import com.application.baatna.utils.UploadManagerCallback;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -76,6 +78,38 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 		if (requestType == CommonLib.WISH_UPDATE_STATUS) {
 			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
 				z_ProgressDialog.dismiss();
+			if(destroyed || !status)
+				return;
+			
+			if(objectId != 1 )//accept
+				return;
+			
+			final User user = (User) ((Object[])data)[0];
+			final Wish wish = (Wish) ((Object[])data)[1];
+				
+			final AlertDialog messageDialog;
+			messageDialog = new AlertDialog.Builder(this)
+					.setMessage(getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle()))
+					.setPositiveButton(getResources().getString(R.string.message), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//navigate to message with this user, how?
+							Intent intent = new Intent(WishActivity.this, MessagesActivity.class);
+							intent.putExtra("user", user);
+							intent.putExtra("wish", wish);
+							intent.putExtra("type", CommonLib.WISH_ACCEPTED_CURRENT_USER);
+							startActivity(intent);
+						}
+					}).setNegativeButton(getResources().getString(R.string.later),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+									onBackPressed();
+								}
+							})
+					.create();
+			messageDialog.show();
 		}
 	}
 
@@ -149,7 +183,7 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(actionBarCustomView);
 
-		SpannableString s = new SpannableString(getString(R.string.help_out));
+		SpannableString s = new SpannableString(getString(R.string.help_out, mUser.getUserName()));
 		s.setSpan(
 				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
 						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
