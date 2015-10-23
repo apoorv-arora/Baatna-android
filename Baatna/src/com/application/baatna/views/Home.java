@@ -1257,7 +1257,7 @@ public class Home extends AppCompatActivity
 									getResources().getString(R.string.sending_request), true, false);
 							z_ProgressDialog.setCancelable(false);
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-									"" + wish.getWishId(), "1");
+									"" + wish.getWishId(), "1", new Object[] {user, wish});
 						}
 					});
 
@@ -1266,7 +1266,7 @@ public class Home extends AppCompatActivity
 						@Override
 						public void onClick(View v) {
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-									"" + wish.getWishId(), "2");
+									"" + wish.getWishId(), "2", new Object[] {user, wish});
 						}
 					});
 					viewHolder.accept.setVisibility(View.VISIBLE);
@@ -1685,6 +1685,38 @@ public class Home extends AppCompatActivity
 		if (requestType == CommonLib.WISH_UPDATE_STATUS) {
 			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
 				z_ProgressDialog.dismiss();
+			
+			if(destroyed || !status)
+				return;
+			
+			if(objectId != 1 )//accept
+				return;
+			
+			final User user = (User) ((Object[])data)[0];
+			final Wish wish = (Wish) ((Object[])data)[1];
+				
+			final AlertDialog messageDialog;
+			messageDialog = new AlertDialog.Builder(this)
+					.setMessage(getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle()))
+					.setPositiveButton(getResources().getString(R.string.message), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//navigate to message with this user, how?
+							Intent intent = new Intent(Home.this, MessagesActivity.class);
+							intent.putExtra("user", user);
+							intent.putExtra("wish", wish);
+							intent.putExtra("type", CommonLib.WISH_ACCEPTED_CURRENT_USER);
+							startActivity(intent);
+						}
+					}).setNegativeButton(getResources().getString(R.string.later),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							})
+					.create();
+			messageDialog.show();
 		}
 	}
 

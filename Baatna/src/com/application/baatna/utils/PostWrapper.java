@@ -77,6 +77,8 @@ public class PostWrapper {
 					resp = ParserJson.parseInstitutionResponse(is);
 				} else if(type.equals(SEND_MESSAGE)) {
 					resp = ParserJson.parseSendMessageResponse(is);
+				} else if(type.equals(WISH_STATUS_UPDATE)) {
+					resp = ParserJson.parseWishUpdateResponse(is);
 				}
 
 			} 

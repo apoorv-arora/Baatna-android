@@ -121,7 +121,7 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 				z_ProgressDialog = ProgressDialog.show(WishActivity.this, null,
 						getResources().getString(R.string.sending_request), true, false);
 				z_ProgressDialog.setCancelable(false);
-				UploadManager.updateRequestStatus(prefs.getString("access_token", ""), "" + mWish.getWishId(), "1");
+				UploadManager.updateRequestStatus(prefs.getString("access_token", ""), "" + mWish.getWishId(), "1", new Object[] {mUser, mWish});
 			}
 		});
 
@@ -129,7 +129,7 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 
 			@Override
 			public void onClick(View v) {
-				UploadManager.updateRequestStatus(prefs.getString("access_token", ""), "" + mWish.getWishId(), "2");
+				UploadManager.updateRequestStatus(prefs.getString("access_token", ""), "" + mWish.getWishId(), "2", new Object[] {mUser, mWish});
 			}
 		});
 		findViewById(R.id.accept_button).setVisibility(View.VISIBLE);

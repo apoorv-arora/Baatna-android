@@ -92,6 +92,35 @@ public class ParserJson {
 		return output;
 	}
 
+	public static Object[] parseWishUpdateResponse(InputStream is) throws JSONException {
+
+		Object[] output = new Object[] { "failed", "", null };
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+			output[0] = responseObject.getString("status");
+			if (output[0].equals("success")) {
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject object = responseObject.getJSONObject("response");
+					Object[] responses = new Object[2];
+					
+					if(object.has("from_user") && object.get("from_user") instanceof JSONObject) {
+						JSONObject fromUser = object.getJSONObject("from_user");
+						if(fromUser.has("user") && fromUser.get("user") instanceof JSONObject) {
+							responses[0] = parse_User(fromUser.getJSONObject("user"));
+						}
+					}
+				}
+			} else {
+				if (responseObject.has("errorMessage")) {
+					output[1] = responseObject.getString("errorMessage");
+				}
+			}
+		}
+		return output;
+	}
+
 	public static Object[] parseLoginResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };

@@ -7,13 +7,14 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.data.User;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Debug;
 import android.widget.Toast;
-
-import com.application.baatna.BaatnaApp;
 
 public class UploadManager {
 
@@ -136,13 +137,13 @@ public class UploadManager {
 
 	}
 	
-	public static void updateRequestStatus(String accessToken, String wishId, String action) {
+	public static void updateRequestStatus(String accessToken, String wishId, String action, Object[] wishedUser) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.WISH_UPDATE_STATUS, 0, accessToken, null);
 		}
 
 		new UpdateWishStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, wishId, action});
+				new Object[] { accessToken, wishId, action, wishedUser});
 
 	}
 	
@@ -367,6 +368,8 @@ public class UploadManager {
 		private String accessToken;
 		private String wishId;
 		private String action;
+		private Object[] wishedUser;
+		int wishIdInt, actionInt;
 
 		@Override
 		protected Object[] doInBackground(Object... params) {
@@ -375,6 +378,7 @@ public class UploadManager {
 			accessToken = (String) params[0];
 			wishId = (String) params[1];
 			action = (String) params[2];
+			wishedUser = (Object[]) params[3];
 			
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
@@ -385,6 +389,8 @@ public class UploadManager {
 			
 			try {
 				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/update?", nameValuePairs, PostWrapper.WISH_STATUS_UPDATE, context);
+				wishIdInt = Integer.parseInt(wishId);
+				actionInt = Integer.parseInt(action);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -398,7 +404,7 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.WISH_UPDATE_STATUS, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.WISH_UPDATE_STATUS, prefs.getInt("uid", 0), actionInt, wishedUser, wishIdInt, arg[0].equals("success"), "");
 			}
 		}
 	}

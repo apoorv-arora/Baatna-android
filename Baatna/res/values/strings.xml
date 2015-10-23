@@ -104,5 +104,8 @@
     <string name="your_wishes">Your wishes</string>
     <string name="your_offers">Your offers</string>
     <string name="your_history">Your history</string>
+    <string name="thanks_wish_tick">Thanks for offering %1$s your %2$s. Would you like to message him?</string>
+    <string name="later">Later</string>
+    <string name="message">Message</string>
 
 </resources>
