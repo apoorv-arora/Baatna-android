@@ -155,14 +155,14 @@ public class GcmIntentService extends IntentService {
 								notificationActivity = new Intent(this, MessagesActivity.class);
 								notificationActivity.putExtra("user", user);
 								notificationActivity.putExtra("wish", messageObj);
-								notificationActivity.putExtra("type", type);
+								notificationActivity.putExtra("type", CommonLib.CURRENT_USER_WISH_ACCEPTED);
 							} else if (CommonLib.hasContact(this, user.getContact())) {
 								msg = user.getUserName() + " offered you a " + messageObj.getTitle()
 										+ ". Start chatting!";
 								notificationActivity = new Intent(this, MessagesActivity.class);
 								notificationActivity.putExtra("user", user);
 								notificationActivity.putExtra("wish", messageObj);
-								notificationActivity.putExtra("type", type);
+								notificationActivity.putExtra("type", CommonLib.WISH_ACCEPTED_CURRENT_USER);
 							} else
 								showNotification = false;
 						}
@@ -181,6 +181,7 @@ public class GcmIntentService extends IntentService {
 		Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Baatna").setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+				.setAutoCancel(true)
 				.setContentText(msg).setSound(soundUri);
 		mBuilder.setContentIntent(contentIntent);
 		if (showNotification)

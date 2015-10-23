@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
-import com.application.baatna.Splash;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
@@ -95,20 +94,23 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 		currentUser = (User) getIntent().getExtras().getSerializable("user");
 		currentWish = (Wish) getIntent().getExtras().getSerializable("wish");
-		type = getIntent().getExtras().getInt("type");
+		if( getIntent().getExtras().containsKey("type") && getIntent().getExtras().get("type") instanceof Integer )
+			type = getIntent().getExtras().getInt("type");
 		
 		setUpActionBar();
 
 		messageText = (EditText) findViewById(R.id.message);
 		
 		messageText.setPadding(width / 20, width / 20, width / 20, width / 20);
-		findViewById(R.id.send_container).setPadding(width / 40, width / 20, width / 40, width / 20);
+		
+//		findViewById(R.id.send_container).setPadding(width / 20, width / 20, width / 20, width / 20);
 
-		sendMessageButton = findViewById(R.id.send_container);
+//		sendMessageButton = ;
 
-		sendMessageButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View arg0) {
+		findViewById(R.id.send_icon).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
 				long objectId = System.currentTimeMillis();
 				String message = messageText.getText().toString();
 				UploadManager.sendMessage(currentUser.getUserId() + "", message,
@@ -131,7 +133,22 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		messageText.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == 66) {
-					sendMessageButton.performClick();
+					long objectId = System.currentTimeMillis();
+					String message = messageText.getText().toString();
+					UploadManager.sendMessage(currentUser.getUserId() + "", message,
+							currentWish.getWishId() + "", objectId);
+					messageText.setText("");
+					
+					Message msg = new Message();
+					msg.setFromTo(true);
+					msg.setMessage(message);
+					msg.setToUser(currentUser);
+					msg.setWish(currentWish);
+					msg.setMessageId(objectId);
+					
+					messages.add(msg);
+					mAdapter.notifyDataSetChanged();
+					messageList.setSelection(messages.size()-1);
 					return true;
 				}
 				return false;
@@ -227,27 +244,20 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 		View v = inflater.inflate(R.layout.messages_action_bar, null);
 
-		v.findViewById(R.id.home_icon_container).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onBackPressed();
-			}
-		});
-
 		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
 		
-		v.findViewById(R.id.tick_proceed_icon).setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
+//		v.findViewById(R.id.tick_proceed_icon).setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
 //				View reviewDropDown = findViewById(R.id.dropdown_setting_layout);
 //	            if (reviewDropDown.isShown())
 //	                reviewDropDown.setVisibility(View.GONE);
 //	            else {
 //	                reviewDropDown.setVisibility(View.VISIBLE);
 //	            }
-			}
-		});
+//			}
+//		});
 		
 		findViewById(R.id.delete_message).setPadding(width / 20, width / 20, width / 20, width / 20);
 		findViewById(R.id.sort_by_recency).setPadding(width / 20, width / 20, width / 20, width / 20);

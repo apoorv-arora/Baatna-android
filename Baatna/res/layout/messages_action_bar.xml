@@ -10,6 +10,7 @@
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:visibility="gone"
         android:clickable="true" >
 
         <com.application.baatna.utils.IconView
@@ -39,7 +40,6 @@
             android:layout_height="@dimen/height60"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:clickable="true"
             android:gravity="center"
             android:text="D"
             android:textColor="@color/zdark"
@@ -83,14 +83,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/tick_container" >
+        android:layout_alignParentRight="true"
+         >
 
         <com.application.baatna.utils.ZCircularImageView
             android:id="@+id/user_chat_head"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:background="@drawable/profile_icon"
             android:gravity=""
             android:scaleType="fitXY" />
     </FrameLayout>

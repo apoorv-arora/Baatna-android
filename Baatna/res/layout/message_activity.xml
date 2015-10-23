@@ -38,12 +38,13 @@
                 android:padding="@dimen/size5"
                 android:textColor="@color/font_color" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/send_container"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@drawable/baatna_dark_feedback"
-                android:clickable="true" >
+                android:clickable="true"
+                android:focusable="true" >
 
                 <com.application.baatna.utils.IconView
                     android:id="@+id/send_icon"
@@ -53,9 +54,10 @@
                     android:clickable="true"
                     android:gravity="center"
                     android:text="N"
+                	android:focusable="true"
                     android:textColor="@color/zhl"
                     android:textSize="@dimen/font_size45" />
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

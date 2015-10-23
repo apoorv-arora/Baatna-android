@@ -294,6 +294,7 @@ public class NewRequestFragment extends Fragment {
 						// setSelectedCategory(view.getText().toString());
 						Intent intent = new Intent(mContext, CategoryItemSelectionFragment.class);
 						intent.putExtra("category_id", categoryName.getCategoryId());
+						intent.putExtra("category_name", categoryName.getCategory());
 						mContext.startActivityForResult(intent, CategoryItemSelectionFragment.requestCode);
 					}
 				}

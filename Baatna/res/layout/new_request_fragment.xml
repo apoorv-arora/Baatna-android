@@ -32,7 +32,7 @@
             android:background="@color/white"
             android:orientation="vertical" >
 
-            <com.application.baatna.utils.EditTextRegular
+            <com.application.baatna.utils.ClearableEditText
                 android:id="@+id/category_et"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/height60"

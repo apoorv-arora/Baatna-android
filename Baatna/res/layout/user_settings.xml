@@ -152,7 +152,7 @@
                 android:textSize="@dimen/drawer_text_size" />
         </RelativeLayout>
 
-        <View
+      <!--   <View
             android:layout_width="fill_parent"
             android:layout_height=".5dp"
             android:background="@color/light_stroke_color" />
@@ -187,19 +187,20 @@
                 android:textAllCaps="true"
                 android:textColor="@color/zdark"
                 android:textSize="@dimen/drawer_text_size" />
-        </RelativeLayout>
+        </RelativeLayout> -->
 
-        <View
+       <!--  <View
             android:layout_width="fill_parent"
             android:layout_height=".5dp"
             android:background="@color/light_stroke_color" />
-
-        <RelativeLayout
+ -->
+        <!-- <RelativeLayout
             android:id="@+id/settings"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/minimum_clickable_area"
             android:background="@drawable/whitebuttoncustomback"
             android:onClick="redeem"
+            android:visibility="gone"
             android:paddingRight="@dimen/toolbar_padding" >
 
             <com.application.baatna.utils.IconView
@@ -225,7 +226,7 @@
                 android:textColor="@color/zdark"
                 android:textSize="@dimen/drawer_text_size" />
         </RelativeLayout>
-
+ -->
         <!--
         <RelativeLayout
             android:id="@+id/rate"

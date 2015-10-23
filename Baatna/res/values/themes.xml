@@ -105,5 +105,5 @@
         <item name="middleBarArrowSize">@dimen/middleBarArrowSize</item>
         <item name="drawableSize">@dimen/drawableSize</item>
     </style>
-
+    
 </resources>

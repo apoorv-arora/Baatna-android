@@ -9,6 +9,7 @@ import com.application.baatna.utils.IconView;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -31,12 +33,21 @@ public class CategoryItemSelectionFragment extends Activity {
 	public static final int requestCode = 100;
 	public static final int RESULT_ITEM_SELECTED = 101;
 	public static final int RESULT_ITEM_UNSELECTED = 102;
+	
+	LayoutInflater inflater;
+	private int width;
+	private String mCategoryName;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.category_item_selection);
+		width = getWindowManager().getDefaultDisplay().getWidth();
+		inflater = LayoutInflater.from(this);
 		mGridView = (GridView) findViewById(R.id.gridView);
+		if (getIntent() != null && getIntent().getExtras() != null && getIntent().hasExtra("category_name")) {
+			mCategoryName = String.valueOf(getIntent().getExtras().get("category_name"));
+		}
 		if (getIntent() != null && getIntent().getExtras() != null && getIntent().hasExtra("category_id")) {
 			mAdapter = new CategoryItemsAdapter(this, R.layout.category_item_holder,
 					CommonLib.getCategoryItems(getIntent().getIntExtra("category_id", 0)));
@@ -48,22 +59,37 @@ public class CategoryItemSelectionFragment extends Activity {
 
 	private void setupActionBar() {
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowCustomEnabled(false);
+		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayUseLogoEnabled(true);
-		actionBar.setLogo(R.drawable.ic_launcher);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
 
-		try {
-			int width = getWindowManager().getDefaultDisplay().getWidth();
-			findViewById(android.R.id.home).setPadding(width / 80, 0, width / 40, 0);
-			ViewGroup home = (ViewGroup) findViewById(android.R.id.home).getParent();
-			home.getChildAt(0).setPadding(width / 80, 0, width / 80, 0);
-		} catch (Exception e) {
-		}
+		View v = inflater.inflate(R.layout.green_action_bar, null);
+
+		((TextView)v.findViewById(R.id.back_icon)).setText("D");
+		((TextView)v.findViewById(R.id.title)).setText(mCategoryName);
+		
+		v.findViewById(R.id.back_icon).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				try {
+					InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				onBackPressed();
+			}
+		});
+		actionBar.setCustomView(v);
+
+		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
+
+		// user handle
+		TextView title = (TextView) v.findViewById(R.id.title);
+		title.setPadding(width / 80, 0, width / 40, 0);
 	}
+
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -129,6 +155,8 @@ public class CategoryItemSelectionFragment extends Activity {
 			viewHolder.category_bg.setText(categoryItem.getResId());
 			viewHolder.category_title.setText(categoryItem.getName());
 
+			viewHolder.category_bg.getLayoutParams().height = width / 3;
+			
 			v.findViewById(R.id.category_item_holder_root).setOnClickListener(new OnClickListener() {
 
 				@Override
