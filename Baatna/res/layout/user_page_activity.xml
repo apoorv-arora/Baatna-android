@@ -22,8 +22,7 @@
         android:id="@+id/content_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/white"
-         >
+        android:background="@color/white" >
 
         <FrameLayout
             android:id="@+id/user_info_top_frame"
@@ -73,20 +72,20 @@
             android:id="@+id/back_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:text="D"
             android:textColor="@color/white"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
             android:textSize="@dimen/font_size45" />
-        
+
         <com.application.baatna.utils.TextViewSemiBold
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/user_info_top_frame"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/black"
             android:text="name"
+            android:textColor="@color/black"
             android:textSize="@dimen/size14" />
 
         <com.application.baatna.utils.TextViewSemiBold
@@ -97,6 +96,33 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/black"
             android:textSize="@dimen/size14" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"
+            android:layout_centerHorizontal="true" >
+
+            <ListView
+                android:id="@+id/wish_items"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/wish_items_progress"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:visibility="gone" >
+
+                <ProgressBar
+                    android:id="@+id/wish_progress"
+                    style="?android:attr/progressBarStyleInverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout

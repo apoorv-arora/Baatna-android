@@ -4,28 +4,52 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.Splash;
+import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.User;
+import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.IconView;
 import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+import com.application.baatna.views.Home.NewsFeedAdapter.ViewHolder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,7 +58,7 @@ import android.widget.Toast;
 /**
  * Displays user name, bio and profile pic
  */
-public class UserPageActivity extends Activity {
+public class UserPageActivity extends Activity implements UploadManagerCallback {
 
 	private SharedPreferences prefs;
 	private int width;
@@ -44,6 +68,21 @@ public class UserPageActivity extends Activity {
 	boolean isSecondProfile = false;
 	ImageView imageView;
 	AsyncTask mAsyncRunning;
+
+	private AsyncTask mListAsyncRunning;
+	private WishesAdapter mAdapter;
+	private ListView mListView;
+	ArrayList<Wish> wishes;
+	LinearLayout mListViewFooter;
+	private int mWishesTotalCount;
+	private boolean cancelled = false;
+	private boolean loading = false;
+	private int count = 10;
+
+	public static final int WISH_OWN = 2;
+
+	User user;
+	private ProgressDialog z_ProgressDialog;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -62,21 +101,24 @@ public class UserPageActivity extends Activity {
 				findViewById(R.id.userpage_progress_container).setVisibility(View.VISIBLE);
 				findViewById(R.id.content_container).setVisibility(View.GONE);
 				findViewById(R.id.empty_view).setVisibility(View.GONE);
-				refreshView(); 
+				refreshView();
 			}
 		}
 		if (!isSecondProfile)
 			userId = prefs.getInt("uid", 0);
+		mListView = (ListView) findViewById(R.id.wish_items);
+		mListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
+		mListView.setDividerHeight(width / 40);
 		fixSizes();
 		setListeners();
+		loadWishes();
 	}
-	
+
 	private void refreshView() {
 		if (mAsyncRunning != null)
 			mAsyncRunning.cancel(true);
 		mAsyncRunning = new GetUserDetails().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
-
 
 	private class GetUserDetails extends AsyncTask<Object, Void, Object> {
 
@@ -86,7 +128,7 @@ public class UserPageActivity extends Activity {
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "user/details?user_id="+userId;
+				url = CommonLib.SERVER + "user/details?user_id=" + userId;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.USER_INFO, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
@@ -102,10 +144,10 @@ public class UserPageActivity extends Activity {
 			if (destroyed)
 				return;
 			findViewById(R.id.userpage_progress_container).setVisibility(View.GONE);
-			
+
 			if (result != null) {
 				if (result instanceof User) {
-					User user = (User)result;
+					user = (User) result;
 					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
 					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "", width, width, false);
 					((TextView) findViewById(R.id.name)).setText(user.getUserName());
@@ -125,7 +167,7 @@ public class UserPageActivity extends Activity {
 
 		}
 	}
-	
+
 	private void setListeners() {
 		findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -185,7 +227,7 @@ public class UserPageActivity extends Activity {
 			}
 		});
 
-		if(!isSecondProfile) {
+		if (!isSecondProfile) {
 			setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageView, "", width, width, false);
 			((TextView) findViewById(R.id.name)).setText(prefs.getString("username", ""));
 			((TextView) findViewById(R.id.description)).setText(prefs.getString("description", ""));
@@ -384,6 +426,392 @@ public class UserPageActivity extends Activity {
 				}
 			}
 		}
+	}
+
+	// Post this only wishes code
+	private void loadWishes() {
+		if (mListAsyncRunning != null)
+			mListAsyncRunning.cancel(true);
+		mListAsyncRunning = new GetWishes().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+	}
+
+	private class GetWishes extends AsyncTask<Object, Void, Object> {
+
+		@Override
+		protected void onPreExecute() {
+			findViewById(R.id.wish_items).setVisibility(View.GONE);
+			findViewById(R.id.wish_items_progress).setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Object... params) {
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "wish/get?type=" + WISH_OWN + "&start=0&count=" + count + "&another_user="
+						+ userId;
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+
+			findViewById(R.id.wish_items_progress).setVisibility(View.GONE);
+
+			if (result != null) {
+				findViewById(R.id.wish_items).setVisibility(View.VISIBLE);
+				if (result instanceof Object[]) {
+					Object[] arr = (Object[]) result;
+					mWishesTotalCount = (Integer) arr[0];
+					setWishes((ArrayList<Wish>) arr[1]);
+				}
+			} else {
+				if (CommonLib.isNetworkAvailable(UserPageActivity.this)) {
+					Toast.makeText(UserPageActivity.this,
+							UserPageActivity.this.getResources().getString(R.string.error_try_again),
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(UserPageActivity.this, getResources().getString(R.string.no_internet_message),
+							Toast.LENGTH_SHORT).show();
+
+				}
+			}
+
+		}
+	}
+
+	public class WishesAdapter extends ArrayAdapter<Wish> {
+
+		private List<Wish> wishes;
+		private Activity mContext;
+		private int width;
+
+		public WishesAdapter(Activity context, int resourceId, List<Wish> wishes) {
+			super(context.getApplicationContext(), resourceId, wishes);
+			mContext = context;
+			this.wishes = wishes;
+			width = mContext.getWindowManager().getDefaultDisplay().getWidth();
+		}
+
+		@Override
+		public int getCount() {
+			if (wishes == null) {
+				return 0;
+			} else {
+				return wishes.size();
+			}
+		}
+
+		protected class ViewHolder {
+			TextView title;
+			TextView date;
+			IconView crossIcon;
+
+			TextView userName;
+			TextView time;
+			TextView distance;
+			View bar;
+			TextView accept;
+			TextView decline;
+			LinearLayout action_container;
+			ImageView imageView;
+		}
+
+		@Override
+		public View getView(int position, View v, ViewGroup parent) {
+			final Wish wish = wishes.get(position);
+			if (isSecondProfile) {
+
+				// from
+				if (v == null || v.findViewById(R.id.feed_item_root) == null) {
+					v = LayoutInflater.from(mContext).inflate(R.layout.feed_list_item_snippet, null);
+				}
+
+				ViewHolder viewHolder = (ViewHolder) v.getTag();
+				if (viewHolder == null) {
+					viewHolder = new ViewHolder();
+					viewHolder.userName = (TextView) v.findViewById(R.id.user_name);
+					// viewHolder.userImage = (RoundedImageView) v
+					// .findViewById(R.id.user_image);
+					viewHolder.time = (TextView) v.findViewById(R.id.time);
+					viewHolder.distance = (TextView) v.findViewById(R.id.distance);
+					viewHolder.bar = v.findViewById(R.id.left_bar);
+					viewHolder.accept = (TextView) v.findViewById(R.id.accept_button);
+					viewHolder.decline = (TextView) v.findViewById(R.id.decline_button);
+					viewHolder.action_container = (LinearLayout) v.findViewById(R.id.action_container);
+					viewHolder.imageView = (ImageView) v.findViewById(R.id.user_image);
+					v.setTag(viewHolder);
+				}
+
+				((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
+						.setMargins(width / 40, 0, width / 40, 0);
+				viewHolder.accept.setPadding(width / 20, 0, width / 20, 0);
+				viewHolder.decline.setPadding(width / 20, 0, width / 20, 0);
+
+				viewHolder.imageView.setVisibility(View.GONE);
+				viewHolder.time.setVisibility(View.GONE);
+
+				v.findViewById(R.id.feed_item).setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						if (((LinearLayout) v.getParent()).getChildAt(1) == null) {
+							if (wish != null && wish.getDescription() != null) {
+								String description = wish.getDescription();
+								TextView descriptionTextView = new TextView(UserPageActivity.this);
+								LayoutParams params = new LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+										LinearLayout.LayoutParams.WRAP_CONTENT);
+								descriptionTextView.setLayoutParams(params);
+								descriptionTextView.setGravity(Gravity.CENTER);
+								descriptionTextView.setText(description);
+								descriptionTextView.setBackgroundColor(getResources().getColor(R.color.white));
+								((LinearLayout) v.getParent()).addView(descriptionTextView);
+							}
+						} else {
+							if (((LinearLayout) v.getParent()).getChildAt(1) != null
+									&& ((LinearLayout) v.getParent()).getChildAt(1) instanceof TextView)
+								((LinearLayout) v.getParent()).removeViewAt(1);
+						}
+
+					}
+				});
+
+				viewHolder.distance.setVisibility(View.GONE);
+
+				if (user != null && wish != null) {
+					String description = getResources().getString(R.string.feed_user_requested,
+							user.getUserName() + " ", wish.getTitle() + " ");
+
+					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
+
+					viewHolder.userName.setText(description);
+					viewHolder.bar
+							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
+
+					viewHolder.accept.setOnClickListener(new View.OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							z_ProgressDialog = ProgressDialog.show(UserPageActivity.this, null,
+									getResources().getString(R.string.sending_request), true, false);
+							z_ProgressDialog.setCancelable(false);
+							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
+									"" + wish.getWishId(), "1", new Object[] { user, wish });
+						}
+					});
+
+					viewHolder.decline.setOnClickListener(new View.OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
+									"" + wish.getWishId(), "2", new Object[] { user, wish });
+						}
+					});
+					viewHolder.accept.setVisibility(View.VISIBLE);
+					viewHolder.decline.setVisibility(View.VISIBLE);
+				}
+				// till
+			} else {
+
+				if (v == null || v.findViewById(R.id.wishbox_list_item_root) == null) {
+					v = LayoutInflater.from(mContext).inflate(R.layout.wishbox_list_item, null);
+				}
+
+				ViewHolder viewHolder = (ViewHolder) v.getTag();
+				if (viewHolder == null) {
+					viewHolder = new ViewHolder();
+					viewHolder.title = (TextView) v.findViewById(R.id.wish_title);
+					viewHolder.date = (TextView) v.findViewById(R.id.wish_date);
+					viewHolder.crossIcon = (IconView) v.findViewById(R.id.cross_icon);
+					v.setTag(viewHolder);
+				}
+
+				((RelativeLayout.LayoutParams) v.findViewById(R.id.wishbox_list_item).getLayoutParams())
+						.setMargins(width / 40, width / 40, width / 40, width / 40);
+
+				viewHolder.date.setPadding(width / 20, width / 20, width / 20, width / 40);
+				viewHolder.title.setPadding(width / 20, width / 40, width / 20, width / 40);
+				((RelativeLayout.LayoutParams) viewHolder.crossIcon.getLayoutParams()).setMargins(0, 0, width / 20, 0);
+				// set the date in hh:mm format
+				viewHolder.date.setText(CommonLib.getDateFromUTC(wish.getTimeOfPost()));
+				// set the span of title
+				String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle();
+				SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(title);
+
+				ClickableSpan cs1 = new ClickableSpan() {
+					@Override
+					public void onClick(View widget) {
+					}
+
+					@Override
+					public void updateDrawState(TextPaint ds) {
+						super.updateDrawState(ds);
+						ds.setUnderlineText(false);
+						ds.setTypeface(
+								CommonLib.getTypeface(UserPageActivity.this.getApplicationContext(), CommonLib.Bold));
+						ds.setColor(getResources().getColor(R.color.bt_orange));
+					}
+				};
+				finalSpanBuilderStr.setSpan(cs1, title.indexOf(wish.getTitle()),
+						title.indexOf(wish.getTitle()) + wish.getTitle().length(),
+						SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+
+				viewHolder.title.setText(finalSpanBuilderStr);
+
+				viewHolder.crossIcon.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						new AlertDialog.Builder(mContext)
+								.setMessage(getResources().getString(R.string.wish_delete_text))
+								.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								UploadManager.deleteRequest(prefs.getString("access_token", ""), wish.getWishId() + "");
+								dialog.dismiss();
+							}
+						}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).show();
+					}
+				});
+			}
+
+			return v;
+		}
+
+	}
+
+	// set all the wishes here
+	private void setWishes(ArrayList<Wish> wishes) {
+		this.wishes = wishes;
+		if (wishes != null && wishes.size() > 0 && mWishesTotalCount > wishes.size()
+				&& mListView.getFooterViewsCount() == 0) {
+			mListViewFooter = new LinearLayout(getApplicationContext());
+			mListViewFooter.setBackgroundResource(R.color.white);
+			mListViewFooter.setLayoutParams(new ListView.LayoutParams(LayoutParams.MATCH_PARENT, width / 5));
+			mListViewFooter.setGravity(Gravity.CENTER);
+			mListViewFooter.setOrientation(LinearLayout.HORIZONTAL);
+			ProgressBar pbar = new ProgressBar(getApplicationContext(), null,
+					android.R.attr.progressBarStyleSmallInverse);
+			mListViewFooter.addView(pbar);
+			pbar.setTag("progress");
+			pbar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			mListView.addFooterView(mListViewFooter);
+		}
+		mAdapter = new WishesAdapter(this, R.layout.new_request_fragment, this.wishes);
+		mListView.setAdapter(mAdapter);
+		mListView.setOnScrollListener(new OnScrollListener() {
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount - 1 < mWishesTotalCount
+						&& !loading && mListViewFooter != null) {
+					if (mListView.getFooterViewsCount() == 1) {
+						loading = true;
+						new LoadModeWishes().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
+					}
+				} else if (totalItemCount - 1 == mWishesTotalCount && mListView.getFooterViewsCount() > 0) {
+					mListView.removeFooterView(mListViewFooter);
+				}
+			}
+		});
+	}
+
+	private class LoadModeWishes extends AsyncTask<Integer, Void, Object> {
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Integer... params) {
+			int start = params[0];
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "wish/get?type=" + WISH_OWN + "&start=" + start + "&count=" + count
+						+ "&another_user=" + userId;
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+			if (result != null && result instanceof Object[]) {
+				Object[] arr = (Object[]) result;
+				wishes.addAll((ArrayList<Wish>) arr[1]);
+				mAdapter.notifyDataSetChanged();
+			}
+			loading = false;
+		}
+	}
+
+	@Override
+	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
+			String stringId) {
+		if (destroyed)
+			return;
+		if (requestType == CommonLib.WISH_UPDATE_STATUS) {
+			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
+				z_ProgressDialog.dismiss();
+
+			if (destroyed || !status)
+				return;
+
+			if (objectId != 1) // accept
+				return;
+
+			final User user = (User) ((Object[]) data)[0];
+			final Wish wish = (Wish) ((Object[]) data)[1];
+
+			final AlertDialog messageDialog;
+			messageDialog = new AlertDialog.Builder(this)
+					.setMessage(
+							getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle()))
+					.setPositiveButton(getResources().getString(R.string.message),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// navigate to message with this user, how?
+									Intent intent = new Intent(UserPageActivity.this, MessagesActivity.class);
+									intent.putExtra("user", user);
+									intent.putExtra("wish", wish);
+									intent.putExtra("type", CommonLib.WISH_ACCEPTED_CURRENT_USER);
+									startActivity(intent);
+								}
+							})
+					.setNegativeButton(getResources().getString(R.string.later), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					}).create();
+			messageDialog.show();
+		}
+	}
+
+	@Override
+	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
 	}
 
 }

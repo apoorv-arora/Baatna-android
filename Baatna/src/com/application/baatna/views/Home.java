@@ -631,6 +631,8 @@ public class Home extends AppCompatActivity
 			mDrawerLayout.closeDrawer(findViewById(R.id.left_drawer));
 			return;
 		}
+		
+		super.onBackPressed();
 	}
 
 	@Override
