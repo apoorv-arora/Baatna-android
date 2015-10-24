@@ -113,6 +113,8 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 			public void onClick(View v) {
 				long objectId = System.currentTimeMillis();
 				String message = messageText.getText().toString();
+				if(message == null || message.length() < 1)
+					return;
 				UploadManager.sendMessage(currentUser.getUserId() + "", message,
 						currentWish.getWishId() + "", objectId);
 				messageText.setText("");
