@@ -33,6 +33,7 @@ public class PostWrapper {
 	public static String WISH_STATUS_UPDATE = "wish_status_update";
 	public static String SEND_MESSAGE = "send_message";
 	public static String LOCATION_UPDATE = "update_location";
+	public static String REDEEM_UPDATE = "redeem_update";
 
 	public static void Initialize(Context context) {
 		// helper = new ResponseCacheManager(context);
@@ -79,6 +80,8 @@ public class PostWrapper {
 					resp = ParserJson.parseSendMessageResponse(is);
 				} else if(type.equals(WISH_STATUS_UPDATE)) {
 					resp = ParserJson.parseWishUpdateResponse(is);
+				} else if(type.equals(REDEEM_UPDATE)) {
+					resp = ParserJson.parseRedeemUpdateResponse(is);
 				}
 
 			} 

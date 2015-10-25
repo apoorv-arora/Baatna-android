@@ -170,6 +170,7 @@ public class CommonLib {
 	public static final int SEND_MESSAGE = 209;
 	public static final int LOCATION_UPDATE = 210;
 	public static final int WISH_OFFERED_STATUS = 211;
+	public static final int COUPON_UPDATE = 212;
 
 	/**
 	 * Feed types

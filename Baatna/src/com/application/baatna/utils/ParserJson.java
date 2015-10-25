@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.xml.sax.Parser;
 
 import com.application.baatna.data.Categories;
+import com.application.baatna.data.Coupon;
 import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.Institution;
 import com.application.baatna.data.Message;
@@ -104,10 +105,10 @@ public class ParserJson {
 				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
 					JSONObject object = responseObject.getJSONObject("response");
 					Object[] responses = new Object[2];
-					
-					if(object.has("from_user") && object.get("from_user") instanceof JSONObject) {
+
+					if (object.has("from_user") && object.get("from_user") instanceof JSONObject) {
 						JSONObject fromUser = object.getJSONObject("from_user");
-						if(fromUser.has("user") && fromUser.get("user") instanceof JSONObject) {
+						if (fromUser.has("user") && fromUser.get("user") instanceof JSONObject) {
 							responses[0] = parse_User(fromUser.getJSONObject("user"));
 						}
 					}
@@ -122,6 +123,27 @@ public class ParserJson {
 	}
 
 	public static Object[] parseLoginResponse(InputStream is) throws JSONException {
+
+		Object[] output = new Object[] { "failed", "", null };
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+			output[0] = responseObject.getString("status");
+			if (output[0].equals("success")) {
+				if (responseObject.has("response")) {
+					output[1] = responseObject.get("response");
+				}
+			} else {
+				if (responseObject.has("errorMessage")) {
+					output[1] = responseObject.getString("errorMessage");
+				}
+			}
+		}
+		return output;
+	}
+	
+	public static Object[] parseRedeemUpdateResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
 
@@ -648,6 +670,72 @@ public class ParserJson {
 			}
 		}
 		return response;
+	}
+
+	public static Object[] parse_Coupons(InputStream is) throws JSONException {
+		Object[] response = new Object[2];
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+
+			if (responseObject.getString("status").equals("success")) {
+
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject responseJson = responseObject.getJSONObject("response");
+
+					if (responseJson.has("coupons") && responseJson.get("coupons") instanceof JSONArray) {
+						ArrayList<Coupon> coupons = new ArrayList<Coupon>();
+						JSONArray couponsArr = responseJson.getJSONArray("coupons");
+						for (int i = 0; i < couponsArr.length(); i++) {
+							JSONObject couponJson = couponsArr.getJSONObject(i);
+							if (couponJson.has("coupon") && couponJson.get("coupon") instanceof JSONObject) {
+								Coupon coupon = parse_Coupon(couponJson.getJSONObject("coupon"));
+								coupons.add(coupon);
+							}
+						}
+						response[0] = coupons;
+					}
+
+					if (responseJson.has("quantity") && responseJson.get("quantity") instanceof Integer) {
+						response[1] = responseJson.getInt("quantity");
+					}
+				}
+			}
+		}
+		return response;
+	}
+
+	public static Coupon parse_Coupon(JSONObject couponJson) throws JSONException {
+		if (couponJson == null)
+			return null;
+		Coupon coupon = new Coupon();
+
+		if (couponJson.has("id") && couponJson.get("id") instanceof Integer) {
+			coupon.setId(couponJson.getInt("id"));
+		}
+
+		if (couponJson.has("count") && couponJson.get("count") instanceof Integer) {
+			coupon.setCount(couponJson.getInt("count"));
+		}
+
+		if (couponJson.has("image")) {
+			coupon.setImage(String.valueOf(couponJson.get("image")));
+		}
+
+		if (couponJson.has("name")) {
+			coupon.setName(String.valueOf(couponJson.get("name")));
+		}
+
+		if (couponJson.has("terms")) {
+			coupon.setTerms(String.valueOf(couponJson.get("terms")));
+		}
+
+		if (couponJson.has("validity")) {
+			coupon.setValidity(String.valueOf(couponJson.get("validity")));
+		}
+
+		return coupon;
 	}
 
 }

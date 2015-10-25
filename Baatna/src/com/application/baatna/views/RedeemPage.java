@@ -1,13 +1,17 @@
 package com.application.baatna.views;
 
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.Splash;
-import com.application.baatna.data.Wish;
+import com.application.baatna.data.Coupon;
 import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.IconView;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
@@ -15,28 +19,24 @@ import com.application.baatna.utils.UploadManagerCallback;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
-import android.text.style.ClickableSpan;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -49,25 +49,19 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 	private boolean destroyed = false;
 	private AsyncTask mAsyncRunning;
 	private Activity mContext;
-	private WishesAdapter mAdapter;
+	private CouponsAdapter mAdapter;
 	LayoutInflater inflater;
 	private int width;
-
-	// Load more part
 	private ListView mListView;
-	ArrayList<Wish> wishes;
-	LinearLayout mListViewFooter;
-	private int mWishesTotalCount;
-	private boolean cancelled = false;
-	private boolean loading = false;
-	private int count = 10;
+	ArrayList<Coupon> coupons;
+	private BaatnaApp zapp;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.redeem_page);
 		width = getWindowManager().getDefaultDisplay().getWidth();
-
+		zapp = (BaatnaApp) getApplication();
 		prefs = getSharedPreferences("application_settings", 0);
 		mListView = (ListView) findViewById(R.id.wish_list);
 		mListView.setDivider(null);
@@ -168,10 +162,10 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 	private void refreshView() {
 		if (mAsyncRunning != null)
 			mAsyncRunning.cancel(true);
-		mAsyncRunning = new GetWishes().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+		mAsyncRunning = new GetCoupons().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
 
-	private class GetWishes extends AsyncTask<Object, Void, Object> {
+	private class GetCoupons extends AsyncTask<Object, Void, Object> {
 
 		@Override
 		protected void onPreExecute() {
@@ -191,8 +185,8 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "wish/view?start=0&count=" + count;
-				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
+				url = CommonLib.SERVER + "redeem/get?";
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.GET_REDEEM_COUPONS, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
 
@@ -213,8 +207,7 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 				findViewById(R.id.content).setVisibility(View.VISIBLE);
 				if (result instanceof Object[]) {
 					Object[] arr = (Object[]) result;
-					mWishesTotalCount = (Integer) arr[0];
-					setWishes((ArrayList<Wish>) arr[1]);
+					setWishes((ArrayList<Coupon>) arr[0]);
 				}
 			} else {
 				if (CommonLib.isNetworkAvailable(mContext)) {
@@ -233,13 +226,13 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 		}
 	}
 
-	public class WishesAdapter extends ArrayAdapter<Wish> {
+	public class CouponsAdapter extends ArrayAdapter<Coupon> {
 
-		private List<Wish> wishes;
+		private List<Coupon> wishes;
 		private Activity mContext;
 		private int width;
 
-		public WishesAdapter(Activity context, int resourceId, List<Wish> wishes) {
+		public CouponsAdapter(Activity context, int resourceId, List<Coupon> wishes) {
 			super(context.getApplicationContext(), resourceId, wishes);
 			mContext = context;
 			this.wishes = wishes;
@@ -256,72 +249,42 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 		}
 
 		protected class ViewHolder {
-			TextView title;
-			TextView date;
-			IconView crossIcon;
+			ImageView logo;
+			TextView validity;
+			TextView offer;
+			TextView terms;
+			RelativeLayout request_container;
 		}
 
 		@Override
 		public View getView(int position, View v, ViewGroup parent) {
-			final Wish wish = wishes.get(position);
+			final Coupon coupon = wishes.get(position);
 			if (v == null || v.findViewById(R.id.wishbox_list_item_root) == null) {
-				v = LayoutInflater.from(mContext).inflate(R.layout.wishbox_list_item, null);
+				v = LayoutInflater.from(mContext).inflate(R.layout.redeem_list_snippet, null);
 			}
 
 			ViewHolder viewHolder = (ViewHolder) v.getTag();
 			if (viewHolder == null) {
 				viewHolder = new ViewHolder();
-				viewHolder.title = (TextView) v.findViewById(R.id.wish_title);
-				viewHolder.date = (TextView) v.findViewById(R.id.wish_date);
-				viewHolder.crossIcon = (IconView) v.findViewById(R.id.cross_icon);
+				viewHolder.logo = (ImageView) v.findViewById(R.id.logo);
+				viewHolder.validity = (TextView) v.findViewById(R.id.validity);
+				viewHolder.offer = (TextView) v.findViewById(R.id.offer);
+				viewHolder.terms = (TextView) v.findViewById(R.id.terms);
+				viewHolder.request_container = (RelativeLayout) v.findViewById(R.id.request_container);
+
 				v.setTag(viewHolder);
 			}
 
-			((RelativeLayout.LayoutParams) v.findViewById(R.id.wishbox_list_item).getLayoutParams())
-					.setMargins(width / 40, width / 40, width / 40, width / 40);
+			viewHolder.validity.setText(coupon.getValidity());
+			viewHolder.offer.setText(coupon.getName());
+			viewHolder.terms.setText(coupon.getTerms());
 
-			viewHolder.date.setPadding(width / 20, width / 20, width / 20, width / 40);
-			viewHolder.title.setPadding(width / 20, width / 40, width / 20, width / 40);
-			((RelativeLayout.LayoutParams) viewHolder.crossIcon.getLayoutParams()).setMargins(0, 0, width / 20, 0);
-			// set the date in hh:mm format
-			viewHolder.date.setText(CommonLib.getDateFromUTC(wish.getTimeOfPost()));
-			// set the span of title
-			String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle();
-			SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(title);
+			setImageFromUrlOrDisk(coupon.getImage(), viewHolder.logo, "user", width / 10, width / 10, false);
 
-			ClickableSpan cs1 = new ClickableSpan() {
-				@Override
-				public void onClick(View widget) {
-				}
-
-				@Override
-				public void updateDrawState(TextPaint ds) {
-					super.updateDrawState(ds);
-					ds.setUnderlineText(false);
-					ds.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold));
-					ds.setColor(getResources().getColor(R.color.bt_orange));
-				}
-			};
-			finalSpanBuilderStr.setSpan(cs1, title.indexOf(wish.getTitle()),
-					title.indexOf(wish.getTitle()) + wish.getTitle().length(),
-					SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-
-			viewHolder.title.setText(finalSpanBuilderStr);
-
-			viewHolder.crossIcon.setOnClickListener(new View.OnClickListener() {
+			viewHolder.request_container.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					new AlertDialog.Builder(mContext).setMessage(getResources().getString(R.string.wish_delete_text))
-							.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							UploadManager.deleteRequest(prefs.getString("access_token", ""), wish.getWishId() + "");
-							dialog.dismiss();
-						}
-					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					}).show();
+					UploadManager.getCoupon(coupon.getId() + "");
 				}
 			});
 			return v;
@@ -330,49 +293,21 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 	}
 
 	// set all the wishes here
-	private void setWishes(ArrayList<Wish> wishes) {
-		this.wishes = wishes;
-		if (wishes != null && wishes.size() > 0 && mWishesTotalCount > wishes.size()
-				&& mListView.getFooterViewsCount() == 0) {
-			mListViewFooter = new LinearLayout(getApplicationContext());
-			mListViewFooter.setBackgroundResource(R.color.white);
-			mListViewFooter.setLayoutParams(new ListView.LayoutParams(LayoutParams.MATCH_PARENT, width / 5));
-			mListViewFooter.setGravity(Gravity.CENTER);
-			mListViewFooter.setOrientation(LinearLayout.HORIZONTAL);
-			ProgressBar pbar = new ProgressBar(getApplicationContext(), null,
-					android.R.attr.progressBarStyleSmallInverse);
-			mListViewFooter.addView(pbar);
-			pbar.setTag("progress");
-			pbar.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-			mListView.addFooterView(mListViewFooter);
-		}
-		mAdapter = new WishesAdapter(mContext, R.layout.new_request_fragment, this.wishes);
+	private void setWishes(ArrayList<Coupon> wishes) {
+		this.coupons = wishes;
+		mAdapter = new CouponsAdapter(mContext, R.layout.new_request_fragment, this.coupons);
 		mListView.setAdapter(mAdapter);
-		mListView.setOnScrollListener(new OnScrollListener() {
-
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-			}
-
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount - 1 < mWishesTotalCount
-						&& !loading && mListViewFooter != null) {
-					if (mListView.getFooterViewsCount() == 1) {
-						loading = true;
-						new LoadModeWishes().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
-					}
-				} else if (totalItemCount - 1 == mWishesTotalCount && mListView.getFooterViewsCount() > 0) {
-					mListView.removeFooterView(mListViewFooter);
-				}
-			}
-		});
 	}
 
 	@Override
 	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
 			String stringId) {
-		if (requestType == CommonLib.WISH_REMOVE) {
-			if (!destroyed)
+		if (requestType == CommonLib.COUPON_UPDATE) {
+			if (!destroyed && status) {
+				Toast.makeText(mContext, "Success", Toast.LENGTH_LONG).show();
+				;
 				refreshView();
+			}
 		}
 	}
 
@@ -380,36 +315,180 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
 	}
 
-	private class LoadModeWishes extends AsyncTask<Integer, Void, Object> {
+	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width,
+			int height, boolean useDiskCache) {
 
-		// execute the api
-		@Override
-		protected Object doInBackground(Integer... params) {
-			int start = params[0];
-			try {
-				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
-				String url = "";
-				url = CommonLib.SERVER + "wish/view?start=" + start + "&count=" + count;
-				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.WISH_LIST, RequestWrapper.FAV);
-				CommonLib.ZLog("url", url);
-				return info;
+		if (cancelPotentialWork(url, imageView)) {
 
-			} catch (Exception e) {
-				e.printStackTrace();
+			GetImage task = new GetImage(url, imageView, width, height, useDiskCache, type);
+			final AsyncDrawable asyncDrawable = new AsyncDrawable(getResources(), zapp.cache.get(url + type), task);
+			imageView.setImageDrawable(asyncDrawable);
+			if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
+					&& ((ViewGroup) imageView.getParent()).getChildAt(2) != null
+					&& ((ViewGroup) imageView.getParent()).getChildAt(2) instanceof ProgressBar) {
+				((ViewGroup) imageView.getParent()).getChildAt(2).setVisibility(View.GONE);
 			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Object result) {
-			if (destroyed)
-				return;
-			if (result != null && result instanceof Object[]) {
-				Object[] arr = (Object[]) result;
-				wishes.addAll((ArrayList<Wish>) arr[1]);
-				mAdapter.notifyDataSetChanged();
+			if (zapp.cache.get(url + type) == null) {
+				task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1L);
+			} else if (imageView != null && imageView.getDrawable() != null
+					&& ((BitmapDrawable) imageView.getDrawable()).getBitmap() != null) {
+				imageView.setBackgroundResource(0);
+				Bitmap blurBitmap = null;
+				if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
+						&& ((ViewGroup) imageView.getParent()).getChildAt(2) != null
+						&& ((ViewGroup) imageView.getParent()).getChildAt(2) instanceof ProgressBar) {
+					((ViewGroup) imageView.getParent()).getChildAt(2).setVisibility(View.GONE);
+				}
 			}
-			loading = false;
 		}
 	}
+
+	private class AsyncDrawable extends BitmapDrawable {
+		private final WeakReference<GetImage> bitmapWorkerTaskReference;
+
+		public AsyncDrawable(Resources res, Bitmap bitmap, GetImage bitmapWorkerTask) {
+			super(res, bitmap);
+			bitmapWorkerTaskReference = new WeakReference<GetImage>(bitmapWorkerTask);
+		}
+
+		public GetImage getBitmapWorkerTask() {
+			return bitmapWorkerTaskReference.get();
+		}
+	}
+
+	public boolean cancelPotentialWork(String data, ImageView imageView) {
+		final GetImage bitmapWorkerTask = getBitmapWorkerTask(imageView);
+
+		if (bitmapWorkerTask != null) {
+			final String bitmapData = bitmapWorkerTask.url;
+			if (!bitmapData.equals(data)) {
+				// Cancel previous task
+				bitmapWorkerTask.cancel(true);
+			} else {
+				// The same work is already in progress
+				return false;
+			}
+		}
+		// No task associated with the ImageView, or an existing task was
+		// cancelled
+		return true;
+	}
+
+	private GetImage getBitmapWorkerTask(ImageView imageView) {
+		if (imageView != null) {
+			final Drawable drawable = imageView.getDrawable();
+			if (drawable instanceof AsyncDrawable) {
+				final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+				return asyncDrawable.getBitmapWorkerTask();
+			}
+		}
+		return null;
+	}
+
+	private class GetImage extends AsyncTask<Object, Void, Bitmap> {
+
+		String url = "";
+		private WeakReference<ImageView> imageViewReference;
+		private int width;
+		private int height;
+		boolean useDiskCache;
+		String type;
+		Bitmap blurBitmap;
+
+		public GetImage(String url, ImageView imageView, int width, int height, boolean useDiskCache, String type) {
+			this.url = url;
+			imageViewReference = new WeakReference<ImageView>(imageView);
+			this.width = width;
+			this.height = height;
+			this.useDiskCache = true;// useDiskCache;
+			this.type = type;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			if (imageViewReference != null) {
+				ImageView imageView = imageViewReference.get();
+				if (imageView != null && imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
+						&& ((ViewGroup) imageView.getParent()).getChildAt(2) != null
+						&& ((ViewGroup) imageView.getParent()).getChildAt(2) instanceof ProgressBar)
+					((ViewGroup) imageView.getParent()).getChildAt(2).setVisibility(View.VISIBLE);
+			}
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Bitmap doInBackground(Object... params) {
+			Bitmap bitmap = null;
+			try {
+
+				String url2 = url + type;
+
+				if (destroyed && (imageViewReference.get() != findViewById(R.id.user_image))) {
+					return null;
+				}
+
+				if (useDiskCache) {
+					bitmap = CommonLib.getBitmapFromDisk(url2, getApplicationContext());
+				}
+
+				if (bitmap == null) {
+					try {
+						BitmapFactory.Options opts = new BitmapFactory.Options();
+						opts.inJustDecodeBounds = true;
+						BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
+
+						opts.inSampleSize = CommonLib.calculateInSampleSize(opts, width, height);
+						opts.inJustDecodeBounds = false;
+
+						bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null, opts);
+
+						if (useDiskCache) {
+							CommonLib.writeBitmapToDisk(url2, bitmap, getApplicationContext(),
+									Bitmap.CompressFormat.JPEG);
+						}
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					} catch (Error e) {
+
+					}
+				}
+
+				if (bitmap != null) {
+
+					bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
+					synchronized (zapp.cache) {
+						zapp.cache.put(url2, bitmap);
+					}
+				}
+
+			} catch (Exception e) {
+			}
+
+			return bitmap;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap bitmap) {
+
+			if (!destroyed) {
+				if (isCancelled()) {
+					bitmap = null;
+				}
+				if (imageViewReference != null && bitmap != null) {
+					final ImageView imageView = imageViewReference.get();
+					if (imageView != null) {
+						imageView.setImageBitmap(bitmap);
+						if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
+								&& ((ViewGroup) imageView.getParent()).getChildAt(2) != null
+								&& ((ViewGroup) imageView.getParent()).getChildAt(2) instanceof ProgressBar) {
+							((ViewGroup) imageView.getParent()).getChildAt(2).setVisibility(View.GONE);
+						}
+					}
+				}
+			}
+		}
+	}
+
 }

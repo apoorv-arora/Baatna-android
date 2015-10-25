@@ -169,6 +169,16 @@ public class UploadManager {
 
 	}
 
+	public static void getCoupon(String couponId) {
+		for (UploadManagerCallback callback : callbacks) {
+			callback.uploadStarted(CommonLib.COUPON_UPDATE, 0, couponId, null);
+		}
+
+		new GetCoupon().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				new Object[] { couponId});
+
+	}
+
 	private static class SignUp extends AsyncTask<Object, Void, Object[]> {
 
 		private String userName;
@@ -630,6 +640,42 @@ public class UploadManager {
 
 			for (UploadManagerCallback callback : callbacks) {
 				callback.uploadFinished(CommonLib.SEND_MESSAGE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+			}
+		}
+	}
+	
+	private static class GetCoupon extends AsyncTask<Object, Void, Object[]> {
+
+		private String couponId;
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+
+			Object result[] = null;
+			couponId = (String) params[0];
+			
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("couponId", couponId));
+			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
+			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
+			
+			try {
+				result = PostWrapper.postRequest(CommonLib.SERVER + "redeem/update?", nameValuePairs, PostWrapper.REDEEM_UPDATE, context);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return result;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Object[] arg) {
+			if (arg[0].equals("failure"))
+				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
+
+			for (UploadManagerCallback callback : callbacks) {
+				callback.uploadFinished(CommonLib.COUPON_UPDATE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
 			}
 		}
 	}
