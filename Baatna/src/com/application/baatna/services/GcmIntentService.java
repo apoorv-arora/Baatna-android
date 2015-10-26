@@ -17,7 +17,6 @@ import com.application.baatna.utils.ParserJson;
 import com.application.baatna.utils.facebook.FriendChecker;
 import com.application.baatna.views.MessagesActivity;
 import com.application.baatna.views.WishActivity;
-import com.application.baatna.views.WishboxActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.IntentService;
@@ -30,6 +29,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class GcmIntentService extends IntentService {
 
@@ -101,12 +101,18 @@ public class GcmIntentService extends IntentService {
 					notificationActivity.putExtra("user", messageObj.getFromUser());
 					notificationActivity.putExtra("wish", messageObj.getWish());
 					notificationActivity.putExtra("type", type);
+					notificationActivity.putExtra("message", messageObj);
 
-					// boolean object =
-					// CommonLib.getCurrentActiveActivity(context);
-					// if(object) {
-					// Intent intent = new Intent();
-					// }
+					boolean object = CommonLib.getCurrentActiveActivity(context);
+					if (object) {
+						showNotification = true;
+						Intent mIntent = new Intent(CommonLib.LOCAL_BROADCAST_NOTIFICATION);
+						mIntent.putExtra("user", messageObj.getFromUser());
+						mIntent.putExtra("wish", messageObj.getWish());
+						mIntent.putExtra("type", type);
+						mIntent.putExtra("message", messageObj);
+						LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
+					}
 
 				}
 
@@ -181,8 +187,7 @@ public class GcmIntentService extends IntentService {
 		Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Baatna").setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-				.setAutoCancel(true)
-				.setContentText(msg).setSound(soundUri);
+				.setAutoCancel(true).setContentText(msg).setSound(soundUri);
 		mBuilder.setContentIntent(contentIntent);
 		if (showNotification)
 			mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

@@ -11,6 +11,7 @@ import com.application.baatna.utils.pager.PagerSlidingTabStrip;
 import com.application.baatna.utils.pager.ZTabClickCallback;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -58,7 +59,7 @@ public class WishHistoryActivity extends FragmentActivity implements ZTabClickCa
 
 		homePager = (NoSwipeViewPager) findViewById(R.id.home_pager);
 		homePager.setAdapter(new HomePagerAdapter(getSupportFragmentManager()));
-		homePager.setOffscreenPageLimit(2);
+		homePager.setOffscreenPageLimit(1);
 		homePager.setCurrentItem(WISH_OWN);
 		homePager.setSwipeable(true);
 		setupActionBar();
@@ -85,7 +86,7 @@ public class WishHistoryActivity extends FragmentActivity implements ZTabClickCa
 		tabs.setInterfaceForClick(this);
 
 		final int tabsUnselectedColor = R.color.zhl_darker;
-		final int tabsSelectedColor = R.color.white;
+		final int tabsSelectedColor = R.color.zomato_red;
 
 //		final TextView homeSearchHeader = (TextView) ((LinearLayout) tabs.getChildAt(0)).getChildAt(WISH_OWN);
 		final TextView homeFeedHeader = (TextView) ((LinearLayout) tabs.getChildAt(0)).getChildAt(WISH_OFFERED);
@@ -182,29 +183,6 @@ public class WishHistoryActivity extends FragmentActivity implements ZTabClickCa
 
 			try {
 				switch (position) {
-
-				case WISH_OFFERED:
-
-					// Home Scroll Top
-					if (fragments.get(WISH_OFFERED) != null) {
-						WishOfferedFragment hf = (WishOfferedFragment) fragments.get(WISH_OFFERED).get();
-						if (hf != null) {
-							hf.scrollToTop();
-						}
-					} else {
-						HomePagerAdapter hAdapter = (HomePagerAdapter) homePager.getAdapter();
-						if (hAdapter != null) {
-							try {
-								WishOfferedFragment fragMent = (WishOfferedFragment) hAdapter.instantiateItem(homePager,
-										WISH_OFFERED);
-								if (fragMent != null)
-									fragMent.scrollToTop();
-							} catch (Exception e) {
-							}
-						}
-					}
-					break;
-
 				case WISH_OWN:
 
 					// Search Scroll Top
@@ -226,6 +204,27 @@ public class WishHistoryActivity extends FragmentActivity implements ZTabClickCa
 						}
 					}
 
+					break;
+				case WISH_OFFERED:
+
+					// Home Scroll Top
+					if (fragments.get(WISH_OFFERED) != null) {
+						WishOfferedFragment hf = (WishOfferedFragment) fragments.get(WISH_OFFERED).get();
+						if (hf != null) {
+							hf.scrollToTop();
+						}
+					} else {
+						HomePagerAdapter hAdapter = (HomePagerAdapter) homePager.getAdapter();
+						if (hAdapter != null) {
+							try {
+								WishOfferedFragment fragMent = (WishOfferedFragment) hAdapter.instantiateItem(homePager,
+										WISH_OFFERED);
+								if (fragMent != null)
+									fragMent.scrollToTop();
+							} catch (Exception e) {
+							}
+						}
+					}
 					break;
 
 				}
@@ -314,12 +313,12 @@ public class WishHistoryActivity extends FragmentActivity implements ZTabClickCa
 						}
 					}
 
-//					homeSearchHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
+					// homeSearchHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
 					homeFeedHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
 
 				} else if (arg0 == WISH_OFFERED) {
 
-//					homeSearchHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
+					// homeSearchHeader.setTextColor(getResources().getColor(tabsUnselectedColor));
 					homeFeedHeader.setTextColor(getResources().getColor(tabsSelectedColor));
 
 					if (fragments != null && fragments.get(WISH_OFFERED) != null) {

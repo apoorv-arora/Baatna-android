@@ -21,9 +21,13 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -32,6 +36,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -69,15 +74,16 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	private ProgressDialog zProgressDialog;
 
 	@Override
-	protected void onNewIntent(Intent intent) {
+	public void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		
-		if(intent != null && intent.getExtras() != null && intent.hasExtra("message")) {
-			new GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-//			mAdapter.notifyDataSetChanged();
-//			messageList.setSelection(mAdapter.getCount() - 1);
+
+		if (intent != null && intent.getExtras() != null && intent.hasExtra("message")) {
+			// new GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+			mAdapter.add((Message) intent.getSerializableExtra("message"));
+			mAdapter.notifyDataSetChanged();
+			messageList.setSelection(mAdapter.getCount() - 1);
 		}
-		
+
 	}
 
 	@Override
@@ -94,41 +100,42 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 		currentUser = (User) getIntent().getExtras().getSerializable("user");
 		currentWish = (Wish) getIntent().getExtras().getSerializable("wish");
-		if( getIntent().getExtras().containsKey("type") && getIntent().getExtras().get("type") instanceof Integer )
+		if (getIntent().getExtras().containsKey("type") && getIntent().getExtras().get("type") instanceof Integer)
 			type = getIntent().getExtras().getInt("type");
-		
+
 		setUpActionBar();
 
 		messageText = (EditText) findViewById(R.id.message);
-		
-		messageText.setPadding(width / 20, width / 20, width / 20, width / 20);
-		
-//		findViewById(R.id.send_container).setPadding(width / 20, width / 20, width / 20, width / 20);
 
-//		sendMessageButton = ;
+		messageText.setPadding(width / 20, width / 20, width / 20, width / 20);
+
+		// findViewById(R.id.send_container).setPadding(width / 20, width / 20,
+		// width / 20, width / 20);
+
+		// sendMessageButton = ;
 
 		findViewById(R.id.send_icon).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				long objectId = System.currentTimeMillis();
 				String message = messageText.getText().toString();
-				if(message == null || message.length() < 1)
+				if (message == null || message.length() < 1)
 					return;
-				UploadManager.sendMessage(currentUser.getUserId() + "", message,
-						currentWish.getWishId() + "", objectId);
+				UploadManager.sendMessage(currentUser.getUserId() + "", message, currentWish.getWishId() + "",
+						objectId);
 				messageText.setText("");
-				
+
 				Message msg = new Message();
 				msg.setFromTo(true);
 				msg.setMessage(message);
 				msg.setToUser(currentUser);
 				msg.setWish(currentWish);
 				msg.setMessageId(objectId);
-				
+
 				messages.add(msg);
 				mAdapter.notifyDataSetChanged();
-				messageList.setSelection(messages.size()-1);
+				messageList.setSelection(messages.size() - 1);
 			}
 		});
 
@@ -137,20 +144,20 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 				if (keyCode == 66) {
 					long objectId = System.currentTimeMillis();
 					String message = messageText.getText().toString();
-					UploadManager.sendMessage(currentUser.getUserId() + "", message,
-							currentWish.getWishId() + "", objectId);
+					UploadManager.sendMessage(currentUser.getUserId() + "", message, currentWish.getWishId() + "",
+							objectId);
 					messageText.setText("");
-					
+
 					Message msg = new Message();
 					msg.setFromTo(true);
 					msg.setMessage(message);
 					msg.setToUser(currentUser);
 					msg.setWish(currentWish);
 					msg.setMessageId(objectId);
-					
+
 					messages.add(msg);
 					mAdapter.notifyDataSetChanged();
-					messageList.setSelection(messages.size()-1);
+					messageList.setSelection(messages.size() - 1);
 					return true;
 				}
 				return false;
@@ -159,63 +166,97 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		UploadManager.addCallback(this);
 
 		new GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-		
+
 		messageList.setDividerHeight(width / 20);
 		messageList.setHeaderDividersEnabled(true);
 		messageList.setFooterDividersEnabled(true);
 		setListeners();
-		
-		if(type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
-//			subtitle.setText("Offered YOU A "+ currentWish.getTitle());
-			if ( currentWish.getStatus() == CommonLib.STATUS_OFFERED ) {
-				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView)findViewById(R.id.product_status)).setText("Product received");
-			} else if ( currentWish.getStatus() == CommonLib.STATUS_RECEIVED ) {
-				//check if the product is received
-			} else if ( currentWish.getStatus() == CommonLib.STATUS_ACTIVE ) {
-				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView)findViewById(R.id.product_status)).setText("Product received");
+
+		if (type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
+			// subtitle.setText("Offered YOU A "+ currentWish.getTitle());
+			if (currentWish.getStatus() == CommonLib.STATUS_OFFERED) {
+				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.product_status)).setText("Product received");
+			} else if (currentWish.getStatus() == CommonLib.STATUS_RECEIVED) {
+				// check if the product is received
+			} else if (currentWish.getStatus() == CommonLib.STATUS_ACTIVE) {
+				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.product_status)).setText("Product received");
 			} else {
-				((TextView)findViewById(R.id.product_status)).setVisibility(View.GONE);
+				((TextView) findViewById(R.id.product_status)).setVisibility(View.GONE);
 			}
-		} else if(type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
-//			subtitle.setText("REQUESTED FOR A "+ currentWish.getTitle());
-			if ( currentWish.getStatus() == CommonLib.STATUS_OFFERED ) {
-				//check if this user is in the accepted list, if it is, make the view gone, else visible
-			} else if ( currentWish.getStatus() == CommonLib.STATUS_RECEIVED ) {
-				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView)findViewById(R.id.product_status)).setText("Product offered");
-			} else if ( currentWish.getStatus() == CommonLib.STATUS_ACTIVE ) {
-				((TextView)findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView)findViewById(R.id.product_status)).setText("Product offered");
+		} else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
+			// subtitle.setText("REQUESTED FOR A "+ currentWish.getTitle());
+			if (currentWish.getStatus() == CommonLib.STATUS_OFFERED) {
+				// check if this user is in the accepted list, if it is, make
+				// the view gone, else visible
+			} else if (currentWish.getStatus() == CommonLib.STATUS_RECEIVED) {
+				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.product_status)).setText("Product offered");
+			} else if (currentWish.getStatus() == CommonLib.STATUS_ACTIVE) {
+				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.product_status)).setText("Product offered");
 			} else {
-				((TextView)findViewById(R.id.product_status)).setVisibility(View.GONE);
+				((TextView) findViewById(R.id.product_status)).setVisibility(View.GONE);
 			}
 		}
-		
+
+		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mNotificationReceived,
+				new IntentFilter(CommonLib.LOCAL_BROADCAST_NOTIFICATION));
+
 	}
 
+	private BroadcastReceiver mNotificationReceived = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			try {
+				if (intent != null && intent.getExtras() != null && intent.hasExtra("message")) {
+					// new
+					// GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+					// check for user and wish
+
+					User user = (User) intent.getSerializableExtra("user");
+					Wish wish = (Wish) intent.getSerializableExtra("wish");
+
+					if (wish.getWishId() == currentWish.getWishId() && user.getUserId() == currentUser.getUserId()) {
+						mAdapter.add((Message) intent.getSerializableExtra("message"));
+						mAdapter.notifyDataSetChanged();
+						messageList.setSelection(mAdapter.getCount() - 1);
+						NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+						notificationManager.cancelAll();
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	};
+
 	private void setListeners() {
-		
+
 		findViewById(R.id.dropdown_setting).setVisibility(View.VISIBLE);
-		
+
 		findViewById(R.id.product_status).setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				int action = -1;
-				if(type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
+				if (type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
 					action = CommonLib.ACTION_WISH_RECEIVED;
 					UploadManager.updateWishOfferedStatus(prefs.getString("access_token", ""),
-							"" + currentWish.getWishId(), action+"");
-				} else if(type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
+							"" + currentWish.getWishId(), action + "");
+				} else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
 					action = CommonLib.ACTION_WISH_OFFERED;
 					UploadManager.updateWishOfferedStatus(prefs.getString("access_token", ""),
-							"" + currentWish.getWishId(), action+"");
+							"" + currentWish.getWishId(), action + "");
 				}
 			}
 		});
 	}
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		int message = -1;
@@ -247,38 +288,39 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		View v = inflater.inflate(R.layout.messages_action_bar, null);
 
 		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
-		
-//		v.findViewById(R.id.tick_proceed_icon).setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				View reviewDropDown = findViewById(R.id.dropdown_setting_layout);
-//	            if (reviewDropDown.isShown())
-//	                reviewDropDown.setVisibility(View.GONE);
-//	            else {
-//	                reviewDropDown.setVisibility(View.VISIBLE);
-//	            }
-//			}
-//		});
-		
+
+		// v.findViewById(R.id.tick_proceed_icon).setOnClickListener(new
+		// View.OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// View reviewDropDown = findViewById(R.id.dropdown_setting_layout);
+		// if (reviewDropDown.isShown())
+		// reviewDropDown.setVisibility(View.GONE);
+		// else {
+		// reviewDropDown.setVisibility(View.VISIBLE);
+		// }
+		// }
+		// });
+
 		findViewById(R.id.delete_message).setPadding(width / 20, width / 20, width / 20, width / 20);
 		findViewById(R.id.sort_by_recency).setPadding(width / 20, width / 20, width / 20, width / 20);
-		
+
 		// user handle
 		TextView title = (TextView) v.findViewById(R.id.title);
 		title.setPadding(width / 80, 0, width / 40, 0);
-		
+
 		TextView subtitle = (TextView) v.findViewById(R.id.subtitle);
 		subtitle.setPadding(width / 80, 0, width / 40, 0);
 		actionBar.setCustomView(v);
 
 		title.setText(currentUser.getUserName());
-		if(type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
-			subtitle.setText("Offered YOU A "+ currentWish.getTitle());
-		} else if(type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
-			subtitle.setText("REQUESTED FOR A "+ currentWish.getTitle());
+		if (type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
+			subtitle.setText("Offered YOU A " + currentWish.getTitle());
+		} else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
+			subtitle.setText("REQUESTED FOR A " + currentWish.getTitle());
 		}
-		
+
 		ImageView imageView = (ImageView) v.findViewById(R.id.user_chat_head);
 		setImageFromUrlOrDisk(currentUser.getImageUrl(), imageView, "", width, width, false);
 	}
@@ -293,6 +335,7 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 		destroyed = true;
 		if (zProgressDialog != null && zProgressDialog.isShowing())
 			zProgressDialog.dismiss();
+		LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mNotificationReceived);
 		super.onDestroy();
 	}
 
@@ -394,15 +437,15 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 					if (data != null && data instanceof Message) {
 						MessageDBWrapper.addMessage((Message) data, ((Message) data).getToUser().getUserId(),
 								((Message) data).getWish().getWishId(), System.currentTimeMillis());
-//						messages.add((Message) data);
-//						mAdapter.notifyDataSetChanged();
-//						messageList.setSelection(messages.size()-1);
+						// messages.add((Message) data);
+						// mAdapter.notifyDataSetChanged();
+						// messageList.setSelection(messages.size()-1);
 					}
 				} else {// show retry button
 					Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();
 				}
 			}
-		} else if(requestType == CommonLib.WISH_OFFERED_STATUS && !destroyed) {
+		} else if (requestType == CommonLib.WISH_OFFERED_STATUS && !destroyed) {
 			if (zProgressDialog != null && zProgressDialog.isShowing())
 				zProgressDialog.dismiss();
 			findViewById(R.id.product_status).setVisibility(View.GONE);
@@ -411,9 +454,9 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 	@Override
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
-		if(requestType == CommonLib.WISH_OFFERED_STATUS && !destroyed) {
-			zProgressDialog = ProgressDialog.show(MessagesActivity.this, null, getResources().getString(R.string.hang_on),
-					true, false);
+		if (requestType == CommonLib.WISH_OFFERED_STATUS && !destroyed) {
+			zProgressDialog = ProgressDialog.show(MessagesActivity.this, null,
+					getResources().getString(R.string.hang_on), true, false);
 			zProgressDialog.setCancelable(true);
 		}
 	}
@@ -441,7 +484,7 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 				if (messages instanceof ArrayList<?>) {
 					mAdapter = new MessagesAdapter(mContext, R.layout.chat_item_snippet, messages);
 					messageList.setAdapter(mAdapter);
-					messageList.setSelection(messages.size()-1);
+					messageList.setSelection(messages.size() - 1);
 				}
 			} else {
 				if (CommonLib.isNetworkAvailable(MessagesActivity.this)) {
@@ -455,7 +498,7 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 		}
 	}
-	
+
 	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width,
 			int height, boolean useDiskCache) {
 
@@ -631,6 +674,5 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 			}
 		}
 	}
-
 
 }

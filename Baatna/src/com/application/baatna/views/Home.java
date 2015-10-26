@@ -1267,8 +1267,11 @@ public class Home extends AppCompatActivity
 
 						@Override
 						public void onClick(View v) {
+							
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
 									"" + wish.getWishId(), "2", new Object[] {user, wish});
+							feedListAdapter.remove(feedItem);
+							feedListAdapter.notifyDataSetChanged();
 						}
 					});
 					viewHolder.accept.setVisibility(View.VISIBLE);

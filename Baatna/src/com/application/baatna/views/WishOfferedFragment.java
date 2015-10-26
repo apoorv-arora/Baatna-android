@@ -225,7 +225,7 @@ public class WishOfferedFragment extends Fragment implements UploadManagerCallba
 			// set the date in hh:mm format
 			viewHolder.date.setText(CommonLib.getDateFromUTC(wish.getTimeOfPost()));
 			// set the span of title
-			String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle();
+			String title = mContext.getResources().getString(R.string.wish_title_offered_hint) + wish.getTitle();
 			SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(title);
 
 			ClickableSpan cs1 = new ClickableSpan() {
@@ -247,22 +247,7 @@ public class WishOfferedFragment extends Fragment implements UploadManagerCallba
 
 			viewHolder.title.setText(finalSpanBuilderStr);
 
-			viewHolder.crossIcon.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					new AlertDialog.Builder(mContext).setMessage(getResources().getString(R.string.wish_delete_text))
-							.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							UploadManager.deleteRequest(prefs.getString("access_token", ""), wish.getWishId() + "");
-							dialog.dismiss();
-						}
-					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					}).show();
-				}
-			});
+			viewHolder.crossIcon.setVisibility(View.GONE);
 			return v;
 		}
 

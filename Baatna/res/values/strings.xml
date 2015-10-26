@@ -107,5 +107,6 @@
     <string name="thanks_wish_tick">Thanks for offering %1$s your %2$s. Would you like to message him?</string>
     <string name="later">Later</string>
     <string name="message">Message</string>
+    <string name="wish_title_offered_hint">You offered\n</string>
 
 </resources>

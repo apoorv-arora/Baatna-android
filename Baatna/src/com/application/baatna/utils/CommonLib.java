@@ -30,7 +30,6 @@ import com.application.baatna.data.Categories;
 import com.application.baatna.data.CategoryItems;
 import com.application.baatna.views.MessagesActivity;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -56,7 +55,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class CommonLib {
 
@@ -78,6 +76,10 @@ public class CommonLib {
 	// public static String API_VERSION = "v2/";
 	public static String API_VERSION = "";
 	public static String SERVER = SERVER_WITHOUT_VERSION + API_VERSION;
+	
+	public static final String LOCAL_BROADCAST_NOTIFICATIONS = "new_push_notification";
+	public static final String LOCAL_BROADCAST_NOTIFICATION = "gcm-push-notification";
+
 
 	/** to keep the url same for all cities.xml requests */
 	// public static String STATIC_SERVER = "https://1api.baatna.com/v2/";
@@ -960,7 +962,10 @@ public class CommonLib {
 		List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
 		Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
 		ComponentName componentInfo = taskInfo.get(0).topActivity;
-		return (componentInfo.equals(MessagesActivity.class));
+		boolean returnvalue= componentInfo.getClassName().equals(MessagesActivity.class.getName());
+		Object o = MessagesActivity.class;
+		System.out.println(o);
+		return (returnvalue);
 	}
 
 	public static boolean hasContact(Context mContext, String contact) {

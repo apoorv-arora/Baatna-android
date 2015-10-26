@@ -19,9 +19,12 @@ import com.application.baatna.utils.UploadManagerCallback;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -65,7 +68,7 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 		prefs = getSharedPreferences("application_settings", 0);
 		mListView = (ListView) findViewById(R.id.wish_list);
 		mListView.setDivider(null);
-		mListView.setDividerHeight(0);
+		mListView.setDividerHeight(width / 20);
 		mContext = this;
 		inflater = LayoutInflater.from(this);
 		setupActionBar();
@@ -253,7 +256,7 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 			TextView validity;
 			TextView offer;
 			TextView terms;
-			RelativeLayout request_container;
+			RelativeLayout fulfill_container;
 		}
 
 		@Override
@@ -270,7 +273,7 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 				viewHolder.validity = (TextView) v.findViewById(R.id.validity);
 				viewHolder.offer = (TextView) v.findViewById(R.id.offer);
 				viewHolder.terms = (TextView) v.findViewById(R.id.terms);
-				viewHolder.request_container = (RelativeLayout) v.findViewById(R.id.request_container);
+				viewHolder.fulfill_container = (RelativeLayout) v.findViewById(R.id.fulfill_container);
 
 				v.setTag(viewHolder);
 			}
@@ -281,7 +284,10 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 
 			setImageFromUrlOrDisk(coupon.getImage(), viewHolder.logo, "user", width / 10, width / 10, false);
 
-			viewHolder.request_container.setOnClickListener(new View.OnClickListener() {
+			((RelativeLayout.LayoutParams) v.findViewById(R.id.relative_container).getLayoutParams())
+					.setMargins(width / 20, 0, width / 20, 0);
+
+			viewHolder.fulfill_container.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					UploadManager.getCoupon(coupon.getId() + "");
@@ -304,8 +310,18 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 			String stringId) {
 		if (requestType == CommonLib.COUPON_UPDATE) {
 			if (!destroyed && status) {
-				Toast.makeText(mContext, "Success", Toast.LENGTH_LONG).show();
-				;
+				final AlertDialog successDialog;
+				successDialog = new AlertDialog.Builder(this).setTitle("Success")
+						.setMessage("The coupon will be emailed to you shortly").setPositiveButton(
+								getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										dialog.dismiss();
+									}
+								})
+						.create();
+				successDialog.show();
+
 				refreshView();
 			}
 		}
