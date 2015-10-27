@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,6 +44,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -347,6 +349,12 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
+		try {
+			InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(findViewById(R.id.message).getWindowToken(), 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 

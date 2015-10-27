@@ -631,7 +631,7 @@ public class Home extends AppCompatActivity
 			mDrawerLayout.closeDrawer(findViewById(R.id.left_drawer));
 			return;
 		}
-		
+
 		super.onBackPressed();
 	}
 
@@ -693,7 +693,7 @@ public class Home extends AppCompatActivity
 		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "", width, width, false, false);
 
 		ImageView imageBlur = (ImageView) findViewById(R.id.drawer_user_info_blur_background_image);
-		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBlur, "", width, width, false, true);
+		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBlur, "", width / 200, width / 200, false, true);
 	}
 
 	// public void feedback(View v) {
@@ -715,10 +715,10 @@ public class Home extends AppCompatActivity
 
 	public void inviteFriends(View v) {
 		String userId = "";
-		String shortUrl = " http://baat.na/invite/" + userId;
+		String shortUrl = "https://play.google.com/store/apps/details?id=com.application.baatna";
 		String shareText = getResources().getString(R.string.share_description) + shortUrl;
 
-		Intent i = new Intent(android.content.Intent.ACTION_SEND);
+		// Intent i = new Intent(android.content.Intent.ACTION_SEND);
 		// i.setType("text/plain");
 		// i.putExtra(Intent.EXTRA_TEXT, shareText);
 		// startActivity(Intent.createChooser(i,
@@ -734,6 +734,7 @@ public class Home extends AppCompatActivity
 				String packageName = resolveInfo.activityInfo.packageName;
 				Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
 				targetedShareIntent.setType("text/plain");
+				targetedShareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				// if (TextUtils.equals(packageName, "com.facebook.katana")) {
 				// targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
@@ -760,7 +761,7 @@ public class Home extends AppCompatActivity
 	}
 
 	public void openWishbox(View v) {
-//		Intent intent = new Intent(this, WishboxActivity.class);
+		// Intent intent = new Intent(this, WishboxActivity.class);
 		Intent intent = new Intent(this, WishHistoryActivity.class);
 		startActivity(intent);
 	}
@@ -781,6 +782,13 @@ public class Home extends AppCompatActivity
 	public void onCoordinatesIdentified(Location loc) {
 		if (loc != null) {
 			UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
+			float lon = (float) loc.getLongitude();
+			float lat = (float) loc.getLatitude();
+
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putFloat("lat", lat);
+			editor.putFloat("lon", lon);
+			editor.commit();
 		}
 	}
 
@@ -1174,8 +1182,11 @@ public class Home extends AppCompatActivity
 
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
 					.setMargins(width / 40, 0, width / 40, 0);
-			viewHolder.accept.setPadding(width / 20, 0, width / 20, 0);
-			viewHolder.decline.setPadding(width / 20, 0, width / 20, 0);
+//			viewHolder.accept.setPadding(width / 20, 0, width / 20, 0);
+//			viewHolder.decline.setPadding(width / 20, 0, width / 20, 0);
+			
+			viewHolder.accept.getLayoutParams().width = getResources().getDimensionPixelOffset(R.dimen.height125) / 2;
+			viewHolder.decline.getLayoutParams().width = getResources().getDimensionPixelOffset(R.dimen.height125) / 2;
 
 			final User user = feedItem.getUserIdFirst();
 
@@ -1234,8 +1245,8 @@ public class Home extends AppCompatActivity
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false, false);
 
 					viewHolder.userName.setText(description);
-					viewHolder.accept.setVisibility(View.GONE);
-					viewHolder.decline.setVisibility(View.GONE);
+					viewHolder.accept.setVisibility(View.INVISIBLE);
+					viewHolder.decline.setVisibility(View.INVISIBLE);
 					viewHolder.bar
 							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.feed_joined)));
 				}
@@ -1259,7 +1270,7 @@ public class Home extends AppCompatActivity
 									getResources().getString(R.string.sending_request), true, false);
 							z_ProgressDialog.setCancelable(false);
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-									"" + wish.getWishId(), "1", new Object[] {user, wish});
+									"" + wish.getWishId(), "1", new Object[] { user, wish });
 						}
 					});
 
@@ -1267,9 +1278,9 @@ public class Home extends AppCompatActivity
 
 						@Override
 						public void onClick(View v) {
-							
+
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-									"" + wish.getWishId(), "2", new Object[] {user, wish});
+									"" + wish.getWishId(), "2", new Object[] { user, wish });
 							feedListAdapter.remove(feedItem);
 							feedListAdapter.notifyDataSetChanged();
 						}
@@ -1286,8 +1297,8 @@ public class Home extends AppCompatActivity
 
 				viewHolder.userName.setText(description);
 				viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
-				viewHolder.accept.setVisibility(View.GONE);
-				viewHolder.decline.setVisibility(View.GONE);
+				viewHolder.accept.setVisibility(View.INVISIBLE);
+				viewHolder.decline.setVisibility(View.INVISIBLE);
 				break;
 
 			}
@@ -1690,37 +1701,38 @@ public class Home extends AppCompatActivity
 		if (requestType == CommonLib.WISH_UPDATE_STATUS) {
 			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
 				z_ProgressDialog.dismiss();
-			
-			if(destroyed || !status)
+
+			if (destroyed || !status)
 				return;
-			
-			if(objectId != 1 )//accept
+
+			if (objectId != 1) // accept
 				return;
-			
-			final User user = (User) ((Object[])data)[0];
-			final Wish wish = (Wish) ((Object[])data)[1];
-				
+
+			final User user = (User) ((Object[]) data)[0];
+			final Wish wish = (Wish) ((Object[]) data)[1];
+
 			final AlertDialog messageDialog;
 			messageDialog = new AlertDialog.Builder(this)
-					.setMessage(getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle()))
-					.setPositiveButton(getResources().getString(R.string.message), new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							//navigate to message with this user, how?
-							Intent intent = new Intent(Home.this, MessagesActivity.class);
-							intent.putExtra("user", user);
-							intent.putExtra("wish", wish);
-							intent.putExtra("type", CommonLib.WISH_ACCEPTED_CURRENT_USER);
-							startActivity(intent);
-						}
-					}).setNegativeButton(getResources().getString(R.string.later),
+					.setMessage(
+							getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle()))
+					.setPositiveButton(getResources().getString(R.string.message),
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
+									// navigate to message with this user, how?
+									Intent intent = new Intent(Home.this, MessagesActivity.class);
+									intent.putExtra("user", user);
+									intent.putExtra("wish", wish);
+									intent.putExtra("type", CommonLib.WISH_ACCEPTED_CURRENT_USER);
+									startActivity(intent);
 								}
 							})
-					.create();
+					.setNegativeButton(getResources().getString(R.string.later), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					}).create();
 			messageDialog.show();
 		}
 	}
@@ -1903,13 +1915,15 @@ public class Home extends AppCompatActivity
 		// addressMap.getParent()).getLayoutParams()).setMargins(0, width / 40,
 		// 0, 0);
 
-		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon
-				+ "&zoom=14&size="+width+"x"+getResources().getDimensionPixelSize(R.dimen.height125)+"&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|"
+		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon + "&zoom=14&size="
+				+ width + "x" + getResources().getDimensionPixelSize(R.dimen.height125)
+				+ "&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|"
 				+ lat + "," + lon;
 
 		// CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type,
 		// mapWidth, height, useDiskCache, fastBlur);
-		setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width, getResources().getDimensionPixelSize(R.dimen.height125), false, false);
+		setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width,
+				getResources().getDimensionPixelSize(R.dimen.height125), false, false);
 
 		// click
 		((FrameLayout) addressMap.getParent()).setOnClickListener(new OnClickListener() {

@@ -16,6 +16,14 @@ import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.R;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.PostWrapper;
+import com.application.baatna.utils.TypefaceSpan;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -42,13 +50,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.R;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.PostWrapper;
-import com.application.baatna.utils.TypefaceSpan;
-
-public class FeedbackPage extends Activity {
+public class FeedbackPage extends Activity implements UploadManagerCallback {
 
 	int screenWidth;
 	int screenHeight;
@@ -62,12 +64,15 @@ public class FeedbackPage extends Activity {
 	private final int EMAIL_FEEDBACK = 1500;
 	private View actionBarCustomView;
 
+	private boolean destroyed = false;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.feedback_page);
 
+		UploadManager.addCallback(this);
 		Display display = getWindowManager().getDefaultDisplay();
 		screenWidth = display.getWidth();
 
@@ -84,6 +89,13 @@ public class FeedbackPage extends Activity {
 		screenHeight = getWindowManager().getDefaultDisplay().getHeight();
 		setUpActionBar();
 		fixSizes();
+	}
+
+	@Override
+	public void onDestroy() {
+		destroyed = true;
+		UploadManager.removeCallback(this);
+		super.onDestroy();
 	}
 
 	private void setUpActionBar() {
@@ -118,6 +130,7 @@ public class FeedbackPage extends Activity {
 
 		case R.id.home_icon_container:
 			onBackPressed();
+			break;
 
 		default:
 			break;
@@ -258,8 +271,12 @@ public class FeedbackPage extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		InputMethodManager imm = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(findViewById(R.id.feedback_content).getWindowToken(), 0);
+		try {
+			InputMethodManager imm = (InputMethodManager) this.getSystemService(INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(findViewById(R.id.feedback_content).getWindowToken(), 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		FeedbackPage.this.finish();
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
@@ -268,7 +285,16 @@ public class FeedbackPage extends Activity {
 
 		if (!((EditText) findViewById(R.id.feedback_content)).getText().toString().equals("")) {
 			String message = ((EditText) findViewById(R.id.feedback_content)).getText().toString();
-			new sendFeedback().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+			String LogString = new String("App Version  : " + CommonLib.VERSION_STRING + "\n" + "Connection   : "
+					+ CommonLib.getNetworkState(this) + "\n" + "Identifier   : " + prefs.getString("app_id", "") + "\n"
+					+ "Location     : " + zapp.lat + " , " + zapp.lon + "\n" + "User Id      : "
+					+ prefs.getInt("uid", 0) + "\n" + "User Agent   : "
+					+ CommonLib.getVersionString(getApplicationContext()) + "&device=" + Build.MANUFACTURER + ","
+					+ Build.BRAND + "," + Build.MODEL);
+			UploadManager.sendFeedback(message, LogString);
+			// new
+			// sendFeedback().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+			// message);
 		}
 	}
 
@@ -276,7 +302,17 @@ public class FeedbackPage extends Activity {
 		if (!((EditText) findViewById(R.id.feedback_content)).getText().toString().equals("")
 				&& ((EditText) findViewById(R.id.feedback_content)).getText().toString().trim().length() > 0) {
 			String message = ((EditText) findViewById(R.id.feedback_content)).getText().toString();
-			new sendFeedback().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+			String LogString = new String("App Version  : " + CommonLib.VERSION_STRING + "\n" + "Connection   : "
+					+ CommonLib.getNetworkState(this) + "\n" + "Identifier   : " + prefs.getString("app_id", "") + "\n"
+					+ "Location     : " + zapp.lat + " , " + zapp.lon + "\n" + "User Id      : "
+					+ prefs.getInt("uid", 0) + "\n" + "User Agent   : "
+					+ CommonLib.getVersionString(getApplicationContext()) + "&device=" + Build.MANUFACTURER + ","
+					+ Build.BRAND + "," + Build.MODEL);
+
+			UploadManager.sendFeedback(message, LogString);
+			// new
+			// sendFeedback().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+			// message);
 		}
 	}
 
@@ -352,5 +388,22 @@ public class FeedbackPage extends Activity {
 
 	public void goBack(View view) {
 		onBackPressed();
+	}
+
+	@Override
+	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
+			String stringId) {
+		if (requestType == CommonLib.SEND_FEEDBACK) {
+			if (!destroyed && status) {
+				Toast.makeText(FeedbackPage.this, "Thank you for your feeback, it means a lot to us!",
+						Toast.LENGTH_LONG).show();
+				onBackPressed();
+			}
+		}
+	}
+
+	@Override
+	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
+
 	}
 }

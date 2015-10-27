@@ -64,6 +64,7 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 		mWish = (Wish) getIntent().getSerializableExtra("wish");
 		mUser = (User) getIntent().getSerializableExtra("user");
 
+		UploadManager.addCallback(this);
 		setupActionBar();
 		fixSizes();
 		setValues();
@@ -75,9 +76,9 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 			String stringId) {
 		if (destroyed)
 			return;
+		if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
+			z_ProgressDialog.dismiss();
 		if (requestType == CommonLib.WISH_UPDATE_STATUS) {
-			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
-				z_ProgressDialog.dismiss();
 			if(destroyed || !status)
 				return;
 			

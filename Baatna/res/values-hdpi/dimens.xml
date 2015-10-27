@@ -109,4 +109,6 @@
     <item name="drawer_text_size" type="dimen">14dp</item>
     <item name="drawer_icon_left_padding" type="dimen">28dp</item>
     
+    <item name="drawer_icon_left_padding_more" type="dimen">26dp</item>
+    
 </resources>

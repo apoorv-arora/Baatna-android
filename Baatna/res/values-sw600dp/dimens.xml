@@ -112,5 +112,7 @@
     <item name="separator_separation" type="dimen">8dp</item>
     <item name="drawer_icon_left_padding" type="dimen">34dp</item>
     
+    <item name="drawer_icon_left_padding_more" type="dimen">32dp</item>
+    
 
 </resources>

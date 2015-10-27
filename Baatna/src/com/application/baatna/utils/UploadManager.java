@@ -39,8 +39,7 @@ public class UploadManager {
 		}
 
 		// this is here because its called from a lot of places.
-		if ((double) Debug.getNativeHeapAllocatedSize()
-				/ Runtime.getRuntime().maxMemory() > .70) {
+		if ((double) Debug.getNativeHeapAllocatedSize() / Runtime.getRuntime().maxMemory() > .70) {
 			if (zapp != null) {
 
 				if (zapp.cache != null)
@@ -60,18 +59,16 @@ public class UploadManager {
 			callback.uploadStarted(CommonLib.SIGNUP, 0, password, null);
 		}
 
-		new SignUp().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { name, email, password});
+		new SignUp().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Object[] { name, email, password });
 
 	}
-	
+
 	public static void login(String email, String password) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.LOGIN, 0, password, null);
 		}
 
-		new Login().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { email, password});
+		new Login().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Object[] { email, password });
 
 	}
 
@@ -80,73 +77,68 @@ public class UploadManager {
 			callback.uploadStarted(CommonLib.LOGOUT, 0, accessToken, null);
 		}
 
-		new Logout().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken});
+		new Logout().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Object[] { accessToken });
 
 	}
-	
+
 	public static void postNewRequest(String accessToken, String title, String description) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.WISH_ADD, 0, accessToken, null);
 		}
 
 		new NewRequest().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, title, description});
+				new Object[] { accessToken, title, description });
 
 	}
-	
+
 	public static void deleteRequest(String accessToken, String wishId) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.WISH_REMOVE, 0, accessToken, null);
 		}
 
-		new DeleteRequest().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, wishId});
+		new DeleteRequest().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Object[] { accessToken, wishId });
 
 	}
-	
+
 	public static void updateRegistrationId(String accessToken, String regId) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.HARDWARE_REGISTER, 0, accessToken, null);
 		}
 
 		new UpdateRegistrationId().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, regId});
+				new Object[] { accessToken, regId });
 
 	}
-	
+
 	public static void updateLocation(String accessToken, double lat, double lon) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.LOCATION_UPDATE, 0, accessToken, null);
 		}
 
-		new UpdateLocation().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, lat, lon});
+		new UpdateLocation().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Object[] { accessToken, lat, lon });
 
 	}
-	
-	
-	
-	public static void updateInstitution(String accessToken, String institutionId, String studentId, int year, String branchName, String phoneNumber) {
+
+	public static void updateInstitution(String accessToken, String institutionId, String studentId, int year,
+			String branchName, String phoneNumber) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.UPDATE_INSTITUTION, 0, accessToken, null);
 		}
 
 		new UpdateInstitutionId().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, institutionId, studentId, year, branchName, phoneNumber});
+				new Object[] { accessToken, institutionId, studentId, year, branchName, phoneNumber });
 
 	}
-	
+
 	public static void updateRequestStatus(String accessToken, String wishId, String action, Object[] wishedUser) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.WISH_UPDATE_STATUS, 0, accessToken, null);
 		}
 
 		new UpdateWishStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, wishId, action, wishedUser});
+				new Object[] { accessToken, wishId, action, wishedUser });
 
 	}
-	
 
 	public static void updateWishOfferedStatus(String accessToken, String wishId, String action) {
 		for (UploadManagerCallback callback : callbacks) {
@@ -154,18 +146,26 @@ public class UploadManager {
 		}
 
 		new UpdateStatusOffered().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, wishId, action});
+				new Object[] { accessToken, wishId, action });
 
 	}
 
-	
 	public static void sendMessage(String userId, String message, String wishId, long objectId) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.SIGNUP, 0, userId, null);
 		}
 
 		new SendMessage().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { userId, message, wishId, ""+objectId});
+				new Object[] { userId, message, wishId, "" + objectId });
+
+	}
+
+	public static void sendFeedback(String message, String log) {
+		for (UploadManagerCallback callback : callbacks) {
+			callback.uploadStarted(CommonLib.SIGNUP, 0, message, null);
+		}
+
+		new SendFeedback().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Object[] { message, log });
 
 	}
 
@@ -174,8 +174,7 @@ public class UploadManager {
 			callback.uploadStarted(CommonLib.COUPON_UPDATE, 0, couponId, null);
 		}
 
-		new GetCoupon().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { couponId});
+		new GetCoupon().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Object[] { couponId });
 
 	}
 
@@ -192,16 +191,17 @@ public class UploadManager {
 			userName = (String) params[0];
 			email = (String) params[1];
 			password = (String) params[2];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("user_name", userName));
 			nameValuePairs.add(new BasicNameValuePair("email", email));
 			nameValuePairs.add(new BasicNameValuePair("password", password));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "user/signup?", nameValuePairs, PostWrapper.REGISTER, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/signup?", nameValuePairs,
+						PostWrapper.REGISTER, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -215,7 +215,8 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.SIGNUP, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.SIGNUP, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
@@ -231,15 +232,16 @@ public class UploadManager {
 			Object result[] = null;
 			email = (String) params[0];
 			password = (String) params[1];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("email", email));
 			nameValuePairs.add(new BasicNameValuePair("password", password));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "auth/login?", nameValuePairs, PostWrapper.LOGIN, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "auth/login?", nameValuePairs, PostWrapper.LOGIN,
+						context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -253,11 +255,12 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.LOGIN, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.LOGIN, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"),
+						"");
 			}
 		}
 	}
-	
+
 	private static class Logout extends AsyncTask<Object, Void, Object[]> {
 
 		private String email;
@@ -267,14 +270,15 @@ public class UploadManager {
 
 			Object result[] = null;
 			email = (String) params[0];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "auth/logout?", nameValuePairs, PostWrapper.LOGOUT, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "auth/logout?", nameValuePairs, PostWrapper.LOGOUT,
+						context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -288,11 +292,11 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.LOGOUT, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.LOGOUT, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
-
 
 	private static class NewRequest extends AsyncTask<Object, Void, Object[]> {
 
@@ -307,16 +311,17 @@ public class UploadManager {
 			accessToken = (String) params[0];
 			title = (String) params[1];
 			description = (String) params[2];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("title", title));
 			nameValuePairs.add(new BasicNameValuePair("description", description));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/add?", nameValuePairs, PostWrapper.WISH_POST, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/add?", nameValuePairs, PostWrapper.WISH_POST,
+						context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -330,7 +335,8 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.WISH_ADD, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.WISH_ADD, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
@@ -346,15 +352,16 @@ public class UploadManager {
 			Object result[] = null;
 			accessToken = (String) params[0];
 			wishId = (String) params[1];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("wishId", wishId));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/delete?", nameValuePairs, PostWrapper.WISH_DELETE, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/delete?", nameValuePairs,
+						PostWrapper.WISH_DELETE, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -368,7 +375,8 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.WISH_REMOVE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.WISH_REMOVE, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
@@ -389,16 +397,17 @@ public class UploadManager {
 			wishId = (String) params[1];
 			action = (String) params[2];
 			wishedUser = (Object[]) params[3];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("wishId", wishId));
 			nameValuePairs.add(new BasicNameValuePair("action", action));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/update?", nameValuePairs, PostWrapper.WISH_STATUS_UPDATE, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/update?", nameValuePairs,
+						PostWrapper.WISH_STATUS_UPDATE, context);
 				wishIdInt = Integer.parseInt(wishId);
 				actionInt = Integer.parseInt(action);
 			} catch (Exception e) {
@@ -414,7 +423,8 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.WISH_UPDATE_STATUS, prefs.getInt("uid", 0), actionInt, wishedUser, wishIdInt, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.WISH_UPDATE_STATUS, prefs.getInt("uid", 0), actionInt, wishedUser,
+						wishIdInt, arg[0].equals("success"), "");
 			}
 		}
 	}
@@ -432,16 +442,17 @@ public class UploadManager {
 			accessToken = (String) params[0];
 			wishId = (String) params[1];
 			action = (String) params[2];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("wishId", wishId));
 			nameValuePairs.add(new BasicNameValuePair("action", action));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/updateStatus?", nameValuePairs, PostWrapper.WISH_STATUS_UPDATE, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/updateStatus?", nameValuePairs,
+						PostWrapper.WISH_STATUS_UPDATE, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -455,12 +466,12 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.WISH_OFFERED_STATUS, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.WISH_OFFERED_STATUS, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
 
-	
 	private static class UpdateRegistrationId extends AsyncTask<Object, Void, Object[]> {
 
 		private String accessToken;
@@ -472,15 +483,18 @@ public class UploadManager {
 			Object result[] = null;
 			accessToken = (String) params[0];
 			regId = (String) params[1];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
-//			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
-//			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
+			// nameValuePairs.add(new BasicNameValuePair("client_id",
+			// CommonLib.CLIENT_ID));
+			// nameValuePairs.add(new BasicNameValuePair("app_type",
+			// CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("pushId", regId));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "user/registrationId?", nameValuePairs, PostWrapper.HARDWARE_REGISTER, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/registrationId?", nameValuePairs,
+						PostWrapper.HARDWARE_REGISTER, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -494,7 +508,8 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.HARDWARE_REGISTER, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.HARDWARE_REGISTER, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
@@ -512,23 +527,24 @@ public class UploadManager {
 			accessToken = (String) params[0];
 			lat = (Double) params[1];
 			lon = (Double) params[2];
-			
-			if( lat != 0 || lon != 0 ) {
+
+			if (lat != 0 || lon != 0) {
 				SharedPreferences.Editor editor = prefs.edit();
-				editor.putFloat("lat", (float)lat);
-				editor.putFloat("lat", (float)lon);
+				editor.putFloat("lat", (float) lat);
+				editor.putFloat("lat", (float) lon);
 				editor.commit();
 			}
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
-			nameValuePairs.add(new BasicNameValuePair("latitude", lat+""));
-			nameValuePairs.add(new BasicNameValuePair("longitude", lon+""));
-			
+			nameValuePairs.add(new BasicNameValuePair("latitude", lat + ""));
+			nameValuePairs.add(new BasicNameValuePair("longitude", lon + ""));
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "user/location?", nameValuePairs, PostWrapper.LOCATION_UPDATE, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/location?", nameValuePairs,
+						PostWrapper.LOCATION_UPDATE, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -542,12 +558,12 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.LOCATION_UPDATE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.LOCATION_UPDATE, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
 
-	
 	private static class UpdateInstitutionId extends AsyncTask<Object, Void, Object[]> {
 
 		private String accessToken;
@@ -556,7 +572,6 @@ public class UploadManager {
 		private int year;
 		private String branchName;
 		private String phoneNumber;
-		
 
 		@Override
 		protected Object[] doInBackground(Object... params) {
@@ -568,20 +583,21 @@ public class UploadManager {
 			year = (Integer) params[3];
 			branchName = (String) params[4];
 			phoneNumber = (String) params[5];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("institution_name", institutionId));
 			nameValuePairs.add(new BasicNameValuePair("student_id", studentId));
-			
+
 			nameValuePairs.add(new BasicNameValuePair("branch_name", branchName));
 			nameValuePairs.add(new BasicNameValuePair("phone_number", phoneNumber));
-			nameValuePairs.add(new BasicNameValuePair("year", year+""));
-			
+			nameValuePairs.add(new BasicNameValuePair("year", year + ""));
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "user/institution?", nameValuePairs, PostWrapper.INSTITUTION_ID, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/institution?", nameValuePairs,
+						PostWrapper.INSTITUTION_ID, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -595,11 +611,12 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.UPDATE_INSTITUTION, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.UPDATE_INSTITUTION, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
-	
+
 	private static class SendMessage extends AsyncTask<Object, Void, Object[]> {
 
 		private String userId;
@@ -615,7 +632,7 @@ public class UploadManager {
 			message = (String) params[1];
 			wishId = (String) params[2];
 			objectId = (String) params[3];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("userId", userId));
 			nameValuePairs.add(new BasicNameValuePair("message", message));
@@ -623,9 +640,10 @@ public class UploadManager {
 			nameValuePairs.add(new BasicNameValuePair("wishId", wishId));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "messaging/post?", nameValuePairs, PostWrapper.SEND_MESSAGE, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "messaging/post?", nameValuePairs,
+						PostWrapper.SEND_MESSAGE, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -639,11 +657,12 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.SEND_MESSAGE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.SEND_MESSAGE, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
-	
+
 	private static class GetCoupon extends AsyncTask<Object, Void, Object[]> {
 
 		private String couponId;
@@ -653,15 +672,16 @@ public class UploadManager {
 
 			Object result[] = null;
 			couponId = (String) params[0];
-			
+
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("couponId", couponId));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
-			
+
 			try {
-				result = PostWrapper.postRequest(CommonLib.SERVER + "redeem/update?", nameValuePairs, PostWrapper.REDEEM_UPDATE, context);
+				result = PostWrapper.postRequest(CommonLib.SERVER + "redeem/update?", nameValuePairs,
+						PostWrapper.REDEEM_UPDATE, context);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return result;
@@ -675,11 +695,51 @@ public class UploadManager {
 				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
 
 			for (UploadManagerCallback callback : callbacks) {
-				callback.uploadFinished(CommonLib.COUPON_UPDATE, prefs.getInt("uid", 0), 0, arg[1], 0, arg[0].equals("success"), "");
+				callback.uploadFinished(CommonLib.COUPON_UPDATE, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
 			}
 		}
 	}
 
+	private static class SendFeedback extends AsyncTask<Object, Void, Object[]> {
 
+		private String message;
+		private String log;
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+
+			Object result[] = null;
+			message = (String) params[0];
+			log = (String) params[1];
+
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("message", message));
+			nameValuePairs.add(new BasicNameValuePair("log", log));
+			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
+			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
+
+			try {
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/feedback?", nameValuePairs,
+						PostWrapper.SEND_FEEDBACK, context);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return result;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Object[] arg) {
+			if (arg[0].equals("failure"))
+				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
+
+			for (UploadManagerCallback callback : callbacks) {
+				callback.uploadFinished(CommonLib.SEND_FEEDBACK, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
+			}
+		}
+	}
 
 }

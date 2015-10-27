@@ -45,7 +45,7 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@drawable/zhlbuttonfollow"
+                    android:background="@drawable/zhldarkbuttonfollow"
                     android:gravity="center_vertical|center_horizontal"
                     android:paddingLeft="@dimen/size10"
                     android:paddingRight="@dimen/size10"
