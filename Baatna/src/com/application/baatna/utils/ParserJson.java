@@ -142,7 +142,7 @@ public class ParserJson {
 		}
 		return output;
 	}
-	
+
 	public static Object[] parseRedeemUpdateResponse(InputStream is) throws JSONException {
 
 		Object[] output = new Object[] { "failed", "", null };
@@ -584,6 +584,15 @@ public class ParserJson {
 
 							if (categoryJson.has("latitude") && categoryJson.get("latitude") instanceof Double) {
 								feedItem.setLatitude(categoryJson.getDouble("latitude"));
+							}
+
+							if (categoryJson.has("timestamp")) {
+								try {
+									long timestamp = Long.parseLong(String.valueOf(categoryJson.get("timestamp")));
+									feedItem.setTimestamp(timestamp);
+								} catch (NumberFormatException e) {
+									e.printStackTrace();
+								}
 							}
 
 							if (categoryJson.has("longitude") && categoryJson.get("longitude") instanceof Double) {

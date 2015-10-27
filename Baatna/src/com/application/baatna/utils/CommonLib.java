@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -446,11 +448,21 @@ public class CommonLib {
 	}
 
 	public static String getDateFromUTC(long timestamp) {
+		if(timestamp == 0)
+			timestamp = System.currentTimeMillis();
 		Date date = new Date(timestamp);
 		Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
 		cal.setTime(date);
-		return (cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.DATE) + " " + cal.get(Calendar.HOUR) + ":"
+		String val = (cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.DATE) + " " + cal.get(Calendar.HOUR) + ":"
 				+ cal.get(Calendar.MINUTE) + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
+		
+//		final Date currentTime = new Date();
+//		final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
+//		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//		String ret = "UTC time: " + sdf.format(currentTime);
+//		System.out.println(ret);
+		
+		return val;
 	}
 
 	/**

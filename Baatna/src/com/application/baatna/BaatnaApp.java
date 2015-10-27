@@ -149,7 +149,7 @@ public class BaatnaApp extends Application {
 			try {
 				// Crashlytics Initialize
 				Fabric.with(getApplicationContext(), new Crashlytics());
-				Crashlytics.setString("version", CommonLib.CRASHLYTICS_VERSION_STRING);
+//				Crashlytics.setString("version", CommonLib.CRASHLYTICS_VERSION_STRING);
 
 				// AppsFlyerLib Initialize
 				AppsFlyerLib.setAppsFlyerKey(CommonLib.APPSFLYER_KEY);

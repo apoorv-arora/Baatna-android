@@ -70,6 +70,11 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,6 +144,7 @@ public class Home extends AppCompatActivity
 
 		// requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.home_activity);
+		
 		getWindow().setBackgroundDrawable(null);
 		mContext = this;
 		inflater = LayoutInflater.from(this);
@@ -704,7 +710,7 @@ public class Home extends AppCompatActivity
 
 		try {
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("market://details?id=com.application.zomato"));
+					Uri.parse("market://details?id=com.application.baatna"));
 			startActivity(browserIntent);
 		} catch (ActivityNotFoundException e) {
 
@@ -1182,9 +1188,7 @@ public class Home extends AppCompatActivity
 
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
 					.setMargins(width / 40, 0, width / 40, 0);
-//			viewHolder.accept.setPadding(width / 20, 0, width / 20, 0);
-//			viewHolder.decline.setPadding(width / 20, 0, width / 20, 0);
-			
+
 			viewHolder.accept.getLayoutParams().width = getResources().getDimensionPixelOffset(R.dimen.height125) / 2;
 			viewHolder.decline.getLayoutParams().width = getResources().getDimensionPixelOffset(R.dimen.height125) / 2;
 
@@ -1233,18 +1237,45 @@ public class Home extends AppCompatActivity
 				}
 			});
 
-			viewHolder.distance.setText(CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
-					feedItem.getLatitude(), feedItem.getLongitude()) + " km");
+			double distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+					feedItem.getLatitude(), feedItem.getLongitude());
 
+			viewHolder.distance.setText("1 km");
+
+			int value = getResources().getDimensionPixelSize(R.dimen.size60);
 			switch (feedItem.getType()) {
 
 			case CommonLib.FEED_TYPE_NEW_USER:
 				if (user != null) {
 					String description = getResources().getString(R.string.feed_user_joined, user.getUserName() + " ");
 
-					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false, false);
+					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", value, value, false, false);
 
-					viewHolder.userName.setText(description);
+					SpannableString spanStr = new SpannableString(description);
+
+					ClickableSpan userSpan = new ClickableSpan() {
+						@Override
+						public void onClick(View textView) {
+						}
+
+						@Override
+						public void updateDrawState(TextPaint ds) {
+							super.updateDrawState(ds);
+							ds.setUnderlineText(false);
+							ds.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold));
+							ds.setTextSize(getResources().getDimension(R.dimen.size14));
+							ds.setColor(getResources().getColor(R.color.zdhl2));
+						}
+					};
+
+					if (description.indexOf(user.getUserName()) > -1)
+						spanStr.setSpan(userSpan, description.indexOf(user.getUserName()),
+								description.indexOf(user.getUserName()) + user.getUserName().length(),
+								Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					viewHolder.userName.setText(spanStr.toString(), TextView.BufferType.SPANNABLE);
+					viewHolder.userName.setMovementMethod(LinkMovementMethod.getInstance());
+
 					viewHolder.accept.setVisibility(View.INVISIBLE);
 					viewHolder.decline.setVisibility(View.INVISIBLE);
 					viewHolder.bar
@@ -1256,9 +1287,52 @@ public class Home extends AppCompatActivity
 					String description = getResources().getString(R.string.feed_user_requested,
 							user.getUserName() + " ", wish.getTitle() + " ");
 
-					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false, false);
+					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", value, value, false, false);
 
-					viewHolder.userName.setText(description);
+					SpannableString spanStr = new SpannableString(description);
+
+					ClickableSpan userSpan = new ClickableSpan() {
+						@Override
+						public void onClick(View textView) {
+						}
+
+						@Override
+						public void updateDrawState(TextPaint ds) {
+							super.updateDrawState(ds);
+							ds.setUnderlineText(false);
+							ds.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold));
+							ds.setTextSize(getResources().getDimension(R.dimen.size14));
+							ds.setColor(getResources().getColor(R.color.zdhl2));
+						}
+					};
+
+					ClickableSpan wishSpan = new ClickableSpan() {
+						@Override
+						public void onClick(View textView) {
+						}
+
+						@Override
+						public void updateDrawState(TextPaint ds) {
+							super.updateDrawState(ds);
+							ds.setUnderlineText(false);
+							ds.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold));
+							ds.setTextSize(getResources().getDimension(R.dimen.size12));
+							ds.setColor(getResources().getColor(R.color.zomato_red));
+						}
+					};
+
+					if (description.indexOf(user.getUserName()) > -1)
+						spanStr.setSpan(userSpan, description.indexOf(user.getUserName()),
+								description.indexOf(user.getUserName()) + user.getUserName().length(),
+								Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					if (description.indexOf(wish.getTitle()) > -1)
+						spanStr.setSpan(wishSpan, description.indexOf(wish.getTitle()),
+								description.indexOf(wish.getTitle()) + wish.getTitle().length(),
+								Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					viewHolder.userName.setText(spanStr.toString(), TextView.BufferType.SPANNABLE);
+					viewHolder.userName.setMovementMethod(LinkMovementMethod.getInstance());
 					viewHolder.bar
 							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
 
@@ -1293,9 +1367,52 @@ public class Home extends AppCompatActivity
 				String description = getResources().getString(R.string.feed_requested_fulfilled,
 						user.getUserName() + " ", wish.getTitle() + " ", user2.getUserName());
 
-				setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false, false);
+				setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", value, value, false, false);
 
-				viewHolder.userName.setText(description);
+				SpannableString spanStr = new SpannableString(description);
+
+				ClickableSpan userSpan = new ClickableSpan() {
+					@Override
+					public void onClick(View textView) {
+					}
+
+					@Override
+					public void updateDrawState(TextPaint ds) {
+						super.updateDrawState(ds);
+						ds.setUnderlineText(false);
+						ds.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold));
+						ds.setTextSize(getResources().getDimension(R.dimen.size12));
+						ds.setColor(getResources().getColor(R.color.zdhl2));
+					}
+				};
+
+				ClickableSpan wishSpan = new ClickableSpan() {
+					@Override
+					public void onClick(View textView) {
+					}
+
+					@Override
+					public void updateDrawState(TextPaint ds) {
+						super.updateDrawState(ds);
+						ds.setUnderlineText(false);
+						ds.setTypeface(CommonLib.getTypeface(getApplicationContext(), CommonLib.Bold));
+						ds.setTextSize(getResources().getDimension(R.dimen.size12));
+						ds.setColor(getResources().getColor(R.color.zomato_red));
+					}
+				};
+
+				if (description.indexOf(user.getUserName()) > -1)
+					spanStr.setSpan(userSpan, description.indexOf(user.getUserName()),
+							description.indexOf(user.getUserName()) + user.getUserName().length(),
+							Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+				if (description.indexOf(wish.getTitle()) > -1)
+					spanStr.setSpan(wishSpan, description.indexOf(wish.getTitle()),
+							description.indexOf(wish.getTitle()) + wish.getTitle().length(),
+							Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+				viewHolder.userName.setText(spanStr.toString(), TextView.BufferType.SPANNABLE);
+				viewHolder.userName.setMovementMethod(LinkMovementMethod.getInstance());
 				viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
 				viewHolder.accept.setVisibility(View.INVISIBLE);
 				viewHolder.decline.setVisibility(View.INVISIBLE);

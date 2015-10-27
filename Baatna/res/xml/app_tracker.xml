@@ -3,90 +3,12 @@
 
     <string name="ga_logLevel">verbose</string>
     
-    <string name="ga_trackingId">UA-19617341-61</string>
+    <string name="ga_trackingId">UA-69383611-1</string>
     <bool name="ga_autoActivityTracking">true</bool>
     
     <!--Enable automatic exception tracking-->
     <bool name="ga_reportUncaughtExceptions">true</bool>
     
-    <screenName name="com.application.zomato.AboutUs">AboutUs</screenName>
-    <screenName name="com.application.zomato.BrunchPage">BrunchPage</screenName>
-    <screenName name="com.application.zomato.CameraActivity">CameraActivity</screenName>
-    <screenName name="com.application.zomato.CheckedInRestaurantPage">CheckedInRestaurantPage</screenName>
-    <screenName name="com.application.zomato.CheckInActivity">CheckInActivity</screenName>
-    <screenName name="com.application.zomato.CheckinDetails">CheckinDetails</screenName>
-    <screenName name="com.application.zomato.ChooseRestaurantForCheckin">ChooseRestaurantForCheckin</screenName>
-    <screenName name="com.application.zomato.ChooseRestaurantForPhoto">ChooseRestaurantForPhoto</screenName>
-    <screenName name="com.application.zomato.ChooseRestaurantForReview">ChooseRestaurantForReview</screenName>
-    <screenName name="com.application.zomato.CollectionEventDetailsWebViewActivity">CollectionEventDetailsWebViewActivity</screenName>
-    <screenName name="com.application.zomato.CollectionEventsListWebViewActivity">CollectionEventsListWebViewActivity</screenName>
-    <screenName name="com.application.zomato.CollectionListActivity">CollectionListActivity</screenName>
-    <screenName name="com.application.zomato.ConnectedAccounts">ConnectedAccounts</screenName>
-    <screenName name="com.application.zomato.CropPicture">CropPicture</screenName>
-    <screenName name="com.application.zomato.DailyMenuListActivity">DailyMenuListActivity</screenName>
-    <screenName name="com.application.zomato.DeepLinkRouter">DeepLinkRouter</screenName>
-    <screenName name="com.application.zomato.EditAttachedPhotos">EditAttachedPhotos</screenName>
-    <screenName name="com.application.zomato.EditProfile">EditProfile</screenName>
-    <screenName name="com.application.zomato.EmailNotifications">EmailNotifications</screenName>
-    <screenName name="com.application.zomato.FeedbackPage">FeedbackPage</screenName>
-    <screenName name="com.application.zomato.FindFriends">FindFriends</screenName>
-    <screenName name="com.application.zomato.ImageFilters">ImageFilters</screenName>
-    <screenName name="com.application.zomato.IndividualReview">IndividualReview</screenName>
-    <screenName name="com.application.zomato.InstagramConnectActivity">InstagramConnectActivity</screenName>
-    <screenName name="com.application.zomato.LargeImage">LargeImage</screenName>
-    <screenName name="com.application.zomato.MyPayments">MyPayments</screenName>
-    <screenName name="com.application.zomato.MyReviews">MyReviews</screenName>
-    <screenName name="com.application.zomato.NewExpertiseActivity">NewExpertiseActivity</screenName>
-    <screenName name="com.application.zomato.RecommendationsPage">RecommendationsPage</screenName>
-    <screenName name="com.application.zomato.ReportError">ReportError</screenName>
-    <screenName name="com.application.zomato.RestaurantMap">RestaurantMap</screenName>
-    <screenName name="com.application.zomato.RestaurantPage">RestaurantPage</screenName>
-    <screenName name="com.application.zomato.RestaurantReviews">RestaurantReviews</screenName>
-    <screenName name="com.application.zomato.Review_Restaurant">Review_Restaurant</screenName>
-    <screenName name="com.application.zomato.SearchUser">SearchUser</screenName>
-    <screenName name="com.application.zomato.SetPasswordActivity">SetPasswordActivity</screenName>
-    <screenName name="com.application.zomato.SetVanityUrlActivity">SetVanityUrlActivity</screenName>
-    <screenName name="com.application.zomato.ShowNotification">ShowNotification</screenName>
-    <screenName name="com.application.zomato.ShowPhotos">ShowPhotos</screenName>
-    <screenName name="com.application.zomato.SignupConfirm">SignupConfirm</screenName>
-    <screenName name="com.application.zomato.SignupConfirmed">SignupConfirmed</screenName>
-    <screenName name="com.application.zomato.Splash">Splash</screenName>
-    <screenName name="com.application.zomato.SuggestRestaurant">SuggestRestaurant</screenName>
-    <screenName name="com.application.zomato.TagShare">TagShare</screenName>
-    <screenName name="com.application.zomato.TextMenuList">TextMenuList</screenName>
-    <screenName name="com.application.zomato.TweetPage">TweetPage</screenName>
-    <screenName name="com.application.zomato.TwitterWebviewActivity">TwitterWebviewActivity</screenName>
-    <screenName name="com.application.zomato.URLRouter">URLRouter</screenName>
-    <screenName name="com.application.zomato.UserListsPage">UserListsPage</screenName>
-    <screenName name="com.application.zomato.UserStatsPage">UserStatsPage</screenName>
-    <screenName name="com.application.zomato.VideoActivity">VideoActivity</screenName>
-    <screenName name="com.application.zomato.ViewPlatformFriends">ViewPlatformFriends</screenName>
-    <screenName name="com.application.zomato.gallery.ZGallery">ZGallery</screenName>
-    <screenName name="com.application.zomato.ZomatoActivity">ZomatoActivity</screenName>
-    <screenName name="com.application.zomato.ZWebView">ZWebView</screenName>
-    <screenName name="com.application.zomato.SavedOffers">SavedOffers</screenName>
-    <screenName name="com.application.zomato.MyDrafts">MyDrafts</screenName>
-    
-    <screenName name="com.application.zomato.ExpertStoryActivity">ExpertStoryActivity</screenName>
-    <screenName name="com.application.zomato.ExpertStoryDetails">ExpertStoryDetails</screenName>
-    
-    
-    <screenName name="com.application.zomato.Home">Home</screenName>
-    <screenName name="com.application.zomato.RecentRestaurants">RecentRestaurants</screenName>
-    <screenName name="com.application.zomato.SearchResults">SearchResults</screenName>
-    <screenName name="com.application.zomato.SelectPicture">SelectPicture</screenName>
-    <screenName name="com.application.zomato.UserBeenThere">UserBeenThere</screenName>
-    <screenName name="com.application.zomato.UserBookmarks">UserBookmarks</screenName>
-    <screenName name="com.application.zomato.UserPage">UserPage</screenName>
-    
-     <screenName name="com.application.zomato.tablebooking.TableBookingConfirmation">TableBookingConfirmation</screenName>
-    <screenName name="com.application.zomato.tablebooking.TableBookingDetails">TableBookingDetails</screenName>
-    <screenName name="com.application.zomato.tablebooking.TableBookingList">TableBookingList</screenName>
-    <screenName name="com.application.zomato.tablebooking.TableBookingWebView">TableBookingWebView</screenName>
-    
-    <screenName name="com.application.zomato.utils.UberWebView">UberWebView</screenName>
-    <screenName name="com.application.zomato.gallery.ZMenuGallery">ZMenuGallery</screenName>
-    <screenName name="com.application.zomato.gallery.ZPhotoCommentsLikes">ZPhotoCommentsLikes</screenName>
-    <screenName name="com.application.zomato.gallery.ZPhotoTagging">ZPhotoTagging</screenName>
+    <screenName name="com.application.baatna.AboutUs">AboutUs</screenName>
     
 </resources>

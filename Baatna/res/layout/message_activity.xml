@@ -26,7 +26,7 @@
             android:layout_height="@dimen/height60"
             android:orientation="horizontal" >
 
-            <EditText
+            <com.application.baatna.utils.EditTextRegular
                 android:id="@+id/message"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"

@@ -72,6 +72,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@id/user_image"
                 android:text="time"
+                android:visibility="gone"
                 android:textColor="@color/zhl_darkest"
                 android:textSize="@dimen/size12" />
 
@@ -82,6 +83,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@id/action_container"
                 android:text="distance"
+                android:visibility="gone"
                 android:textColor="@color/zhl_darkest"
                 android:textSize="@dimen/size12" />
 
