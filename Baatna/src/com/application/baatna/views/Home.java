@@ -144,7 +144,7 @@ public class Home extends AppCompatActivity
 
 		// requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.home_activity);
-		
+
 		getWindow().setBackgroundDrawable(null);
 		mContext = this;
 		inflater = LayoutInflater.from(this);
