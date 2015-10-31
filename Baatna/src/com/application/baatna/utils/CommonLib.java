@@ -7,8 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,20 +60,15 @@ public class CommonLib {
 
 	public static final boolean isTestBuild = false;
 
-	// public static final String SERVER_PREFIX = "https://";
-	// public static final String SERVER_BODY = "api.baatna.com/";
-	// public static String SERVER_WITHOUT_VERSION = "https://1api.baatna.com/";
 	public static final String SERVER_PREFIX = "http://";
-	// public static final String SERVER_BODY =
-	// "52.76.6.41:8080/BaatnaServer/rest/";
-	// public static String SERVER_WITHOUT_VERSION =
-	// "http://52.76.6.41:8080/BaatnaServer/rest/";
 	public static final String SERVER_BODY = "52.74.254.28:8080/BaatnaServer/rest/";
 	public static String SERVER_WITHOUT_VERSION = "http://52.74.254.28:8080/BaatnaServer/rest/";
-
+	
+//	public static final String SERVER_BODY = "192.168.2.13:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.13:8080/BaatnaServer/rest/";
+	
 	public static final boolean enableHSLogin = true;
 
-	// public static String API_VERSION = "v2/";
 	public static String API_VERSION = "";
 	public static String SERVER = SERVER_WITHOUT_VERSION + API_VERSION;
 	
@@ -95,8 +88,8 @@ public class CommonLib {
 	private static SharedPreferences prefs;
 
 	/** Application version */
-	public static final int VERSION = 4;
-	public static final String VERSION_STRING = "1.0.4";
+	public static final int VERSION = 5;
+	public static final String VERSION_STRING = "1.0.5";
 
 	/** Preferences */
 	public final static String APP_SETTINGS = "application_settings";
