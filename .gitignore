@@ -36,6 +36,13 @@ com_crashlytics_export_strings.xml
 zombats-app.ttf
 android_new/card.io/.project
 *.project
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
 
 *.idea
 *.iml
