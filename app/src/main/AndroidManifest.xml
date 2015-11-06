@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.application.baatna"
+    android:installLocation="auto">
+
+    <supports-screens android:smallScreens="false" />
+
+    <permission
+        android:name="com.application.baatna.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.application.baatna.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COURSE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <application
+        android:name="BaatnaApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <!-- Library usage -->
+        <uses-library android:name="com.google.android.maps" />
+
+        <!-- Meta-data of the application -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDlW-EnI0TZxHNOkAEslTPulkFjBbS8qfg" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="4b23245b109600af9dadc95aee6deaf9c84956eb" />
+
+        <!-- Activities -->
+        <activity
+            android:name="com.application.baatna.Splash"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.Home"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarHomeTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.application.baatna.views.AboutUs"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.FeedbackPage"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.BWebView"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.FriendListActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.MessagesActivity"
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/ZomatoMessageTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" >
+                </action>
+                <category android:name="android.intent.category.NORMAL" >
+                </category>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.UserPageActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoThemeNoTitleBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.WishboxActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.WishActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.WishHistoryActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.NewRequestActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.CategoryItemSelectionFragment"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.MapActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.utils.DeepLinkRouter"
+            android:label="@string/app_name"
+            android:parentActivityName="com.application.baatna.views.Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.application.baatna.views.Home" />
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.HSLoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
+        <activity
+            android:name="com.application.baatna.views.RedeemPage"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/ZomatoActionBarTheme" >
+        </activity>
+        <!-- Facebook Activity -->
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <!-- Broadcast Receivers -->
+        <receiver
+            android:name="com.application.baatna.receivers.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.application.baatna.receivers" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Services -->
+        <service android:name="com.application.baatna.utils.CacheCleanerService" />
+        <service android:name="com.application.baatna.services.LocationUpdateService" />
+        <service android:name="com.application.baatna.services.GcmIntentService" />
+        <service android:name="com.application.baatna.services.IMService" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8da1c9f3d595f350e6c53bd8e1a8bdae2c4f5b03" />
+    </application>
+
+</manifest>

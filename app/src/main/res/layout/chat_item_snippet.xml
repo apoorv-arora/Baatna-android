@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_snippet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <com.application.baatna.utils.TextViewRegular
+        android:id="@+id/message_preview_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/size10"
+        android:layout_marginRight="@dimen/size20"
+        android:layout_marginTop="@dimen/size10"
+        android:background="@color/message_from"
+        android:padding="@dimen/size10"
+        android:text="I can help  you with that"
+        android:textColor="@color/font_color"
+        android:textSize="@dimen/size14"
+        android:visibility="gone" />
+
+    <com.application.baatna.utils.TextViewRegular
+        android:id="@+id/message_preview_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/size20"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginTop="@dimen/size10"
+        android:background="@color/message_to"
+        android:padding="@dimen/size10"
+        android:text="I can help you with that"
+        android:textColor="@color/font_color"
+        android:textSize="@dimen/size14"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -1,0 +1,194 @@
+<resources>
+
+    <color name="theme_translucent">#a9a9a9</color>
+    <color name="transparent1">#00000000</color>
+    <color name="translucent_dark">#99000000</color>
+    <color name="translucent_darker">#AA000000</color>
+    <color name="translucent_dark2">#DD000000</color>
+    <color name="translucent_dark3">#CC000000</color>
+    <color name="translucent_dark_restaurant">#CC000000</color>
+    <color name="translucent_dark_ad">#AF000000</color>
+    <color name="translucent_dark_light">#20000000</color>
+    <color name="translucent_dark_toast">#aa000000</color>
+    <color name="login_activity_background">#dd000000</color>
+    <color name="transparent_white">#e5ffffff</color>
+    <color name="grey">#F3F3F3F3</color>
+    <color name="dark_grey">#aeaeae</color>
+    <color name="action_bar_default">#2a393f</color>
+    <!--
+    <color name="zomato_red">#e75149</color>
+    <color name="zomato_red_trans_fifty">#80e75149</color>
+    <color name="zomato_red_feedback">#e14e4e</color>
+    -->
+    <color name="zomato_red_secondary">#BC212D</color>
+    <color name="zomato_red">#20d4a4</color>
+    <color name="baatna_primary_dark">#3dc49a</color>
+    <color name="zomato_red_trans_fifty">#80CB202D</color>
+    <color name="zomato_red_feedback">#AB000D</color>
+    <color name="zomato_grey">#aeaeae</color>
+    <color name="zomato_grey_trans">#eeaeaeae</color>
+    <color name="zomato_grey_trans_fifty">#80aeaeae</color>
+    <color name="zomato_dark_grey">#4d4d4d</color>
+    <color name="black">#000000</color>
+    <color name="zomato_blue">#00AACC</color>
+    <color name="zomato_blue_feedback">#0098b6</color>
+    <color name="zomato_blue_transparent">#EE00AACC</color>
+    <color name="zomato_blue_feedback_transparent">#EE0098b6</color>
+    <color name="settings_border">#5d5d5d</color>
+    <color name="settings_background_dark">#2d2d2d</color>
+    <color name="settings_background">#4d4d4d</color>
+    <color name="settings_text_dark">#8a8a8a</color>
+    <color name="settings_text_light">#c8c8c8</color>
+    <color name="white">#ffffff</color>
+    <color name="font_color">#ff2d2d2a</color>
+    <color name="login_color_text">#882D2D2A</color>
+    <color name="login_color_line">#992D2D2A</color>
+    <color name="font_color_custom">#802d2d2a</color>
+    <color name="selected_background_green">#3e873e</color>
+    <color name="selected_background">#f2f2f2</color>
+    <color name="submit_green">#69bc63</color> <!-- #51a351 -->
+    <color name="submit_green_pressed">#3e873e</color>
+    <color name="submit_green_transparent">#EE69bc63</color>
+    <color name="separator_color">#e7e7e7</color>
+    <color name="button_background_grey">#dedede</color>
+    <color name="filter_background">#363636</color>
+    <color name="twitter_blue">#00aced</color>
+    <color name="twitter_feedback_blue">#00a0dd</color>
+    <color name="color_aa">#AAAAAA</color>
+    <color name="google_background">#dd4b39</color>
+    <color name="fb_background">#3b5998</color>
+    <color name="tw_background">#4099ff</color>
+    <color name="ig_background">#3f729b</color>
+    <color name="ig_background_light">#5A86A8</color>
+    <color name="zhl">#f4f4f4</color>
+    <color name="zhl_light">#f8f8f8</color>
+    <color name="zhl_trans_fifty">#80f4f4f4</color>
+    <color name="zhl_trans_more">#18f4f4f4</color>
+    <color name="zhl_alpha">#99f4f4f4</color>
+    <color name="zhl_dark">#e4e4e4</color>
+    <color name="zhl_darker">#cbcbcb</color>
+    <color name="zhl_dark_trans_ninety">#e6e4e4e4</color>
+    <color name="zhl_darker_alpha">#99cbcbcb</color>
+    <color name="zhl_darkest">#9a9a9a</color>
+    <color name="zdhl6">#8D8D8D</color>
+    <color name="zdhl5">#7D7D7D</color>
+    <color name="zdhl4">#6D6D6D</color>
+    <color name="zdhl3">#5D5D5D</color>
+    <color name="zdhl2">#4D4D4D</color>
+    <color name="zdhl">#3D3D3D</color>
+    <color name="zdark">#2D2D2D</color>
+    <color name="zhl2">#e7e7e7</color>
+    <color name="zhl1.5">#EDEDED</color>
+    <color name="unread_notification">#fffced</color>
+    <color name="zdhl7">#CBCBCB</color>
+    <color name="zomato_darker">#1d1d1d</color>
+    <color name="cashless_tour_black">#EE000000</color>
+    <color name="black_trans_background">#60000000</color>
+    <color name="black_trans_ten">#1A000000</color>
+    <color name="black_trans_twenty">#33000000</color>
+    <color name="black_trans_forty">#66000000</color>
+    <color name="black_trans_thirty_five">#59000000</color>
+    <color name="black_trans_tour">#ba000000</color>
+    <color name="black_trans_home_button">#cc000000</color>
+    <color name="white_trans_ten">#22ffffff</color>
+    <color name="white_trans_thirty_five">#59ffffff</color>
+    <color name="white_trans_ninety">#e6ffffff</color>
+    <color name="white_trans_ninety_five">#f2ffffff</color>
+    <color name="white_trans_eighty">#baffffff</color>
+    <color name="white_trans_seventy">#a3ffffff</color>
+    <color name="white_trans_sixty">#91ffffff</color>
+    <color name="white_trans_forty">#5cffffff</color>
+    <color name="white_trans_fifty">#80ffffff</color>
+    <color name="white_trans_twenty">#33ffffff</color>
+    <color name="fb_background_pressed">#2d477e</color>
+    <color name="google_background_pressed">#c74231</color>
+    <color name="zhl_dark_custom">#66e4e4e4</color>
+    <color name="separator_trans_forty">#43dedede</color>
+    <color name="black_trans_fifty">#80000000</color>
+    <color name="black_trans_random">#99000000</color>
+    <color name="black_trans_speeddial">#FF000000</color>
+    <color name="zomato_yellow">#FFD35D</color>
+    <color name="zomato_stats_grey">#1affffff</color>
+    <color name="zdhl6_trans_eighty">#ba8D8D85</color>
+    <color name="zdhl6_trans_sixty">#ba8D8D85</color>
+    <color name="foodie_text">#FFD35D</color>
+    <color name="tab_greyscale_3">#4d4d4d</color>
+    <color name="border_separator_color">#331a1a19</color>
+    <color name="tag_window_background">#2d2d2a</color>
+    <color name="popup_bg_color">#EE666666</color>
+    <color name="zhl_darker_translucent_ten">#1acbcbc8</color>
+    <color name="black_trans_ninety">#e5000000</color>
+    <color name="zomato_yellow_translucent">#80F8D474</color>
+    <color name="black_trans_collection">#36000000</color>
+    <color name="zdhl4_trans_sixty">#906D6D6D</color>
+    <color name="zdhl2_trans_fifty">#804D4D4D</color>
+    <color name="zdhl5_trans_fifty">#807D7D7D</color>
+    <color name="zdhl6_trans_fifty">#808D8D8D</color>
+
+    <!-- crop colors -->
+    <color name="crop_shadow_color">#CF000000</color>
+    <color name="crop_shadow_wp_color">#4F000000</color>
+    <color name="crop_wp_markers">#7FFFFFFF</color>
+    <color name="android_light_background">#F5F5F5</color>
+    <color name="android_light_feedback">#E5E5E5</color>
+
+    <!-- journey story colors -->
+    <color name="journey_review_color">#48a0dc</color>
+    <color name="journey_photo_color">#eeaf4b</color>
+    <color name="journey_beenthere_color">#ed7161</color>
+    <color name="journey_checkin_color">#9777a8</color>
+    <color name="journey_expertise_color">#00AACC</color>
+
+    <!-- Icon Colors -->
+    <item name="color_like_below_story_fill" type="color">@color/zomato_red</item>
+    <item name="color_like_below_story" type="color">@color/zhl_darkest</item>
+    <item name="color_like_onphoto_fill" type="color">@color/zomato_red</item>
+    <item name="color_like_onphoto" type="color">@color/white</item>
+    <item name="color_unfollow" type="color">@color/zdhl6</item>
+    <item name="color_follow" type="color">@color/submit_green</item>
+
+    <!-- Seperator Colors -->
+    <item name="color_separator_color" type="color">@color/zhl1.5</item>
+    <item name="color_separator_color_dark" type="color">@color/zhl_dark</item>
+
+    <!-- Icon Font Color -->
+    <item name="color_iconfont" type="color">@color/zdhl4</item>
+
+    <!-- New shades of ZDark -->
+    <color name="zdark_1">#1a1a19</color>
+    <color name="zdark_2">#141411</color>
+    <color name="zdark_3">#0a0a09</color>
+    <color name="tour_grey">#cdcdcd</color>
+    <color name="fab_checkin_color">#9777a8</color>
+    <color name="fab_ordering_color">#e67706</color>
+    <color name="fab_cashless_color">#7dc31e</color>
+    <color name="fab_review_color_pressed">#e048a0dc</color>
+    <color name="fab_photo_color_pressed">#e0eeaf4b</color>
+    <color name="fab_checkin_color_pressed">#e09777a8</color>
+    <color name="black_trans_seventy">#B3000000</color>
+    <color name="zhl_darkest_custom">#609a9a93</color>
+    <color name="holo_white">#f3f3f3</color>
+
+    <!-- Baatna colors -->
+    <color name="bt_orange">#ff7e69</color>
+    <color name="bt_grey">#f8f8f8</color>
+    <color name="bt_drawer_green">#3ae3bc</color>
+    <color name="green_gradient">#00dca0</color>
+    <color name="feed_bg">#f8f8f8</color>
+    <color name="decline_bg_color">#f8f8f8</color>
+    <color name="decline_text_color">#a7a9ac</color>
+    <color name="feed_offered">#ff90f5</color>
+    <color name="feed_joined">#a58edd</color>
+    <color name="bt_orange_2">#ffab5f</color>
+    
+    <color name="message_from">#ebfaf7</color>
+    <color name="message_to">#f7f7f7</color>
+    <color name="light_stroke_color">#f1f2f2</color>
+    <color name="drawer_lighter">#939598</color>
+    
+    <color name="category_icon_color">#d1d3d4</color>
+    <color name="default_font_color">#6d6e71</color>
+        <color name="transparent_super_white">#66ffffff</color>
+    
+    
+</resources>

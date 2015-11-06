@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height60"
+    android:layout_gravity="fill_horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/home_icon_container"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height60"
+        android:layout_alignParentLeft="true">
+
+        <RelativeLayout
+            android:id="@+id/home_icon_subcontainer"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:id="@+id/ic_drawer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_drawer" />
+
+            <ImageView
+                android:id="@+id/home_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/ic_drawer"
+                android:clickable="false"
+                android:onClick="actionBarSelected" />
+
+            <ImageView
+                android:id="@+id/home_icon_zomato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ic_drawer"
+                android:clickable="false"
+                android:src="@drawable/action_bar_logo"
+                android:visibility="gone" />
+        </RelativeLayout>
+        
+        <com.application.baatna.utils.IconView
+            android:id="@+id/back_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height60"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="actionBarSelected"
+            android:layout_marginRight="@dimen/height2"
+            android:layout_toRightOf="@id/home_icon_subcontainer"
+            android:text="D"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size18"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height60"
+            android:layout_toRightOf="@id/home_icon_subcontainer"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <com.application.baatna.utils.TextViewBold
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:onClick="actionBarSelected"
+                android:paddingLeft="0dp"
+                android:paddingRight="@dimen/height2"
+                android:textColor="@color/zhl"
+                android:textSize="@dimen/size16" />
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/subtitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/zdhl5"
+                android:textSize="@dimen/size13"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/action_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height60"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/open_messages"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height60"
+            android:layout_gravity="center"
+            android:background="@drawable/baatna_dark_feedback"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="@dimen/size10"
+            android:text="A"
+            android:textColor="@color/bt_drawer_green"
+            android:textSize="@dimen/font_size45" />
+    </LinearLayout>
+
+</RelativeLayout>

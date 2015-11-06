@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="size3">3.65dp</dimen>
+    <dimen name="size5">5dp</dimen>
+    <dimen name="size7">7dp</dimen>
+    <dimen name="size8">8dp</dimen>
+    <dimen name="size9">9dp</dimen>
+    <dimen name="size10">10dp</dimen>
+    <dimen name="size11">11dp</dimen>
+    <dimen name="size12">12dp</dimen>
+    <dimen name="size13">13dp</dimen>
+    <dimen name="size14">14dp</dimen>
+    <dimen name="size15">15dp</dimen>
+    <dimen name="size16">16dp</dimen>
+    <dimen name="size17">17dp</dimen>
+    <dimen name="size18">18dp</dimen>
+    <dimen name="size19">19dp</dimen>
+    <dimen name="size20">20dp</dimen>
+    <dimen name="size21">21dp</dimen>
+    <dimen name="size22">22dp</dimen>
+    <dimen name="size23">23dp</dimen>
+    <dimen name="size24">24dp</dimen>
+    <dimen name="size26">26dp</dimen>
+    <dimen name="size30">30dp</dimen>
+    <dimen name="size32">32dp</dimen>
+    <dimen name="size35">35dp</dimen>
+    <dimen name="size40">40dp</dimen>
+    <dimen name="size42">42dp</dimen>
+    <dimen name="size45">45dp</dimen>
+    <dimen name="size46">46dp</dimen>
+    <dimen name="size47">47dp</dimen>
+    <dimen name="size50">50dp</dimen>
+    <dimen name="size60">60dp</dimen>
+    <dimen name="size110">110dp</dimen>
+    <dimen name="size11_user">11dp</dimen>
+    <dimen name="size18_user">18dp</dimen>
+    <dimen name="size_tabs">12dp</dimen>
+    <dimen name="size13_rest">11dp</dimen>
+    <dimen name="size17_feed">15dp</dimen>
+    <dimen name="size14_rest">13dp</dimen>
+    <dimen name="size16_rest">14dp</dimen>
+    <dimen name="height0_5">0.5dp</dimen>
+    <dimen name="height1">1dp</dimen>
+    <dimen name="height2">2dp</dimen>
+    <dimen name="height3">3dp</dimen>
+    <dimen name="height4">4dp</dimen>
+    <dimen name="height5">5dp</dimen>
+    <dimen name="height6">6dp</dimen>
+    <dimen name="height10">10dp</dimen>
+    <dimen name="height14">14dp</dimen>
+    <dimen name="height15">15dp</dimen>
+    <dimen name="height16">16dp</dimen>
+    <dimen name="height32">32dp</dimen>
+    <dimen name="height35">35dp</dimen>
+    <dimen name="height42">42dp</dimen>
+    <dimen name="height46">46dp</dimen>
+    <dimen name="height48">48dp</dimen>
+    <dimen name="height54">54dp</dimen>
+    <dimen name="height55">55dp</dimen>
+    <dimen name="height75">75dp</dimen>
+    <dimen name="height60">75dp</dimen>
+    <dimen name="height100">100dp</dimen>
+    <dimen name="height125">125dp</dimen>
+    <dimen name="height150">150dp</dimen>
+    <dimen name="height170">170dp</dimen>
+    <dimen name="height200">200dp</dimen>
+    <dimen name="height300">300dp</dimen>
+    <dimen name="speedial_circle_size">60dp</dimen>
+    <dimen name="size30_res">32dp</dimen>
+    <dimen name="corner_radius_medium">1dp</dimen>
+    <dimen name="corner_radius">1dp</dimen>
+    <dimen name="corner_radius_four">1dp</dimen>
+    <dimen name="corner_radius_verified">4dp</dimen>
+    <dimen name="corner_radius_notification">10dp</dimen>
+    <dimen name="corner_radius_big">100dp</dimen>
+
+    <!-- Crop dimensions -->
+    <dimen name="crop_indicator_size">35dp</dimen>
+    <dimen name="preview_margin">20dp</dimen>
+    <dimen name="shadow_margin">5dp</dimen>
+    <dimen name="crop_min_side">45dp</dimen>
+    <dimen name="crop_touch_tolerance">20dp</dimen>
+    <dimen name="wp_selector_dash_length">4dp</dimen>
+    <dimen name="wp_selector_off_length">4dp</dimen>
+
+    <!-- Collection Card rounding -->
+    <dimen name="corner_radius_four_collections">4dp</dimen>
+
+    <item name="landmark_pin_size" type="dimen">10dp</item>
+    <item name="pinA_size" type="dimen">10dp</item>
+    
+    <item name="toolbar_height" type="dimen">46dp</item>
+    
+
+    <!-- Baatna sizes -->
+    <dimen name="font_size40">40dp</dimen>
+    <dimen name="font_size45">45dp</dimen>
+    <dimen name="font_size50">50dp</dimen>
+    <dimen name="font_size55">55dp</dimen>
+    <dimen name="font_size60">60dp</dimen>
+    
+      <!-- Material dimensions -->
+    <item name="minimum_clickable_area" type="dimen">60dp</item>
+    <item name="minimum_clickable_area_small" type="dimen">48dp</item>
+    <item name="toolbar_padding" type="dimen">16dp</item>
+    <item name="drawer_user_container_height" type="dimen">140dp</item>
+    <item name="shadow_elevation" type="dimen">.15dp</item>
+    <item name="drawer_text_size" type="dimen">14dp</item>
+    <item name="drawer_icon_left_padding" type="dimen">28dp</item>
+    
+    <item name="drawer_icon_left_padding_more" type="dimen">26dp</item>
+    
+</resources>

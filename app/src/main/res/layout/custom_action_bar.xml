@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height"
+    android:layout_gravity="fill_horizontal" >
+
+    <LinearLayout
+        android:id="@+id/action_container"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/home_icon_container"
+        android:clickable="true"
+        android:gravity="right"
+        android:visibility="gone" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/action_icon"
+            android:layout_width="@dimen/height48"
+            android:layout_height="@dimen/height48"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size18" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/home_icon_container"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:clickable="true"
+        android:onClick="actionBarSelected" >
+
+        <RelativeLayout
+            android:id="@+id/home_icon_subcontainer"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/zomato_dark_feedback" >
+
+            <ImageView
+                android:id="@+id/ic_drawer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_drawer" />
+
+            <ImageView
+                android:id="@+id/home_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ic_drawer"
+                android:gravity="left"
+                android:src="@drawable/ic_launcher" />
+
+            <com.application.baatna.utils.IconView
+                android:id="@+id/header_button_left_cross"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:background="@drawable/zomato_dark_feedback"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="actionBarSelected"
+                android:text="&quot;"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size16"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/back_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="@dimen/height2"
+            android:layout_toRightOf="@id/home_icon_subcontainer"
+            android:background="@drawable/baatna_red_feedback"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="actionBarSelected"
+            android:text="@string/zicon_android_back_icon"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size18"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_toRightOf="@id/back_icon"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:onClick="actionBarSelected"
+                android:paddingLeft="@dimen/height2"
+                android:paddingRight="@dimen/height5"
+                android:textColor="@color/zhl"
+                android:textSize="@dimen/size16" />
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/subtitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/zdhl5"
+                android:textSize="@dimen/size13"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/clear_notif_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/home_icon_container"
+        android:gravity="right"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/show_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/baatna_dark_feedback"
+            android:clickable="true"
+            android:gravity="right|center_vertical"
+            android:onClick="actionBarSelected"
+            android:paddingLeft="@dimen/height15"
+            android:paddingRight="@dimen/height15"
+            android:src="@drawable/header_settings" />
+
+        <ImageView
+            android:id="@+id/clear_notif"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/baatna_dark_feedback"
+            android:clickable="true"
+            android:gravity="right|center_vertical"
+            android:onClick="actionBarSelected"
+            android:paddingLeft="@dimen/height15"
+            android:paddingRight="@dimen/height15"
+            android:src="@drawable/header_read" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sort_container"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/home_icon_container"
+        android:clickable="true"
+        android:gravity="right"
+        android:visibility="gone" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/bookmark_sort_icon"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
+            android:gravity="center"
+            android:text="S"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tick_container"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/home_icon_container"
+        android:clickable="true"
+        android:gravity="right"
+        android:visibility="gone" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/tick_proceed_icon"
+            android:layout_width="@dimen/toolbar_height"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/radial_oval_feedback"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="proceed"
+            android:text="G"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_size45" />
+    </LinearLayout>
+    
+</RelativeLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height60"
+    android:layout_gravity="fill_horizontal"
+    android:background="@drawable/green_gradient" >
+
+    <com.application.baatna.utils.IconView
+        android:id="@+id/back_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height60"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="C"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size45" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/height60"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/back_icon"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <com.application.baatna.utils.TextViewBold
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:onClick="actionBarSelected"
+            android:paddingLeft="10dp"
+            android:paddingRight="@dimen/height2"
+            android:text="@string/make_new_request"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size16" />
+    </LinearLayout>
+
+</RelativeLayout>
