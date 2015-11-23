@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/userpage_progress_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/userpage_progress"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/content_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white" >
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true">
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <FrameLayout
+                    android:id="@+id/user_info_top_frame"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true" >
+
+                    <FrameLayout
+                        android:id="@+id/user_info_frame"
+                        android:layout_width="fill_parent"
+                        android:layout_height="150dp"
+                        android:paddingBottom="30dp" >
+
+                        <ImageView
+                            android:id="@+id/drawer_user_info_background_image"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:scaleType="centerCrop" />
+
+                        <View
+                            android:id="@+id/drawer_user_info_background_image_overlay"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/black_trans_twenty" />
+
+                        <View
+                            android:id="@+id/drawer_user_gradient_bottom"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:background="@drawable/drawer_gradient_bottom" />
+                    </FrameLayout>
+
+                    <com.application.baatna.utils.ZCircularImageView
+                        android:id="@+id/user_image"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_below="@id/user_info_frame"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:src="@drawable/profile_icon" />
+                </FrameLayout>
+
+                <View
+                    android:id="@+id/layout_login_separator"
+                    android:layout_width="175dp"
+                    android:layout_height=".5dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:background="@color/baatna_primary_dark"/>
+
+                <com.application.baatna.utils.TextViewSemiBold
+                    android:id="@+id/join_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/layout_login_separator"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="true"
+                    android:text="Join the college community"
+                    android:textAllCaps="true"
+                    android:textColor="@color/baatna_primary_dark"
+                    android:textSize="@dimen/size14" />
+
+                <com.application.baatna.utils.TextViewSemiBold
+                    android:id="@+id/question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/join_college"
+                    android:layout_centerHorizontal="true"
+                    android:text="Are you a college student?"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/size14" />
+
+
+                <com.application.baatna.utils.IconView
+                    android:id="@+id/back_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="D"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_size45" />
+
+                <com.application.baatna.utils.TextViewSemiBold
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/user_info_top_frame"
+                    android:layout_centerHorizontal="true"
+                    android:text="name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/size14" />
+
+                <com.application.baatna.utils.TextViewRegular
+                    android:id="@+id/enter_phone_number"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="Enter your phone number to help us verify your identity"
+                    android:layout_margin="@dimen/size20"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/size16" />
+
+                <LinearLayout
+                    android:id="@+id/phone_number_container"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/zhlbuttonfeedback"
+                    android:layout_margin="@dimen/size20"
+                    android:layout_marginTop="@dimen/size20"
+                    android:layout_marginBottom="@dimen/size20"
+                    android:layout_below="@id/enter_phone_number"
+                    android:orientation="horizontal">
+
+                    <com.application.baatna.utils.TextViewRegular
+                        android:id="@+id/phone_country_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/rounded_zhldark_button"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="+91"
+                        android:padding="@dimen/size10"
+                        android:textColor="@color/zdhl3"
+                        android:layout_marginRight="@dimen/size10"
+                        android:textSize="@dimen/size18" />
+
+                    <com.application.baatna.utils.EditTextRegular
+                        android:id="@+id/phone_number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@drawable/rounded_right_corner_white"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:maxLength="10"
+                        android:padding="@dimen/size20"
+                        android:textColor="@color/zdark"
+                        android:textSize="@dimen/size18" />
+                </LinearLayout>
+
+                <com.application.baatna.utils.TextViewSemiBold
+                    android:id="@+id/submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/phone_number_container"
+                    android:layout_centerHorizontal="true"
+                    android:text="Submit"
+                    android:background="@drawable/greenbuttonfeedback"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/white"
+                    android:padding="10dp"
+                    android:textSize="@dimen/size14" />
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/empty_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/empty_view_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="k"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/height150" />
+
+        <TextView
+            android:id="@+id/empty_view_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_internet_message"
+            android:textColor="@color/dark_grey" />
+
+        <LinearLayout
+            android:id="@+id/empty_view_retry_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_zdhl4_drawable"
+            android:clickable="true"
+            android:gravity="center" >
+
+            <com.application.baatna.utils.IconView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="e"
+                android:textColor="@color/z_grey_font_color"
+                android:textSize="@dimen/size22" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

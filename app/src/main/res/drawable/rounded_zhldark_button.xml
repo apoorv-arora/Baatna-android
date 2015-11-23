@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle" >
+            <corners
+                android:bottomLeftRadius="@dimen/corner_radius_tour"
+                android:topLeftRadius="@dimen/corner_radius_tour" />
+
+            <solid android:color="@color/zhl_light" />
+
+            <stroke
+                android:width="@dimen/height1"
+                android:color="@color/zhl_dark" />
+        </shape>
+    </item> <!-- pressed -->
+
+    <item > <!-- default/unchecked -->
+
+        <shape android:shape="rectangle" >
+            <corners
+                android:bottomLeftRadius="@dimen/corner_radius_tour"
+                android:topLeftRadius="@dimen/corner_radius_tour" />
+
+            <solid android:color="@color/zhl_dark" />
+
+            <stroke
+                android:width="@dimen/height1"
+                android:color="@color/zhl_dark" />
+        </shape>
+    </item>
+
+</selector>

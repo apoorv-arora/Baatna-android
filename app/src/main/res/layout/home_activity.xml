@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/homenew_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/zhl_dark"
+    android:orientation="vertical" >
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true" >
+
+        <RelativeLayout
+            android:id="@+id/home_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_actionbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height60"
+                android:background="@color/action_bar_default"
+                android:elevation="@dimen/toolbar_elevation"
+                android:minHeight="@dimen/height60"
+                android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+                android:theme="@style/ToolbarBaseTheme"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp" />
+
+            <ListView
+                android:id="@+id/feedListView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/toolbar_actionbar"
+                android:background="@color/feed_bg" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/left_drawer"
+            android:layout_width="@dimen/height300"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:clickable="true"
+            android:orientation="vertical" >
+
+            <include layout="@layout/user_settings" />
+        </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <View
+            android:id="@+id/fab_overlay"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:alpha="0"
+            android:background="@color/black_trans_seventy"
+            android:clickable="false" />
+
+        <include layout="@layout/fab" />
+    </FrameLayout>
+
+</RelativeLayout>
