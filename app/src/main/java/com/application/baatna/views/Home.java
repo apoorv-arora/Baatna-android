@@ -298,7 +298,6 @@ public class Home extends AppCompatActivity
 
 		UploadManager.addCallback(this);
 		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
-
 		new AppConfig().execute(null, null, null);
 	}
 
@@ -692,10 +691,10 @@ public class Home extends AppCompatActivity
 	public void setImageInDrawer() {
 		// Blurred user image
 		ImageView imageBackground = (ImageView) findViewById(R.id.drawer_user_info_background_image);
-		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "", width, width, false, false);
+		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "user", width, width, false, false);
 
 		ImageView imageBlur = (ImageView) findViewById(R.id.drawer_user_info_blur_background_image);
-		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBlur, "", width / 200, width / 200, false, true);
+		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBlur, "blur", width / 20, width / 20, false, true);
 	}
 
 	// public void feedback(View v) {
@@ -781,6 +780,7 @@ public class Home extends AppCompatActivity
 	@Override
 	public void onCoordinatesIdentified(Location loc) {
 		if (loc != null) {
+			displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), loc.getLatitude(), loc.getLongitude());
 			UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
 			float lon = (float) loc.getLongitude();
 			float lat = (float) loc.getLatitude();
@@ -1246,7 +1246,7 @@ public class Home extends AppCompatActivity
 					if (user != null) {
 						String description = getResources().getString(R.string.feed_user_joined, user.getUserName() + " ");
 
-						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", value, value, false, false);
+						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 
 						viewHolder.userName.setText(description);
 //					viewHolder.userName.setMovementMethod(LinkMovementMethod.getInstance());
@@ -1262,7 +1262,7 @@ public class Home extends AppCompatActivity
 						String description = getResources().getString(R.string.feed_user_requested,
 								user.getUserName() + " ", wish.getTitle() + " ");
 
-						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", value, value, false, false);
+						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 
 						viewHolder.userName.setText(description);
 
@@ -1300,7 +1300,7 @@ public class Home extends AppCompatActivity
 					String description = getResources().getString(R.string.feed_requested_fulfilled,
 							user.getUserName() + " ", wish.getTitle() + " ", user2.getUserName());
 
-					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", value, value, false, false);
+					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 
 					viewHolder.userName.setText(description);
 
@@ -1467,7 +1467,7 @@ public class Home extends AppCompatActivity
 			} else {
 				imageView.setBackgroundResource(0);
 				Bitmap blurBitmap = null;
-				if (imageView != null) {
+				if (type != null && type.equalsIgnoreCase("blur") && imageView != null) {
 					blurBitmap = CommonLib.fastBlur(((BitmapDrawable) imageView.getDrawable()).getBitmap(), 10);
 				}
 				if (imageView != null && blurBitmap != null) {

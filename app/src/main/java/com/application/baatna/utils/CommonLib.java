@@ -61,12 +61,15 @@ public class CommonLib {
 	public static final boolean isTestBuild = false;
 
 	public static final String SERVER_PREFIX = "http://";
-//	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
-//	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
 	
-	public static final String SERVER_BODY = "192.168.1.35:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.35:8080/BaatnaServer/rest/";
-	
+//	public static final String SERVER_BODY = "192.168.1.35:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.35:8080/BaatnaServer/rest/";
+
+//	public static final String SERVER_BODY = "192.168.43.193:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://192.168.43.193:8080/BaatnaServer/rest/";
+
 	public static final boolean enableHSLogin = true;
 
 	public static String API_VERSION = "";
