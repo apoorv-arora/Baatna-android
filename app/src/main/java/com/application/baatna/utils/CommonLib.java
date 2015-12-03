@@ -40,6 +40,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -351,7 +353,7 @@ public class CommonLib {
 	 */
 
 	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
-		Log.e("lat1"+lat1+"  long1"+lng1,"lat 2"+lat2 +"  long2"+lng2);
+		CommonLib.ZLog("disFrom", "lat1"+lat1+"  long1"+lng1 + "lat 2"+lat2 +"  long2"+lng2);
 		double earthRadius = 6371;
 		double dLat = Math.toRadians(lat2 - lat1);
 		double dLng = Math.toRadians(lng2 - lng1);
@@ -362,34 +364,8 @@ public class CommonLib {
 		double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(lat1) * Math.cos(lat2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		double dist = earthRadius * c;
-		Log.e("difference in distance",""+dist);
-		return distance(lat1, lng1, lat2, lng2);
+		return dist;
 	}
-	private static double distance(double lat1, double lon1, double lat2, double lon2) {
-		double theta = lon1 - lon2;
-		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-		dist = Math.acos(dist);
-		dist = rad2deg(dist);
-		dist = dist * 60 * 1.1515;
-
-			dist = dist * 1.609344;
-		return (dist);
-	}
-
-	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	/*::	This function converts decimal degrees to radians						 :*/
-	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	private static double deg2rad(double deg) {
-		return (deg * Math.PI / 180.0);
-	}
-
-	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	/*::	This function converts radians to decimal degrees						 :*/
-	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	private static double rad2deg(double rad) {
-		return (rad * 180 / Math.PI);
-	}
-
 	// Returns the Network State
 	public static String getNetworkState(Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1041,4 +1017,71 @@ public class CommonLib {
 		} 
 		return false;
 	}
+
+
+	public static String findDateDifference(Long timestamp) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm a");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm a");
+		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar calendar1 = Calendar.getInstance();
+		Calendar calendar2 = Calendar.getInstance();
+		calendar1.setTimeInMillis(timestamp);
+		calendar2.setTimeInMillis(System.currentTimeMillis());
+		try {
+
+
+			//in milliseconds
+			long diff = calendar2.getTimeInMillis() - calendar1.getTimeInMillis();
+
+			long diffSeconds = diff / 1000 % 60;
+			long diffMinutes = diff / (60 * 1000) % 60;
+			long diffHours = diff / (60 * 60 * 1000) % 24;
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			long diffYears = diffDays / 365;
+//            System.out.print(diffDays + " days, ");
+//            System.out.print(diffHours + " hours, ");
+//            System.out.print(diffMinutes + " minutes, ");
+//            System.out.print(diffSeconds + " seconds.");
+//            Log.e("difference is", diffDays + " days, " + diffHours + " hours, " + diffMinutes + " minutes, ");
+			if (diffDays == 0) {
+				if (diffMinutes > 0) {
+					return diffMinutes + "MINS AGO";
+					//return timeFormat.format(calendar1.getTime());
+				} else return "Just Now";
+			} else if (diffDays == 1) {
+				return "Yesterday";
+			} else if (diffDays <= 30) {
+				return "" + diffDays + " DAYS AGO";
+			} else
+				return format.format(calendar1.getTime());
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static boolean validatePhone(String phone)
+	{
+
+		try{
+			if(phone.trim().length()==0)
+			{
+				return false;
+			}
+			double n = Double.parseDouble(phone);
+			if(!(phone.trim().toString().startsWith("7")||phone.trim().toString().startsWith("8")||phone.trim().toString().startsWith("9")))
+				return false;
+			if(phone.trim().length()==10)
+				return true;
+
+		}catch(Exception e)
+		{
+			return false;
+		}
+		return false;
+	}
+
 }

@@ -65,7 +65,6 @@ import com.application.baatna.mapUtils.GoogleMapRenderer;
 import com.application.baatna.mapUtils.SimpleRestaurantPin;
 import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.CommonUtils;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
@@ -1200,7 +1199,7 @@ public class Home extends AppCompatActivity
 
 			final Wish wish = feedItem.getWish();
 
-			viewHolder.time.setText(CommonUtils.findDateDifference(feedItem.getTimestamp()));
+			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getTimestamp()));
 
 			viewHolder.imageView.setOnClickListener(new OnClickListener() {
 
