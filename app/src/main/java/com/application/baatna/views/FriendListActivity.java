@@ -324,7 +324,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 					viewHolder.userName.setText(description);
 					viewHolder.bar
-							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.feed_joined)));
+							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.item_received_color)));
 
 				}
 				break;
@@ -337,7 +337,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 					viewHolder.userName.setText(description);
 					viewHolder.bar
-							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
+							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.item_offered_color)));
 
 				}
 				break;

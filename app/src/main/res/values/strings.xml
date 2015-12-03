@@ -49,7 +49,7 @@
     <string name="messages">Messages</string>
     <string name="post_request">New Request</string>
     <string name="could_not_logout">Could not logout</string>
-    <string name="category_hint">What would you like to borrow?</string>
+    <string name="category_hint">What would you like to borrow?(Max 30 chars)</string>
     <string name="description_hint">Convince your neighbours\n\nEg Dear neighbours, I\'m looking to a company trip this weekend. I\'m short of a sleeping bag and would need one for 2 days. Thanks a lot for the help in advance :)</string>
     <string name="post">Post</string>
     <string name="or_select_from_categories">Or select from categories</string>
@@ -58,7 +58,7 @@
     <string name="signup_terms">By creating an account, you agree to Baatna\'s Terms of Service, Privacy Policy and Content Policies.</string>
     <string name="login_terms">By logging in you agree to Baatna\'s Terms of Service, Privacy Policy and Content Policies.</string>
     <string name="wishbox">Wishbox</string>
-    <string name="view_wishbox">View Wishbox</string>
+    <string name="view_wishbox">View History</string>
     <string name="wish_title_hint">You wished for a\n</string>
     <string name="wish_delete_text">Are you sure you want to delete the item?</string>
     <string name="your_wishbox">YOUR WISHBOX</string>

@@ -120,8 +120,8 @@ public class NewRequestFragment extends Fragment {
 					return;
 				}
 
-				if (description == null || description.length() < 1) {
-					Toast.makeText(mContext, "Please enter description of the request", Toast.LENGTH_SHORT).show();
+				if (description == null || description.length() < 30) {
+					Toast.makeText(mContext, "Please enter description of the request of at least 30 characters", Toast.LENGTH_SHORT).show();
 					((TextView) rootView.findViewById(R.id.description_et)).requestFocus();
 					return;
 				}

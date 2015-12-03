@@ -65,11 +65,13 @@ import com.application.baatna.mapUtils.GoogleMapRenderer;
 import com.application.baatna.mapUtils.SimpleRestaurantPin;
 import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.CommonUtils;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
 import com.application.baatna.utils.fab.FABControl.OnFloatingActionsMenuUpdateListener;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -81,6 +83,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.plus.PlusOneButton;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
@@ -432,7 +435,12 @@ public class Home extends AppCompatActivity
 						editor.putBoolean("twitter_status", false);
 
 						editor.commit();
-
+						//To stop getting chat notification after uninstall
+						try {
+							GoogleCloudMessaging.getInstance(getApplicationContext()).unregister();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 						if (prefs.getInt("uid", 0) == 0) {
 							Intent intent = new Intent(zapp, Splash.class);
 							startActivity(intent);
@@ -1192,7 +1200,7 @@ public class Home extends AppCompatActivity
 
 			final Wish wish = feedItem.getWish();
 
-			viewHolder.time.setText(CommonLib.getDateFromUTC(feedItem.getTimestamp()));
+			viewHolder.time.setText(CommonUtils.findDateDifference(feedItem.getTimestamp()));
 
 			viewHolder.imageView.setOnClickListener(new OnClickListener() {
 
