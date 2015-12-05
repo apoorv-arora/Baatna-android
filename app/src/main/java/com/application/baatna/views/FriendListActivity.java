@@ -276,6 +276,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 				viewHolder = new ViewHolder();
 				viewHolder.userName = (TextView) v.findViewById(R.id.user_name);
 				viewHolder.time = (TextView) v.findViewById(R.id.time);
+				viewHolder.distance = (TextView) v.findViewById(R.id.distance);
 				viewHolder.bar = v.findViewById(R.id.left_bar);
 				viewHolder.imageView = (ImageView) v.findViewById(R.id.user_image);
 				v.setTag(viewHolder);
@@ -287,6 +288,15 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 			final User user = feedItem.getUser();
 
 			final Wish wish = feedItem.getWish();
+			//setting text to display time
+			viewHolder.time.setText(CommonLib.getDateFromUTC(feedItem.getTimestamp()));
+			//displaying distance
+			double distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+					feedItem.getLatitude(), feedItem.getLongitude());
+			if(distance < 5)
+				viewHolder.distance.setText(distance+" km");
+			else
+				viewHolder.distance.setVisibility(View.GONE);
 
 			viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
 

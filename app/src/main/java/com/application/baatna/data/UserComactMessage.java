@@ -32,6 +32,11 @@ public class UserComactMessage {
 	 * Wish signifies the wish in picture.
 	 */
 	Wish wish;
+	/**
+	 * Location of person sending the message
+	 * */
+	private double latitude;
+	private double longitude;
 
 	public int getGroupId() {
 		return groupId;
@@ -80,5 +85,22 @@ public class UserComactMessage {
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
 
 }
