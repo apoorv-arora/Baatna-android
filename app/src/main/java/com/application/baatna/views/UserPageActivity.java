@@ -84,6 +84,7 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 
 	@Override
 	protected void onCreate(Bundle arg0) {
+		overridePendingTransition(R.anim.rotation,R.anim.rotation1);
 		super.onCreate(arg0);
 		setContentView(R.layout.user_page_activity);
 		zapp = (BaatnaApp) getApplication();
