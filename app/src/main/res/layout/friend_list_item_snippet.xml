@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@id/user_image"
+                android:layout_marginTop="@dimen/size10"
                 android:textColor="@color/zhl_darkest"
                 android:textSize="@dimen/size12" />
 
@@ -45,6 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/size10"
+                android:layout_marginRight="20dp"
+
                 android:textColor="@color/zhl_darkest"
                 android:textSize="@dimen/size12" />
 
