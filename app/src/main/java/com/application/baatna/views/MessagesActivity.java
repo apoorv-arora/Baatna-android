@@ -38,6 +38,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -176,6 +178,8 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 		if (type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
 			// subtitle.setText("Offered YOU A "+ currentWish.getTitle());
+			//set background
+			setFragmentBackground();
 			if (currentWish.getStatus() == CommonLib.STATUS_OFFERED) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
 				((TextView) findViewById(R.id.product_status)).setText("Product received");
@@ -680,6 +684,15 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 					}
 				}
 			}
+		}
+	}
+	public void setFragmentBackground()
+	{
+		if(type == CommonLib.WISH_ACCEPTED_CURRENT_USER)
+		{
+			messageList.setBackgroundColor(getResources().getColor(R.color.item_offered_color));
+			((RelativeLayout) findViewById(R.id.parent_layout)).setBackgroundColor(getResources().getColor(R.color.item_offered_color));
+			Log.e("orange color","set");
 		}
 	}
 

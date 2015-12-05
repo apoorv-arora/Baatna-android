@@ -351,6 +351,7 @@ public class CommonLib {
 	 */
 
 	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
+		Log.e("lat1"+lat1+"  long1"+lng1,"lat 2"+lat2 +"  long2"+lng2);
 		double earthRadius = 6371;
 		double dLat = Math.toRadians(lat2 - lat1);
 		double dLng = Math.toRadians(lng2 - lng1);
@@ -361,8 +362,32 @@ public class CommonLib {
 		double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(lat1) * Math.cos(lat2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		double dist = earthRadius * c;
+		Log.e("difference in distance",""+dist);
+		return distance(lat1, lng1, lat2, lng2);
+	}
+	private static double distance(double lat1, double lon1, double lat2, double lon2) {
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
 
-		return dist;
+			dist = dist * 1.609344;
+		return (dist);
+	}
+
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::	This function converts decimal degrees to radians						 :*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	private static double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::	This function converts radians to decimal degrees						 :*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	private static double rad2deg(double rad) {
+		return (rad * 180 / Math.PI);
 	}
 
 	// Returns the Network State

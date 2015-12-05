@@ -185,7 +185,7 @@ public class BaatnaApp extends Application {
 		calendar.set(Calendar.SECOND, 00);
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 24 * 60 * 60 * 1000, pintent);
+		alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 3 * 24 * 60 * 60 * 1000, pintent);
 	}
 
 	private void startLocationUpdateService() {
