@@ -248,7 +248,7 @@ public class WishFragment extends Fragment implements UploadManagerCallback {
 					super.updateDrawState(ds);
 					ds.setUnderlineText(false);
 					ds.setTypeface(CommonLib.getTypeface(activity.getApplicationContext(), CommonLib.Bold));
-					ds.setColor(getResources().getColor(R.color.bt_orange));
+					ds.setColor(getResources().getColor(R.color.bt_drawer_green));
 				}
 			};
 			finalSpanBuilderStr.setSpan(cs1, title.indexOf(wish.getTitle()),

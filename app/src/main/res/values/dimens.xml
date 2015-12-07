@@ -68,7 +68,8 @@
 
     <!--
 	<dimen name="corner_radius">3dp</dimen>
-	<dimen name="corner_radius_four">4dp</dimen>
+	<dimen name="corner_radius_four">4dp</dimen>
+
     -->
 
     <dimen name="corner_radius_button">4dp</dimen>
@@ -143,5 +144,6 @@
     <item name="drawableSize" type="dimen">24dp</item>
     
     <item name="toolbar_elevation" type="dimen">4dp</item>
+    <item name="new_feed_count_margin" type="dimen">10dp</item>
     
 </resources>

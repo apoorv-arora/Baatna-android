@@ -396,7 +396,7 @@ public class UserLoginActivity extends Activity implements UploadManagerCallback
 
                 if (bitmap != null) {
 
-                    bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
+                   // bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
                     synchronized (zapp.cache) {
                         zapp.cache.put(url2, bitmap);
                     }

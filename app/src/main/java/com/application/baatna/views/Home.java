@@ -6,11 +6,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ResolveInfo;
@@ -26,12 +29,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +64,7 @@ import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.Splash;
 import com.application.baatna.data.FeedItem;
+import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
 import com.application.baatna.mapUtils.Cluster;
@@ -137,6 +145,8 @@ public class Home extends AppCompatActivity
 	// rate us on the play store
 	private PlusOneButton mPlusOneButton;
 
+	private SwipeRefreshLayout swipeRefreshLayout;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -178,6 +188,7 @@ public class Home extends AppCompatActivity
 		});
 
 		setMapActivity(savedInstanceState);
+		findViewById(R.id.feedListView).setVisibility(View.GONE);
 		refreshFeed();
 
 		feedListView.setOnScrollListener(new OnScrollListener() {
@@ -297,12 +308,52 @@ public class Home extends AppCompatActivity
 			CommonLib.ZLog("rate dialog", "rate_dialog is now  " + rateDialogCounter);
 			CommonLib.ZLog("rate dialog", "rate_dialog_trigger is now " + rateDialogCounterTrigger);
 		}
+		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				CommonLib.ZLog("onRefresh","called");
+				refreshFeed();
+			}
+		});
+		((TextView) findViewById(R.id.txt_new_feeds)).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				feedListAdapter.notifyDataSetChanged();
+				feedListView.smoothScrollToPosition(0);
+				((TextView) findViewById(R.id.txt_new_feeds)).setVisibility(View.GONE);
 
+			}
+		});
 		UploadManager.addCallback(this);
 		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
 		new AppConfig().execute(null, null, null);
+		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mFeedReceived,
+				new IntentFilter(CommonLib.LOCAL_FEED_BROADCAST_NOTIFICATION));
 	}
+	private BroadcastReceiver mFeedReceived = new BroadcastReceiver() {
 
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			try {
+				if (intent != null && intent.getExtras() != null && intent.hasExtra("feed")) {
+					// new
+					// GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+					// check for user and wish
+					FeedItem feedItem = (FeedItem) intent.getSerializableExtra("feed");
+					wishes.add(0,feedItem);
+					if(feedListView!=null && feedListView.getFirstVisiblePosition()>=2)
+						((TextView) findViewById(R.id.txt_new_feeds)).setVisibility(View.VISIBLE);
+					else if(feedListView!=null && feedListView.getFirstVisiblePosition()<2)
+						feedListAdapter.notifyDataSetChanged();
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	};
 	private void setUpFAB() {
 
 		// ((FABControl)
@@ -698,7 +749,7 @@ public class Home extends AppCompatActivity
 	public void setImageInDrawer() {
 		// Blurred user image
 		ImageView imageBackground = (ImageView) findViewById(R.id.drawer_user_info_background_image);
-		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "user", width, width, false, false);
+		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBackground, "profile_pic", width, width, false, false);
 
 		ImageView imageBlur = (ImageView) findViewById(R.id.drawer_user_info_blur_background_image);
 		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBlur, "blur", width / 20, width / 20, false, true);
@@ -744,6 +795,9 @@ public class Home extends AppCompatActivity
 				targetedShareIntent.setType("text/plain");
 				shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				if (TextUtils.equals(packageName, "com.facebook.katana")) {
+					shareText = "<p>"+shareText+"</p>";
+					targetedShareIntent.setType("text/plain");
+					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(shareText));
 					targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
 							"http://www.baatna.com");
 				} else {
@@ -781,6 +835,7 @@ public class Home extends AppCompatActivity
 		zapp.zll.removeCallback(this);
 		zapp.cache.clear();
 		UploadManager.removeCallback(this);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mFeedReceived);
 		super.onDestroy();
 	}
 
@@ -1186,7 +1241,11 @@ public class Home extends AppCompatActivity
 				viewHolder.imageView = (ImageView) v.findViewById(R.id.user_image);
 				v.setTag(viewHolder);
 			}
-
+			if(position==0)
+			{
+				if(((TextView) mContext.findViewById(R.id.txt_new_feeds)).getVisibility()==View.VISIBLE)
+					((TextView) mContext.findViewById(R.id.txt_new_feeds)).setVisibility(View.GONE);
+			}
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
 					.setMargins(width / 40, 0, width / 40, 0);
 
@@ -1240,7 +1299,6 @@ public class Home extends AppCompatActivity
 
 			double distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
 					feedItem.getLatitude(), feedItem.getLongitude());
-
 			if(distance < 5)
 				viewHolder.distance.setText(distance+" km");
 			else
@@ -1332,7 +1390,6 @@ public class Home extends AppCompatActivity
 
 		@Override
 		protected void onPreExecute() {
-			findViewById(R.id.feedListView).setVisibility(View.GONE);
 			super.onPreExecute();
 		}
 
@@ -1376,6 +1433,7 @@ public class Home extends AppCompatActivity
 					findViewById(R.id.feedListView).setVisibility(View.GONE);
 				}
 			}
+			swipeRefreshLayout.setRefreshing(false);
 
 		}
 	}
@@ -1595,8 +1653,8 @@ public class Home extends AppCompatActivity
 			}
 
 			if (bitmap != null) {
-				if (this.type.equalsIgnoreCase("user"))
-					bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
+//				if (this.type.equalsIgnoreCase("user"))
+//					bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
 
 				zapp.cache.put(url, bitmap);
 

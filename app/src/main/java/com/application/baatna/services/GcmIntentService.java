@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.application.baatna.R;
 import com.application.baatna.Splash;
+import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
@@ -100,7 +101,13 @@ public class GcmIntentService extends IntentService {
 					notificationActivity = new Intent(this, MessagesActivity.class);
 					notificationActivity.putExtra("user", messageObj.getFromUser());
 					notificationActivity.putExtra("wish", messageObj.getWish());
-					notificationActivity.putExtra("type", type);
+					if(messageObj.getWish().getUserId()==messageObj.getFromUser().getUserId())
+					notificationActivity.putExtra("type", CommonLib.WISH_ACCEPTED_CURRENT_USER);
+					else if(messageObj.getWish().getUserId()==getSharedPreferences(CommonLib.APP_SETTINGS, 0).getInt("uid",0))
+						notificationActivity.putExtra("type", CommonLib.CURRENT_USER_WISH_ACCEPTED);
+					else
+						notificationActivity.putExtra("type", type);
+
 					notificationActivity.putExtra("message", messageObj);
 
 					boolean object = CommonLib.getCurrentActiveActivity(context);
@@ -140,6 +147,22 @@ public class GcmIntentService extends IntentService {
 
 				notificationActivity.putExtra("user", mUser);
 				notificationActivity.putExtra("wish", mWish);
+				if(mUser!=null && mWish!=null)
+				{
+					Intent intent = new Intent(CommonLib.LOCAL_FEED_BROADCAST_NOTIFICATION);
+					FeedItem feedItem = new FeedItem();
+					feedItem.setFeedId(-1);
+					feedItem.setLatitude(0);
+					feedItem.setLongitude(0);
+					feedItem.setTimestamp(System.currentTimeMillis());
+					feedItem.setType(CommonLib.FEED_TYPE_NEW_REQUEST);
+					feedItem.setUserFirst(mUser);
+					feedItem.setWish(mWish);
+					intent.putExtra("feed",feedItem);
+					LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+				}
+
+
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

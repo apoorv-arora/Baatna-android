@@ -66,8 +66,8 @@ public class CommonLib {
 	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
 	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
 	
-//	public static final String SERVER_BODY = "192.168.1.35:8080/BaatnaServer/rest/";
-//	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.35:8080/BaatnaServer/rest/";
+//	public static final String SERVER_BODY = "192.168.2.12:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.12:8080/BaatnaServer/rest/";
 
 //	public static final String SERVER_BODY = "192.168.43.193:8080/BaatnaServer/rest/";
 //	public static String SERVER_WITHOUT_VERSION = "http://192.168.43.193:8080/BaatnaServer/rest/";
@@ -79,6 +79,7 @@ public class CommonLib {
 	
 	public static final String LOCAL_BROADCAST_NOTIFICATIONS = "new_push_notification";
 	public static final String LOCAL_BROADCAST_NOTIFICATION = "gcm-push-notification";
+	public static final String LOCAL_FEED_BROADCAST_NOTIFICATION = "new-feed-notification";
 
 
 	/** to keep the url same for all cities.xml requests */
