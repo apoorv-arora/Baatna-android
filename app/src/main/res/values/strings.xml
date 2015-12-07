@@ -70,8 +70,8 @@
     <string name="feed_user_joined">%1$s joined your neighborhood</string>
     <string name="feed_user_requested">%1$s wants to borrow a \n%2$s.</string>
     <string name="feed_requested_fulfilled">%1$s was offered %2$s by %3$s.</string>
-    <string name="message_user_requested">%1$s offered you a %2$s.</string>
-    <string name="message_requested_fulfilled">You offered %1$s to %2$s.</string>
+    <string name="message_user_requested">%1$s offered you a \n%2$s.</string>
+    <string name="message_requested_fulfilled">%2$s wants to borrow a \n%1$s.</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="make_new_request">Make a new request</string>
