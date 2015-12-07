@@ -31,7 +31,11 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +98,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Home extends AppCompatActivity
 		implements BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener, UploadManagerCallback {
@@ -746,7 +752,7 @@ public class Home extends AppCompatActivity
 				shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				if (TextUtils.equals(packageName, "com.facebook.katana")) {
 					targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-							"http://www.baatna.com");
+							"https://play.google.com/store/apps/details?id=com.application.baatna");
 				} else {
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				}
@@ -755,15 +761,19 @@ public class Home extends AppCompatActivity
 						|| packageName.equalsIgnoreCase("com.twitter.android")
 						|| packageName.equalsIgnoreCase("com.tencent.mm")
 						|| packageName.equalsIgnoreCase("com.viber.voip")
-						|| packageName.equalsIgnoreCase("com.skype.raider")) {
+						|| packageName.equalsIgnoreCase("com.skype.raider")||
+						packageName.equalsIgnoreCase("com.google.android.apps.messaging")) {
 					targetedShareIntent.setPackage(packageName);
 					targetedShareIntents.add(targetedShareIntent);
 				}
 			}
-			Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Invite using");
+			if(!targetedShareIntents.isEmpty()) //app crash if no targeted app found
+			{Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Invite using");
 			chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[] {}));
+
 			startActivity(chooserIntent);
-		}
+		}}
+
 
 	}
 
@@ -1223,11 +1233,20 @@ public class Home extends AppCompatActivity
 							TextView descriptionTextView = new TextView(Home.this);
 							LayoutParams params = new LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 									LinearLayout.LayoutParams.WRAP_CONTENT);
+							//coversion of px to dp
+							/*int padding_in_dp = 10;
+							final float scale = getResources().getDisplayMetrics().density;
+							int padding_in_px = (int) (padding_in_dp * scale + 0.5f);*/
+
 							descriptionTextView.setLayoutParams(params);
+							//ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(descriptionTextView.getLayoutParams());
+							//marginParams.setMargins(50, 50, 50, 50);
 							descriptionTextView.setGravity(Gravity.CENTER);
 							descriptionTextView.setText(description);
 							descriptionTextView.setBackgroundColor(getResources().getColor(R.color.white));
 							((LinearLayout) v.getParent()).addView(descriptionTextView);
+
+
 							descriptionPos = position;
 						}
 					} else {
@@ -1239,13 +1258,14 @@ public class Home extends AppCompatActivity
 				}
 			});
 
-			double distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
 					feedItem.getLatitude(), feedItem.getLongitude());
-
-			if(distance < 5)
-				viewHolder.distance.setText(distance+" km");
-			else
-				viewHolder.distance.setVisibility(View.GONE);
+			//distance in km
+			distance=(distance/1000);
+			//if(distance < 5)
+				viewHolder.distance.setText(distance+"KM");
+			//else
+				//viewHolder.distance.setVisibility(View.GONE);
 
 			int value = getResources().getDimensionPixelSize(R.dimen.size60);
 			switch (feedItem.getType()) {
@@ -1255,9 +1275,14 @@ public class Home extends AppCompatActivity
 						String description = getResources().getString(R.string.feed_user_joined, user.getUserName() + " ");
 
 						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
-
-						viewHolder.userName.setText(description);
-//					viewHolder.userName.setMovementMethod(LinkMovementMethod.getInstance());
+						Spannable desc=new SpannableString(description);
+						Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
+						Matcher m = p.matcher(description);
+						while (m.find()){
+							desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						}
+						viewHolder.userName.setText(desc);
+//
 
 						viewHolder.accept.setVisibility(View.INVISIBLE);
 						viewHolder.decline.setVisibility(View.INVISIBLE);
@@ -1268,11 +1293,25 @@ public class Home extends AppCompatActivity
 				case CommonLib.FEED_TYPE_NEW_REQUEST:
 					if (user != null && wish != null) {
 						String description = getResources().getString(R.string.feed_user_requested,
-								user.getUserName() + " ", wish.getTitle() + " ");
+								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ");
 
 						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
+						Spannable desc=new SpannableString(description);
+						Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
+						Matcher m = p.matcher(description);
+						while (m.find()){
+							desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						}
+						p=Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
+						m = p.matcher(description);
+						while (m.find()){
 
-						viewHolder.userName.setText(description);
+
+							desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.zomato_red)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+							desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						}
+						viewHolder.userName.setText(desc);
+
 
 						viewHolder.bar
 								.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
@@ -1306,11 +1345,24 @@ public class Home extends AppCompatActivity
 					break;
 				case CommonLib.FEED_TYPE_REQUEST_FULFILLED:
 					String description = getResources().getString(R.string.feed_requested_fulfilled,
-							user.getUserName() + " ", wish.getTitle() + " ", user2.getUserName());
+							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", user2.getUserName());
 
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
+					Spannable desc=new SpannableString(description);
+					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
+					Matcher m = p.matcher(description);
+					while (m.find()){
+						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+					p=Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
+					m = p.matcher(description);
+					while (m.find()){
 
-					viewHolder.userName.setText(description);
+
+						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.bt_orange_2)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+					viewHolder.userName.setText(desc);
 
 					viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
 					viewHolder.accept.setVisibility(View.INVISIBLE);
@@ -1363,6 +1415,7 @@ public class Home extends AppCompatActivity
 				if (result instanceof Object[]) {
 					findViewById(R.id.feedListView).setVisibility(View.VISIBLE);
 					Object[] arr = (Object[]) result;
+					if(arr[0]!=null)
 					mWishesTotalCount = (Integer) arr[0];
 					setWishes((ArrayList<FeedItem>) arr[1]);
 				}

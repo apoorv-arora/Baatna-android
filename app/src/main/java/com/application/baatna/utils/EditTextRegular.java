@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 
 public class EditTextRegular extends EditText {
+
 	public EditTextRegular(Context context) {
 		super(context);
 		setTypeface(CommonLib.getTypeface(context, CommonLib.Regular));

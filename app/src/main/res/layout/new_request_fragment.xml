@@ -53,7 +53,7 @@
                 android:layout_height=".5dp"
                 android:background="@color/zomato_red" />
 
-            <com.application.baatna.utils.EditTextRegular
+            <com.application.baatna.utils.EditTextItalics
                 android:id="@+id/description_et"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/height200"
@@ -67,9 +67,9 @@
                 android:maxLength="200"
                 android:textColor="@color/default_font_color"
                 android:textColorHint="@color/default_font_color"
-                android:textSize="@dimen/size16" />
+                android:textSize="@dimen/size14" />
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/post"
                 android:layout_width="@dimen/size110"
                 android:layout_height="@dimen/size60"
@@ -78,7 +78,9 @@
                 android:text="@string/post"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/size14" />
+                android:textSize="@dimen/size14"
+               android:textAllCaps="true"
+                 />
 
             <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/category_selection_label"
@@ -86,7 +88,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/or_select_from_categories"
                 android:textColor="@color/default_font_color"
-                android:textSize="@dimen/size14" />
+                android:textSize="@dimen/size14"
+                android:textAllCaps="true"/>
 
             <ListView
                 android:id="@+id/category_list_view"

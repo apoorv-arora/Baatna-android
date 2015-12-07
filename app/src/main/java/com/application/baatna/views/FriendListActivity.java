@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +36,7 @@ import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.CommonUtils;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
@@ -45,6 +48,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FriendListActivity extends Activity implements UploadManagerCallback {
 
@@ -113,7 +118,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 				.setMargins(width / 40, 0, 0, 0);
 		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
 		title.setText(s);
-
+		title.setAllCaps(true);
 	}
 
 	@Override
@@ -289,14 +294,17 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 			final Wish wish = feedItem.getWish();
 			//setting text to display time
-			viewHolder.time.setText(CommonLib.getDateFromUTC(feedItem.getTimestamp()));
+			viewHolder.time.setText(CommonUtils.findDateDifference(feedItem.getTimestamp()));
 			//displaying distance
-			double distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+
+			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
 					feedItem.getLatitude(), feedItem.getLongitude());
-			if(distance < 5)
-				viewHolder.distance.setText(distance+" km");
-			else
-				viewHolder.distance.setVisibility(View.GONE);
+			//distance in km
+			distance=(distance/1000);
+			//if(distance < 5)
+				viewHolder.distance.setText(distance+" KM");
+			//else
+				//viewHolder.distance.setVisibility(View.GONE);
 
 			viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
 
@@ -326,13 +334,25 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 			case CommonLib.CURRENT_USER_WISH_ACCEPTED:
 				if (user != null) {
-
-					String description = getResources().getString(R.string.message_user_requested,
-							user.getUserName() + " ", wish.getTitle());
-
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", width, width, false);
+					String description = getResources().getString(R.string.message_user_requested,
+							user.getUserName() + " ", wish.getTitle().toUpperCase());
+					//making sapnnable string to make changes to color and format of description
+					Spannable desc=new SpannableString(description);
+					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
+					Matcher m = p.matcher(description);
+					while (m.find()){
+						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+					p=Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
+					m = p.matcher(description);
+					while (m.find()){
 
-					viewHolder.userName.setText(description);
+
+						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.item_received_color)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+					viewHolder.userName.setText(desc);
 					viewHolder.bar
 							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.item_received_color)));
 
@@ -341,11 +361,27 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 			case CommonLib.WISH_ACCEPTED_CURRENT_USER:
 				if (user != null && wish != null) {
 					String description = getResources().getString(R.string.message_requested_fulfilled,
-							wish.getTitle() + " ", user.getUserName() + " ");
+							wish.getTitle().toUpperCase() + " ", user.getUserName() + " ");
+					//making sapnnable string to make changes to color and format of description
+					Spannable desc=new SpannableString(description);
+					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
+					Matcher m = p.matcher(description);
+					while (m.find()){
+
+						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+					p=Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
+					m = p.matcher(description);
+					while (m.find()){
+
+						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.item_offered_color)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+
 
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
 
-					viewHolder.userName.setText(description);
+					viewHolder.userName.setText(desc);
 					viewHolder.bar
 							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.item_offered_color)));
 

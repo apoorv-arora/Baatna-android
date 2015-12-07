@@ -25,7 +25,7 @@
         android:gravity="center"
         android:orientation="vertical" >
 
-        <com.application.baatna.utils.TextViewBold
+        <com.application.baatna.utils.TextViewSemiBold
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,9 @@
             android:paddingRight="@dimen/height2"
             android:text="@string/make_new_request"
             android:textColor="@color/white"
-            android:textSize="@dimen/size16" />
+            android:textSize="@dimen/size16"
+            android:textStyle="bold"
+            android:textAllCaps="true"/>
     </LinearLayout>
 
 </RelativeLayout>

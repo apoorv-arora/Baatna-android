@@ -189,6 +189,6 @@
     <color name="category_icon_color">#d1d3d4</color>
     <color name="default_font_color">#6d6e71</color>
         <color name="transparent_super_white">#66ffffff</color>
-    <color name="item_offered_color">@color/bt_orange_2</color>
-    <color name="item_received_color">@color/green_gradient</color>
+    <color name="item_offered_color">@color/green_gradient</color>
+    <color name="item_received_color">@color/bt_orange_2</color>
 </resources>
