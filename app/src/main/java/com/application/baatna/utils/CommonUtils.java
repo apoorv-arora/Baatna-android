@@ -1,12 +1,8 @@
 package com.application.baatna.utils;
 
-import android.util.Log;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by yogeshmadaan on 01/12/15.
@@ -44,14 +40,16 @@ public class CommonUtils {
                 } else return "Just Now";
             } else if (diffDays == 1) {
                 return "Yesterday";
-            } else if (diffDays <= 30) {
+            } else //if (diffDays = 30) // check if needed
+             {
                 return "" + diffDays + " DAYS AGO";
-            } else
-                return format.format(calendar1.getTime());
+            } //else // unformated timestamp looks bad on ui
+                // return format.format(calendar1.getTime());
 
 
         } catch (Exception e) {
             e.printStackTrace();
+
         }
         return null;
     }

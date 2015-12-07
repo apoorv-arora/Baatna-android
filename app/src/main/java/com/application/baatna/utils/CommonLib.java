@@ -17,6 +17,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.ContactsContract;
@@ -350,9 +351,9 @@ public class CommonLib {
 	 * @return distance in km
 	 */
 
-	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
+	public static int distFrom(double lat1, double lng1, double lat2, double lng2) {
 		Log.e("lat1"+lat1+"  long1"+lng1,"lat 2"+lat2 +"  long2"+lng2);
-		double earthRadius = 6371;
+		/*double earthRadius = 6371;
 		double dLat = Math.toRadians(lat2 - lat1);
 		double dLng = Math.toRadians(lng2 - lng1);
 		lat1 = Math.toRadians(lat1);
@@ -363,9 +364,15 @@ public class CommonLib {
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		double dist = earthRadius * c;
 		Log.e("difference in distance",""+dist);
-		return distance(lat1, lng1, lat2, lng2);
+		return distance(lat1, lng1, lat2, lng2);*/
+		float[] result=new float[3];
+		Location.distanceBetween(lat1,lng1,lat2,lng2,result);
+		//conversion to m
+		result[0]=result[0]/1000;
+		return (int)result[0];
+
 	}
-	private static double distance(double lat1, double lon1, double lat2, double lon2) {
+	/*private static double distance(double lat1, double lon1, double lat2, double lon2) {
 		double theta = lon1 - lon2;
 		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
 		dist = Math.acos(dist);
@@ -374,21 +381,19 @@ public class CommonLib {
 
 			dist = dist * 1.609344;
 		return (dist);
-	}
+	}*/
 
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 	/*::	This function converts decimal degrees to radians						 :*/
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	private static double deg2rad(double deg) {
+	/*private static double deg2rad(double deg) {
 		return (deg * Math.PI / 180.0);
 	}
 
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 	/*::	This function converts radians to decimal degrees						 :*/
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	private static double rad2deg(double rad) {
-		return (rad * 180 / Math.PI);
-	}
+	//private static double rad2deg(double rad) {return (rad * 180 / Math.PI);}
 
 	// Returns the Network State
 	public static String getNetworkState(Context context) {
