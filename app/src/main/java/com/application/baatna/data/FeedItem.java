@@ -1,6 +1,8 @@
 package com.application.baatna.data;
 
-public class FeedItem {
+import java.io.Serializable;
+
+public class FeedItem implements Serializable{
 
 	private int feedId;
 	/**

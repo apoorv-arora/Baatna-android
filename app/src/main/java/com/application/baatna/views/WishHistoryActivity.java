@@ -89,6 +89,8 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 		final boolean isAndroidL = Build.VERSION.SDK_INT >= 21; // Build.AndroidL
 		if (!isAndroidL)
 			actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.baatna_dark_feedback));
+		else
+			getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.baatna_dark_feedback));
 
 		actionBar.setTitle("");
 	}
@@ -232,7 +234,7 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 					}
 
 					deal1Header.setTextColor(getResources().getColor(tabsUnselectedColor));
-					deal2Header.setTextColor(getResources().getColor(tabsSelectedColor));
+					deal2Header.setTextColor(getResources().getColor(R.color.bt_orange));
 
 				} else if (arg0 == VIEWPAGER_INDEX_DEAL1_FRAGMENT) {
 
@@ -251,7 +253,7 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 							.setUnderlineColor(Color.argb(alphaValueUnderline, 228, 228, 228));
 
 				} else if (position > 0) {
-					((PagerSlidingTabStrip) findViewById(R.id.tabs)).setUnderlineColor(Color.argb(255, 228, 228, 228));
+					((PagerSlidingTabStrip) findViewById(R.id.tabs)).setUnderlineColor(Color.argb(255, 255, 125, 105));
 				}
 			}
 

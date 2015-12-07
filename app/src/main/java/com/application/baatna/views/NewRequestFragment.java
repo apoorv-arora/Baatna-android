@@ -18,13 +18,19 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -64,6 +70,7 @@ public class NewRequestFragment extends Fragment {
 		fixSizes();
 		setListeners();
 
+
 	}
 
 	private void fixSizes() {
@@ -100,7 +107,39 @@ public class NewRequestFragment extends Fragment {
 				return false;
 			}
 		});
+		final EditText description = (EditText)rootView.findViewById(R.id.description_et);
+		description.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				if(s.toString().contains("\n"))
+				{
+					String temp [] =s.toString().split("\n");
+					Log.e("length is",""+temp.length);
+					if(temp.length>=6)
+					{
+//						description.setEnabled(false);
+//						description.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+//						description.invalidate();
+					}
+					else
+					{
+//						description.setEnabled(true);
+//						description.setImeOptions(EditorInfo.IME_ACTION_NONE);
+//						description.invalidate();
+					}
+				}
+			}
+		});
 		rootView.findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

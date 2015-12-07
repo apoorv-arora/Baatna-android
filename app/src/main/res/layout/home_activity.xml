@@ -29,13 +29,33 @@
                 android:theme="@style/ToolbarBaseTheme"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp" />
-
+            <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar_actionbar"
+                >
             <ListView
                 android:id="@+id/feedListView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@id/toolbar_actionbar"
                 android:background="@color/feed_bg" />
+            </android.support.v4.widget.SwipeRefreshLayout>
+            <com.application.baatna.utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_rectangle"
+                android:text="New Feeds"
+                android:layout_below="@+id/toolbar_actionbar"
+                android:textSize="@dimen/size24"
+                android:textColor="@color/black"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/new_feed_count_margin"
+                android:paddingRight="@dimen/new_feed_count_margin"
+                android:paddingLeft="@dimen/new_feed_count_margin"
+                android:id="@+id/txt_new_feeds"
+                android:visibility="gone"
+                />
         </RelativeLayout>
 
         <LinearLayout

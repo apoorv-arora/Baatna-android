@@ -41,6 +41,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,8 +67,8 @@ public class CommonLib {
 	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
 	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
 	
-//	public static final String SERVER_BODY = "192.168.1.35:8080/BaatnaServer/rest/";
-//	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.35:8080/BaatnaServer/rest/";
+//	public static final String SERVER_BODY = "192.168.2.12:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.12:8080/BaatnaServer/rest/";
 
 //	public static final String SERVER_BODY = "192.168.43.193:8080/BaatnaServer/rest/";
 //	public static String SERVER_WITHOUT_VERSION = "http://192.168.43.193:8080/BaatnaServer/rest/";
@@ -78,6 +80,7 @@ public class CommonLib {
 	
 	public static final String LOCAL_BROADCAST_NOTIFICATIONS = "new_push_notification";
 	public static final String LOCAL_BROADCAST_NOTIFICATION = "gcm-push-notification";
+	public static final String LOCAL_FEED_BROADCAST_NOTIFICATION = "new-feed-notification";
 
 
 	/** to keep the url same for all cities.xml requests */
@@ -1046,4 +1049,71 @@ public class CommonLib {
 		} 
 		return false;
 	}
+
+
+	public static String findDateDifference(Long timestamp) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm a");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm a");
+		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar calendar1 = Calendar.getInstance();
+		Calendar calendar2 = Calendar.getInstance();
+		calendar1.setTimeInMillis(timestamp);
+		calendar2.setTimeInMillis(System.currentTimeMillis());
+		try {
+
+
+			//in milliseconds
+			long diff = calendar2.getTimeInMillis() - calendar1.getTimeInMillis();
+
+			long diffSeconds = diff / 1000 % 60;
+			long diffMinutes = diff / (60 * 1000) % 60;
+			long diffHours = diff / (60 * 60 * 1000) % 24;
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			long diffYears = diffDays / 365;
+//            System.out.print(diffDays + " days, ");
+//            System.out.print(diffHours + " hours, ");
+//            System.out.print(diffMinutes + " minutes, ");
+//            System.out.print(diffSeconds + " seconds.");
+//            Log.e("difference is", diffDays + " days, " + diffHours + " hours, " + diffMinutes + " minutes, ");
+			if (diffDays == 0) {
+				if (diffMinutes > 0) {
+					return diffMinutes + "MINS AGO";
+					//return timeFormat.format(calendar1.getTime());
+				} else return "Just Now";
+			} else if (diffDays == 1) {
+				return "Yesterday";
+			} else if (diffDays <= 30) {
+				return "" + diffDays + " DAYS AGO";
+			} else
+				return format.format(calendar1.getTime());
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static boolean validatePhone(String phone)
+	{
+
+		try{
+			if(phone.trim().length()==0)
+			{
+				return false;
+			}
+			double n = Double.parseDouble(phone);
+			if(!(phone.trim().toString().startsWith("7")||phone.trim().toString().startsWith("8")||phone.trim().toString().startsWith("9")))
+				return false;
+			if(phone.trim().length()==10)
+				return true;
+
+		}catch(Exception e)
+		{
+			return false;
+		}
+		return false;
+	}
+
 }

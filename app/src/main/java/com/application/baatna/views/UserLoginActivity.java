@@ -31,7 +31,6 @@ import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
-import com.application.baatna.utils.ValidateUtils;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -136,7 +135,7 @@ public class UserLoginActivity extends Activity implements UploadManagerCallback
             public void onClick(View v) {
 
                 String phoneNumber = ((TextView) findViewById(R.id.phone_number)).getText().toString();
-                if(phoneNumber == null || !ValidateUtils.validatePhone(phoneNumber)) {
+                if(phoneNumber == null || !CommonLib.validatePhone(phoneNumber)) {
                     Toast.makeText(UserLoginActivity.this, "Invalid phone number", Toast.LENGTH_SHORT).show();
                     ((TextView) findViewById(R.id.phone_number)).requestFocus();
                     return;
@@ -397,7 +396,7 @@ public class UserLoginActivity extends Activity implements UploadManagerCallback
 
                 if (bitmap != null) {
 
-                    bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
+                   // bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
                     synchronized (zapp.cache) {
                         zapp.cache.put(url2, bitmap);
                     }

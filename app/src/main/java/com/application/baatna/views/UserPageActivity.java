@@ -149,7 +149,7 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 				if (result instanceof User) {
 					user = (User) result;
 					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
-					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "", width, width, false);
+					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "profile", width, width, false);
 					((TextView) findViewById(R.id.name)).setText(user.getUserName());
 					((TextView) findViewById(R.id.description)).setText(user.getBio());
 				}
@@ -228,7 +228,7 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 		});
 
 		if (!isSecondProfile) {
-			setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageView, "", width, width, false);
+			setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageView, "profile", width, width, false);
 			((TextView) findViewById(R.id.name)).setText(prefs.getString("username", ""));
 			((TextView) findViewById(R.id.description)).setText(prefs.getString("description", ""));
 		}
@@ -388,8 +388,10 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 				}
 
 				if (bitmap != null) {
-
-					bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
+//					if(type.equalsIgnoreCase("profile"))
+//					{
+//						bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
+//					}
 					synchronized (zapp.cache) {
 						zapp.cache.put(url2, bitmap);
 					}
@@ -594,7 +596,7 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 					String description = getResources().getString(R.string.feed_user_requested,
 							user.getUserName() + " ", wish.getTitle() + " ");
 
-					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "", position, width, false);
+					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "profile", position, width, false);
 
 					viewHolder.userName.setText(description);
 					viewHolder.bar

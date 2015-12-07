@@ -61,13 +61,15 @@
                 android:gravity="top|left"
                 android:hint="@string/description_hint"
                 android:inputType="textMultiLine"
-                android:lines="4"
                 android:maxLines="5"
                 android:singleLine="false"
                 android:maxLength="200"
                 android:textColor="@color/default_font_color"
                 android:textColorHint="@color/default_font_color"
-                android:textSize="@dimen/size14" />
+                
+                android:textSize="@dimen/size16"
+                />
+
 
             <com.application.baatna.utils.TextViewSemiBold
                 android:id="@+id/post"
