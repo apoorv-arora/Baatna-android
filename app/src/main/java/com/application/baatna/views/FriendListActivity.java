@@ -21,12 +21,16 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -90,6 +94,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 		feedListView = (ListView) findViewById(R.id.feedListView);
 		feedListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
 		feedListView.setDividerHeight(width / 40);
+		feedListView.setTextFilterEnabled(true);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -97,8 +102,40 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
 		SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		return true;
+		searchView.animate();
+		searchView.setIconified(true);
+		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
+		{
+			@Override
+			public boolean onQueryTextChange(String newText)
+			{
+				// this is your adapter that will be filtered
+				mAdapter.getFilter().filter(newText);
+				return true;
+			}
+			@Override
+			public boolean onQueryTextSubmit(String query)
+			{
+				// this is your adapter that will be filtered
+				mAdapter.getFilter().filter(query);
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+				return true;
+			}
+
+
+
+
+		};
+		searchView.setOnQueryTextListener(textChangeListener);
+
+		return super.onCreateOptionsMenu(menu);
+
 	}
+
+
+
+
 
 
 	public void actionBarSelected(View v) {
@@ -256,9 +293,11 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 		}
 	}
 
-	public class FriendsAdapter extends ArrayAdapter<UserComactMessage> {
+	public class FriendsAdapter extends ArrayAdapter<UserComactMessage> implements Filterable{
 
-		private List<UserComactMessage> messageItems;
+		public List<UserComactMessage> messageItems;
+		public List<UserComactMessage> orig;
+
 		private Activity mContext;
 		private int width;
 
@@ -277,6 +316,48 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 				return messageItems.size();
 			}
 		}
+
+		public Filter getFilter() {
+			return new Filter() {
+
+				@Override
+				protected FilterResults performFiltering(CharSequence constraint) {
+
+					constraint = constraint.toString().toLowerCase();
+					FilterResults oReturn = new FilterResults();
+					if (orig == null)
+						orig = messageItems;
+					if (constraint != null && constraint.toString().length() > 0) {
+
+
+						List<UserComactMessage> results = new ArrayList<UserComactMessage>();
+						for (UserComactMessage g : orig) {
+							if (g.getWish().getTitle().toLowerCase().contains(constraint)||g.getUser().getUserName().toLowerCase().contains(constraint))
+							{
+								results.add(g);
+							Log.e("filter",g.getWish().getTitle());}
+						}
+						oReturn.values = results;
+						oReturn.count = results.size();
+					} else {
+						oReturn.values = orig;
+						oReturn.count = orig.size();
+					}
+					return oReturn;
+				}
+
+
+
+				@SuppressWarnings("unchecked")
+				@Override
+				protected void publishResults(CharSequence constraint,
+											  FilterResults results) {
+					messageItems = (List<UserComactMessage>) results.values;
+					notifyDataSetChanged();
+				}
+			};
+		}
+
 
 		protected class ViewHolder {
 			TextView userName;
