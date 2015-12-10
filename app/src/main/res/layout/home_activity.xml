@@ -29,17 +29,20 @@
                 android:theme="@style/ToolbarBaseTheme"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp" />
+
             <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/toolbar_actionbar"
+
                 >
             <ListView
                 android:id="@+id/feedListView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@color/feed_bg" />
+                android:background="@color/feed_bg"
+              />
             </android.support.v4.widget.SwipeRefreshLayout>
             <com.application.baatna.utils.TextViewRegular
                 android:layout_width="wrap_content"

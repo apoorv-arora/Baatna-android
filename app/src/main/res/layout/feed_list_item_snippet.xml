@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/height125"
             android:background="@drawable/whitebuttoncustomback"
-            android:elevation="@dimen/shadow_elevation" >
+            android:elevation=".5dp" >
 
             <LinearLayout
                 android:id="@+id/action_container"

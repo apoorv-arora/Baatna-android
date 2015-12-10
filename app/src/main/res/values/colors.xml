@@ -170,7 +170,7 @@
     <color name="holo_white">#f3f3f3</color>
 
     <!-- Baatna colors -->
-    <color name="bt_orange">#ff7e69</color>
+    <color name="bt_orange">#ffab5f</color>
     <color name="bt_grey">#f8f8f8</color>
     <color name="bt_drawer_green">#3ae3bc</color>
     <color name="green_gradient">#00dca0</color>

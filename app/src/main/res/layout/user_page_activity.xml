@@ -73,7 +73,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+
+            android:layout_marginTop="30dp"
             android:text="D"
             android:textColor="@color/white"
             android:textSize="@dimen/font_size45" />
@@ -107,7 +108,8 @@
                 android:id="@+id/wish_items"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="@color/feed_bg"/>
 
             <LinearLayout
                 android:id="@+id/wish_items_progress"

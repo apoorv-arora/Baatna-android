@@ -1,35 +1,39 @@
 package com.application.baatna.views;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.pager.NoSwipeViewPager;
 import com.application.baatna.utils.pager.PagerSlidingTabStrip;
 import com.application.baatna.utils.pager.ZTabClickCallback;
 
 import java.lang.ref.SoftReference;
 
-public class WishHistoryActivity extends ActionBarActivity implements ZTabClickCallback {
+public class WishHistoryActivity extends AppCompatActivity implements ZTabClickCallback {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -66,33 +70,51 @@ public class WishHistoryActivity extends ActionBarActivity implements ZTabClickC
 		homePager.setOffscreenPageLimit(4);
 		homePager.setCurrentItem(VIEWPAGER_INDEX_DEAL1_FRAGMENT);
 		homePager.setSwipeable(true);
-
-		setUpActionBar();
-
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
+		setupActionBar();
 		// hide the thin line below tabs on androidL
 		if (CommonLib.isAndroidL())
 			findViewById(R.id.tab_thin_line).setVisibility(View.GONE);
 
 		setUpTabs();
+
+}
+	public void actionBarSelected(View v) {
+		switch (v.getId()) {
+			case R.id.home_icon_container:
+				onBackPressed();
+				break;
+			default:
+				break;
+		}
 	}
 
-	private void setUpActionBar() {
+	private void setupActionBar() {
 
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayShowCustomEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(false);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayUseLogoEnabled(true);
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayShowCustomEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayHomeAsUpEnabled(false);
 
-		final boolean isAndroidL = Build.VERSION.SDK_INT >= 21; // Build.AndroidL
-		if (!isAndroidL)
-			actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.baatna_dark_feedback));
-		else
-			getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.baatna_dark_feedback));
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
+		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
+		actionBar.setCustomView(actionBarCustomView);
 
-		actionBar.setTitle("");
+		SpannableString s = new SpannableString(getString(R.string.your_history));
+		s.setSpan(
+				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
+						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
+				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
+
+		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
+				.setMargins(width / 40, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+		title.setText(s);
+		title.setAllCaps(true);
 	}
 
 	private void setUpTabs() {

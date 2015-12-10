@@ -1,23 +1,5 @@
 package com.application.baatna.views;
 
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.R;
-import com.application.baatna.data.Message;
-import com.application.baatna.data.User;
-import com.application.baatna.data.Wish;
-import com.application.baatna.db.MessageDBWrapper;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.UploadManager;
-import com.application.baatna.utils.UploadManagerCallback;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,8 +18,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -45,8 +33,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,7 +46,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MessagesActivity extends Activity implements UploadManagerCallback {
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.R;
+import com.application.baatna.data.Message;
+import com.application.baatna.data.User;
+import com.application.baatna.data.Wish;
+import com.application.baatna.db.MessageDBWrapper;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class MessagesActivity extends AppCompatActivity implements UploadManagerCallback {
 
 	private int width;
 
@@ -285,14 +294,16 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 	}
 
 	private void setUpActionBar() {
-		ActionBar actionBar = getActionBar();
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
 
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflater.inflate(R.layout.messages_action_bar, null);
-
+		v.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
+		actionBar.setCustomView(v);
 		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
 
 		// v.findViewById(R.id.tick_proceed_icon).setOnClickListener(new
@@ -318,13 +329,49 @@ public class MessagesActivity extends Activity implements UploadManagerCallback 
 
 		TextView subtitle = (TextView) v.findViewById(R.id.subtitle);
 		subtitle.setPadding(width / 80, 0, width / 40, 0);
-		actionBar.setCustomView(v);
+
 
 		title.setText(currentUser.getUserName());
 		if (type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
-			subtitle.setText("Offered YOU A " + currentWish.getTitle());
-		} else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
-			subtitle.setText("REQUESTED FOR A " + currentWish.getTitle());
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				Window window = getWindow();
+				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+				window.setStatusBarColor(getResources().getColor(R.color.item_received_color));
+			}
+
+			String temp="OFFERED YOU A " + currentWish.getTitle().toUpperCase();
+			Spannable subtext=new SpannableString(temp);
+			Pattern p= Pattern.compile(currentWish.getTitle(), Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(subtext);
+			while (m.find()){
+
+
+				subtext.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.item_received_color)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+				subtext.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+			}
+			subtitle.setText(subtext);
+		}
+		else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				Window window = getWindow();
+				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+				window.setStatusBarColor(getResources().getColor(R.color.item_offered_color));
+			}
+
+			String temp="REQUESTED FOR A " + currentWish.getTitle().toUpperCase();
+
+			Spannable subtext=new SpannableString(temp);
+			Pattern p= Pattern.compile(currentWish.getTitle(), Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(subtext);
+			while (m.find()){
+
+
+				subtext.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.item_offered_color)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+				subtext.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+			}
+			subtitle.setText(subtext);
+
+
 		}
 
 		ImageView imageView = (ImageView) v.findViewById(R.id.user_chat_head);

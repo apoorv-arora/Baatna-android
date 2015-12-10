@@ -1,12 +1,5 @@
 package com.application.baatna.views;
 
-import com.application.baatna.R;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.UploadManager;
-import com.application.baatna.utils.UploadManagerCallback;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -15,17 +8,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class NewRequestActivity extends Activity implements UploadManagerCallback {
+import com.application.baatna.R;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+
+public class NewRequestActivity extends AppCompatActivity implements UploadManagerCallback {
 
 	private SharedPreferences prefs;
 	private NewRequestFragment mFragment;
@@ -43,6 +41,8 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 		prefs = getSharedPreferences("application_settings", 0);
 		width = getWindowManager().getDefaultDisplay().getWidth();
 		inflater = LayoutInflater.from(this);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setupActionBar();
 		mFragment = new NewRequestFragment();
 		mFragment.setArguments(getIntent().getExtras());
@@ -52,33 +52,33 @@ public class NewRequestActivity extends Activity implements UploadManagerCallbac
 	}
 
 	private void setupActionBar() {
-		ActionBar actionBar = getActionBar();
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
 
-		View v = inflater.inflate(R.layout.green_action_bar, null);
+		View actionBarCustomView = inflater.inflate(R.layout.green_action_bar, null);
 
-		v.findViewById(R.id.back_icon).setOnClickListener(new OnClickListener() {
+		actionBarCustomView.findViewById(R.id.back_icon).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {
+			public void onClick(View actionBarCustomView) {
 				try {
 					InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+					imm.hideSoftInputFromWindow(actionBarCustomView.getWindowToken(), 0);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				onBackPressed();
 			}
 		});
-		actionBar.setCustomView(v);
+		actionBar.setCustomView(actionBarCustomView);
 
-		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
+		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
+				.setMargins(width / 40, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
 
-		// user handle
-		TextView title = (TextView) v.findViewById(R.id.title);
-		title.setPadding(width / 80, 0, width / 40, 0);
+
 	}
 
 	@Override

@@ -1,29 +1,29 @@
 package com.application.baatna.views;
 
-import java.util.List;
+import android.app.Activity;
+import android.app.Service;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import com.application.baatna.R;
 import com.application.baatna.data.CategoryItems;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.IconView;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Service;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.TextView;
+import java.util.List;
 
-public class CategoryItemSelectionFragment extends Activity {
+public class CategoryItemSelectionFragment extends AppCompatActivity {
 
 	private SharedPreferences prefs;
 	private boolean isDestroyed = false;
@@ -58,7 +58,7 @@ public class CategoryItemSelectionFragment extends Activity {
 	}
 
 	private void setupActionBar() {
-		ActionBar actionBar = getActionBar();
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);

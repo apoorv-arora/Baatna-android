@@ -6,6 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical" >
 
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -16,6 +17,16 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_actionbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height60"
+                android:background="@color/action_bar_default"
+                android:elevation="@dimen/toolbar_elevation"
+                android:minHeight="@dimen/height60"
+                android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+                android:theme="@style/ToolbarBaseTheme"
+                />
 
             <LinearLayout
                 android:id="@+id/home_logo_container"

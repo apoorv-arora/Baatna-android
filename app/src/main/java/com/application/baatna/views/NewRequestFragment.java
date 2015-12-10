@@ -1,33 +1,20 @@
 package com.application.baatna.views;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.application.baatna.R;
-import com.application.baatna.data.Categories;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.IconView;
-import com.application.baatna.utils.RequestWrapper;
-import com.application.baatna.utils.UploadManager;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -37,6 +24,16 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.application.baatna.R;
+import com.application.baatna.data.Categories;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.IconView;
+import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.UploadManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewRequestFragment extends Fragment {
 
@@ -77,8 +74,12 @@ public class NewRequestFragment extends Fragment {
 
 		rootView.findViewById(R.id.category_et).setPadding(width / 20, width / 20, width / 20, width / 40);
 
-		((LinearLayout.LayoutParams) rootView.findViewById(R.id.category_separator).getLayoutParams())
+		rootView.findViewById(R.id.time_duration).setPadding(width / 20, width / 20, width / 20, width / 40);
+		((LinearLayout.LayoutParams) rootView.findViewById(R.id.category_separator1).getLayoutParams())
 				.setMargins(width / 20, 0, width / 20, 0);
+		((LinearLayout.LayoutParams) rootView.findViewById(R.id.category_separator2).getLayoutParams())
+				.setMargins(width / 20, 0, width / 20, 0);
+
 
 		rootView.findViewById(R.id.description_et).setPadding(width / 20, width / 10, width / 20, width / 40);
 
@@ -150,6 +151,7 @@ public class NewRequestFragment extends Fragment {
 		rootView.findViewById(R.id.post).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				String timeduration=((TextView)rootView.findViewById(R.id.time_duration)).getText().toString();
 				String title = ((TextView) rootView.findViewById(R.id.category_et)).getText().toString();
 				String description = ((TextView) rootView.findViewById(R.id.description_et)).getText().toString();
 
@@ -158,7 +160,11 @@ public class NewRequestFragment extends Fragment {
 					((TextView) rootView.findViewById(R.id.category_et)).requestFocus();
 					return;
 				}
-
+				if (timeduration== null ) {
+					Toast.makeText(mContext, "Please enter time duration of the request", Toast.LENGTH_SHORT).show();
+					((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
+					return;
+				}
 				if (description == null || description.length() < 30) {
 					Toast.makeText(mContext, "Please enter description of the request of at least 30 characters", Toast.LENGTH_SHORT).show();
 					((TextView) rootView.findViewById(R.id.description_et)).requestFocus();

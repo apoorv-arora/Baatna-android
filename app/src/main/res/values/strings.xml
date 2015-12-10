@@ -39,7 +39,7 @@
     <string name="feedback_email_subject">Zomato Android App Feedback</string>
     <string name="send_mail">Send Mail</string>
     <string name="no_email_clients">There are no email clients installed.</string>
-    <string name="feedback_title">Feedback</string>
+    <string name="feedback_title">FEEDBACK</string>
     <string name="no_internet_message">Seems like you are not connected to the internet. Please try again later.</string>
     <string name="about_version">v1.1</string>
     <string name="about_text">Baatna is a platform that lets you borrow stuff instantly by shouting out your need to your neighbours, friends and people in your surroundings.</string>
@@ -49,7 +49,8 @@
     <string name="messages">Messages</string>
     <string name="post_request">New Request</string>
     <string name="could_not_logout">Could not logout</string>
-    <string name="category_hint">What would you like to borrow?(Max 30 chars)</string>
+    <string name="category_hint">What would you like to borrow ?(Max 30 chars)</string>
+    <string name="time_duration">For how long ?</string>
     <string name="description_hint">Convince your neighbours\n\nEg Dear neighbours, I\'m looking to a company trip this weekend. I\'m short of a sleeping bag and would need one for 2 days. Thanks a lot for the help in advance :)</string>
     <string name="post">Post</string>
     <string name="or_select_from_categories">Or select from categories</string>

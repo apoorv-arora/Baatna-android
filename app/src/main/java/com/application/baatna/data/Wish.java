@@ -10,6 +10,9 @@ public class Wish implements Serializable {
 	private int wishId;
 	private int userId;
 	private int status;
+	private double latitude;
+	private double longitude;
+	private long timestamp;
 
 	public Wish() {
 	}
@@ -60,6 +63,24 @@ public class Wish implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public long getTimestamp() {
+		return timestamp;
 	}
 	
 }

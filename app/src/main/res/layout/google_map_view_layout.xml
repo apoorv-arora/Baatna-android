@@ -5,6 +5,18 @@
     android:background="@color/bt_grey"
     android:orientation="vertical" >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:theme="@style/ToolbarBaseTheme"
+        android:layout_marginBottom="10dp"
+        />
+
+
     <LinearLayout
         android:id="@+id/wishbox_progress_container"
         android:layout_width="fill_parent"

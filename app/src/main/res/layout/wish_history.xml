@@ -3,13 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:theme="@style/ToolbarBaseTheme"
+        />
+
     <com.application.baatna.utils.pager.PagerSlidingTabStrip
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height60"
-        android:layout_alignParentTop="true"
-        android:elevation="@dimen/toolbar_elevation"
-        android:gravity="fill_vertical" />
+        android:layout_below="@id/toolbar_actionbar"
+        android:elevation="0.15dp"
+        android:gravity="fill_vertical"
+        />
 
     <com.application.baatna.utils.pager.NoSwipeViewPager
         android:id="@+id/home_pager"
@@ -21,7 +33,7 @@
     <View
         android:id="@+id/tab_thin_line"
         android:layout_width="fill_parent"
-        android:layout_height="0.6dp"
+        android:layout_height="0.15dp"
         android:layout_above="@id/home_pager"
         android:background="@color/zhl_dark" />
 

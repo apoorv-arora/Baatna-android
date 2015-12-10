@@ -9,15 +9,20 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -52,11 +57,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Displays user name, bio and profile pic
  */
-public class UserPageActivity extends Activity implements UploadManagerCallback {
+public class UserPageActivity extends AppCompatActivity implements UploadManagerCallback {
 
 	private SharedPreferences prefs;
 	private int width;
@@ -81,6 +88,7 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 
 	User user;
 	private ProgressDialog z_ProgressDialog;
+
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -562,8 +570,8 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 				viewHolder.accept.setPadding(width / 20, 0, width / 20, 0);
 				viewHolder.decline.setPadding(width / 20, 0, width / 20, 0);
 
-				viewHolder.imageView.setVisibility(View.GONE);
-				viewHolder.time.setVisibility(View.GONE);
+				//viewHolder.imageView.setVisibility(View.GONE);
+
 
 				v.findViewById(R.id.feed_item).setOnClickListener(new View.OnClickListener() {
 
@@ -590,17 +598,40 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 					}
 				});
 
-				viewHolder.distance.setVisibility(View.GONE);
+				int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+						wish.getLatitude(), wish.getLongitude());
+
+				//distance in km
+				distance = (distance / 1000);
+				//if(distance < 5)
+				viewHolder.distance.setText(distance + "KM");
+				//else
+				//viewHolder.distance.setVisibility(View.GONE);
 
 				if (user != null && wish != null) {
 					String description = getResources().getString(R.string.feed_user_requested,
-							user.getUserName() + " ", wish.getTitle() + " ");
+							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ");
+					Spannable desc = new SpannableString(description);
+					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
+					Matcher m = p.matcher(description);
+					while (m.find()) {
+						desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+					p = Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
+					m = p.matcher(description);
+					while (m.find()) {
 
+
+						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.zomato_red)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					}
+					viewHolder.userName.setText(desc);
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "profile", position, width, false);
 
-					viewHolder.userName.setText(description);
+
 					viewHolder.bar
-							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
+							.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+
 
 					viewHolder.accept.setOnClickListener(new View.OnClickListener() {
 
@@ -648,7 +679,7 @@ public class UserPageActivity extends Activity implements UploadManagerCallback 
 				viewHolder.title.setPadding(width / 20, width / 40, width / 20, width / 40);
 				((RelativeLayout.LayoutParams) viewHolder.crossIcon.getLayoutParams()).setMargins(0, 0, width / 20, 0);
 				// set the date in hh:mm format
-				viewHolder.date.setText(CommonLib.getDateFromUTC(wish.getTimeOfPost()));
+				viewHolder.date.setText(CommonLib.findDateDifference(wish.getTimestamp()));
 				// set the span of title
 				String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle();
 				SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(title);

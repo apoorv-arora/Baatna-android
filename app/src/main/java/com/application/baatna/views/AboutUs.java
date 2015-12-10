@@ -1,21 +1,19 @@
 package com.application.baatna.views;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,7 +24,7 @@ import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.TypefaceSpan;
 import com.google.android.gms.plus.PlusOneButton;
 
-public class AboutUs extends Activity {
+public class AboutUs extends AppCompatActivity {
 
 	private int width;
 	PlusOneButton mPlusOneButton;
@@ -35,7 +33,9 @@ public class AboutUs extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_us);
-		width = getWindowManager().getDefaultDisplay().getWidth(); 
+		width = getWindowManager().getDefaultDisplay().getWidth();
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setUpActionBar();
 		fixsizes();
 		setListeners();
@@ -84,7 +84,7 @@ public class AboutUs extends Activity {
 
 	private void setUpActionBar() {
 
-		ActionBar actionBar = getActionBar();
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -96,7 +96,7 @@ public class AboutUs extends Activity {
 		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(actionBarCustomView);
 
-		SpannableString s = new SpannableString(getString(R.string.your_wishbox));
+		SpannableString s = new SpannableString(getString(R.string.about_us).toUpperCase());
 		s.setSpan(
 				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
 						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),

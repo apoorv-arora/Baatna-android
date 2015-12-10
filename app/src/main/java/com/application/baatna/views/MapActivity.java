@@ -1,6 +1,18 @@
 package com.application.baatna.views;
 
-import java.util.ArrayList;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
@@ -23,21 +35,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.ArrayList;
 
-public class MapActivity extends Activity {
+public class MapActivity extends AppCompatActivity {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -73,7 +73,7 @@ public class MapActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.google_map_view_layout);
-		
+
 		width = getWindowManager().getDefaultDisplay().getWidth();
 		
 		inflater = LayoutInflater.from(this);
@@ -86,7 +86,8 @@ public class MapActivity extends Activity {
 		
 		mMapView = (MapView) findViewById(R.id.search_map);
 		mMapView.onCreate(savedInstanceState);
-		
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setupActionBar();
 
 		prefs = getSharedPreferences("application_settings", 0);
@@ -104,7 +105,7 @@ public class MapActivity extends Activity {
 	}
 
 	private void setupActionBar() {
-		ActionBar actionBar = getActionBar();
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);

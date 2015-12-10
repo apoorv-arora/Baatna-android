@@ -30,7 +30,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+             >
 
             <com.application.baatna.utils.ClearableEditText
                 android:id="@+id/category_et"
@@ -45,13 +46,38 @@
                 android:textColor="@color/default_font_color"
                 android:textColorHint="@color/default_font_color"
                 android:textSize="@dimen/size16"
-                android:maxLength="30"/>
+                android:maxLength="30"
 
+                />
             <View
-                android:id="@+id/category_separator"
+                android:id="@+id/category_separator1"
                 android:layout_width="fill_parent"
                 android:layout_height=".5dp"
-                android:background="@color/zomato_red" />
+                android:background="@color/zomato_red"
+                />
+            <com.application.baatna.utils.ClearableEditText
+                android:id="@+id/time_duration"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/height60"
+                android:background="@drawable/white_background"
+                android:gravity="bottom|left"
+                android:hint="@string/time_duration"
+                android:inputType="textAutoCorrect|textAutoComplete"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/default_font_color"
+                android:textColorHint="@color/default_font_color"
+                android:textSize="@dimen/size16"
+                android:maxLength="30"
+
+                />
+
+            <View
+                android:id="@+id/category_separator2"
+                android:layout_width="fill_parent"
+                android:layout_height=".5dp"
+                android:background="@color/zomato_red"
+                />
 
             <com.application.baatna.utils.EditTextItalics
                 android:id="@+id/description_et"
@@ -66,9 +92,10 @@
                 android:maxLength="200"
                 android:textColor="@color/default_font_color"
                 android:textColorHint="@color/default_font_color"
-                
+
                 android:textSize="@dimen/size16"
                 />
+
 
 
             <com.application.baatna.utils.TextViewSemiBold
@@ -82,6 +109,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/size14"
                android:textAllCaps="true"
+
                  />
 
             <com.application.baatna.utils.TextViewSemiBold
@@ -91,13 +119,15 @@
                 android:text="@string/or_select_from_categories"
                 android:textColor="@color/default_font_color"
                 android:textSize="@dimen/size14"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true"
+                />
 
             <ListView
                 android:id="@+id/category_list_view"
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                />
         </LinearLayout>
     </ScrollView>
 

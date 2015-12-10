@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -21,6 +20,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -36,17 +36,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-
-import android.text.Html;
-import android.text.TextUtils;
-import android.util.Log;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,11 +63,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.Splash;
 import com.application.baatna.data.FeedItem;
-import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
 import com.application.baatna.mapUtils.Cluster;
@@ -86,6 +81,9 @@ import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
 import com.application.baatna.utils.fab.FABControl.OnFloatingActionsMenuUpdateListener;
 import com.crashlytics.android.Crashlytics;
+import com.facebook.Session;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -156,6 +154,11 @@ public class Home extends AppCompatActivity
 	private PlusOneButton mPlusOneButton;
 
 	private SwipeRefreshLayout swipeRefreshLayout;
+	/**
+	 * ATTENTION: This was auto-generated to implement the App Indexing API.
+	 * See https://g.co/AppIndexing/AndroidStudio for more information.
+	 */
+	private GoogleApiClient client;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -319,13 +322,21 @@ public class Home extends AppCompatActivity
 			CommonLib.ZLog("rate dialog", "rate_dialog_trigger is now " + rateDialogCounterTrigger);
 		}
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+
 		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				CommonLib.ZLog("onRefresh","called");
+				CommonLib.ZLog("onRefresh", "called");
 				refreshFeed();
 			}
+
 		});
+		swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+				android.R.color.holo_green_light,
+				android.R.color.holo_orange_light,
+				android.R.color.holo_red_light);
+
+
 		((TextView) findViewById(R.id.txt_new_feeds)).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -340,7 +351,11 @@ public class Home extends AppCompatActivity
 		new AppConfig().execute(null, null, null);
 		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mFeedReceived,
 				new IntentFilter(CommonLib.LOCAL_FEED_BROADCAST_NOTIFICATION));
+		// ATTENTION: This was auto-generated to implement the App Indexing API.
+		// See https://g.co/AppIndexing/AndroidStudio for more information.
+		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 	}
+
 	private BroadcastReceiver mFeedReceived = new BroadcastReceiver() {
 
 		@Override
@@ -352,10 +367,10 @@ public class Home extends AppCompatActivity
 					// GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 					// check for user and wish
 					FeedItem feedItem = (FeedItem) intent.getSerializableExtra("feed");
-					wishes.add(0,feedItem);
-					if(feedListView!=null && feedListView.getFirstVisiblePosition()>=2)
+					wishes.add(0, feedItem);
+					if (feedListView != null && feedListView.getFirstVisiblePosition() >= 2)
 						((TextView) findViewById(R.id.txt_new_feeds)).setVisibility(View.VISIBLE);
-					else if(feedListView!=null && feedListView.getFirstVisiblePosition()<2)
+					else if (feedListView != null && feedListView.getFirstVisiblePosition() < 2)
 						feedListAdapter.notifyDataSetChanged();
 				}
 
@@ -364,6 +379,7 @@ public class Home extends AppCompatActivity
 			}
 		}
 	};
+
 	private void setUpFAB() {
 
 		// ((FABControl)
@@ -468,11 +484,11 @@ public class Home extends AppCompatActivity
 						// disconnect facebook
 						try {
 
-							com.facebook.Session fbSession = com.facebook.Session.getActiveSession();
+							Session fbSession = Session.getActiveSession();
 							if (fbSession != null) {
 								fbSession.closeAndClearTokenInformation();
 							}
-							com.facebook.Session.setActiveSession(null);
+							Session.setActiveSession(null);
 
 						} catch (Exception e) {
 						}
@@ -805,10 +821,10 @@ public class Home extends AppCompatActivity
 				targetedShareIntent.setType("text/plain");
 				shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				if (TextUtils.equals(packageName, "com.facebook.katana")) {
-					shareText = "<p>"+shareText+"</p>";
+					shareText = "<p>" + shareText + "</p>";
 					targetedShareIntent.setType("text/plain");
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(shareText));
-					targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+					targetedShareIntent.putExtra(Intent.EXTRA_TEXT,
 							"https://play.google.com/store/apps/details?id=com.application.baatna");
 				} else {
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
@@ -818,18 +834,20 @@ public class Home extends AppCompatActivity
 						|| packageName.equalsIgnoreCase("com.twitter.android")
 						|| packageName.equalsIgnoreCase("com.tencent.mm")
 						|| packageName.equalsIgnoreCase("com.viber.voip")
-						|| packageName.equalsIgnoreCase("com.skype.raider")||
+						|| packageName.equalsIgnoreCase("com.skype.raider") ||
 						packageName.equalsIgnoreCase("com.google.android.apps.messaging")) {
 					targetedShareIntent.setPackage(packageName);
 					targetedShareIntents.add(targetedShareIntent);
 				}
 			}
-			if(!targetedShareIntents.isEmpty()) //app crash if no targeted app found
-			{Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Invite using");
-			chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[] {}));
+			if (!targetedShareIntents.isEmpty()) //app crash if no targeted app found
+			{
+				Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0), "Invite using");
+				chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
 
-			startActivity(chooserIntent);
-		}}
+				startActivity(chooserIntent);
+			}
+		}
 
 
 	}
@@ -1126,6 +1144,46 @@ public class Home extends AppCompatActivity
 			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, width / 40 + width / 15));
 	}
 
+	/*@Override
+	public void onStart() {
+		super.onStart();
+
+		// ATTENTION: This was auto-generated to implement the App Indexing API.
+		// See https://g.co/AppIndexing/AndroidStudio for more information.
+		client.connect();
+		Action viewAction = Action.newAction(
+				Action.TYPE_VIEW, // TODO: choose an action type.
+				"Home Page", // TODO: Define a title for the content shown.
+				// TODO: If you have web page content that matches this app activity's content,
+				// make sure this auto-generated web page URL is correct.
+				// Otherwise, set the URL to null.
+				Uri.parse("http://host/path"),
+				// TODO: Make sure this auto-generated app deep link URI is correct.
+				Uri.parse("android-app://com.application.baatna.views/http/host/path")
+		);
+		AppIndex.AppIndexApi.start(client, viewAction);
+	}*/
+
+	//@Override
+	/*public void onStop() {
+		super.onStop();
+
+		// ATTENTION: This was auto-generated to implement the App Indexing API.
+		// See https://g.co/AppIndexing/AndroidStudio for more information.
+		Action viewAction = Action.newAction(
+				Action.TYPE_VIEW, // TODO: choose an action type.
+				"Home Page", // TODO: Define a title for the content shown.
+				// TODO: If you have web page content that matches this app activity's content,
+				// make sure this auto-generated web page URL is correct.
+				// Otherwise, set the URL to null.
+				Uri.parse("http://host/path"),
+				// TODO: Make sure this auto-generated app deep link URI is correct.
+				Uri.parse("android-app://com.application.baatna.views/http/host/path")
+		);
+		AppIndex.AppIndexApi.end(client, viewAction);
+		client.disconnect();
+	}*/
+
 	private class mRenderer extends GoogleMapRenderer implements GoogleMap.OnCameraChangeListener {
 
 		public mRenderer() {
@@ -1255,9 +1313,8 @@ public class Home extends AppCompatActivity
 				viewHolder.imageView = (ImageView) v.findViewById(R.id.user_image);
 				v.setTag(viewHolder);
 			}
-			if(position==0)
-			{
-				if(((TextView) mContext.findViewById(R.id.txt_new_feeds)).getVisibility()==View.VISIBLE)
+			if (position == 0) {
+				if (((TextView) mContext.findViewById(R.id.txt_new_feeds)).getVisibility() == View.VISIBLE)
 					((TextView) mContext.findViewById(R.id.txt_new_feeds)).setVisibility(View.GONE);
 			}
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.feed_item_container).getLayoutParams())
@@ -1293,13 +1350,15 @@ public class Home extends AppCompatActivity
 								&& feedItem.getWish().getDescription() != null) {
 							String description = feedItem.getWish().getDescription();
 							TextView descriptionTextView = new TextView(Home.this);
-							LayoutParams params = new LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+							LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 									LinearLayout.LayoutParams.WRAP_CONTENT);
 							//coversion of px to dp
 							/*int padding_in_dp = 10;
 							final float scale = getResources().getDisplayMetrics().density;
 							int padding_in_px = (int) (padding_in_dp * scale + 0.5f);*/
 
+
+							params.setMargins(width / 40, 0, width / 40, 0);
 							descriptionTextView.setLayoutParams(params);
 							//ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(descriptionTextView.getLayoutParams());
 							//marginParams.setMargins(50, 50, 50, 50);
@@ -1324,11 +1383,11 @@ public class Home extends AppCompatActivity
 					feedItem.getLatitude(), feedItem.getLongitude());
 
 			//distance in km
-			distance=(distance/1000);
+			distance = (distance / 1000);
 			//if(distance < 5)
-				viewHolder.distance.setText(distance+"KM");
+			viewHolder.distance.setText(distance + "KM");
 			//else
-				//viewHolder.distance.setVisibility(View.GONE);
+			//viewHolder.distance.setVisibility(View.GONE);
 
 
 			int value = getResources().getDimensionPixelSize(R.dimen.size60);
@@ -1339,11 +1398,11 @@ public class Home extends AppCompatActivity
 						String description = getResources().getString(R.string.feed_user_joined, user.getUserName() + " ");
 
 						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
-						Spannable desc=new SpannableString(description);
+						Spannable desc = new SpannableString(description);
 						Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
 						Matcher m = p.matcher(description);
-						while (m.find()){
-							desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						while (m.find()) {
+							desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 						}
 						viewHolder.userName.setText(desc);
 //
@@ -1360,19 +1419,19 @@ public class Home extends AppCompatActivity
 								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ");
 
 						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
-						Spannable desc=new SpannableString(description);
+						Spannable desc = new SpannableString(description);
 						Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
 						Matcher m = p.matcher(description);
-						while (m.find()){
-							desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						while (m.find()) {
+							desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 						}
-						p=Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
+						p = Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
 						m = p.matcher(description);
-						while (m.find()){
+						while (m.find()) {
 
 
 							desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.zomato_red)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-							desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+							desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 						}
 						viewHolder.userName.setText(desc);
 
@@ -1388,7 +1447,7 @@ public class Home extends AppCompatActivity
 										getResources().getString(R.string.sending_request), true, false);
 								z_ProgressDialog.setCancelable(false);
 								UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-										"" + wish.getWishId(), "1", new Object[] { user, wish });
+										"" + wish.getWishId(), "1", new Object[]{user, wish});
 							}
 						});
 
@@ -1398,7 +1457,7 @@ public class Home extends AppCompatActivity
 							public void onClick(View v) {
 
 								UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-										"" + wish.getWishId(), "2", new Object[] { user, wish });
+										"" + wish.getWishId(), "2", new Object[]{user, wish});
 								feedListAdapter.remove(feedItem);
 								feedListAdapter.notifyDataSetChanged();
 							}
@@ -1412,19 +1471,19 @@ public class Home extends AppCompatActivity
 							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", user2.getUserName());
 
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
-					Spannable desc=new SpannableString(description);
+					Spannable desc = new SpannableString(description);
 					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
 					Matcher m = p.matcher(description);
-					while (m.find()){
-						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+					while (m.find()) {
+						desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 					}
-					p=Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
+					p = Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
 					m = p.matcher(description);
-					while (m.find()){
+					while (m.find()) {
 
 
 						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.bt_orange_2)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 					}
 					viewHolder.userName.setText(desc);
 
@@ -1478,8 +1537,8 @@ public class Home extends AppCompatActivity
 				if (result instanceof Object[]) {
 					findViewById(R.id.feedListView).setVisibility(View.VISIBLE);
 					Object[] arr = (Object[]) result;
-					if(arr[0]!=null)
-					mWishesTotalCount = (Integer) arr[0];
+					if (arr[0] != null)
+						mWishesTotalCount = (Integer) arr[0];
 					setWishes((ArrayList<FeedItem>) arr[1]);
 				}
 			} else {

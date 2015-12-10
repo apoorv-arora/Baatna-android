@@ -5,6 +5,22 @@
     android:background="@color/bt_grey"
     android:orientation="vertical" >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:theme="@style/ToolbarBaseTheme"
+        android:layout_marginBottom="10dp"
+        >
+
+
+    </android.support.v7.widget.Toolbar>
+
+
     <LinearLayout
         android:id="@+id/friend_list_progress_container"
         android:layout_width="fill_parent"
@@ -24,7 +40,24 @@
         android:layout_height="fill_parent"
         android:headerDividersEnabled="true"
         android:footerDividersEnabled="true"
-        android:background="@color/feed_bg" />
+        android:background="@color/feed_bg"
+       />
+
+    <com.application.baatna.utils.TextViewRegular
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rectangle"
+        android:text="New Feeds"
+        android:layout_below="@+id/toolbar_actionbar"
+        android:textSize="@dimen/size24"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/new_feed_count_margin"
+        android:paddingRight="@dimen/new_feed_count_margin"
+        android:paddingLeft="@dimen/new_feed_count_margin"
+        android:id="@+id/txt_new_feeds"
+        android:visibility="gone"
+        />
 
     <LinearLayout
         android:id="@+id/empty_view"

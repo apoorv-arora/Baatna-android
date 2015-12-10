@@ -227,15 +227,15 @@ public class WishFragment extends Fragment implements UploadManagerCallback {
 			}
 
 			((RelativeLayout.LayoutParams) v.findViewById(R.id.wishbox_list_item).getLayoutParams())
-					.setMargins(width / 40, width / 40, width / 40, width / 40);
+					.setMargins(width / 40, width / 40, width / 40, 0);
 
 			viewHolder.date.setPadding(width / 20, width / 20, width / 20, width / 40);
 			viewHolder.title.setPadding(width / 20, width / 40, width / 20, width / 40);
 			((RelativeLayout.LayoutParams) viewHolder.crossIcon.getLayoutParams()).setMargins(0, 0, width / 20, 0);
 			// set the date in hh:mm format
-			viewHolder.date.setText(CommonLib.getDateFromUTC(wish.getTimeOfPost()));
+			viewHolder.date.setText(CommonLib.findDateDifference(wish.getTimeOfPost()));
 			// set the span of title
-			String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle();
+			String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle().toUpperCase();
 			SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(title);
 
 			ClickableSpan cs1 = new ClickableSpan() {
@@ -248,11 +248,12 @@ public class WishFragment extends Fragment implements UploadManagerCallback {
 					super.updateDrawState(ds);
 					ds.setUnderlineText(false);
 					ds.setTypeface(CommonLib.getTypeface(activity.getApplicationContext(), CommonLib.Bold));
+
 					ds.setColor(getResources().getColor(R.color.bt_drawer_green));
 				}
 			};
-			finalSpanBuilderStr.setSpan(cs1, title.indexOf(wish.getTitle()),
-					title.indexOf(wish.getTitle()) + wish.getTitle().length(),
+			finalSpanBuilderStr.setSpan(cs1, title.indexOf(wish.getTitle().toUpperCase()),
+					title.indexOf(wish.getTitle().toUpperCase()) + wish.getTitle().toUpperCase().length(),
 					SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
 
 			viewHolder.title.setText(finalSpanBuilderStr);

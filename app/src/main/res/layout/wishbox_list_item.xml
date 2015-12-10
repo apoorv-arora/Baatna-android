@@ -10,7 +10,7 @@
         android:id="@+id/wishbox_list_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height100"
-        android:elevation="@dimen/shadow_margin"
+        android:elevation=".5dp"
         android:background="@drawable/light_rectangle_stroke"
         android:orientation="vertical" >
 

@@ -66,6 +66,10 @@ public class CommonLib {
 	public static final String SERVER_PREFIX = "http://";
 	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
 	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
+
+
+	//public static final String SERVER_BODY = "192.168.2.41:8080/BaatnaServer/rest/";
+	//public static String SERVER_WITHOUT_VERSION = "http://192.168.2.41:8080/BaatnaServer/rest/";
 	
 //	public static final String SERVER_BODY = "192.168.2.12:8080/BaatnaServer/rest/";
 //	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.12:8080/BaatnaServer/rest/";
@@ -1085,8 +1089,8 @@ public class CommonLib {
 				return "Yesterday";
 			} else if (diffDays <= 30) {
 				return "" + diffDays + " DAYS AGO";
-			} else
-				return format.format(calendar1.getTime());
+			} //else
+				//return format.format(calendar1.getTime());
 
 
 		} catch (Exception e) {

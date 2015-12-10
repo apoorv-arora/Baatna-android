@@ -1,7 +1,7 @@
 package com.application.baatna.views;
 
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,11 +13,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +41,6 @@ import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.CommonUtils;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
@@ -51,7 +55,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FriendListActivity extends Activity implements UploadManagerCallback {
+public class FriendListActivity extends AppCompatActivity implements UploadManagerCallback {
 
 	private SharedPreferences prefs;
 	private boolean destroyed = false;
@@ -74,15 +78,28 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 		prefs = getSharedPreferences("application_settings", 0);
 		mContext = this;
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setupActionBar();
 		setListeners();
 		refreshView();
+
+
 		UploadManager.addCallback(this);
 
 		feedListView = (ListView) findViewById(R.id.feedListView);
 		feedListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
 		feedListView.setDividerHeight(width / 40);
 	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.option_menu, menu);
+		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
+		SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		return true;
+	}
+
 
 	public void actionBarSelected(View v) {
 		switch (v.getId()) {
@@ -95,8 +112,8 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 	}
 
 	private void setupActionBar() {
-		ActionBar actionBar = getActionBar();
 
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
@@ -294,7 +311,7 @@ public class FriendListActivity extends Activity implements UploadManagerCallbac
 
 			final Wish wish = feedItem.getWish();
 			//setting text to display time
-			viewHolder.time.setText(CommonUtils.findDateDifference(feedItem.getTimestamp()));
+			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getTimestamp()));
 			//displaying distance
 
 			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),

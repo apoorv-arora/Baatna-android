@@ -123,6 +123,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 			e.printStackTrace();
 		}
 
+
 		imgBg.postDelayed(new Runnable() {
 			@Override
 			public void run() {
