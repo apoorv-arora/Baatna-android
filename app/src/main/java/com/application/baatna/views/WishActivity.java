@@ -1,21 +1,5 @@
 package com.application.baatna.views;
 
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.R;
-import com.application.baatna.data.User;
-import com.application.baatna.data.Wish;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.TypefaceSpan;
-import com.application.baatna.utils.UploadManager;
-import com.application.baatna.utils.UploadManagerCallback;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,6 +14,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.Gravity;
@@ -43,7 +29,21 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class WishActivity extends Activity implements UploadManagerCallback {
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.R;
+import com.application.baatna.data.User;
+import com.application.baatna.data.Wish;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.TypefaceSpan;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class WishActivity extends AppCompatActivity implements UploadManagerCallback {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -65,6 +65,8 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 		mUser = (User) getIntent().getSerializableExtra("user");
 
 		UploadManager.addCallback(this);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setupActionBar();
 		fixSizes();
 		setValues();
@@ -172,8 +174,7 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 	}
 
 	private void setupActionBar() {
-		ActionBar actionBar = getActionBar();
-
+		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
@@ -195,6 +196,7 @@ public class WishActivity extends Activity implements UploadManagerCallback {
 				.setMargins(width / 40, 0, 0, 0);
 		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
 		title.setText(s);
+		title.setAllCaps(true);
 	}
 
 	@Override

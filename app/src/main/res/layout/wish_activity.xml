@@ -2,9 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/feed_item_root"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/height125"
-    android:animateLayoutChanges="true"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:theme="@style/ToolbarBaseTheme"
+        />
 
     <RelativeLayout
         android:id="@+id/feed_item"

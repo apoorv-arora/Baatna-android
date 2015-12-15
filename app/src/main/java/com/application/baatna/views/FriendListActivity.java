@@ -104,6 +104,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		searchView.animate();
 		searchView.setIconified(true);
+		searchView.setVisibility(View.GONE);
 		SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener()
 		{
 			@Override

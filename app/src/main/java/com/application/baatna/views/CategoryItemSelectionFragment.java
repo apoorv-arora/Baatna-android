@@ -5,7 +5,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,11 +56,13 @@ public class CategoryItemSelectionFragment extends AppCompatActivity {
 			mGridView.setAdapter(mAdapter);
 		}
 		prefs = getSharedPreferences("application_settings", 0);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setupActionBar();
 	}
 
 	private void setupActionBar() {
-		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
