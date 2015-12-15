@@ -160,6 +160,7 @@ public class NewRequestFragment extends Fragment {
 					((TextView) rootView.findViewById(R.id.category_et)).requestFocus();
 					return;
 				}
+
 				if (timeduration== null ) {
 					Toast.makeText(mContext, "Please enter time duration of the request", Toast.LENGTH_SHORT).show();
 					((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
