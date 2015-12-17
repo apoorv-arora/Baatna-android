@@ -682,7 +682,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 				viewHolder.title.setPadding(width / 20, width / 40, width / 20, width / 40);
 				((RelativeLayout.LayoutParams) viewHolder.crossIcon.getLayoutParams()).setMargins(0, 0, width / 20, 0);
 				// set the date in hh:mm format
-				viewHolder.date.setText(CommonLib.findDateDifference(wish.getTimestamp()));
+				viewHolder.date.setText(CommonLib.findDateDifference(wish.getTimeOfPost()));
 				// set the span of title
 				String title = mContext.getResources().getString(R.string.wish_title_hint) + wish.getTitle();
 				SpannableStringBuilder finalSpanBuilderStr = new SpannableStringBuilder(title);

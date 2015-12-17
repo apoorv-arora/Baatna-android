@@ -185,7 +185,12 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 		LayoutInflater mInflater = inflater;
 		Context mContext=getBaseContext();
 		View rootView = mInflater.inflate(R.layout.new_request_fragment, null);
-		String timeduration= ((TextView) findViewById(R.id.time_duration)).getText().toString();
+		int timeDuration = -1;
+		try {
+			timeDuration = Integer.parseInt( ((TextView) findViewById(R.id.time_duration)).getText().toString());
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+		}
 		String title = ((TextView) findViewById(R.id.category_et)).getText().toString();
 		String description = ((TextView) findViewById(R.id.description_et)).getText().toString();
 
@@ -195,7 +200,7 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 			return;
 		}
 
-		if (timeduration== null ) {
+		if (timeDuration == -1 ) {
 			Toast.makeText(mContext, "Please enter time duration of the request", Toast.LENGTH_SHORT).show();
 			((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
 			return;
@@ -206,7 +211,7 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 			return;
 		}
 
-		UploadManager.postNewRequest(prefs.getString("access_token", ""), title, description);
+		UploadManager.postNewRequest(prefs.getString("access_token", ""), title, description, timeDuration);
 		try {
 			InputMethodManager imm = (InputMethodManager) mContext
 					.getSystemService(Service.INPUT_METHOD_SERVICE);

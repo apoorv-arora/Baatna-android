@@ -152,7 +152,12 @@ public class NewRequestFragment extends Fragment {
 		rootView.findViewById(R.id.post).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String timeduration=((TextView)rootView.findViewById(R.id.time_duration)).getText().toString();
+				int timeDuration = -1;
+				try {
+					timeDuration = Integer.parseInt( ((TextView) rootView.findViewById(R.id.time_duration)).getText().toString());
+				} catch(NumberFormatException e) {
+					e.printStackTrace();
+				}
 				String title = ((TextView) rootView.findViewById(R.id.category_et)).getText().toString();
 				String description = ((TextView) rootView.findViewById(R.id.description_et)).getText().toString();
 
@@ -162,7 +167,7 @@ public class NewRequestFragment extends Fragment {
 					return;
 				}
 
-				if (timeduration== null ) {
+				if (timeDuration == -1 ) {
 					Toast.makeText(mContext, "Please enter time duration of the request", Toast.LENGTH_SHORT).show();
 					((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
 					return;
@@ -173,7 +178,7 @@ public class NewRequestFragment extends Fragment {
 					return;
 				}
 				
-				UploadManager.postNewRequest(prefs.getString("access_token", ""), title, description);
+				UploadManager.postNewRequest(prefs.getString("access_token", ""), title, description, timeDuration);
 				try {
 					InputMethodManager imm = (InputMethodManager) mContext
 							.getSystemService(Service.INPUT_METHOD_SERVICE);

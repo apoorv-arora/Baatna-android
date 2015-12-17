@@ -331,6 +331,8 @@ public class ParserJson {
 									category.setUserId(categoryJson.getInt("user_id"));
 								if (categoryJson.has("wish_id") && categoryJson.get("wish_id") instanceof Integer)
 									category.setWishId(categoryJson.getInt("wish_id"));
+								if (categoryJson.has("required_for") && categoryJson.get("required_for") instanceof Integer)
+									category.setRequiredFor(categoryJson.getInt("required_for"));
 								wishes.add(category);
 							}
 						}
@@ -439,6 +441,8 @@ public class ParserJson {
 				wish.setWishId(wishObject.getInt("wish_id"));
 			if (wishObject.has("status") && wishObject.get("status") instanceof Integer)
 				wish.setStatus(wishObject.getInt("status"));
+			if (wishObject.has("required_for") && wishObject.get("required_for") instanceof Integer)
+				wish.setRequiredFor(wishObject.getInt("required_for"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

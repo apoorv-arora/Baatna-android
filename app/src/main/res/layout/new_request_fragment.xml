@@ -62,8 +62,7 @@
                 android:background="@drawable/white_background"
                 android:gravity="bottom|left"
                 android:hint="@string/time_duration"
-                android:visibility="gone"
-                android:inputType="textAutoCorrect|textAutoComplete"
+                android:inputType="number"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/default_font_color"
@@ -77,7 +76,6 @@
                 android:id="@+id/category_separator2"
                 android:layout_width="fill_parent"
                 android:layout_height=".5dp"
-                android:visibility="gone"
                 android:background="@color/zomato_red"
                 />
 

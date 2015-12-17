@@ -12,7 +12,7 @@ public class Wish implements Serializable {
 	private int status;
 	private double latitude;
 	private double longitude;
-	private long timestamp;
+	private int requiredFor;
 
 	public Wish() {
 	}
@@ -79,8 +79,12 @@ public class Wish implements Serializable {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public long getTimestamp() {
-		return timestamp;
+
+	public int getRequiredFor() {
+		return requiredFor;
 	}
-	
+
+	public void setRequiredFor(int requiredFor) {
+		this.requiredFor = requiredFor;
+	}
 }
