@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -90,13 +91,15 @@ public class AboutUs extends AppCompatActivity {
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
+		if(Build.VERSION.SDK_INT > 20)
+			actionBar.setElevation(0);
 
 		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
 		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(actionBarCustomView);
 
-		SpannableString s = new SpannableString(getString(R.string.about_us).toUpperCase());
+		SpannableString s = new SpannableString(getString(R.string.about_us));
 		s.setSpan(
 				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
 						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
@@ -107,6 +110,7 @@ public class AboutUs extends AppCompatActivity {
 				.setMargins(width / 40, 0, 0, 0);
 		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
 		title.setText(s);
+		title.setAllCaps(true);
 	}
 
 	void fixsizes() {

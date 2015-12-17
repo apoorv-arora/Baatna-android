@@ -1,18 +1,5 @@
 package com.application.baatna.views;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.application.baatna.R;
-import com.application.baatna.Splash;
-import com.application.baatna.data.Wish;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.IconView;
-import com.application.baatna.utils.RequestWrapper;
-import com.application.baatna.utils.TypefaceSpan;
-import com.application.baatna.utils.UploadManager;
-import com.application.baatna.utils.UploadManagerCallback;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,6 +29,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.application.baatna.R;
+import com.application.baatna.Splash;
+import com.application.baatna.data.Wish;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.IconView;
+import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.TypefaceSpan;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WishboxActivity extends Activity implements UploadManagerCallback {
 
@@ -104,6 +104,7 @@ public class WishboxActivity extends Activity implements UploadManagerCallback {
 				.setMargins(width / 40, 0, 0, 0);
 		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
 		title.setText(s);
+
 	}
 
 	public void actionBarSelected(View v) {

@@ -93,6 +93,7 @@ public class NewRequestFragment extends Fragment {
 		mCategoriesListView.setDivider(null);
 
 		rootView.findViewById(R.id.new_request_progress_container).setVisibility(View.GONE);
+		rootView.findViewById(R.id.post).setVisibility(View.GONE);
 	}
 
 	private void setListeners() {

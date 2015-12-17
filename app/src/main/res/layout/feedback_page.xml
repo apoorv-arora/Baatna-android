@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/feedback_page_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white" >
+    android:background="@color/white">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,6 +24,7 @@
                 android:minHeight="@dimen/height60"
                 android:popupTheme="@android:style/ThemeOverlay.Material.Light"
                 android:theme="@style/ToolbarBaseTheme"
+                app:contentInsetStart="0dp"
                 />
 
             <LinearLayout
@@ -66,7 +68,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/feedback"
                     android:textAllCaps="true"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:letterSpacing="0.1"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

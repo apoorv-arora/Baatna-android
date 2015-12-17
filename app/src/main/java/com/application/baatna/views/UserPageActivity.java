@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -46,6 +47,7 @@ import com.application.baatna.Splash;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.CustomTypefaceSpan;
 import com.application.baatna.utils.IconView;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
@@ -226,7 +228,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 		imageViewBlur = (ImageView) findViewById(R.id.drawer_user_info_background_image);
 
 		((RelativeLayout.LayoutParams) findViewById(R.id.back_icon).getLayoutParams()).setMargins(width / 20,
-				width / 20, width / 20, width / 20);
+				width / 15, width / 20, width / 20);
 
 		findViewById(R.id.back_icon).setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -619,11 +621,12 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 					}
 					p = Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
 					m = p.matcher(description);
+					Typeface font=CommonLib.getTypeface(getContext(), CommonLib.Bold);
 					while (m.find()) {
 
-
+						desc.setSpan (new CustomTypefaceSpan(font), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.zomato_red)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-						desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
 					}
 					viewHolder.userName.setText(desc);
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "profile", position, width, false);

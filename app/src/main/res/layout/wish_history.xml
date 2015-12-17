@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_actionbar"
@@ -12,6 +13,7 @@
         android:minHeight="@dimen/height60"
         android:popupTheme="@android:style/ThemeOverlay.Material.Light"
         android:theme="@style/ToolbarBaseTheme"
+        app:contentInsetStart="0dp"
         />
 
     <com.application.baatna.utils.pager.PagerSlidingTabStrip

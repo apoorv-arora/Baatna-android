@@ -9,14 +9,15 @@
         android:id="@+id/wishbox_progress_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center" >
+            android:gravity="center"
+        >
 
-        <ProgressBar
-            android:id="@+id/wishbox_progress"
-            style="?android:attr/progressBarStyleInverse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <ProgressBar
+                android:id="@+id/wishbox_progress"
+                style="?android:attr/progressBarStyleInverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/content"

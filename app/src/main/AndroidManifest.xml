@@ -73,7 +73,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.NoActionBar"
+            android:theme="@style/ZomatoActionBarHomeTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -203,7 +203,7 @@
             android:parentActivityName="com.application.baatna.views.Home"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/ZomatoActionBarTheme" >
+            android:theme="@style/ZomatoActionBarHomeTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.application.baatna.views.Home" />

@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bt_grey"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_actionbar"
@@ -15,6 +16,8 @@
         android:popupTheme="@android:style/ThemeOverlay.Material.Light"
         android:theme="@style/ToolbarBaseTheme"
         android:layout_marginBottom="10dp"
+        app:contentInsetStart="0dp"
+
         >
 
 
@@ -57,6 +60,7 @@
         android:paddingLeft="@dimen/new_feed_count_margin"
         android:id="@+id/txt_new_feeds"
         android:visibility="gone"
+
         />
 
     <LinearLayout

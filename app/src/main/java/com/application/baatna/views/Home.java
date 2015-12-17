@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -39,9 +40,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +66,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.Splash;
@@ -76,6 +78,7 @@ import com.application.baatna.mapUtils.GoogleMapRenderer;
 import com.application.baatna.mapUtils.SimpleRestaurantPin;
 import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.CustomTypefaceSpan;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
@@ -190,7 +193,7 @@ public class Home extends AppCompatActivity
 		feedListView.setDividerHeight(width / 40);
 
 		((RelativeLayout.LayoutParams) headerView.findViewById(R.id.request_icon).getLayoutParams())
-				.setMargins(width / 20 + width / 80, 0, 0, 0);
+				.setMargins(width / 20 + width / 80+ width/100, 0, 0, 0);
 		headerView.findViewById(R.id.make_request_container).setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -592,6 +595,9 @@ public class Home extends AppCompatActivity
 	private void setupActionBar() {
 
 		ActionBar actionBar = getSupportActionBar();
+		if(Build.VERSION.SDK_INT > 20)
+			actionBar.setElevation(0);
+
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
@@ -1288,20 +1294,39 @@ public class Home extends AppCompatActivity
 			TextView decline;
 			LinearLayout action_container;
 			ImageView imageView;
+			RelativeLayout feed_item_container;
+			RelativeLayout feed_item;
 			// RoundedImageView userImage;
+		}
+		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+		@Override
+		public int getItemViewType(int position) {
+			return (feedItems.get(position).getType() == CommonLib.FEED_TYPE_NEW_REQUEST) ? 0 : 1;
 		}
 
 		@Override
 		public View getView(final int position, View v, ViewGroup parent) {
 			final FeedItem feedItem = feedItems.get(position);
+			int type = getItemViewType(position);
+			if(v==null)
+			{
+				if (type==0)
+					v = LayoutInflater.from(mContext).inflate(R.layout.feed_list_item_snippet, null);
 
-			if (v == null || v.findViewById(R.id.feed_item_root) == null) {
-				v = LayoutInflater.from(mContext).inflate(R.layout.feed_list_item_snippet, null);
+
+				else
+					v = LayoutInflater.from(mContext).inflate(R.layout.feed_list_item_snippet1, null);
 			}
+
 			ViewHolder viewHolder = (ViewHolder) v.getTag();
 			if (viewHolder == null) {
 				viewHolder = new ViewHolder();
 				viewHolder.userName = (TextView) v.findViewById(R.id.user_name);
+				viewHolder.feed_item_container=(RelativeLayout)v.findViewById(R.id.feed_item_container);
+				viewHolder.feed_item=(RelativeLayout)v.findViewById(R.id.feed_item);
 				// viewHolder.userImage = (RoundedImageView) v
 				// .findViewById(R.id.user_image);
 				viewHolder.time = (TextView) v.findViewById(R.id.time);
@@ -1341,43 +1366,7 @@ public class Home extends AppCompatActivity
 					startActivity(intent);
 				}
 			});
-			v.findViewById(R.id.feed_item).setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					if (((LinearLayout) v.getParent()).getChildAt(1) == null) {
-						if (feedItem != null && feedItem.getWish() != null
-								&& feedItem.getWish().getDescription() != null) {
-							String description = feedItem.getWish().getDescription();
-							TextView descriptionTextView = new TextView(Home.this);
-							LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-									LinearLayout.LayoutParams.WRAP_CONTENT);
-							//coversion of px to dp
-							/*int padding_in_dp = 10;
-							final float scale = getResources().getDisplayMetrics().density;
-							int padding_in_px = (int) (padding_in_dp * scale + 0.5f);*/
-
-
-							params.setMargins(width / 40, 0, width / 40, 0);
-							descriptionTextView.setLayoutParams(params);
-							//ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(descriptionTextView.getLayoutParams());
-							//marginParams.setMargins(50, 50, 50, 50);
-							descriptionTextView.setGravity(Gravity.CENTER);
-							descriptionTextView.setText(description);
-							descriptionTextView.setBackgroundColor(getResources().getColor(R.color.white));
-							((LinearLayout) v.getParent()).addView(descriptionTextView);
-
-
-							descriptionPos = position;
-						}
-					} else {
-						if (((LinearLayout) v.getParent()).getChildAt(1) != null
-								&& ((LinearLayout) v.getParent()).getChildAt(1) instanceof TextView)
-							((LinearLayout) v.getParent()).removeViewAt(1);
-					}
-
-				}
-			});
 
 			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
 					feedItem.getLatitude(), feedItem.getLongitude());
@@ -1404,16 +1393,24 @@ public class Home extends AppCompatActivity
 						while (m.find()) {
 							desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 						}
+
 						viewHolder.userName.setText(desc);
 //
 
 						viewHolder.accept.setVisibility(View.INVISIBLE);
 						viewHolder.decline.setVisibility(View.INVISIBLE);
+
 						viewHolder.bar
 								.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.feed_joined)));
 					}
 					break;
+
 				case CommonLib.FEED_TYPE_NEW_REQUEST:
+					//viewHolder.feed_item.setLayoutParams(new LinearLayout.LayoutParams(width/80, getResources().getDimensionPixelOffset(R.dimen.height125)));
+					//v.getLayoutParams().height= R.dimen.height125;
+					//v.setLayoutParams(new LinearLayout.LayoutParams(width,getResources().getDimensionPixelOffset(R.dimen.height125)));
+					//viewHolder.feed_item_container.setLayoutParams(new RelativeLayout.LayoutParams(width/80, getResources().getDimensionPixelOffset(R.dimen.height125)));
+
 					if (user != null && wish != null) {
 						String description = getResources().getString(R.string.feed_user_requested,
 								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ");
@@ -1427,17 +1424,71 @@ public class Home extends AppCompatActivity
 						}
 						p = Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
 						m = p.matcher(description);
+						Typeface font=CommonLib.getTypeface(getContext(), CommonLib.Bold);
 						while (m.find()) {
+							desc.setSpan (new CustomTypefaceSpan(font), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+							desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.green_gradient)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
-
-							desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.zomato_red)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-							desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 						}
+						if(feedItems.get(position).getType()==CommonLib.FEED_TYPE_NEW_REQUEST)
+							v.findViewById(R.id.feed_item).setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									if (((LinearLayout) v.getParent()).getChildAt(1) == null) {
+										if (feedItem != null && feedItem.getWish() != null
+												&& feedItem.getWish().getDescription() != null) {
+
+											String description = feedItem.getWish().getDescription();
+
+											TextView descriptionTextView = new TextView(Home.this);
+											LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+													LinearLayout.LayoutParams.WRAP_CONTENT);
+
+											//coversion of px to dp
+							/*int padding_in_dp = 10;
+							final float scale = getResources().getDisplayMetrics().density;
+							int padding_in_px = (int) (padding_in_dp * scale + 0.5f);*/
+
+
+											params.setMargins(width / 40, 0, width / 40, 0);
+											descriptionTextView.setLayoutParams(params);
+											//ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(descriptionTextView.getLayoutParams());
+											//marginParams.setMargins(50, 50, 50, 50);
+
+											descriptionTextView.setText(description);
+											descriptionTextView.setTypeface(CommonLib.getTypeface(getContext(), CommonLib.Regular));
+											descriptionTextView.setPadding(width / 20, width / 20, width / 20, width / 20);
+											descriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.height14));
+											//descriptionTextView.setTextSize(pxFromDp(14, Home.this));
+
+							/*int fontsize = (int) (14 * scale + 0.5f);
+							descriptionTextView.setTextSize(fontsize);
+							int linespacing = 21;
+							descriptionTextView.setLineSpacing(linespacing,1);
+
+							int pixels = (int) (125 * scale + 0.5f);
+							descriptionTextView.setMinHeight(pixels);*/
+											descriptionTextView.setBackgroundColor(getResources().getColor(R.color.white));
+											((LinearLayout) v.getParent()).addView(descriptionTextView);
+
+
+											descriptionPos = position;
+										}
+									} else {
+										if (((LinearLayout) v.getParent()).getChildAt(1) != null
+												&& ((LinearLayout) v.getParent()).getChildAt(1) instanceof TextView)
+											((LinearLayout) v.getParent()).removeViewAt(1);
+									}
+
+								}
+							});
+
 						viewHolder.userName.setText(desc);
 
 
 						viewHolder.bar
-								.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.zomato_red)));
+								.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.green_gradient)));
 
 						viewHolder.accept.setOnClickListener(new OnClickListener() {
 
@@ -1464,8 +1515,14 @@ public class Home extends AppCompatActivity
 						});
 						viewHolder.accept.setVisibility(View.VISIBLE);
 						viewHolder.decline.setVisibility(View.VISIBLE);
+
+						//v.setMinimumHeight(getResources().getDimensionPixelOffset(R.dimen.height125));
+						//viewHolder.feed_item.setMinimumHeight(getResources().getDimensionPixelOffset(R.dimen.height125));
+						//viewHolder.feed_item_container.setMinimumHeight(getResources().getDimensionPixelOffset(R.dimen.height125));
+
 					}
 					break;
+
 				case CommonLib.FEED_TYPE_REQUEST_FULFILLED:
 					String description = getResources().getString(R.string.feed_requested_fulfilled,
 							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", user2.getUserName());
@@ -1479,12 +1536,65 @@ public class Home extends AppCompatActivity
 					}
 					p = Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
 					m = p.matcher(description);
+					Typeface font=CommonLib.getTypeface(getContext(), CommonLib.Bold);
 					while (m.find()) {
 
-
+						desc.setSpan (new CustomTypefaceSpan(font), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.bt_orange_2)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-						desc.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
 					}
+					if(feedItems.get(position).getType()==CommonLib.FEED_TYPE_REQUEST_FULFILLED)
+						v.findViewById(R.id.feed_item).setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								if (((LinearLayout) v.getParent()).getChildAt(1) == null) {
+									if (feedItem != null && feedItem.getWish() != null
+											&& feedItem.getWish().getDescription() != null) {
+
+
+
+										LinearLayout descriptionimageView = new LinearLayout(Home.this);
+										LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+												getResources().getDimensionPixelOffset(R.dimen.height75));
+
+
+										//coversion of px to dp
+							/*int padding_in_dp = 10;
+							final float scale = getResources().getDisplayMetrics().density;
+							int padding_in_px = (int) (padding_in_dp * scale + 0.5f);*/
+
+
+										params.setMargins(width / 40, 0, width / 40, 0);
+										descriptionimageView.setLayoutParams(params);
+
+
+										//ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(descriptionTextView.getLayoutParams());
+										//marginParams.setMargins(50, 50, 50, 50);
+
+
+										//descriptionTextView.setTextSize(pxFromDp(14, Home.this));
+
+							/*int fontsize = (int) (14 * scale + 0.5f);
+							descriptionTextView.setTextSize(fontsize);
+							int linespacing = 21;
+							descriptionTextView.setLineSpacing(linespacing,1);
+
+							int pixels = (int) (125 * scale + 0.5f);
+							descriptionTextView.setMinHeight(pixels);*/
+										descriptionimageView.setBackgroundColor(getResources().getColor(R.color.white));
+										((LinearLayout) v.getParent()).addView(descriptionimageView);
+										descriptionPos = position;
+									}
+								} else {
+									if (((LinearLayout) v.getParent()).getChildAt(1) != null
+											&& ((LinearLayout) v.getParent()).getChildAt(1) instanceof LinearLayout)
+										((LinearLayout) v.getParent()).removeViewAt(1);
+								}
+
+							}
+						});
+
 					viewHolder.userName.setText(desc);
 
 					viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
