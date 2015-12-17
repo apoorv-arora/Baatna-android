@@ -158,18 +158,15 @@ public class AboutUs extends AppCompatActivity {
 		btnTermsAndConditons.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
-				// tracker.trackPageView("/android/About_TC/"+zapp.city_id);
-				// trackerAll.trackPageView("/android/About_TC/"+zapp.city_id);
-
 				Intent intent = new Intent(AboutUs.this, BWebView.class);
 				intent.putExtra("title",
 						getResources()
 								.getString(R.string.about_us_terms_of_use));
-				// intent.putExtra("url",
-				// "https://www.zomato.com/terms_mobile.html");
-				// startActivity(intent);
-				// ////overridePendingTransition(R.anim.slide_in_right,
-				// R.anim.slide_out_left);
+				intent.putExtra("url",
+						"https://www.baatna.com/terms.html");
+				startActivity(intent);
+				overridePendingTransition(R.anim.slide_in_right,
+						R.anim.slide_out_left);
 
 			}
 		});
@@ -178,19 +175,16 @@ public class AboutUs extends AppCompatActivity {
 		btnPrivacyPolicy.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
-				// tracker.trackPageView("/android/About_Privacy/"+zapp.city_id);
-				// trackerAll.trackPageView("/android/About_Privacy/"+zapp.city_id);
-
 				Intent intent = new Intent(AboutUs.this, BWebView.class);
 				intent.putExtra(
 						"title",
 						getResources().getString(
 								R.string.about_us_privacypolicy));
-				// intent.putExtra("url",
-				// "https://www.zomato.com/privacy_mobile.html");
-				// startActivity(intent);
-				// //overridePendingTransition(R.anim.slide_in_right,
-				// R.anim.slide_out_left);
+				intent.putExtra("url",
+						"https://www.zomato.com/privacy.html");
+				startActivity(intent);
+				overridePendingTransition(R.anim.slide_in_right,
+						R.anim.slide_out_left);
 
 			}
 		});
@@ -209,23 +203,23 @@ public class AboutUs extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			onBackPressed();
+			case android.R.id.home:
+				onBackPressed();
 
-			return true;
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void actionBarSelected(View v) {
 
 		switch (v.getId()) {
 
-		case R.id.home_icon_container:
-			onBackPressed();
+			case R.id.home_icon_container:
+				onBackPressed();
 
-		default:
-			break;
+			default:
+				break;
 		}
 
 	}
