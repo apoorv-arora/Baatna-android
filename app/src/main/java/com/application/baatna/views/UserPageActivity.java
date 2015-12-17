@@ -85,6 +85,8 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 	private boolean cancelled = false;
 	private boolean loading = false;
 	private int count = 10;
+	View headerView;
+	ListView feedlistview;
 
 	public static final int WISH_OWN = 2;
 
@@ -94,10 +96,13 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 
 	@Override
 	protected void onCreate(Bundle arg0) {
-		overridePendingTransition(R.anim.rotation,R.anim.rotation1);
+
 		super.onCreate(arg0);
 		setContentView(R.layout.user_page_activity);
 		zapp = (BaatnaApp) getApplication();
+		headerView = View.inflate(this, R.layout.user_page_activity_header, null);
+		feedlistview = (ListView) findViewById(R.id.wish_items);
+		feedlistview.addHeaderView(headerView);
 
 		UploadManager.addCallback(this);
 		prefs = getSharedPreferences("application_settings", 0);
@@ -210,12 +215,12 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 
 		switch (item.getItemId()) {
 
-		case android.R.id.home:
-			onBackPressed();
-			return true;
+			case android.R.id.home:
+				onBackPressed();
+				return true;
 
-		default:
-			return super.onOptionsItemSelected(item);
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -252,7 +257,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 	}
 
 	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width,
-			int height, boolean useDiskCache) {
+									   int height, boolean useDiskCache) {
 
 		if (cancelPotentialWork(url, imageView)) {
 
@@ -621,10 +626,10 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 					}
 					p = Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
 					m = p.matcher(description);
-					Typeface font=CommonLib.getTypeface(getContext(), CommonLib.Bold);
+					Typeface font = CommonLib.getTypeface(getContext(), CommonLib.Bold);
 					while (m.find()) {
 
-						desc.setSpan (new CustomTypefaceSpan(font), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+						desc.setSpan(new CustomTypefaceSpan(font), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.zomato_red)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
 					}
@@ -644,7 +649,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 									getResources().getString(R.string.sending_request), true, false);
 							z_ProgressDialog.setCancelable(false);
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-									"" + wish.getWishId(), "1", new Object[] { user, wish });
+									"" + wish.getWishId(), "1", new Object[]{user, wish});
 						}
 					});
 
@@ -653,7 +658,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 						@Override
 						public void onClick(View v) {
 							UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
-									"" + wish.getWishId(), "2", new Object[] { user, wish });
+									"" + wish.getWishId(), "2", new Object[]{user, wish});
 						}
 					});
 					viewHolder.accept.setVisibility(View.VISIBLE);
@@ -713,11 +718,11 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 						new AlertDialog.Builder(mContext)
 								.setMessage(getResources().getString(R.string.wish_delete_text))
 								.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
-								UploadManager.deleteRequest(prefs.getString("access_token", ""), wish.getWishId() + "");
-								dialog.dismiss();
-							}
-						}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+										UploadManager.deleteRequest(prefs.getString("access_token", ""), wish.getWishId() + "");
+										dialog.dismiss();
+									}
+								}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
 								dialog.dismiss();
 							}
@@ -805,7 +810,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 
 	@Override
 	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
-			String stringId) {
+							   String stringId) {
 		if (destroyed)
 			return;
 		if (requestType == CommonLib.WISH_UPDATE_STATUS) {
@@ -849,6 +854,21 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 
 	@Override
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
+	}
+
+	public void expanddescription(View v) {
+
+		final TextView descriptiontext = (TextView) findViewById(R.id.description);
+		final TextView showAll = (TextView) findViewById(R.id.showall);
+		if (showAll.getText().toString().equals("show more")) {
+			showAll.setText("show less");
+			descriptiontext.setMaxLines(Integer.MAX_VALUE);
+		} else if (showAll.getText().toString().equals("show less")) {
+			showAll.setText("show more");
+			descriptiontext.setMaxLines(5);
+		}
+
+
 	}
 
 }

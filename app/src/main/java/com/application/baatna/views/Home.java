@@ -769,6 +769,7 @@ public class Home extends AppCompatActivity
 			public void onClick(View v) {
 				Intent intent = new Intent(Home.this, UserPageActivity.class);
 				startActivity(intent);
+				overridePendingTransition(R.anim.rotation, R.anim.rotation1);
 			}
 		});
 
@@ -1364,6 +1365,7 @@ public class Home extends AppCompatActivity
 					if (user != null && user.getUserId() != prefs.getInt("uid", 0))
 						intent.putExtra("uid", user.getUserId());
 					startActivity(intent);
+					overridePendingTransition(R.anim.rotation, R.anim.rotation1);
 				}
 			});
 
