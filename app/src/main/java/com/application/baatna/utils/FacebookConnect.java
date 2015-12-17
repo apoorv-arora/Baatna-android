@@ -1,24 +1,5 @@
 package com.application.baatna.utils;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,12 +17,32 @@ import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 public class FacebookConnect {
 
 	// permissions sought from facebook
 	private final String PERMISSION_EMAIL = "email";
 	private final String PERMISSION_USER_FRIENDS = "user_friends";
 	private final String PERMISSION_PUBLIC_PROFILE = "public_profile";
+	private final String PERMISSION_ABOUT_ME = "user_about_me";
 	private final String PERMISSION_POST = "publish_actions";
 	
 	// fields sought from the facebook 'user' object
@@ -53,7 +54,9 @@ public class FacebookConnect {
 	//private final String FIELD_LOCATION = "location";
 	private final String FIELDS = "fields";
 	private final String FIELD_PICTURE = "picture.type(large)";
-	
+	private final String FIELD_ABOUT_ME = "bio";
+
+
 	private Exception failException = null;
 
 	/**
@@ -164,7 +167,7 @@ public class FacebookConnect {
 				if (!session.isOpened() && !session.isClosed()) {
 					CommonLib.ZLog("FC", "open for read, site alpha");
 					session.openForRead(new Session.OpenRequest((Activity) callback)
-								.setPermissions(Arrays.asList(permsString, PERMISSION_USER_FRIENDS, PERMISSION_PUBLIC_PROFILE))
+								.setPermissions(Arrays.asList(permsString, PERMISSION_USER_FRIENDS, PERMISSION_PUBLIC_PROFILE, PERMISSION_ABOUT_ME))
 								.setCallback(mStatusCallback));
 
 			    } else {
@@ -245,7 +248,7 @@ public class FacebookConnect {
 		CommonLib.ZLog("FC", "fbRequestME");
 
 		String REQUEST_FIELDS = TextUtils.join(",", new String[] {
-				FIELD_ID, FIELD_EMAIL, FIELD_NAME, FIELD_BIRTHDAY, FIELD_GENDER, FIELD_PICTURE});//, FIELD_LOCATION });
+				FIELD_ID, FIELD_EMAIL, FIELD_NAME, FIELD_BIRTHDAY, FIELD_GENDER, FIELD_PICTURE, FIELD_ABOUT_ME});//, FIELD_LOCATION });
 
 		Bundle parameters = new Bundle();
 		parameters.putString(FIELDS, REQUEST_FIELDS);
@@ -439,6 +442,7 @@ public class FacebookConnect {
 			try {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("fbid", params[0]));
+				String bio = "";
 				try {
 					JSONObject fbDataJson = new JSONObject(params[1]);
 					String profile_pic = null;
@@ -450,6 +454,10 @@ public class FacebookConnect {
 							if (profilePicJson.has("url"))
 								profile_pic = String.valueOf(profilePicJson.get("url"));
 						}
+					}
+					if(fbDataJson.has("bio")) {
+						bio = String.valueOf(fbDataJson.get("bio"));
+						nameValuePairs.add(new BasicNameValuePair("bio", bio));
 					}
 					if(profile_pic != null)
 						nameValuePairs.add(new BasicNameValuePair("profile_pic", profile_pic));
@@ -489,6 +497,7 @@ public class FacebookConnect {
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putString("fb_token", params[3]);
 					editor.putString("fbId", params[0]);
+					editor.putString("description", bio);
 					editor.commit();
 					
 					if (!regId.equals("")) {

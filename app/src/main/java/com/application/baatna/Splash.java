@@ -456,6 +456,8 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 				editor.putInt("uid", bundle.getInt("uid"));
 				if (bundle.containsKey("email"))
 					editor.putString("email", bundle.getString("email"));
+				if (bundle.containsKey("description"))
+					editor.putString("description", bundle.getString("description"));
 				if (bundle.containsKey("username"))
 					editor.putString("username", bundle.getString("username"));
 				if (bundle.containsKey("thumbUrl"))

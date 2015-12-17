@@ -1,13 +1,5 @@
 package com.application.baatna.utils;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xml.sax.Parser;
-
 import com.application.baatna.data.Categories;
 import com.application.baatna.data.Coupon;
 import com.application.baatna.data.FeedItem;
@@ -16,7 +8,13 @@ import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
-import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.util.ArrayList;
 
 public class ParserJson {
 
@@ -475,6 +473,10 @@ public class ParserJson {
 
 			if (userObject.has("contact")) {
 				returnUser.setContact(String.valueOf(userObject.get("contact")));
+			}
+
+			if (userObject.has("bio")) {
+				returnUser.setBio(String.valueOf(userObject.get("bio")));
 			}
 
 		} catch (JSONException e) {
