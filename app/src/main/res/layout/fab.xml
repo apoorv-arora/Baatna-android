@@ -33,7 +33,7 @@
             android:gravity="center"
             android:layerType="hardware"
             android:onClick="actionBarSelected"
-            fab:fab_colorNormal="@color/zomato_red"
+            fab:fab_colorNormal="@color/green_gradient"
             fab:fab_colorPressed="@color/zomato_red_secondary"
             fab:fab_icon="@drawable/fab_icon"
             fab:fab_labelStyle="@style/fab_labels_style"

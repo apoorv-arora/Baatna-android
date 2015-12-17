@@ -97,6 +97,7 @@ public class WishHistoryActivity extends AppCompatActivity implements ZTabClickC
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
+		actionBar.setElevation(0);
 
 		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
@@ -137,7 +138,7 @@ public class WishHistoryActivity extends AppCompatActivity implements ZTabClickC
 		tabs.setInterfaceForClick(this);
 
 		final int tabsUnselectedColor = R.color.zdhl3;
-		final int tabsSelectedColor = R.color.baatna_primary_dark;
+		final int tabsSelectedColor = R.color.bt_orange_2;
 
 		final TextView deal1Header = (TextView) ((LinearLayout) tabs.getChildAt(0))
 				.getChildAt(VIEWPAGER_INDEX_DEAL1_FRAGMENT);
@@ -256,7 +257,7 @@ public class WishHistoryActivity extends AppCompatActivity implements ZTabClickC
 					}
 
 					deal1Header.setTextColor(getResources().getColor(tabsUnselectedColor));
-					deal2Header.setTextColor(getResources().getColor(R.color.bt_orange));
+					deal2Header.setTextColor(getResources().getColor(R.color.green_gradient));
 
 				} else if (arg0 == VIEWPAGER_INDEX_DEAL1_FRAGMENT) {
 
@@ -324,7 +325,7 @@ public class WishHistoryActivity extends AppCompatActivity implements ZTabClickC
 			return 2;
 		}
 
-		private String[] ids = { getResources().getString(R.string.your_wishes), getResources().getString(R.string.your_offers)};
+		private String[] ids = { getResources().getString(R.string.your_wishes).toUpperCase(), getResources().getString(R.string.your_offers).toUpperCase()};
 
 		public String getPageTitle(int pos) {
 			return ids[pos];

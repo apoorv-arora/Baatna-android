@@ -295,6 +295,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 	private void setUpActionBar() {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+		actionBar.setElevation(0);
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);

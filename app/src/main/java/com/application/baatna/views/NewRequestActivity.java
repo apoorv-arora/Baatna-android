@@ -4,22 +4,26 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.Service;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.application.baatna.R;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
 
@@ -57,27 +61,24 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
-
-		View actionBarCustomView = inflater.inflate(R.layout.green_action_bar, null);
-
-		actionBarCustomView.findViewById(R.id.back_icon).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View actionBarCustomView) {
-				try {
-					InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(actionBarCustomView.getWindowToken(), 0);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				onBackPressed();
-			}
-		});
+		actionBar.setElevation(0);
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View actionBarCustomView = inflator.inflate(R.layout.green_action_bar, null);
+		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(actionBarCustomView);
 
-		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
-				.setMargins(width / 40, 0, 0, 0);
-		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+		SpannableString s = new SpannableString(getString(R.string.make_new_request));
+		s.setSpan(
+				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
+						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
+				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
 
+		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
+				.setMargins(width / 20 + width / 80 + width / 100, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+		title.setText(s);
+		title.setAllCaps(true);
 
 	}
 
@@ -166,4 +167,51 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 			}
 		}
 	}
+	public void actionBarSelected(View v) {
+
+		switch (v.getId()) {
+
+			case R.id.home_icon_container:
+				onBackPressed();
+			default:
+				break;
+		}
+
+	}
+	public void postRequest(View v){
+
+		LayoutInflater mInflater = inflater;
+		Context mContext=getBaseContext();
+		View rootView = mInflater.inflate(R.layout.new_request_fragment, null);
+		String timeduration= ((TextView) findViewById(R.id.time_duration)).getText().toString();
+		String title = ((TextView) findViewById(R.id.category_et)).getText().toString();
+		String description = ((TextView) findViewById(R.id.description_et)).getText().toString();
+
+		if (title == null || title.length() < 1) {
+			Toast.makeText(mContext, "Please enter title of the request", Toast.LENGTH_SHORT).show();
+			((TextView) rootView.findViewById(R.id.category_et)).requestFocus();
+			return;
+		}
+
+		if (timeduration== null ) {
+			Toast.makeText(mContext, "Please enter time duration of the request", Toast.LENGTH_SHORT).show();
+			((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
+			return;
+		}
+		if (description == null || description.length() < 30) {
+			Toast.makeText(mContext, "Please enter description of the request of at least 30 characters", Toast.LENGTH_SHORT).show();
+			((TextView) rootView.findViewById(R.id.description_et)).requestFocus();
+			return;
+		}
+
+		UploadManager.postNewRequest(prefs.getString("access_token", ""), title, description);
+		try {
+			InputMethodManager imm = (InputMethodManager) mContext
+					.getSystemService(Service.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

@@ -125,6 +125,7 @@ public class FeedbackPage extends AppCompatActivity implements UploadManagerCall
 				.setMargins(screenWidth / 40, 0, screenWidth / 40, 0);
 		actionBarCustomView.findViewById(R.id.title).setPadding(screenWidth / 40, 0, screenWidth / 40, 0);
 		title.setText(s);
+		title.setAllCaps(true);
 	}
 
 	public void actionBarSelected(View v) {

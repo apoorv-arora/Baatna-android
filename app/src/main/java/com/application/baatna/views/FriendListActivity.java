@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -45,6 +47,7 @@ import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.CustomTypefaceSpan;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
@@ -156,7 +159,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
-
+		actionBar.setElevation(0);
 		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View actionBarCustomView = inflator.inflate(R.layout.white_action_bar, null);
 		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
@@ -440,6 +443,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 					Spannable desc=new SpannableString(description);
 					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
 					Matcher m = p.matcher(description);
+					Typeface font=CommonLib.getTypeface(getContext(), CommonLib.Bold);
 					while (m.find()){
 						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 					}
@@ -449,7 +453,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 
 
 						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.item_received_color)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						desc.setSpan (new CustomTypefaceSpan(font), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 					}
 					viewHolder.userName.setText(desc);
 					viewHolder.bar
@@ -471,10 +475,11 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 					}
 					p=Pattern.compile(wish.getTitle(), Pattern.CASE_INSENSITIVE);
 					m = p.matcher(description);
+					Typeface font=CommonLib.getTypeface(getContext(), CommonLib.Bold);
 					while (m.find()){
 
 						desc.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.item_offered_color)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-						desc.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+						desc.setSpan (new CustomTypefaceSpan(font), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 					}
 
 

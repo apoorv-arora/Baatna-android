@@ -3,44 +3,81 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/height60"
     android:layout_gravity="fill_horizontal"
-    android:background="@drawable/green_gradient" >
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/baatna_dark_feedback">
 
-    <com.application.baatna.utils.IconView
-        android:id="@+id/back_icon"
+    <RelativeLayout
+        android:id="@+id/home_icon_container"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height60"
-        android:layout_alignParentLeft="true"
+        android:background="@drawable/baatna_dark_feedback"
+        android:onClick="actionBarSelected"
+        >
+
+        <com.application.baatna.utils.IconView
+            android:id="@+id/back_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height60"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="H"
+            android:textColor="@color/zhl"
+            android:textSize="@dimen/font_size45"
+            android:onClick="actionBarSelected"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height60"
+            android:layout_toRightOf="@id/back_icon"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <com.application.baatna.utils.TextViewSemiBold
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="false"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:onClick="actionBarSelected"
+                android:paddingLeft="0dp"
+                android:paddingRight="@dimen/height2"
+                android:textColor="@color/zhl"
+                android:textSize="14dp"
+                android:letterSpacing="0.1"/>
+
+            <com.application.baatna.utils.TextViewRegular
+                android:id="@+id/subtitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/zdhl5"
+                android:textSize="@dimen/size13"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <com.application.baatna.utils.IconView
+        android:id="@+id/post_icon"
+        android:layout_width="@dimen/height75"
+        android:layout_height="@dimen/height75"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:clickable="true"
+        android:onClick="postRequest"
         android:gravity="center"
-        android:text="C"
-        android:textColor="@color/white"
-        android:textSize="@dimen/font_size45" />
+        android:text="G"
+        android:textColor="@color/baatna_primary_dark"
+        android:textSize="@dimen/font_size45"
+        android:background="@drawable/baatna_dark_feedback"/>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/height60"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/back_icon"
-        android:gravity="center"
-        android:orientation="vertical" >
 
-        <com.application.baatna.utils.TextViewSemiBold
-            android:id="@+id/title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:onClick="actionBarSelected"
-            android:paddingLeft="10dp"
-            android:paddingRight="@dimen/height2"
-            android:text="@string/make_new_request"
-            android:textColor="@color/white"
-            android:textSize="@dimen/size16"
-            android:textStyle="bold"
-            android:textAllCaps="true"/>
-    </LinearLayout>
 
 </RelativeLayout>

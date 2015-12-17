@@ -44,7 +44,8 @@
                 android:paddingLeft="0dp"
                 android:paddingRight="@dimen/height2"
                 android:textColor="@color/zhl"
-                android:textSize="@dimen/size16" />
+                android:textSize="14dp"
+                android:letterSpacing="0.1"/>
 
             <com.application.baatna.utils.TextViewRegular
                 android:id="@+id/subtitle"

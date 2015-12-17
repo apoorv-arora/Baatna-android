@@ -66,6 +66,8 @@ public class CommonLib {
 	public static final String SERVER_PREFIX = "http://";
 	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
 	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
+	//public static final String SERVER_BODY = "192.168.2.50:8080/BaatnaServer/rest/";
+	//public static String SERVER_WITHOUT_VERSION = "http://192.168.2.50:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -1072,7 +1074,7 @@ public class CommonLib {
 //            Log.e("difference is", diffDays + " days, " + diffHours + " hours, " + diffMinutes + " minutes, ");
 			if (diffDays == 0) {
 				if (diffMinutes > 0) {
-					return diffMinutes + "MINS AGO";
+					return diffMinutes+ " MINS AGO";
 					//return timeFormat.format(calendar1.getTime());
 				} else return "Just Now";
 			} else if (diffDays == 1) {

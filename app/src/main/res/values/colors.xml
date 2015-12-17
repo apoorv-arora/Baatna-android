@@ -21,7 +21,7 @@
     <color name="zomato_red_feedback">#e14e4e</color>
     -->
     <color name="zomato_red_secondary">#BC212D</color>
-    <color name="zomato_red">#20d4a4</color>
+    <color name="zomato_red">@color/green_gradient</color>
     <color name="baatna_primary_dark">#3dc49a</color>
     <color name="zomato_red_trans_fifty">#80CB202D</color>
     <color name="zomato_red_feedback">#AB000D</color>
