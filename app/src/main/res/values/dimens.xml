@@ -65,6 +65,7 @@
     <dimen name="height300">300dp</dimen>
     <dimen name="speedial_circle_size">60dp</dimen>
     <dimen name="size30_res">32dp</dimen>
+    <dimen name="height240">240dp</dimen>
 
     <!--
 	<dimen name="corner_radius">3dp</dimen>
