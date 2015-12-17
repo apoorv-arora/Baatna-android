@@ -3,7 +3,8 @@ package com.application.baatna.views;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.MenuItem;
@@ -20,7 +21,7 @@ import com.application.baatna.utils.TypefaceSpan;
 
 import org.apache.http.util.EncodingUtils;
 
-public class BWebView extends ActionBarActivity {
+public class BWebView extends AppCompatActivity {
 
 	private int width;
 
@@ -49,6 +50,8 @@ public class BWebView extends ActionBarActivity {
 		else if (mUrl != null && mUrl.contains("expertise"))
 			mUrl = mUrl + "?src=mob";
 
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setUpActionBar();
 		findViewById(R.id.loader).setVisibility(View.VISIBLE);
 		findViewById(R.id.webView).setVisibility(View.GONE);

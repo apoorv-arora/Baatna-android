@@ -863,6 +863,7 @@ public class Home extends AppCompatActivity
 		// Intent intent = new Intent(this, WishboxActivity.class);
 		Intent intent = new Intent(this, WishHistoryActivity.class);
 		startActivity(intent);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	@Override
@@ -920,10 +921,12 @@ public class Home extends AppCompatActivity
 	public void aboutus(View view) {
 		Intent intent = new Intent(this, AboutUs.class);
 		startActivity(intent);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	public void feedback(View v) {
 		startActivity(new Intent(this, FeedbackPage.class));
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	public void redeem(View v) {

@@ -282,7 +282,7 @@ public class FeedbackPage extends AppCompatActivity implements UploadManagerCall
 			e.printStackTrace();
 		}
 		FeedbackPage.this.finish();
-		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+		overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 	}
 
 	public void submit(View v) {

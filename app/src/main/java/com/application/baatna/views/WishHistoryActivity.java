@@ -91,6 +91,12 @@ public class WishHistoryActivity extends AppCompatActivity implements ZTabClickC
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+	}
+
 	private void setupActionBar() {
 
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();

@@ -104,7 +104,7 @@
             android:parentActivityName="com.application.baatna.views.Home"
             android:screenOrientation="portrait"
             android:theme="@style/ZomatoActionBarHomeTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.application.baatna.views.Home" />

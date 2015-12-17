@@ -2,16 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <!--
-         <include
-        android:id="@+id/header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/common_header" />
-    -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:theme="@style/ToolbarBaseTheme"
+        app:contentInsetStart="0dp"
+        />
 
     <WebView
         android:id="@+id/webView"
