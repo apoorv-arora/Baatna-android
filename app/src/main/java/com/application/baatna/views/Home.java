@@ -1413,7 +1413,7 @@ public class Home extends AppCompatActivity
 
 					if (user != null && wish != null) {
 						String description = getResources().getString(R.string.feed_user_requested,
-								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ");
+								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", wish.getRequiredFor());
 
 						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 						Spannable desc = new SpannableString(description);

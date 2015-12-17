@@ -133,7 +133,7 @@ public class WishActivity extends AppCompatActivity implements UploadManagerCall
 
 	private void setValues() {
 		String description = getResources().getString(R.string.feed_user_requested, mUser.getUserName() + " ",
-				mWish.getTitle() + " ");
+				mWish.getTitle() + " ", mWish.getRequiredFor());
 
 		String details = mWish.getDescription();
 		TextView descriptionTextView = new TextView(WishActivity.this);

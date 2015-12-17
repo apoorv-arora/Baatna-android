@@ -95,9 +95,9 @@
             android:clickable="false"
             android:gravity="center"
             android:paddingTop="0dp"
-            android:text="á"
+            android:text="U"
             android:textColor="@color/zomato_red"
-            android:textSize="@dimen/size15" />
+            android:textSize="@dimen/size45" />
 
         <com.application.baatna.utils.TextViewRegular
             android:id="@+id/about_us_terms_conditions"
@@ -136,9 +136,9 @@
             android:clickable="false"
             android:gravity="center"
             android:paddingTop="0dp"
-            android:text="¢"
+            android:text="g"
             android:textColor="@color/zomato_red"
-            android:textSize="@dimen/size15" />
+            android:textSize="@dimen/size45" />
 
         <com.application.baatna.utils.TextViewRegular
             android:id="@+id/about_us_privacy_policy"

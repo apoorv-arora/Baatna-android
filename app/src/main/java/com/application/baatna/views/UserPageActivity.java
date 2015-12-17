@@ -612,7 +612,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 
 				if (user != null && wish != null) {
 					String description = getResources().getString(R.string.feed_user_requested,
-							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ");
+							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", wish.getRequiredFor());
 					Spannable desc = new SpannableString(description);
 					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);
 					Matcher m = p.matcher(description);
