@@ -152,6 +152,7 @@ public class UserLoginActivity extends Activity implements UploadManagerCallback
                 Intent intent = new Intent(UserLoginActivity.this, HSLoginActivity.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_up);
             }
         });
 

@@ -1,20 +1,19 @@
 package com.application.baatna.utils;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.data.User;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Debug;
 import android.widget.Toast;
+
+import com.application.baatna.BaatnaApp;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 public class UploadManager {
 
@@ -81,13 +80,13 @@ public class UploadManager {
 
 	}
 
-	public static void postNewRequest(String accessToken, String title, String description) {
+	public static void postNewRequest(String accessToken, String title, String description, int requiredFor) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.WISH_ADD, 0, accessToken, null);
 		}
 
 		new NewRequest().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, title, description });
+				new Object[] { accessToken, title, description, requiredFor });
 
 	}
 
@@ -303,6 +302,7 @@ public class UploadManager {
 		private String accessToken;
 		private String title;
 		private String description;
+		private int requiredFor;
 
 		@Override
 		protected Object[] doInBackground(Object... params) {
@@ -311,6 +311,7 @@ public class UploadManager {
 			accessToken = (String) params[0];
 			title = (String) params[1];
 			description = (String) params[2];
+			requiredFor = (Integer) params[3];
 
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
@@ -318,6 +319,7 @@ public class UploadManager {
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("title", title));
 			nameValuePairs.add(new BasicNameValuePair("description", description));
+			nameValuePairs.add(new BasicNameValuePair("required_for", requiredFor+""));
 
 			try {
 				result = PostWrapper.postRequest(CommonLib.SERVER + "wish/add?", nameValuePairs, PostWrapper.WISH_POST,

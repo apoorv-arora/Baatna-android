@@ -42,6 +42,7 @@
                     android:hint="@string/feedback_hint"
                     android:inputType="textMultiLine|textCapSentences"
                     android:textColorHint="@color/zhl_darkest"
+                    android:textColor="@color/zdhl3"
                     android:textSize="@dimen/size16" />
 
                 <com.application.baatna.utils.TextViewRegular

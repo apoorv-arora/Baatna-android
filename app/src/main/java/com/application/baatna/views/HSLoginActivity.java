@@ -1,18 +1,5 @@
 package com.application.baatna.views;
 
-import java.util.ArrayList;
-
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.R;
-import com.application.baatna.Splash;
-import com.application.baatna.data.Institution;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.RequestWrapper;
-import com.application.baatna.utils.TypefaceSpan;
-import com.application.baatna.utils.UploadManager;
-import com.application.baatna.utils.UploadManagerCallback;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,6 +8,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -42,7 +32,19 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-public class HSLoginActivity extends Activity implements UploadManagerCallback {
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.R;
+import com.application.baatna.Splash;
+import com.application.baatna.data.Institution;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.TypefaceSpan;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+
+import java.util.ArrayList;
+
+public class HSLoginActivity extends AppCompatActivity implements UploadManagerCallback {
 
 	int width;
 	int height;
@@ -70,10 +72,13 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 		mSubzoneSearchListView = (ListView) findViewById(R.id.subzone_search_list_view);
 		mBranchListView = (ListView) findViewById(R.id.branch_list_view);
 
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
+		setUpActionBar();
+
 		refreshView();
 		fixSizes();
 		setListeners();
-		setUpActionBar();
 		UploadManager.addCallback(this);
 	}
 
@@ -98,7 +103,7 @@ public class HSLoginActivity extends Activity implements UploadManagerCallback {
 	}
 
 	private void setUpActionBar() {
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);

@@ -1,11 +1,10 @@
 package com.application.baatna.views;
 
-import org.apache.http.util.EncodingUtils;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.MenuItem;
@@ -20,7 +19,9 @@ import com.application.baatna.R;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.TypefaceSpan;
 
-public class BWebView extends Activity {
+import org.apache.http.util.EncodingUtils;
+
+public class BWebView extends AppCompatActivity {
 
 	private int width;
 
@@ -49,6 +50,8 @@ public class BWebView extends Activity {
 		else if (mUrl != null && mUrl.contains("expertise"))
 			mUrl = mUrl + "?src=mob";
 
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setUpActionBar();
 		findViewById(R.id.loader).setVisibility(View.VISIBLE);
 		findViewById(R.id.webView).setVisibility(View.GONE);
@@ -102,14 +105,13 @@ public class BWebView extends Activity {
 
 	private void setUpActionBar() {
 
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowCustomEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayUseLogoEnabled(true);
-		actionBar.setLogo(R.drawable.ic_launcher);
 
 		SpannableString s = new SpannableString(mTitle);
 		s.setSpan(

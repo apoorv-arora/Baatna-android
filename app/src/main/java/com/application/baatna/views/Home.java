@@ -898,6 +898,7 @@ public class Home extends AppCompatActivity
 		// Intent intent = new Intent(this, WishboxActivity.class);
 		Intent intent = new Intent(this, WishHistoryActivity.class);
 		startActivity(intent);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	@Override
@@ -955,10 +956,12 @@ public class Home extends AppCompatActivity
 	public void aboutus(View view) {
 		Intent intent = new Intent(this, AboutUs.class);
 		startActivity(intent);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	public void feedback(View v) {
 		startActivity(new Intent(this, FeedbackPage.class));
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	public void redeem(View v) {
@@ -1453,7 +1456,7 @@ public class Home extends AppCompatActivity
 
 					if (user != null && wish != null) {
 						String description = getResources().getString(R.string.feed_user_requested,
-								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ");
+								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", wish.getRequiredFor());
 
 						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 						Spannable desc = new SpannableString(description);
