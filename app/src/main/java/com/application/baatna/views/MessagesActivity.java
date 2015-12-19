@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -104,6 +105,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.message_activity);
+
 		mContext = this;
 		zapp = (BaatnaApp) getApplication();
 		prefs = getSharedPreferences(CommonLib.APP_SETTINGS, 0);
@@ -115,7 +117,8 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		currentWish = (Wish) getIntent().getExtras().getSerializable("wish");
 		if (getIntent().getExtras().containsKey("type") && getIntent().getExtras().get("type") instanceof Integer)
 			type = getIntent().getExtras().getInt("type");
-
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setUpActionBar();
 
 		messageText = (EditText) findViewById(R.id.message);
@@ -295,14 +298,14 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 	private void setUpActionBar() {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-		if(Build.VERSION.SDK_INT > 20)
-			actionBar.setElevation(0);
+
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
+		if(Build.VERSION.SDK_INT > 20)
+			actionBar.setElevation(0);
 
-		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflater.inflate(R.layout.messages_action_bar, null);
 		v.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(v);
@@ -322,8 +325,8 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		// }
 		// });
 
-		findViewById(R.id.delete_message).setPadding(width / 20, width / 20, width / 20, width / 20);
-		findViewById(R.id.sort_by_recency).setPadding(width / 20, width / 20, width / 20, width / 20);
+		//findViewById(R.id.delete_message).setPadding(width / 20, width / 20, width / 20, width / 20);
+		//findViewById(R.id.sort_by_recency).setPadding(width / 20, width / 20, width / 20, width / 20);
 
 		// user handle
 		TextView title = (TextView) v.findViewById(R.id.title);
@@ -417,7 +420,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 		case R.id.home_icon_container:
 			onBackPressed();
-
+			break;
 		default:
 			break;
 		}

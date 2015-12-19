@@ -478,6 +478,11 @@ public class ParserJson {
 			if (userObject.has("bio")) {
 				returnUser.setBio(String.valueOf(userObject.get("bio")));
 			}
+			if(userObject.has("rating")){
+				returnUser.setRating(String.valueOf(userObject.get("rating")));
+
+			}
+
 
 		} catch (JSONException e) {
 			e.printStackTrace();

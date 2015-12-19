@@ -2,9 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     android:id="@+id/parent_layout">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:theme="@style/ToolbarBaseTheme"
+        android:layout_marginBottom="10dp"
+        app:contentInsetStart="0dp"
+        android:clickable="true"
+
+        >
+
+
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/bottom_parent"
@@ -12,6 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical" >
+
+
 
         <com.application.baatna.utils.TextViewSemiBold
             android:id="@+id/product_status"

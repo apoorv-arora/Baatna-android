@@ -38,6 +38,7 @@
 
                 >
 
+
                 <ImageView
                     android:id="@+id/drawer_user_info_background_image"
                     android:layout_width="fill_parent"
@@ -56,7 +57,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/drawer_gradient_bottom" />
+
             </FrameLayout>
+
 
             <com.application.baatna.utils.ZCircularImageView
                 android:id="@+id/user_image"
@@ -64,26 +67,38 @@
                 android:layout_height="90dp"
                 android:layout_below="@id/user_info_frame"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="70dp"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
-
                 android:src="@drawable/profile_icon" />
+
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Match Score:"
+            android:textSize="10dp"
+            android:textAllCaps="true"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="left"
+            android:textColor="@color/white"/>
 
         <com.application.baatna.utils.IconView
             android:id="@+id/back_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-
             android:layout_marginTop="30dp"
             android:text="D"
             android:textColor="@color/white"
             android:textSize="@dimen/font_size45" />
 
-        <com.application.baatna.utils.TextViewSemiBold
+        <com.application.baatna.utils.TextViewRegular
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,7 +106,8 @@
             android:layout_centerHorizontal="true"
             android:text="name"
             android:textColor="@color/black"
-            android:textSize="@dimen/size14" />
+            android:textSize="@dimen/size14"
+            />
 
         <com.application.baatna.utils.TextViewRegular
             android:id="@+id/description"
@@ -119,7 +135,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/size14"
             android:padding="@dimen/size10"
-
             android:text="show more"
             android:clickable="true"
             android:onClick="expanddescription"/>

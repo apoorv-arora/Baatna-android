@@ -64,10 +64,10 @@ public class CommonLib {
 	public static final boolean isTestBuild = false;
 
 	public static final String SERVER_PREFIX = "http://";
-	public static final String SERVER_BODY = "192.168.2.50:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.50:8080/BaatnaServer/rest/";
-	//public static final String SERVER_BODY = "192.168.2.50:8080/BaatnaServer/rest/";
-	//public static String SERVER_WITHOUT_VERSION = "http://192.168.2.50:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
+	//public static final String SERVER_BODY = "192.168.43.43:8080/BaatnaServer/rest/";
+	//public static String SERVER_WITHOUT_VERSION = "http://192.168.43.43:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -819,7 +819,7 @@ public class CommonLib {
 		Categories categoryBookSports = new Categories();
 		categoryBookSports.setCategoryId(1);
 		categoryBookSports.setCategory("Books and Sports");
-		categoryBookSports.setCategoryIcon("a");
+		categoryBookSports.setCategoryIcon("Z");
 
 		ArrayList<CategoryItems> categoryItemsList1 = new ArrayList<CategoryItems>();
 		// categoryItemsList1.add(new CategoryItems(1, "Book", -1));
@@ -837,7 +837,7 @@ public class CommonLib {
 		Categories categorygames = new Categories();
 		categorygames.setCategoryId(2);
 		categorygames.setCategory("Games");
-		categorygames.setCategoryIcon("a");
+		categorygames.setCategoryIcon("Y");
 
 		ArrayList<CategoryItems> categoryItemsList2 = new ArrayList<CategoryItems>();
 		// categoryItemsList2.add(new CategoryItems(1, "Play-station", -1));
@@ -873,7 +873,7 @@ public class CommonLib {
 		Categories categoryTravelHoliday = new Categories();
 		categoryTravelHoliday.setCategoryId(4);
 		categoryTravelHoliday.setCategory("Travel and Holiday");
-		categoryTravelHoliday.setCategoryIcon("a");
+		categoryTravelHoliday.setCategoryIcon("X");
 
 		ArrayList<CategoryItems> categoryItemsList4 = new ArrayList<CategoryItems>();
 		// categoryItemsList4.add(new CategoryItems(1, "Helmet", -1));
@@ -907,7 +907,7 @@ public class CommonLib {
 		Categories categoryBakingCooking = new Categories();
 		categoryBakingCooking.setCategoryId(1);
 		categoryBakingCooking.setCategory("Baking and cooking");
-		categoryBakingCooking.setCategoryIcon("a");
+		categoryBakingCooking.setCategoryIcon("d");
 
 		ArrayList<CategoryItems> categoryItemsList6 = new ArrayList<CategoryItems>();
 		// categoryItemsList6.add(new CategoryItems(1, "Blender", -1));
@@ -924,7 +924,7 @@ public class CommonLib {
 		Categories categoryHomeImprovement = new Categories();
 		categoryHomeImprovement.setCategoryId(1);
 		categoryHomeImprovement.setCategory("Home Improvement");
-		categoryHomeImprovement.setCategoryIcon("a");
+		categoryHomeImprovement.setCategoryIcon("W");
 
 		ArrayList<CategoryItems> categoryItemsList7 = new ArrayList<CategoryItems>();
 		// categoryItemsList7.add(new CategoryItems(1, "Drill", -1));

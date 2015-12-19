@@ -34,7 +34,7 @@
             android:layerType="hardware"
             android:onClick="actionBarSelected"
             fab:fab_colorNormal="@color/green_gradient"
-            fab:fab_colorPressed="@color/baatna_primary_dark"
+            fab:fab_colorPressed="@color/action_bar_default"
             fab:fab_icon="@drawable/fab_icon"
             fab:fab_labelStyle="@style/fab_labels_style"
             fab:fab_size="normal"

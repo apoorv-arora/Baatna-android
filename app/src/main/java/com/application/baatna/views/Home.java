@@ -52,6 +52,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -193,13 +195,30 @@ public class Home extends AppCompatActivity
 		feedListView.setDividerHeight(width / 40);
 
 		((RelativeLayout.LayoutParams) headerView.findViewById(R.id.request_icon).getLayoutParams())
-				.setMargins(width / 20 + width / 80+ width/100, 0, 0, 0);
+				.setMargins(width / 20 + width / 80 + width / 100, 0, 0, 0);
 		headerView.findViewById(R.id.make_request_container).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+
 				Intent intent = new Intent(Home.this, NewRequestActivity.class);
+				getSupportActionBar().hide();
+				if (CommonLib.isAndroidL()) {
+					Window window = getWindow();
+					window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+					window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+					window.setStatusBarColor(getResources().getColor(R.color.green_gradient));
+				}
+				//TranslateAnimation anim=new TranslateAnimation(0,0,-getResources().getDimensionPixelOffset(R.dimen.height60),0);
+				//anim.setFillAfter(true);
+				//anim.setDuration(1500);
+				//feedListView.setEnabled(true);
+				//feedListView.startAnimation(anim);
 				startActivityForResult(intent, CommonLib.NEW_REQUEST);
+				overridePendingTransition(0, 0);
+
+
 			}
 		});
 
@@ -207,7 +226,9 @@ public class Home extends AppCompatActivity
 		findViewById(R.id.feedListView).setVisibility(View.GONE);
 		refreshFeed();
 
+
 		feedListView.setOnScrollListener(new OnScrollListener() {
+
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -357,7 +378,10 @@ public class Home extends AppCompatActivity
 		// ATTENTION: This was auto-generated to implement the App Indexing API.
 		// See https://g.co/AppIndexing/AndroidStudio for more information.
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
 	}
+
+
 
 	private BroadcastReceiver mFeedReceived = new BroadcastReceiver() {
 
@@ -388,6 +412,7 @@ public class Home extends AppCompatActivity
 		// ((FABControl)
 		// findViewById(R.id.multiple_actions)).setOnFloatingActionsMenuUpdateListener(this);
 		// overlay behind FAB
+
 		mFABOverlay = findViewById(R.id.fab_overlay);
 		mFABOverlay.setOnClickListener(new OnClickListener() {
 
@@ -400,6 +425,8 @@ public class Home extends AppCompatActivity
 
 		showFAB(true);
 	}
+
+
 
 	private void toggleFAB() {
 		// ((FABControl) findViewById(R.id.multiple_actions)).toggle();
@@ -728,6 +755,14 @@ public class Home extends AppCompatActivity
 
 	@Override
 	public void onResume() {
+		getSupportActionBar().show();
+		if(CommonLib.isAndroidL())
+		{Window window = getWindow();
+			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+			window.setStatusBarColor(getResources().getColor(R.color.action_bar_default));
+		}
 		try {
 			super.onResume();
 
@@ -1007,6 +1042,7 @@ public class Home extends AppCompatActivity
 	}
 
 	private void setUpMapIfNeeded() {
+
 		if (mMap == null && mMapView != null)
 			mMap = mMapView.getMap();
 		if (mMap != null) {
@@ -1373,6 +1409,8 @@ public class Home extends AppCompatActivity
 			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
 					feedItem.getLatitude(), feedItem.getLongitude());
 
+
+
 			//distance in km
 			distance = (distance / 1000);
 			//if(distance < 5)
@@ -1689,6 +1727,7 @@ public class Home extends AppCompatActivity
 		feedListView.setAdapter(feedListAdapter);
 		feedListView.setOnScrollListener(new OnScrollListener() {
 
+
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 			}
 
@@ -1703,7 +1742,10 @@ public class Home extends AppCompatActivity
 					feedListView.removeFooterView(mListViewFooter);
 				}
 			}
-		});
+
+
+		}
+		);
 	}
 
 	private class LoadModeFeed extends AsyncTask<Integer, Void, Object> {
