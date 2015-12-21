@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ResolveInfo;
@@ -44,6 +45,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -89,7 +91,15 @@ import com.crashlytics.android.Crashlytics;
 import com.facebook.Session;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -186,6 +196,7 @@ public class Home extends AppCompatActivity
 		setUpDrawer();
 		// initialize list view
 		setUpFAB();
+		LocationCheck(mContext);
 
 		headerView = View.inflate(this, R.layout.map_header_view, null);
 
@@ -366,6 +377,7 @@ public class Home extends AppCompatActivity
 			public void onClick(View v) {
 				feedListAdapter.notifyDataSetChanged();
 				feedListView.smoothScrollToPosition(0);
+
 				((TextView) findViewById(R.id.txt_new_feeds)).setVisibility(View.GONE);
 
 			}
@@ -422,8 +434,8 @@ public class Home extends AppCompatActivity
 			}
 		});
 		mFABOverlay.setClickable(false);
-
-		showFAB(true);
+		//View fab=findViewById(R.id.fab_post_request);
+		//showFAB(true);
 	}
 
 
@@ -434,15 +446,20 @@ public class Home extends AppCompatActivity
 
 	// makes FAB visible.
 	public void showFAB(boolean delayed) {
+		findViewById(R.id.fab_post_request).animate().translationY(0);
 
 		if (!mFABVisible) {
 			mFABVisible = true;
 
-			findViewById(R.id.fab_post_request).setVisibility(View.VISIBLE);
+
 
 			if (delayed) {
 				ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
 						.setDuration(250).setInterpolator(new AccelerateInterpolator()).setStartDelay(700);
+
+				//final Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fab_animate_in);
+				findViewById(R.id.fab_post_request).setVisibility(View.VISIBLE); //It has to be invisible before here
+				//findViewById(R.id.fab_post_request).startAnimation(mAnimation);
 				// required | dont remove
 				animator.setListener(new AnimatorListener() {
 
@@ -567,9 +584,11 @@ public class Home extends AppCompatActivity
 	// makes FAB gone.
 	public void hideFAB() {
 
+		findViewById(R.id.fab_post_request).animate().translationY(getResources().getDimensionPixelOffset(R.dimen.height60));
+
 		if (mFABVisible) {
 			mFABVisible = false;
-
+			//findViewById(R.id.fab_post_request).setVisibility(View.GONE);
 			ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(0).scaleY(0)
 					.setDuration(50).setStartDelay(0).setInterpolator(new AccelerateInterpolator());
 
@@ -943,11 +962,74 @@ public class Home extends AppCompatActivity
 
 	@Override
 	public void locationNotEnabled() {
+
+
 	}
 
 	@Override
 	public void onLocationTimedOut() {
 	}
+
+	public void LocationCheck(Context context)
+	{
+		GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
+				.addApi(LocationServices.API).build();
+		googleApiClient.connect();
+
+		LocationRequest locationRequest = LocationRequest.create();
+		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		locationRequest.setInterval(10000);
+		locationRequest.setFastestInterval(10000 / 2);
+
+		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+		builder.setAlwaysShow(true);
+
+		PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+		result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+			@Override
+			public void onResult(LocationSettingsResult result) {
+				final Status status = result.getStatus();
+				switch (status.getStatusCode()) {
+					case LocationSettingsStatusCodes.SUCCESS:
+						Log.i("a", "All location settings are satisfied.");
+						break;
+					case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+						Log.i("b", "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+
+						try {
+							// Show the dialog by calling startResolutionForResult(), and check the result
+							// in onActivityResult().
+							status.startResolutionForResult(Home.this,1000);
+						} catch (IntentSender.SendIntentException e) {
+							Log.i("c", "PendingIntent unable to execute request.");
+						}
+						break;
+					case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+						Log.i("d", "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
+						break;
+				}
+			}
+		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+// Check for the integer request code originally supplied to startResolutionForResult().
+			case 1000:
+				switch (resultCode) {
+					case Activity.RESULT_OK:
+						break;
+					case Activity.RESULT_CANCELED:
+						LocationCheck(mContext);
+						Toast.makeText(mContext, "Please enable location services",
+								Toast.LENGTH_LONG).show();//keep asking if imp or do whatever
+						break;
+				}
+				break;
+		}
+	}
+
 
 	@Override
 	public void onNetworkError() {
@@ -1336,6 +1418,7 @@ public class Home extends AppCompatActivity
 			ImageView imageView;
 			RelativeLayout feed_item_container;
 			RelativeLayout feed_item;
+			TextView descriptiontextview;
 			// RoundedImageView userImage;
 		}
 		@Override
@@ -1376,6 +1459,8 @@ public class Home extends AppCompatActivity
 				viewHolder.decline = (TextView) v.findViewById(R.id.decline_button);
 				viewHolder.action_container = (LinearLayout) v.findViewById(R.id.action_container);
 				viewHolder.imageView = (ImageView) v.findViewById(R.id.user_image);
+				if(type==0)
+				viewHolder.descriptiontextview=(TextView)v.findViewById(R.id.description_text_view);
 				v.setTag(viewHolder);
 			}
 			if (position == 0) {
@@ -1395,6 +1480,8 @@ public class Home extends AppCompatActivity
 			final Wish wish = feedItem.getWish();
 
 			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getTimestamp()));
+			if(type==0)
+			viewHolder.descriptiontextview.setVisibility(View.GONE);
 
 			viewHolder.imageView.setOnClickListener(new OnClickListener() {
 
@@ -1412,7 +1499,7 @@ public class Home extends AppCompatActivity
 			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
 					feedItem.getLatitude(), feedItem.getLongitude());
 
-
+			final TextView descriptionTextView = viewHolder.descriptiontextview;
 
 			//distance in km
 			distance = (distance / 1000);
@@ -1449,6 +1536,7 @@ public class Home extends AppCompatActivity
 					break;
 
 				case CommonLib.FEED_TYPE_NEW_REQUEST:
+
 					//viewHolder.feed_item.setLayoutParams(new LinearLayout.LayoutParams(width/80, getResources().getDimensionPixelOffset(R.dimen.height125)));
 					//v.getLayoutParams().height= R.dimen.height125;
 					//v.setLayoutParams(new LinearLayout.LayoutParams(width,getResources().getDimensionPixelOffset(R.dimen.height125)));
@@ -1478,50 +1566,36 @@ public class Home extends AppCompatActivity
 
 								@Override
 								public void onClick(View v) {
-									if (((LinearLayout) v.getParent()).getChildAt(1) == null) {
+									if (((LinearLayout) v.getParent()).getChildAt(1).getVisibility()==View.GONE) {
 										if (feedItem != null && feedItem.getWish() != null
 												&& feedItem.getWish().getDescription() != null) {
 
 											String description = feedItem.getWish().getDescription();
 
-											TextView descriptionTextView = new TextView(Home.this);
+
 											LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 													LinearLayout.LayoutParams.WRAP_CONTENT);
 
-											//coversion of px to dp
-							/*int padding_in_dp = 10;
-							final float scale = getResources().getDisplayMetrics().density;
-							int padding_in_px = (int) (padding_in_dp * scale + 0.5f);*/
 
 
 											params.setMargins(width / 40, 0, width / 40, 0);
-											descriptionTextView.setLayoutParams(params);
-											//ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(descriptionTextView.getLayoutParams());
-											//marginParams.setMargins(50, 50, 50, 50);
-
+											descriptionTextView.setVisibility(View.VISIBLE);
 											descriptionTextView.setText(description);
 											descriptionTextView.setTypeface(CommonLib.getTypeface(getContext(), CommonLib.Regular));
 											descriptionTextView.setPadding(width / 20, width / 20, width / 20, width / 20);
 											descriptionTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.height14));
-											//descriptionTextView.setTextSize(pxFromDp(14, Home.this));
+											descriptionTextView.setLayoutParams(params);
 
-							/*int fontsize = (int) (14 * scale + 0.5f);
-							descriptionTextView.setTextSize(fontsize);
-							int linespacing = 21;
-							descriptionTextView.setLineSpacing(linespacing,1);
-
-							int pixels = (int) (125 * scale + 0.5f);
-							descriptionTextView.setMinHeight(pixels);*/
 											descriptionTextView.setBackgroundColor(getResources().getColor(R.color.white));
-											((LinearLayout) v.getParent()).addView(descriptionTextView);
+											//((LinearLayout) v.getParent()).addView(descriptionTextView);
 
 
 											descriptionPos = position;
 										}
 									} else {
-										if (((LinearLayout) v.getParent()).getChildAt(1) != null
+										if (((LinearLayout) v.getParent()).getChildAt(1).getVisibility() == View.VISIBLE
 												&& ((LinearLayout) v.getParent()).getChildAt(1) instanceof TextView)
-											((LinearLayout) v.getParent()).removeViewAt(1);
+											((LinearLayout) v.getParent()).getChildAt(1).setVisibility(View.GONE);
 									}
 
 								}
@@ -1731,12 +1805,17 @@ public class Home extends AppCompatActivity
 		feedListView.setOnScrollListener(new OnScrollListener() {
 
 
+
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 			}
 
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if(feedListView.canScrollVertically(-1))
+					showFAB(true);
+				else hideFAB();
 				if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount - 1 < mWishesTotalCount
 						&& !loading && mListViewFooter != null) {
+
 					if (feedListView.getFooterViewsCount() == 1) {
 						loading = true;
 						new LoadModeFeed().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);

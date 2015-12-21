@@ -113,5 +113,13 @@
         </RelativeLayout>
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/description_text_view"
+        android:visibility="gone"
+
+       />
+
 
 </LinearLayout>
