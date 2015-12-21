@@ -226,7 +226,8 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 				if (result instanceof User) {
 					user = (User) result;
 					Log.e("user rating",user.getRating());
-					((TextView)findViewById(R.id.rating)).setText(user.getRating());
+					//((TextView)findViewById(R.id.rating)).setText(user.getRating());
+					((ProgressBar)findViewById(R.id.wish_progress)).setProgress(75);
 //					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
 //					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "profile", width, width, false);
 //					((TextView) findViewById(R.id.name)).setText(user.getUserName());
