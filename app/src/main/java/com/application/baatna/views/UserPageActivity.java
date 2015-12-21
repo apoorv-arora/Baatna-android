@@ -650,6 +650,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 						.setMargins(width / 40, 0, width / 40, 0);
 				viewHolder.accept.setPadding(width / 20, 0, width / 20, 0);
 				viewHolder.decline.setPadding(width / 20, 0, width / 20, 0);
+				viewHolder.time.setText(CommonLib.findDateDifference(wish.getTimeOfPost()));
 
 				//viewHolder.imageView.setVisibility(View.GONE);
 
