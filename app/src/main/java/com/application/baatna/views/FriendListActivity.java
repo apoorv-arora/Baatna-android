@@ -72,7 +72,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 	private FriendsAdapter mAdapter;
 	private ListView feedListView;
 	private int width;
-
+	SearchView searchView;
 	private BaatnaApp zapp;
 
 	@Override
@@ -93,6 +93,8 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 		refreshView();
 
 
+
+
 		UploadManager.addCallback(this);
 
 		feedListView = (ListView) findViewById(R.id.feedListView);
@@ -103,7 +105,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.option_menu, menu);
-		final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
+		searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search));
 		SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		searchView.animate();
@@ -131,7 +133,10 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 
 
 
+
+
 		};
+
 		searchView.setOnQueryTextListener(textChangeListener);
 
 		return super.onCreateOptionsMenu(menu);
@@ -184,8 +189,15 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 
 	@Override
 	public void onBackPressed() {
+		if(!searchView.isIconified()){
+
+			searchView.onActionViewCollapsed();  //collapse your ActionView
+			searchView.setQuery("",false);       //clears your query without submit
+
+		}
+		else{
 		super.onBackPressed();
-		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);}
 	}
 
 	@Override

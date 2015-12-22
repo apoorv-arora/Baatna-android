@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -104,6 +105,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.message_activity);
+
 		mContext = this;
 		zapp = (BaatnaApp) getApplication();
 		prefs = getSharedPreferences(CommonLib.APP_SETTINGS, 0);
@@ -115,7 +117,8 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		currentWish = (Wish) getIntent().getExtras().getSerializable("wish");
 		if (getIntent().getExtras().containsKey("type") && getIntent().getExtras().get("type") instanceof Integer)
 			type = getIntent().getExtras().getInt("type");
-
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+		setSupportActionBar(toolbar);
 		setUpActionBar();
 
 		messageText = (EditText) findViewById(R.id.message);
@@ -189,28 +192,45 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 			// subtitle.setText("Offered YOU A "+ currentWish.getTitle());
 			//set background
 			setFragmentBackground();
+			String Text=" Product Received";
+
 			if (currentWish.getStatus() == CommonLib.STATUS_OFFERED) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView) findViewById(R.id.product_status)).setText("Product received");
+				((TextView) findViewById(R.id.product_status)).setText(Text.toUpperCase());
+				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_received_color));
+				((TextView) findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_received_color));
+
 			} else if (currentWish.getStatus() == CommonLib.STATUS_RECEIVED) {
 				// check if the product is received
 			} else if (currentWish.getStatus() == CommonLib.STATUS_ACTIVE) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView) findViewById(R.id.product_status)).setText("Product received");
+				((TextView) findViewById(R.id.product_status)).setText(Text);
+				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_received_color));
+				((TextView)findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_received_color));
 			} else {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.GONE);
 			}
 		} else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
 			// subtitle.setText("REQUESTED FOR A "+ currentWish.getTitle());
+			String Text="Product Offered";
+
 			if (currentWish.getStatus() == CommonLib.STATUS_OFFERED) {
 				// check if this user is in the accepted list, if it is, make
 				// the view gone, else visible
 			} else if (currentWish.getStatus() == CommonLib.STATUS_RECEIVED) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView) findViewById(R.id.product_status)).setText("Product offered");
+				((TextView) findViewById(R.id.product_status)).setText(Text.toUpperCase());
+				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_offered_color));
+				((TextView)findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_offered_color));
+
+
 			} else if (currentWish.getStatus() == CommonLib.STATUS_ACTIVE) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
-				((TextView) findViewById(R.id.product_status)).setText("Product offered");
+				((TextView) findViewById(R.id.product_status)).setText(Text.toUpperCase());
+				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_offered_color));
+				((TextView)findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_offered_color));
+
+
 			} else {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.GONE);
 			}
@@ -295,14 +315,14 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 	private void setUpActionBar() {
 		android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-		if(Build.VERSION.SDK_INT > 20)
-			actionBar.setElevation(0);
+
 		actionBar.setDisplayShowCustomEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
+		if(Build.VERSION.SDK_INT > 20)
+			actionBar.setElevation(0);
 
-		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflater.inflate(R.layout.messages_action_bar, null);
 		v.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(v);
@@ -322,8 +342,8 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		// }
 		// });
 
-		findViewById(R.id.delete_message).setPadding(width / 20, width / 20, width / 20, width / 20);
-		findViewById(R.id.sort_by_recency).setPadding(width / 20, width / 20, width / 20, width / 20);
+		//findViewById(R.id.delete_message).setPadding(width / 20, width / 20, width / 20, width / 20);
+		//findViewById(R.id.sort_by_recency).setPadding(width / 20, width / 20, width / 20, width / 20);
 
 		// user handle
 		TextView title = (TextView) v.findViewById(R.id.title);
@@ -417,7 +437,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 		case R.id.home_icon_container:
 			onBackPressed();
-
+			break;
 		default:
 			break;
 		}

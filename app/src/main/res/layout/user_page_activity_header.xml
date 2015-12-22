@@ -30,6 +30,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true" >
 
+
+
+
             <FrameLayout
                 android:id="@+id/user_info_frame"
                 android:layout_width="fill_parent"
@@ -37,6 +40,7 @@
                 android:paddingBottom="30dp"
 
                 >
+
 
                 <ImageView
                     android:id="@+id/drawer_user_info_background_image"
@@ -56,34 +60,86 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/drawer_gradient_bottom" />
+
             </FrameLayout>
 
             <com.application.baatna.utils.ZCircularImageView
                 android:id="@+id/user_image"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:layout_below="@id/user_info_frame"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="70dp"
                 android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
+
 
                 android:src="@drawable/profile_icon" />
+
+
+
         </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/wish_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:indeterminate="false"
+            android:layout_marginTop="60dp"
+            android:layout_centerHorizontal="true"
+            android:progress="75"
+            android:max="100"
+            android:secondaryProgress="100"
+            android:progressDrawable="@drawable/ring_progress_bar" />
+        <com.application.baatna.utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="% MATCH SCORE"
+            android:layout_marginTop="100dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:id="@+id/matchscore"
+            />
+        <com.application.baatna.utils.TextViewSemiBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rating"
+            android:layout_toLeftOf="@+id/matchscore"
+            android:text="75"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:layout_marginTop="100dp"
+
+            />
+
+        <com.application.baatna.utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="YOUR RATING"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+
+            />
+
+
+
 
         <com.application.baatna.utils.IconView
             android:id="@+id/back_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-
             android:layout_marginTop="30dp"
             android:text="D"
             android:textColor="@color/white"
             android:textSize="@dimen/font_size45" />
 
-        <com.application.baatna.utils.TextViewSemiBold
+
+
+        <com.application.baatna.utils.TextViewRegular
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,13 +147,39 @@
             android:layout_centerHorizontal="true"
             android:text="name"
             android:textColor="@color/black"
-            android:textSize="@dimen/size14" />
+            android:textSize="@dimen/size14"
+            />
+
+        <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:layout_centerHorizontal="true"
+
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="2.0" />
+
+        <TextView
+            android:id="@+id/ratingsubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ratingBar"
+            android:layout_alignTop="@id/ratingBar"
+            android:layout_marginTop="14dp"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:background="@color/green_gradient"
+            android:padding="@dimen/size5"
+            android:textSize="@dimen/size10"/>
+
 
         <com.application.baatna.utils.TextViewRegular
             android:id="@+id/description"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/name"
+            android:layout_below="@id/ratingBar"
             android:layout_centerHorizontal="true"
             android:ellipsize="end"
             android:textColor="@color/black"
@@ -119,7 +201,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/size14"
             android:padding="@dimen/size10"
-
             android:text="show more"
             android:clickable="true"
             android:onClick="expanddescription"/>

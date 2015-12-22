@@ -34,11 +34,10 @@
 
     </style>
     
-    <style name="ZomatoMessageTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="ZomatoMessageTheme" parent="ZomatoHomeBaseTheme">
 
         <item name="colorPrimary">@color/white</item>
 
-        <item name="android:homeAsUpIndicator">@drawable/backarrow_androiddb</item>
     </style>
 
     <style name="ZomatoActionBarThemeDefault" parent="android:Theme.Holo.Light">
@@ -103,6 +102,7 @@
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:alertDialogTheme">@style/Theme.AppCompat.Light.Dialog.Alert</item>
     </style>
 
     <style name="ToolbarBaseTheme" parent="Theme.AppCompat">

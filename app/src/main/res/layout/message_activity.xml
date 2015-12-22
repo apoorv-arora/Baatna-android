@@ -2,9 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     android:id="@+id/parent_layout">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:theme="@style/ToolbarBaseTheme"
+        android:layout_marginBottom="10dp"
+        app:contentInsetStart="0dp"
+        android:clickable="true"
+
+        >
+
+
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/bottom_parent"
@@ -13,13 +32,38 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical" >
 
+
+        <LinearLayout
+             android:layout_width="fill_parent"
+            android:orientation="horizontal"
+            android:layout_height="@dimen/height60"
+            android:gravity="center_vertical"
+            >
+
+            <com.application.baatna.utils.IconView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/messages_tick_icon"
+                android:background="@color/white"
+                android:text="G"
+                android:textSize="@dimen/size16"
+                android:gravity="right"
+                android:textColor="@color/font_color"
+                />
+
         <com.application.baatna.utils.TextViewSemiBold
             android:id="@+id/product_status"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/height60"
-            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:gravity="left"
             android:clickable="true"
-            android:textColor="@color/font_color" />
+            android:textColor="@color/font_color"
+            android:textSize="@dimen/size16"
+            />
+
+            </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bottom_container"

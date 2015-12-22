@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    >
 
     <!--  
     <com.application.baatna.utils.fab.FABControl
@@ -34,11 +35,12 @@
             android:layerType="hardware"
             android:onClick="actionBarSelected"
             fab:fab_colorNormal="@color/green_gradient"
-            fab:fab_colorPressed="@color/baatna_primary_dark"
+            fab:fab_colorPressed="@color/action_bar_default"
             fab:fab_icon="@drawable/fab_icon"
             fab:fab_labelStyle="@style/fab_labels_style"
             fab:fab_size="normal"
-            fab:fab_title="@string/post_request" />
+            fab:fab_title="@string/post_request"
+            android:visibility="gone"/>
    <!-- </com.application.baatna.utils.fab.FABControl>-->
 
 </RelativeLayout>
