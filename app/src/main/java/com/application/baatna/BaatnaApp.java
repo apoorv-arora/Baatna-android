@@ -95,7 +95,6 @@ public class BaatnaApp extends Application {
 			edit.commit();
 
 			deleteDatabase("CACHE");
-			deleteDatabase("DRAFTTABLE");
 			deleteDatabase("LOCATIONSDB");
 			deleteDatabase("USERSDB");
 			deleteDatabase("UPLOADDB");
