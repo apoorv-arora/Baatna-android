@@ -93,6 +93,9 @@
     <style name="ZomatoActionBarHomeTheme" parent="@style/ZomatoHomeBaseTheme">
         <item name="colorPrimary">@color/action_bar_default</item>
     </style>
+    <style name="GreenStatusBar" parent="@style/ZomatoHomeBaseTheme">
+        <item name="colorPrimary">@color/green_gradient</item>
+    </style>
 
     <style name="ZomatoHomeBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/action_bar_default</item>

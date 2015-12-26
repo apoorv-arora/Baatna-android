@@ -99,7 +99,7 @@
     <dimen name="font_size50">50dp</dimen>
     <dimen name="font_size55">55dp</dimen>
     <dimen name="font_size60">60dp</dimen>
-    
+    <dimen name="font_size65">65dp</dimen>
       <!-- Material dimensions -->
     <item name="minimum_clickable_area" type="dimen">60dp</item>
     <item name="minimum_clickable_area_small" type="dimen">48dp</item>

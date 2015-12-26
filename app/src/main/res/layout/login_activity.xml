@@ -38,7 +38,8 @@
         android:gravity="center"
         android:onClick="facebookAction"
         android:orientation="horizontal"
-        android:visibility="gone" >
+        android:visibility="gone"
+        >
 
         <LinearLayout
             android:id="@+id/login_page_facebook_icon_container"
@@ -57,26 +58,35 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/size16" />
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/join_in_container"
+            >
         <com.application.baatna.utils.TextViewSemiBold
             android:id="@+id/login_page_layout_connect_using_facebook_text"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/size14" />
+            android:textSize="@dimen/size14"
+            />
+
+        <View
+            android:id="@+id/layout_login_separator"
+            android:layout_width="wrap_content"
+            android:layout_height=".5dp"
+            android:gravity="center"
+            android:background="@color/white"
+            android:visibility="gone"
+            />
+        </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:id="@+id/layout_login_separator"
-        android:layout_width="wrap_content"
-        android:layout_height=".5dp"
-        android:layout_below="@id/login_page_layout_connect_using_facebook"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:background="@color/white"
-        android:visibility="gone" />
+
 
     <!--
     <com.application.baatna.utils.TextViewBold

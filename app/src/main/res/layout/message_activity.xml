@@ -47,9 +47,10 @@
                 android:id="@+id/messages_tick_icon"
                 android:background="@color/white"
                 android:text="G"
-                android:textSize="@dimen/size16"
+                android:textSize="@dimen/size40"
                 android:gravity="right"
                 android:textColor="@color/font_color"
+                android:layout_marginRight="10dp"
                 />
 
         <com.application.baatna.utils.TextViewSemiBold

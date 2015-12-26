@@ -483,8 +483,7 @@ public class ParserJson {
 				returnUser.setBio(String.valueOf(userObject.get("bio")));
 			}
 			if(userObject.has("rating")){
-				returnUser.setRating(String.valueOf(userObject.get("rating")));
-
+				returnUser.setRating(userObject.getDouble("rating"));
 			}
 
 
@@ -696,8 +695,9 @@ public class ParserJson {
 		return response;
 	}
 
-	public static boolean parse_AppConfig(InputStream is) throws JSONException {
-		boolean response = true;
+	public static Object[] parse_AppConfigandRating(InputStream is) throws JSONException {
+		Object[] response = new Object[2];
+		response[1]=true;
 
 		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
 
@@ -705,10 +705,29 @@ public class ParserJson {
 
 			if (responseObject.getString("status").equals("success")) {
 
-				if (responseObject.has("response") && responseObject.get("response") instanceof Boolean) {
-					response = responseObject.getBoolean("response");
+				if (responseObject.has("response") && responseObject.get("response") instanceof JSONObject) {
+					JSONObject responseJson = responseObject.getJSONObject("response");
+
+					if (responseJson.has("rating_list") && responseJson.get("rating_list") instanceof JSONArray) {
+						ArrayList<User> userList = new ArrayList<User>();
+						JSONArray userArr = responseJson.getJSONArray("rating_list");
+						for (int i = 0; i < userArr.length(); i++) {
+							JSONObject userJson = userArr.getJSONObject(i);
+							if (userJson.has("user") && userJson.get("user") instanceof JSONObject) {
+								User user= parse_User(userJson.getJSONObject("user"));
+								userList.add(user);
+							}
+						}
+						User user=new User();
+						userList.add(user);
+						response[0] = userList;
+					}
+					if (responseJson.has("update") && responseJson.get("update") instanceof Boolean) {
+						response[1] = responseJson.getBoolean("update");
+					}
 				}
 			}
+
 		}
 		return response;
 	}

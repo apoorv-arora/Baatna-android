@@ -68,11 +68,11 @@
     <string name="roll_number_hint">Invide code</string>
     <string name="select_an_option">Select an option</string>
     <string name="verifying_creds">Verifying credentials..</string>
-    <string name="feed_user_joined">%1$s joined your neighborhood</string>
-    <string name="feed_user_requested">%1$swants to borrow a \n%2$s for %3$d days.</string>
-    <string name="feed_requested_fulfilled">%1$s was offered %2$s by %3$s.</string>
-    <string name="message_user_requested">%1$s offered you a \n%2$s.</string>
-    <string name="message_requested_fulfilled">%2$s wants to borrow a \n%1$s.</string>
+    <string name="feed_user_joined">%1$sjoined your neighborhood</string>
+    <string name="feed_user_requested">%1$swants to borrow a \n%2$sfor %3$d days.</string>
+    <string name="feed_requested_fulfilled">%1$swas offered %2$sby %3$s.</string>
+    <string name="message_user_requested">%1$soffered you a \n%2$s.</string>
+    <string name="message_requested_fulfilled">%2$swants to borrow a \n%1$s.</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="make_new_request">Make a new request</string>
@@ -110,5 +110,8 @@
     <string name="later">Later</string>
     <string name="message">Message</string>
     <string name="wish_title_offered_hint">You offered\n</string>
+    <string name="dialog_request_accepted">Your request has been accepted for %1$s days</string>
+    <string name="dialog_change_time_duration">Do you want to change the duration?</string>
+    <string name="rate_your_experience">How would you like to rate your \nexperience with</string>
 
 </resources>

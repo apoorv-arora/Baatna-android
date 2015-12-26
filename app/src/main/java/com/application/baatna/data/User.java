@@ -18,7 +18,7 @@ public class User implements Serializable{
 	private String bio = "";
 	private String fbId = "";
 	private String contact = "";
-	private String rating = "";
+	private Double rating;
 
 	public double getLatitude() {
 		return latitude;
@@ -92,14 +92,13 @@ public class User implements Serializable{
 		this.bio = bio;
 	}
 
-	public String getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(String rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
-
 
 	public String getFbId() {
 		return fbId;

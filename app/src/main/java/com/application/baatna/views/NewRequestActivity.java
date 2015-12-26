@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +63,7 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 		actionBar.setDisplayHomeAsUpEnabled(false);
 		if(Build.VERSION.SDK_INT > 20)
 			actionBar.setElevation(0);
+
 		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View actionBarCustomView = inflator.inflate(R.layout.green_action_bar, null);
 		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
@@ -76,9 +76,12 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
 
-		((RelativeLayout.LayoutParams) actionBarCustomView.findViewById(R.id.back_icon).getLayoutParams())
-				.setMargins(width / 20 + width / 80 + width / 100, 0, 0, 0);
-		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
+
+	actionBarCustomView.findViewById(R.id.back_icon).setPadding(width / 20 + width / 80 + width / 100, 0, 0, 0);
+		actionBarCustomView.findViewById(R.id.post_icon).setPadding(width / 20 + width / 80 + width / 100, 0, width / 20 + width / 80 + width / 100, 0);
+		//((LinearLayout.LayoutParams) actionBarCustomView.findViewById(R.id.post_icon).getLayoutParams())
+				//.setMargins(width / 20 + width / 80 + width / 100, 0, 0, 0);
+		//actionBarCustomView.findViewById(R.id.title).setPadding(width / 10+width/20, 0, width / 10+width/20, 0);
 		title.setText(s);
 		title.setAllCaps(true);
 

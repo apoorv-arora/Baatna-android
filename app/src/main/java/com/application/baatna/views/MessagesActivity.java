@@ -421,7 +421,9 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 	@Override
 	public void onBackPressed() {
+
 		super.onBackPressed();
+
 		try {
 			InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(findViewById(R.id.message).getWindowToken(), 0);

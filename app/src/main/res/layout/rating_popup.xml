@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <com.application.baatna.utils.TextViewSemiBold
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rate_your_experience"
+        android:textSize="@dimen/size14"
+        android:gravity="center"
+        android:layout_margin="20dp"
+
+        />
+    <com.application.baatna.utils.ZCircularImageView
+        android:layout_width="@dimen/size60"
+        android:layout_height="@dimen/size60"
+        android:id="@+id/image"/>
+    <com.application.baatna.utils.TextViewSemiBold
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Joanna"
+        android:textSize="@dimen/size14"
+        android:layout_margin="10dp"
+        android:id="@+id/name"
+        />
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="@style/RatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="2.0"
+
+        />
+
+</LinearLayout>

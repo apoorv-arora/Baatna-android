@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -205,6 +206,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 
 		if (resultCode != ConnectionResult.SUCCESS) {
 
+
 			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
 				CommonLib.ZLog("google-play-resultcode", resultCode);
 				if (resultCode == 2 && !isFinishing()) {
@@ -222,6 +224,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 		} else {
 
 			gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+
 			regId = getRegistrationId(context);
 
 			if (hardwareRegistered == 0) {
@@ -231,10 +234,11 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 					Editor editor = prefs.edit();
 					editor.putInt("HARDWARE_REGISTERED", 1);
 					editor.commit();
+					hardwareRegistered=1;
 				}
 			}
 
-			if (regId.isEmpty()) {
+			else if (regId.isEmpty()) {
 				CommonLib.ZLog("GCM", "RegID is empty");
 				registerInBackground();
 			} else {
@@ -340,6 +344,16 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 	}
 
 	public void onCoordinatesIdentified(Location loc) {
+		if(loc!=null){
+		UploadManager.updateLocation(prefs.getString("access_token", ""),loc.getLatitude(), loc.getLongitude());
+		float lon = (float) loc.getLatitude();
+		float lat = (float)loc.getLongitude();
+		Log.e("lat lon",lat+" "+lon);
+
+		Editor editor = prefs.edit();
+		editor.putFloat("lat", lat);
+		editor.putFloat("lon", lon);
+		editor.commit();}
 	}
 
 	public void onLocationIdentified() {
@@ -391,8 +405,8 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 		// fb button
 		View fb_cont = findViewById(R.id.login_page_layout_connect_using_facebook);
 		fb_cont.getLayoutParams().height = buttonHeight;
-		((RelativeLayout.LayoutParams) fb_cont.getLayoutParams()).setMargins(width / 20, height / 2 + height / 4,
-				width / 10, width / 80);
+		((RelativeLayout.LayoutParams) fb_cont.getLayoutParams()).setMargins(0, height / 2 + height / 4,
+				0, width / 80);
 		((LinearLayout.LayoutParams) findViewById(R.id.login_page_facebook_icon_container).getLayoutParams())
 				.setMargins(0, 0, width / 20, 0);
 		findViewById(R.id.login_page_facebook_icon_container).getLayoutParams().width = buttonHeight;
@@ -520,6 +534,8 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 		String regId = prefs.getString("registration_id", "");
 		FacebookConnect facebookConnect = new FacebookConnect(Splash.this, 1, APPLICATION_ID, true, regId);
 		facebookConnect.execute();
+		checkPlayServices();
+
 	}
 
 	@Override
@@ -597,6 +613,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 				// return;
 				// UploadManager.login(email, password);
 				// } else {
+
 
 			}
 		} else if (requestType == CommonLib.LOGIN) {

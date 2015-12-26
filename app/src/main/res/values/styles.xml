@@ -21,6 +21,14 @@
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/zdark</item>
     </style>
-    
+
+    <style name="RatingBar" parent="@android:style/Widget.DeviceDefault.RatingBar.Indicator">
+    <item name="android:minHeight">@dimen/height35</item>
+        <item name="android:maxHeight">@dimen/height35</item>
+        <item name="android:isIndicator">false</item>
+
+    </style>
+
+
 
 </resources>

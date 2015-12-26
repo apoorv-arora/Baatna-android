@@ -68,7 +68,8 @@
                 android:textColor="@color/default_font_color"
                 android:textColorHint="@color/default_font_color"
                 android:textSize="@dimen/size16"
-                android:maxLength="30"
+                android:maxLength="2"
+
 
                 />
 

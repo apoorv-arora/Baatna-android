@@ -411,7 +411,7 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 
 			final Wish wish = feedItem.getWish();
 			//setting text to display time
-			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getTimestamp()));
+			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getWish().getTimeOfPost()));
 			//displaying distance
 
 			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),

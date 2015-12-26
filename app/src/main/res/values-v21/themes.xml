@@ -8,11 +8,24 @@
 
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
-
         <!-- specify shared element transitions -->
         <item name="android:windowSharedElementEnterTransition">    @transition/change_image_transform</item>
         <item name="android:windowSharedElementExitTransition">    @transition/change_image_transform</item>
     </style>
+    <style name="GreenStatusBar" parent="@style/ZomatoHomeBaseTheme">
+    <item name="android:colorPrimary">@color/green_gradient</item>
+    <item name="android:colorPrimaryDark">@color/green_gradient</item>
+    <item name="android:colorAccent">@color/action_bar_default</item>
+
+    <!-- enable window content transitions -->
+    <item name="android:windowContentTransitions">true</item>
+    <!-- specify shared element transitions -->
+    <item name="android:windowSharedElementEnterTransition">    @transition/change_image_transform</item>
+    <item name="android:windowSharedElementExitTransition">    @transition/change_image_transform</item>
+</style>
 
 
-</resources>
+
+
+
+    </resources>

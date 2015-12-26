@@ -32,6 +32,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -66,6 +67,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,7 +82,6 @@ import com.application.baatna.mapUtils.Cluster;
 import com.application.baatna.mapUtils.ClusterManager;
 import com.application.baatna.mapUtils.GoogleMapRenderer;
 import com.application.baatna.mapUtils.SimpleRestaurantPin;
-import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.CustomTypefaceSpan;
 import com.application.baatna.utils.RequestWrapper;
@@ -125,15 +126,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+
 public class Home extends AppCompatActivity
-		implements BaatnaLocationCallback, OnFloatingActionsMenuUpdateListener, UploadManagerCallback {
+		implements OnFloatingActionsMenuUpdateListener, UploadManagerCallback {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
 	private int width;
 	public DrawerLayout mDrawerLayout;
 	LayoutInflater inflater;
-
 	// rate us on the play store
 	boolean rateDialogShow = false;
 	private boolean destroyed = false;
@@ -186,7 +188,7 @@ public class Home extends AppCompatActivity
 		inflater = LayoutInflater.from(this);
 		prefs = getSharedPreferences(CommonLib.APP_SETTINGS, 0);
 		zapp = (BaatnaApp) getApplication();
-		zapp.zll.addCallback(this);
+
 		width = getWindowManager().getDefaultDisplay().getWidth();
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
@@ -384,7 +386,14 @@ public class Home extends AppCompatActivity
 		});
 		UploadManager.addCallback(this);
 		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
-		new AppConfig().execute(null, null, null);
+		//UploadManager.updateLocation(prefs.getString("access_token", ""),zapp.lat, zapp.lon);
+		/*float lon = (float) zapp.lon;
+		float lat = (float) zapp.lat;
+		Editor editor = prefs.edit();
+		editor.putFloat("lat", lat);
+		editor.putFloat("lon", lon);
+		editor.commit();*/
+		new AppConfigandRating().execute(null, null, null);
 		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mFeedReceived,
 				new IntentFilter(CommonLib.LOCAL_FEED_BROADCAST_NOTIFICATION));
 		// ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -446,7 +455,7 @@ public class Home extends AppCompatActivity
 
 	// makes FAB visible.
 	public void showFAB(boolean delayed) {
-		findViewById(R.id.fab_post_request).animate().translationY(0);
+
 
 		if (!mFABVisible) {
 			mFABVisible = true;
@@ -454,12 +463,13 @@ public class Home extends AppCompatActivity
 
 
 			if (delayed) {
-				ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
-						.setDuration(250).setInterpolator(new AccelerateInterpolator()).setStartDelay(700);
+			ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
+						.setDuration(250).setInterpolator(new AccelerateInterpolator()).setStartDelay(200);
 
-				//final Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fab_animate_in);
-				findViewById(R.id.fab_post_request).setVisibility(View.VISIBLE); //It has to be invisible before here
-				//findViewById(R.id.fab_post_request).startAnimation(mAnimation);
+//				final Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fab_animate_in);
+//				 //It has to be invisible before here
+//				findViewById(R.id.fab_post_request).startAnimation(mAnimation);
+				findViewById(R.id.fab_post_request).setVisibility(View.VISIBLE);
 				// required | dont remove
 				animator.setListener(new AnimatorListener() {
 
@@ -584,14 +594,14 @@ public class Home extends AppCompatActivity
 	// makes FAB gone.
 	public void hideFAB() {
 
-		findViewById(R.id.fab_post_request).animate().translationY(getResources().getDimensionPixelOffset(R.dimen.height60));
+		//findViewById(R.id.fab_post_request).animate().translationY(getResources().getDimensionPixelOffset(R.dimen.height60));
 
 		if (mFABVisible) {
 			mFABVisible = false;
-			//findViewById(R.id.fab_post_request).setVisibility(View.GONE);
+
 			ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(0).scaleY(0)
 					.setDuration(50).setStartDelay(0).setInterpolator(new AccelerateInterpolator());
-
+			//findViewById(R.id.fab_post_request).setVisibility(View.GONE);
 			animator.setListener(new AnimatorListener() {
 
 				@Override
@@ -926,49 +936,15 @@ public class Home extends AppCompatActivity
 			mMapView.onDestroy();
 		destroyed = true;
 		mDrawerLayout = null;
-		zapp.zll.removeCallback(this);
+
 		zapp.cache.clear();
 		UploadManager.removeCallback(this);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(mFeedReceived);
 		super.onDestroy();
 	}
 
-	@Override
-	public void onCoordinatesIdentified(Location loc) {
-		if (loc != null) {
-			displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), loc.getLatitude(), loc.getLongitude());
-			UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
-			float lon = (float) loc.getLongitude();
-			float lat = (float) loc.getLatitude();
-
-			Editor editor = prefs.edit();
-			editor.putFloat("lat", lat);
-			editor.putFloat("lon", lon);
-			editor.commit();
-		}
-	}
-
-	@Override
-	public void onLocationIdentified() {
-	}
-
-	@Override
-	public void onLocationNotIdentified() {
-	}
-
-	@Override
-	public void onDifferentCityIdentified() {
-	}
-
-	@Override
-	public void locationNotEnabled() {
 
 
-	}
-
-	@Override
-	public void onLocationTimedOut() {
-	}
 
 	public void LocationCheck(Context context)
 	{
@@ -1019,6 +995,19 @@ public class Home extends AppCompatActivity
 			case 1000:
 				switch (resultCode) {
 					case Activity.RESULT_OK:
+						GoogleApiClient googleApiClient = new GoogleApiClient.Builder(mContext)
+								.addApi(LocationServices.API).build();
+						googleApiClient.connect();
+						Location loc = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+						UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
+						displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), loc.getLatitude(), loc.getLongitude());
+						float lon = (float) loc.getLongitude();
+						float lat = (float) loc.getLatitude();
+
+						Editor editor = prefs.edit();
+						editor.putFloat("lat", lat);
+						editor.putFloat("lon", lon);
+						editor.commit();
 						break;
 					case Activity.RESULT_CANCELED:
 						LocationCheck(mContext);
@@ -1031,9 +1020,7 @@ public class Home extends AppCompatActivity
 	}
 
 
-	@Override
-	public void onNetworkError() {
-	}
+
 
 	public void aboutus(View view) {
 		Intent intent = new Intent(this, AboutUs.class);
@@ -1475,6 +1462,7 @@ public class Home extends AppCompatActivity
 
 			final User user = feedItem.getUserIdFirst();
 
+
 			User user2 = feedItem.getUserSecond();
 
 			final Wish wish = feedItem.getWish();
@@ -1482,7 +1470,9 @@ public class Home extends AppCompatActivity
 			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getTimestamp()));
 			if(type==0)
 			viewHolder.descriptiontextview.setVisibility(View.GONE);
-
+			if(feedItems.get(position).getType()==CommonLib.FEED_TYPE_NEW_USER) {
+				v.findViewById(R.id.feed_item).setOnClickListener(null);
+			}
 			viewHolder.imageView.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -1527,8 +1517,8 @@ public class Home extends AppCompatActivity
 						viewHolder.userName.setText(desc);
 //
 
-						viewHolder.accept.setVisibility(View.INVISIBLE);
-						viewHolder.decline.setVisibility(View.INVISIBLE);
+//						viewHolder.accept.setVisibility(View.GONE);
+//						viewHolder.decline.setVisibility(View.G);
 
 						viewHolder.bar
 								.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.feed_joined)));
@@ -1715,8 +1705,8 @@ public class Home extends AppCompatActivity
 					viewHolder.userName.setText(desc);
 
 					viewHolder.bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bt_orange_2)));
-					viewHolder.accept.setVisibility(View.INVISIBLE);
-					viewHolder.decline.setVisibility(View.INVISIBLE);
+//					viewHolder.accept.setVisibility(View.INVISIBLE);
+//					viewHolder.decline.setVisibility(View.INVISIBLE);
 					break;
 
 			}
@@ -2279,7 +2269,7 @@ public class Home extends AppCompatActivity
 	}
 
 	// get institution name list...
-	private class AppConfig extends AsyncTask<Object, Void, Object> {
+	private class AppConfigandRating extends AsyncTask<Object, Void, Object> {
 
 		// execute the api
 		@Override
@@ -2288,7 +2278,7 @@ public class Home extends AppCompatActivity
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
 				url = CommonLib.SERVER + "appConfig/version?";
-				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.APP_CONFIG_VERSION, RequestWrapper.FAV);
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.APP_CONFIG_VERSION_AND_RATING, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;
 
@@ -2303,8 +2293,11 @@ public class Home extends AppCompatActivity
 			if (destroyed)
 				return;
 
-			if (result != null && result instanceof Boolean) {
-				if (!(Boolean) result) {
+
+			if (result != null && result instanceof Object[]) {
+				Object[] response = (Object[]) result;
+				Boolean asd=(Boolean) response[1];
+				if (!(Boolean) response[1]) {
 					// if true show the dialog, else do not show the dialog
 					new AlertDialog.Builder(mContext).setMessage(getResources().getString(R.string.update_message))
 							.setCancelable(false).setPositiveButton(getResources().getString(R.string.update),
@@ -2323,7 +2316,25 @@ public class Home extends AppCompatActivity
 							})
 							.show();
 				}
-			} else {
+
+				if (response[0] instanceof ArrayList<?>) {
+					ArrayList<User> userlist = (ArrayList<User>) response[0];
+
+					if (!userlist.isEmpty()) {
+						for (User user : userlist) {
+							showRatingDialog(user);
+						}
+
+						}
+
+					}
+
+
+				}
+
+			else {
+
+
 			}
 
 		}
@@ -2345,8 +2356,8 @@ public class Home extends AppCompatActivity
 
 		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon + "&zoom=14&size="
 				+ width + "x" + getResources().getDimensionPixelSize(R.dimen.height125)
-				+ "&maptype=roadmap&scale=2&markers=icon:http%3A%2F%2Fwww.zomato.com%2Fimages%2Fresprite_location%2Fpin_res2x.png|scale:2|"
-				+ lat + "," + lon;
+				+ "&maptype=roadmap&scale=2&markers=icon:http://i.imgur.com/Kn5aI2q.png?1"+"|scale:2|"
+				+ lot + "," + lon;
 
 		// CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type,
 		// mapWidth, height, useDiskCache, fastBlur);
@@ -2359,8 +2370,43 @@ public class Home extends AppCompatActivity
 			public void onClick(View v) {
 				Intent intent = new Intent(Home.this, MapActivity.class);
 				startActivity(intent);
+
 			}
 		});
+
+	}
+
+	public void showRatingDialog(User user)
+	{
+
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = this.getLayoutInflater();
+		final View dialogView = inflater.inflate(R.layout.rating_popup, null);
+		dialogBuilder.setView(dialogView);
+		((TextView)dialogView.findViewById(R.id.name)).setText(user.getUserName());
+		ImageView userratingimage =((ImageView)dialogView.findViewById(R.id.image));
+		setImageFromUrlOrDisk(user.getImageUrl(), userratingimage, "profile_pic", width, width, false, false);
+		RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.ratingBar);
+		final float ratedValue=ratingBar.getRating();
+		Drawable progress = ratingBar.getProgressDrawable();
+		DrawableCompat.setTint(progress, R.color.green_gradient);
+		dialogBuilder.setPositiveButton("SUBMIT", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				sendRatingtoBackend(ratedValue);
+			}
+		});
+		dialogBuilder.setNegativeButton("LATER", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog b = dialogBuilder.create();
+		b.show();
+
+
+	}
+	public void sendRatingtoBackend(float rating)
+	{
 
 	}
 
