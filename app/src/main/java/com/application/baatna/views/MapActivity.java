@@ -128,6 +128,7 @@ public class MapActivity extends AppCompatActivity {
 				.setMargins(width / 40, 0, 0, 0);
 		actionBarCustomView.findViewById(R.id.title).setPadding(width / 20, 0, width / 40, 0);
 		title.setText(s);
+		title.setAllCaps(true);
 	}
 
 	private void setUpMapIfNeeded() {
@@ -357,7 +358,7 @@ public class MapActivity extends AppCompatActivity {
 			try {
 				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
 				String url = "";
-				url = CommonLib.SERVER + "user/nearbyusers?";
+				url = CommonLib.SERVER + "user/nearbyusers/?latitude="+zapp.lat+"&longitude="+zapp.lon;
 				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.NEARBY_USERS, RequestWrapper.FAV);
 				CommonLib.ZLog("url", url);
 				return info;

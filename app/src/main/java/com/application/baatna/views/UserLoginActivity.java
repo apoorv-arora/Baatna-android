@@ -1,6 +1,5 @@
 package com.application.baatna.views;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -13,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +40,7 @@ import java.net.URL;
 /**
  * Created by apoorvarora on 16/11/15.
  */
-public class UserLoginActivity extends Activity implements UploadManagerCallback {
+public class UserLoginActivity extends AppCompatActivity implements UploadManagerCallback {
 
     private SharedPreferences prefs;
     private int width;

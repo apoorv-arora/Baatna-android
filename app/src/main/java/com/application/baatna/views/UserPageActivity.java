@@ -24,7 +24,6 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -136,7 +135,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 		if (mAsyncRunning != null)
 			mAsyncRunning.cancel(true);
 		mAsyncRunning = new GetUserDetails().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-		AsyncGetUserRating=new GetUserRating().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+
 
 
 	}
@@ -166,11 +165,14 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 			if (destroyed)
 				return;
 			findViewById(R.id.userpage_progress_container).setVisibility(View.GONE);
-
+			View view=findViewById(R.id.content_container);
 			if (result != null) {
 				if (result instanceof User) {
 					user = (User) result;
-
+					//displaying rating in circle annd match score
+					ProgressBar userRating=(ProgressBar)view.findViewById(R.id.wish_progress);
+					//userRating.setProgress(user.getRating().intValue());
+					((TextView)view.findViewById(R.id.rating)).setText(""+user.getRating().intValue());
 					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
 					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "profile", width, width, false);
 					((TextView) findViewById(R.id.name)).setText(user.getUserName());
@@ -178,7 +180,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 					if(user.getBio().equals(""))
 					{
 						findViewById(R.id.showall).setVisibility(View.GONE);
-						 ((TextView) findViewById(R.id.description)).setMaxLines(0);
+						 //((TextView) findViewById(R.id.description)).setMaxLines(0);
 
 					}
 				}
@@ -197,62 +199,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 		}
 	}
 
-	private class GetUserRating extends AsyncTask<Object, Void, Object> {
 
-		// execute the api
-		@Override
-		protected Object doInBackground(Object... params) {
-			try {
-				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
-				String url = "";
-				url = CommonLib.SERVER + "user/details?user_id=" + userId;
-				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.USER_INFO, RequestWrapper.FAV);
-				CommonLib.ZLog("url", url);
-				return info;
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Object result) {
-			if (destroyed)
-				return;
-			findViewById(R.id.userpage_progress_container).setVisibility(View.GONE);
-
-			if (result != null) {
-				if (result instanceof User) {
-					user = (User) result;
-					Log.e("user rating",user.getRating());
-					//((TextView)findViewById(R.id.rating)).setText(user.getRating());
-					((ProgressBar)findViewById(R.id.wish_progress)).setProgress(75);
-//					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
-//					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "profile", width, width, false);
-//					((TextView) findViewById(R.id.name)).setText(user.getUserName());
-//					((TextView) findViewById(R.id.description)).setText(user.getBio());
-//					if(user.getBio().equals(""))
-//					{
-//						findViewById(R.id.showall).setVisibility(View.GONE);
-//						((TextView) findViewById(R.id.description)).setMaxLines(0);
-//
-//					}
-				}
-			} else {
-//				findViewById(R.id.empty_view).setVisibility(View.GONE);
-//				findViewById(R.id.content_container).setVisibility(View.GONE);
-//				if (CommonLib.isNetworkAvailable(UserPageActivity.this)) {
-//					Toast.makeText(UserPageActivity.this, getResources().getString(R.string.error_try_again),
-//							Toast.LENGTH_SHORT).show();
-//				} else {
-//					Toast.makeText(UserPageActivity.this, getResources().getString(R.string.no_internet_message),
-//							Toast.LENGTH_SHORT).show();
-//				}
-			}
-
-		}
-	}
 
 	private void setListeners() {
 		findViewById(R.id.empty_view_retry_container).setOnClickListener(new View.OnClickListener() {
@@ -299,7 +246,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 
 	private void fixSizes() {
 		findViewById(R.id.name).setPadding(width / 20, width / 20, width / 20, width / 20);
-		findViewById(R.id.description).setPadding(width / 20, width / 20, width / 20, width / 20);
+		findViewById(R.id.description).setPadding(width / 20, 0, width / 20, width / 20);
 		imageView = ((ImageView) findViewById(R.id.user_image));
 		imageViewBlur = (ImageView) findViewById(R.id.drawer_user_info_background_image);
 

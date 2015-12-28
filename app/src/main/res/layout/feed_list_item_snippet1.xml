@@ -23,7 +23,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+               android:visibility="gone">
 
                 <com.application.baatna.utils.IconView
                     android:id="@+id/accept_button"
@@ -82,9 +83,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginTop="@dimen/size10"
-                android:layout_marginRight="20dp"
-                android:layout_toLeftOf="@id/action_container"
+                android:layout_marginRight="82.5dp"
                 android:text="distance"
                 android:textColor="@color/zhl_darkest"
                 android:textSize="@dimen/size12" />
@@ -101,6 +102,7 @@
                 android:layout_marginTop="20dp"
                 android:textColor="@color/font_color"
                 android:textSize="@dimen/size14"
+                android:layout_marginRight="20dp"
 
                 />
 

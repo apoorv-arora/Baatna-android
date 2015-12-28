@@ -33,7 +33,8 @@
         android:layout_height="@dimen/height60"
         android:layout_alignParentLeft="true"
         android:background="@drawable/whitebuttoncustomback"
-        android:onClick="actionBarSelected" >
+        android:onClick="actionBarSelected"
+        >
 
         <com.application.baatna.utils.IconView
             android:id="@+id/back_icon"

@@ -110,6 +110,7 @@
             android:textSize="12dp"
             android:layout_marginTop="100dp"
 
+
             />
 
         <com.application.baatna.utils.TextViewRegular
@@ -150,36 +151,15 @@
             android:textSize="@dimen/size14"
             />
 
-        <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-            android:layout_below="@+id/name"
-            android:layout_centerHorizontal="true"
 
-        android:numStars="5"
-        android:stepSize="1.0"
-        android:rating="2.0" />
 
-        <TextView
-            android:id="@+id/ratingsubmit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/ratingBar"
-            android:layout_alignTop="@id/ratingBar"
-            android:layout_marginTop="14dp"
-            android:text="Submit"
-            android:textColor="@color/white"
-            android:background="@color/green_gradient"
-            android:padding="@dimen/size5"
-            android:textSize="@dimen/size10"/>
 
 
         <com.application.baatna.utils.TextViewRegular
             android:id="@+id/description"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ratingBar"
+            android:layout_below="@id/name"
             android:layout_centerHorizontal="true"
             android:ellipsize="end"
             android:textColor="@color/black"
@@ -187,6 +167,7 @@
             android:maxLines="5"
             android:gravity="center"
             android:scrollbars = "vertical"
+            android:minLines="0"
 
             />
 
@@ -194,15 +175,15 @@
             android:id="@+id/showall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/green_gradient"
             android:layout_below="@id/description"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
-            android:textColor="@color/white"
+            android:textColor="@color/green_gradient"
             android:textSize="@dimen/size14"
-            android:padding="@dimen/size10"
+            android:textAllCaps="true"
             android:text="show more"
             android:clickable="true"
-            android:onClick="expanddescription"/>
+            android:onClick="expanddescription"
+            android:paddingBottom="@dimen/size10"/>
 </RelativeLayout>
     </LinearLayout>

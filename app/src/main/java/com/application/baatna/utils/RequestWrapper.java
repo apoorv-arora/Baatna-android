@@ -1,14 +1,14 @@
 package com.application.baatna.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.data.Categories;
+import com.application.baatna.data.Institution;
+import com.application.baatna.data.Message;
+import com.application.baatna.data.User;
+import com.application.baatna.data.UserComactMessage;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -18,16 +18,15 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.data.Categories;
-import com.application.baatna.data.Institution;
-import com.application.baatna.data.Message;
-import com.application.baatna.data.User;
-import com.application.baatna.data.UserComactMessage;
-import com.google.android.gms.maps.model.LatLng;
-
-import android.content.Context;
-import android.content.SharedPreferences;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RequestWrapper {
 	private static SharedPreferences prefs;
@@ -49,7 +48,7 @@ public class RequestWrapper {
 	public static final String NEWS_FEED = "news_feed";
 	public static final String MESSAGES_COMPACT = "messages_compact";
 	public static final String USER_INFO = "user_info";
-	public static final String APP_CONFIG_VERSION = "appConfig_version";
+	public static final String APP_CONFIG_VERSION_AND_RATING = "appConfig_version";
 	public static final String GET_REDEEM_COUPONS = "redeem_coupons_get";
 
 	public static void Initialize(Context context) {
@@ -173,14 +172,14 @@ public class RequestWrapper {
 				e.printStackTrace();
 			}
 			return items;
-		} else if (Type == APP_CONFIG_VERSION) {
-			boolean latestVersion = true;
+		} else if (Type == APP_CONFIG_VERSION_AND_RATING) {
+			Object[] object= null;
 			try {
-				latestVersion = (Boolean) ParserJson.parse_AppConfig(result);
+				object = (Object[]) ParserJson.parse_AppConfigandRating(result);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			return latestVersion;
+			return object;
 		} else if (Type == GET_REDEEM_COUPONS) {
 			Object[] coupons = null;
 			try {

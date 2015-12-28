@@ -24,8 +24,8 @@
                 android:layout_height="60dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="15dp"
                 android:scaleType="fitXY"
                 android:layout_toRightOf="@+id/left_bar"
                 android:src="@drawable/profile_icon" />
@@ -35,10 +35,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_toRightOf="@id/user_image"
+                android:layout_toRightOf="@+id/user_image"
                 android:layout_marginTop="@dimen/size10"
                 android:textColor="@color/zhl_darkest"
-                android:textSize="@dimen/size12" />
+                android:textSize="@dimen/size12"
+                />
 
             <com.application.baatna.utils.TextViewRegular
                 android:id="@+id/distance"
@@ -47,7 +48,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="@dimen/size10"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="82.5dp"
 
                 android:textColor="@color/zhl_darkest"
                 android:textSize="@dimen/size12" />
@@ -61,7 +62,7 @@
                 android:layout_alignBottom="@id/user_image"
 
                 android:layout_toRightOf="@id/user_image"
-                android:layout_marginLeft="10dp"
+
                 android:layout_marginTop="20dp"
                 android:textColor="@color/font_color"
                 android:textSize="@dimen/size14" />
