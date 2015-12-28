@@ -51,7 +51,7 @@
     <string name="could_not_logout">Could not logout</string>
     <string name="category_hint">What would you like to borrow ?(Max 30 chars)</string>
     <string name="time_duration">For how long ?</string>
-    <string name="description_hint">Convince your neighbours\n\nEg Dear neighbours, I\'m looking to a company trip this weekend. I\'m short of a sleeping bag and would need one for 2 days. Thanks a lot for the help in advance :)</string>
+    <string name="description_hint">Convince your neighbours\n\n<i><small>Eg Dear neighbours, I\'m looking to a company trip this weekend. I\'m short of a sleeping bag and would need one for 2 days. Thanks a lot for the help in advance :)</small></i></string>
     <string name="post">Post</string>
     <string name="or_select_from_categories">Or select from categories</string>
     <string name="error_try_again">Something went wrong. \n Please try again later.</string>

@@ -251,7 +251,7 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 		imageViewBlur = (ImageView) findViewById(R.id.drawer_user_info_background_image);
 
 		((RelativeLayout.LayoutParams) findViewById(R.id.back_icon).getLayoutParams()).setMargins(width / 20,
-				width / 15, width / 20, width / 20);
+				width / 9, width / 20, width / 20);
 
 		findViewById(R.id.back_icon).setOnClickListener(new View.OnClickListener() {
 			@Override
