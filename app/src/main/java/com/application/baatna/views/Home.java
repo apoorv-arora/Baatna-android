@@ -82,6 +82,7 @@ import com.application.baatna.mapUtils.Cluster;
 import com.application.baatna.mapUtils.ClusterManager;
 import com.application.baatna.mapUtils.GoogleMapRenderer;
 import com.application.baatna.mapUtils.SimpleRestaurantPin;
+import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.CustomTypefaceSpan;
 import com.application.baatna.utils.RequestWrapper;
@@ -129,7 +130,7 @@ import java.util.regex.Pattern;
 
 
 public class Home extends AppCompatActivity
-		implements OnFloatingActionsMenuUpdateListener, UploadManagerCallback {
+		implements OnFloatingActionsMenuUpdateListener, UploadManagerCallback, BaatnaLocationCallback {
 
 	private BaatnaApp zapp;
 	private SharedPreferences prefs;
@@ -215,21 +216,21 @@ public class Home extends AppCompatActivity
 			public void onClick(View v) {
 
 				Intent intent = new Intent(Home.this, NewRequestActivity.class);
-				getSupportActionBar().hide();
-				if (CommonLib.isAndroidL()) {
-					Window window = getWindow();
-					window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-					window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-					window.setStatusBarColor(getResources().getColor(R.color.green_gradient));
-				}
+//				getSupportActionBar().hide();
+//				if (CommonLib.isAndroidL()) {
+//					Window window = getWindow();
+//					window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//
+//					window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//					window.setStatusBarColor(getResources().getColor(R.color.green_gradient));
+//				}
 				//TranslateAnimation anim=new TranslateAnimation(0,0,-getResources().getDimensionPixelOffset(R.dimen.height60),0);
 				//anim.setFillAfter(true);
 				//anim.setDuration(1500);
 				//feedListView.setEnabled(true);
 				//feedListView.startAnimation(anim);
-				startActivityForResult(intent, CommonLib.NEW_REQUEST);
-				overridePendingTransition(0, 0);
+				startActivity(intent);
+//				overridePendingTransition(0, 0);
 
 
 			}
@@ -936,7 +937,7 @@ public class Home extends AppCompatActivity
 			mMapView.onDestroy();
 		destroyed = true;
 		mDrawerLayout = null;
-
+		zapp.zll.removeCallback(this);
 		zapp.cache.clear();
 		UploadManager.removeCallback(this);
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(mFeedReceived);
@@ -975,7 +976,7 @@ public class Home extends AppCompatActivity
 						try {
 							// Show the dialog by calling startResolutionForResult(), and check the result
 							// in onActivityResult().
-							status.startResolutionForResult(Home.this,1000);
+							status.startResolutionForResult(Home.this, 1000);
 						} catch (IntentSender.SendIntentException e) {
 							Log.i("c", "PendingIntent unable to execute request.");
 						}
@@ -995,19 +996,7 @@ public class Home extends AppCompatActivity
 			case 1000:
 				switch (resultCode) {
 					case Activity.RESULT_OK:
-						GoogleApiClient googleApiClient = new GoogleApiClient.Builder(mContext)
-								.addApi(LocationServices.API).build();
-						googleApiClient.connect();
-						Location loc = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-						UploadManager.updateLocation(prefs.getString("access_token", ""), loc.getLatitude(), loc.getLongitude());
-						displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), loc.getLatitude(), loc.getLongitude());
-						float lon = (float) loc.getLongitude();
-						float lat = (float) loc.getLatitude();
-
-						Editor editor = prefs.edit();
-						editor.putFloat("lat", lat);
-						editor.putFloat("lon", lon);
-						editor.commit();
+						startLocationCheck();
 						break;
 					case Activity.RESULT_CANCELED:
 						LocationCheck(mContext);
@@ -1019,8 +1008,50 @@ public class Home extends AppCompatActivity
 		}
 	}
 
+	public void startLocationCheck() {
+		zapp.zll.forced = true;
+		zapp.zll.addCallback(this);
+		zapp.startLocationCheck();
+	}
 
+	public void onCoordinatesIdentified(Location loc) {
+		if(loc!=null) {
+			UploadManager.updateLocation(prefs.getString("access_token", ""),loc.getLatitude(), loc.getLongitude());
+			float lon = (float) loc.getLatitude();
+			float lat = (float)loc.getLongitude();
+			Log.e("lat lon",lat+" "+lon);
 
+			Editor editor = prefs.edit();
+			editor.putFloat("lat", lat);
+			editor.putFloat("lon", lon);
+			editor.commit();
+			displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), loc.getLatitude(), loc.getLongitude());
+		}
+	}
+
+	public void onLocationIdentified() {
+	}
+
+	public void onLocationNotIdentified() {
+	}
+
+	@Override
+	public void onDifferentCityIdentified() {
+	}
+
+	@Override
+	public void locationNotEnabled() {
+	}
+
+	@Override
+	public void onLocationTimedOut() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onNetworkError() {
+	}
 
 	public void aboutus(View view) {
 		Intent intent = new Intent(this, AboutUs.class);
@@ -1463,7 +1494,7 @@ public class Home extends AppCompatActivity
 			final User user = feedItem.getUserIdFirst();
 
 
-			User user2 = feedItem.getUserSecond();
+			List<User> users = feedItem.getUsers();
 
 			final Wish wish = feedItem.getWish();
 
@@ -1631,9 +1662,12 @@ public class Home extends AppCompatActivity
 					break;
 
 				case CommonLib.FEED_TYPE_REQUEST_FULFILLED:
-					String description = getResources().getString(R.string.feed_requested_fulfilled,
-							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", user2.getUserName());
-
+					StringBuilder builder = new StringBuilder();
+					builder.append(getResources().getString(R.string.feed_requested_fulfilled,
+							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", users.get(0).getUserName()));
+					if(users.size() > 1)
+						builder.append(getResources().getString(R.string.and_more, users.size() - 2));
+					String description = builder.toString();
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 					Spannable desc = new SpannableString(description);
 					Pattern p = Pattern.compile(user.getUserName(), Pattern.CASE_INSENSITIVE);

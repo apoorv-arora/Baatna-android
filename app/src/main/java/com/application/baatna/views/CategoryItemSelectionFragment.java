@@ -1,19 +1,19 @@
 package com.application.baatna.views;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -22,6 +22,7 @@ import com.application.baatna.R;
 import com.application.baatna.data.CategoryItems;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.IconView;
+import com.application.baatna.utils.TypefaceSpan;
 
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class CategoryItemSelectionFragment extends AppCompatActivity {
 		width = getWindowManager().getDefaultDisplay().getWidth();
 		inflater = LayoutInflater.from(this);
 		mGridView = (GridView) findViewById(R.id.gridView);
+
 		if (getIntent() != null && getIntent().getExtras() != null && getIntent().hasExtra("category_name")) {
 			mCategoryName = String.valueOf(getIntent().getExtras().get("category_name"));
 		}
@@ -56,6 +58,7 @@ public class CategoryItemSelectionFragment extends AppCompatActivity {
 			mGridView.setAdapter(mAdapter);
 		}
 		prefs = getSharedPreferences("application_settings", 0);
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
 		setSupportActionBar(toolbar);
 		setupActionBar();
@@ -68,30 +71,20 @@ public class CategoryItemSelectionFragment extends AppCompatActivity {
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
 
-		View v = inflater.inflate(R.layout.green_action_bar, null);
+		View actionBarCustomView = inflater.inflate(R.layout.green_action_bar, null);
+		actionBarCustomView.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
+		actionBar.setCustomView(actionBarCustomView);
 
-		((TextView)v.findViewById(R.id.back_icon)).setText("D");
-		((TextView)v.findViewById(R.id.title)).setText(mCategoryName);
-		
-		v.findViewById(R.id.back_icon).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				try {
-					InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				onBackPressed();
-			}
-		});
-		actionBar.setCustomView(v);
+		SpannableString s = new SpannableString(mCategoryName);
+		s.setSpan(
+				new TypefaceSpan(getApplicationContext(), CommonLib.BOLD_FONT_FILENAME,
+						getResources().getColor(R.color.white), getResources().getDimension(R.dimen.size16)),
+				0, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
 
-		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
-
-		// user handle
-		TextView title = (TextView) v.findViewById(R.id.title);
-		title.setPadding(width / 80, 0, width / 40, 0);
+		actionBarCustomView.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
+		actionBarCustomView.findViewById(R.id.post_icon).setVisibility(View.GONE);
+		title.setText(s);
 	}
 
 
@@ -107,6 +100,18 @@ public class CategoryItemSelectionFragment extends AppCompatActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	public void actionBarSelected(View v) {
+
+		switch (v.getId()) {
+
+			case R.id.home_icon_container:
+				onBackPressed();
+			default:
+				break;
+		}
+
 	}
 
 	@Override

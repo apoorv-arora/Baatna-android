@@ -575,18 +575,34 @@ public class ParserJson {
 								}
 							}
 
-							if (categoryJson.has("userSecond")
-									&& categoryJson.get("userSecond") instanceof JSONObject) {
+							if(categoryJson.has("users") && categoryJson.get("users") instanceof JSONArray) {
 
-								JSONObject userSecondJSONObject = new JSONObject();
-								userSecondJSONObject = categoryJson.getJSONObject("userSecond");
+								JSONArray usersArr = categoryJson.getJSONArray("users");
+								ArrayList<User> users = new ArrayList<User>();
+								for(int x=0; x<usersArr.length(); x++) {
+									JSONObject userSecondJSONObject = usersArr.getJSONObject(i);
 
-								if (userSecondJSONObject.has("user")
-										&& userSecondJSONObject.get("user") instanceof JSONObject) {
-									User userSecond = parse_User(userSecondJSONObject.getJSONObject("user"));
-									feedItem.setUserSecond(userSecond);
+									if (userSecondJSONObject.has("user")
+											&& userSecondJSONObject.get("user") instanceof JSONObject) {
+										User userSecond = parse_User(userSecondJSONObject.getJSONObject("user"));
+										users.add(userSecond);
+									}
 								}
+								feedItem.setUsers(users);
 							}
+
+//							if (categoryJson.has("userSecond")
+//									&& categoryJson.get("userSecond") instanceof JSONObject) {
+//
+//								JSONObject userSecondJSONObject = new JSONObject();
+//								userSecondJSONObject = categoryJson.getJSONObject("userSecond");
+//
+//								if (userSecondJSONObject.has("user")
+//										&& userSecondJSONObject.get("user") instanceof JSONObject) {
+//									User userSecond = parse_User(userSecondJSONObject.getJSONObject("user"));
+//									feedItem.setUserSecond(userSecond);
+//								}
+//							}
 
 							if (categoryJson.has("type") && categoryJson.get("type") instanceof Integer) {
 								feedItem.setType(categoryJson.getInt("type"));

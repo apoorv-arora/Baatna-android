@@ -1,6 +1,7 @@
 package com.application.baatna.data;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class FeedItem implements Serializable{
 
@@ -21,7 +22,7 @@ public class FeedItem implements Serializable{
 	/**
 	 * User Z
 	 * */
-	private User userSecond;
+	private List<User> users;
 	/**
 	 * Wish Y
 	 * */
@@ -57,12 +58,16 @@ public class FeedItem implements Serializable{
 		this.userFirst = userFirst;
 	}
 
-	public User getUserSecond() {
-		return userSecond;
+	public User getUserFirst() {
+		return userFirst;
 	}
 
-	public void setUserSecond(User userSecond) {
-		this.userSecond = userSecond;
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public Wish getWish() {

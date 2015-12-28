@@ -2,14 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_actionbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:minHeight="60dp"
-        android:background="@color/green_gradient" />
+        android:layout_height="@dimen/height60"
+        android:background="@color/action_bar_default"
+        android:elevation="@dimen/toolbar_elevation"
+        android:minHeight="@dimen/height60"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:theme="@style/ToolbarBaseTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp" />
 
     <GridView
         android:id="@+id/gridView"

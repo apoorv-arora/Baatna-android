@@ -1,5 +1,6 @@
 package com.application.baatna.utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -25,7 +26,9 @@ import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.application.baatna.data.Categories;
 import com.application.baatna.data.CategoryItems;
@@ -64,10 +67,10 @@ public class CommonLib {
 	public static final boolean isTestBuild = false;
 
 	public static final String SERVER_PREFIX = "http://";
-	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
-	//public static final String SERVER_BODY = "192.168.2.125:8080/BaatnaServer/rest/";
-	//public static String SERVER_WITHOUT_VERSION = "http://192.168.2.125:8080/BaatnaServer/rest/";
+//	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "192.168.1.3:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.3:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -467,6 +470,18 @@ public class CommonLib {
 
 		default:
 			return "UNKNOWN ";
+		}
+	}
+
+	/**
+	 * Remove the keyboard explicitly.
+	 */
+	public static void hideKeyBoard(Activity mActivity, View mGetView) {
+		try {
+			((InputMethodManager) mActivity.getSystemService(Activity.INPUT_METHOD_SERVICE))
+					.hideSoftInputFromWindow(mGetView.getRootView().getWindowToken(), 0);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
