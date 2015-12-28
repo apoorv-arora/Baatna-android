@@ -77,7 +77,7 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 		TextView title = (TextView) actionBarCustomView.findViewById(R.id.title);
 
 
-	actionBarCustomView.findViewById(R.id.back_icon).setPadding(width / 20 + width / 80 + width / 100, 0, 0, 0);
+	actionBarCustomView.findViewById(R.id.back_icon).setPadding(width / 20 + width / 80 + width / 100, 0, width / 20, 0);
 		actionBarCustomView.findViewById(R.id.post_icon).setPadding(width / 20 + width / 80 + width / 100, 0, width / 20 + width / 80 + width / 100, 0);
 		//((LinearLayout.LayoutParams) actionBarCustomView.findViewById(R.id.post_icon).getLayoutParams())
 				//.setMargins(width / 20 + width / 80 + width / 100, 0, 0, 0);
@@ -103,8 +103,10 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 								isChecked = true;
 							}
 						}).show();
-			} else
+			} else {
+				CommonLib.hideKeyBoard(this, findViewById(R.id.fragment_container));
 				super.onBackPressed();
+			}
 
 		} else {
 			super.onBackPressed();
