@@ -17,10 +17,10 @@
     </item>
     <item android:id="@android:id/progress">
         <rotate
-            android:fromDegrees="270"
+            android:fromDegrees="90"
             android:pivotX="50%"
             android:pivotY="50%"
-            android:toDegrees="270" >
+            android:toDegrees="90" >
             <shape
                 android:innerRadiusRatio="2.6"
                 android:shape="ring"

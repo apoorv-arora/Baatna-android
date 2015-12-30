@@ -41,7 +41,7 @@
                     <FrameLayout
                         android:id="@+id/user_info_frame"
                         android:layout_width="fill_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="175dp"
                         android:paddingBottom="30dp" >
 
                         <ImageView
@@ -73,7 +73,7 @@
                         android:layout_gravity="bottom|center_horizontal"
                         android:layout_marginLeft="2dp"
                         android:layout_marginRight="2dp"
-                        android:layout_marginTop="75dp"
+                        android:layout_marginTop="100dp"
                         android:src="@drawable/profile_icon" />
                 </FrameLayout>
 

@@ -81,14 +81,14 @@ public class NewRequestFragment extends Fragment {
 				.setMargins(width / 20, 0, width / 20, 0);
 
 
-		rootView.findViewById(R.id.description_et).setPadding(width / 20, width / 10, width / 20, width / 40);
+		rootView.findViewById(R.id.description_et).setPadding(width / 20, width / 10, width / 20, width / 10);
 
 		((LinearLayout.LayoutParams) rootView.findViewById(R.id.post).getLayoutParams()).setMargins(width / 20,
 				width / 20, 0, width / 20);
 
 		rootView.findViewById(R.id.post).setPadding(width / 20, width / 40, width / 20, width / 40);
 
-		rootView.findViewById(R.id.category_selection_label).setPadding(width / 20, width / 40, width / 20, width / 20);
+		rootView.findViewById(R.id.category_selection_label).setPadding(width / 20, width / 20, width / 20, width / 20);
 
 		mCategoriesListView.setDivider(null);
 
@@ -123,18 +123,14 @@ public class NewRequestFragment extends Fragment {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				if(s.toString().contains("\n"))
-				{
-					String temp [] =s.toString().split("\n");
-					Log.e("length is",""+temp.length);
-					if(temp.length>=6)
-					{
+				if (s.toString().contains("\n")) {
+					String temp[] = s.toString().split("\n");
+					Log.e("length is", "" + temp.length);
+					if (temp.length >= 6) {
 //						description.setEnabled(false);
 //						description.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 //						description.invalidate();
-					}
-					else
-					{
+					} else {
 //						description.setEnabled(true);
 //						description.setImeOptions(EditorInfo.IME_ACTION_NONE);
 //						description.invalidate();
@@ -187,6 +183,22 @@ public class NewRequestFragment extends Fragment {
 					e.printStackTrace();
 				}
 
+			}
+		});
+		EditText et=(EditText)rootView.findViewById(R.id.time_duration);
+		et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (hasFocus) {
+					rootView.findViewById(R.id.days_hint).setVisibility(View.VISIBLE);
+				} else {
+					rootView.findViewById(R.id.days_hint).setVisibility(View.GONE);
+					int timeDurartion=Integer.parseInt( ((TextView) rootView.findViewById(R.id.time_duration)).getText().toString());
+					if(timeDurartion>31)
+					{Toast.makeText(mContext, "Time Duration has to be less than a month", Toast.LENGTH_SHORT).show();
+					rootView.findViewById(R.id.days_hint).requestFocus();}
+
+				}
 			}
 		});
 	}

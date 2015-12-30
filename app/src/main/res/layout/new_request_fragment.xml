@@ -55,6 +55,9 @@
                 android:layout_height=".5dp"
                 android:background="@color/zomato_red"
                 />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
             <com.application.baatna.utils.ClearableEditText
                 android:id="@+id/time_duration"
                 android:layout_width="fill_parent"
@@ -69,9 +72,20 @@
                 android:textColorHint="@color/default_font_color"
                 android:textSize="@dimen/size16"
                 android:maxLength="2"
-
-
                 />
+                <com.application.baatna.utils.TextViewSemiBold
+                    android:id="@+id/days_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Days"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="55dp"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="50dp"
+                    android:textColor="@color/zhl_darkest"
+                    android:visibility="gone"
+                    />
+            </FrameLayout>
 
             <View
                 android:id="@+id/category_separator2"
@@ -80,10 +94,10 @@
                 android:background="@color/zomato_red"
                 />
 
-            <com.application.baatna.utils.EditTextItalics
+            <com.application.baatna.utils.EditTextRegular
                 android:id="@+id/description_et"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/height200"
+                android:layout_height="wrap_content"
                 android:background="@drawable/all_round_cornered_zhl_button"
                 android:gravity="top|left"
                 android:hint="@string/description_hint"
@@ -121,6 +135,7 @@
                 android:textColor="@color/default_font_color"
                 android:textSize="@dimen/size14"
                 android:textAllCaps="true"
+                android:letterSpacing="0.1"
                 />
 
             <ListView
