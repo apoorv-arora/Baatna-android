@@ -77,29 +77,34 @@
                         android:src="@drawable/profile_icon" />
                 </FrameLayout>
 
-                <View
-                    android:id="@+id/layout_login_separator"
-                    android:layout_width="175dp"
-                    android:layout_height=".5dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center"
-                    android:background="@color/baatna_primary_dark"/>
 
                 <com.application.baatna.utils.TextViewSemiBold
                     android:id="@+id/join_college"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/layout_login_separator"
                     android:layout_centerHorizontal="true"
                     android:clickable="true"
-                    android:text="Join the college community"
+                    android:layout_above="@id/layout_login_separator"
+                    android:text="@string/join_the_college"
                     android:textAllCaps="true"
-                    android:textColor="@color/baatna_primary_dark"
-                    android:textSize="@dimen/size14" />
+                    android:textColor="@color/green_gradient"
+                    android:textSize="@dimen/size12"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="gone"
+                   />
+                <View
+                    android:id="@+id/layout_login_separator"
+                    android:layout_width="185dp"
+                    android:layout_height=".5dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="50dp"
+                    android:layout_gravity="center"
+                    android:background="@color/green_gradient"
+                    android:visibility="gone"/>
 
-                <com.application.baatna.utils.TextViewSemiBold
+
+                <com.application.baatna.utils.TextViewRegular
                     android:id="@+id/question"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,7 +113,8 @@
                     android:text="Are you a college student?"
                     android:layout_margin="10dp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/size14" />
+                    android:textSize="@dimen/size14"
+                    android:visibility="gone"/>
 
 
                 <com.application.baatna.utils.IconView
@@ -120,7 +126,7 @@
                     android:text="D"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_size45"
-                    android:layout_marginTop="30dp"/>
+                    />
 
                 <com.application.baatna.utils.TextViewRegular
                     android:id="@+id/name"
@@ -130,7 +136,7 @@
                     android:layout_centerHorizontal="true"
                     android:text="name"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/size14" />
+                    android:textSize="@dimen/size22" />
 
                 <com.application.baatna.utils.TextViewRegular
                     android:id="@+id/enter_phone_number"
@@ -139,8 +145,8 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:text="Enter your phone number to help us verify your identity"
-                    android:layout_margin="@dimen/size20"
+                    android:text="Enter your phone number to help us\nverify your identity"
+                    android:layout_marginBottom="15dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/size16" />
 
@@ -148,7 +154,7 @@
                     android:id="@+id/phone_number_container"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/zhlbuttonfeedback"
+                    android:gravity="center_horizontal"
                     android:layout_margin="@dimen/size20"
                     android:layout_marginTop="@dimen/size20"
                     android:layout_marginBottom="@dimen/size20"
@@ -159,27 +165,27 @@
                         android:id="@+id/phone_country_code"
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
-                        android:background="@drawable/rounded_zhldark_button"
+
                         android:gravity="center"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="+91"
                         android:padding="@dimen/size10"
-                        android:textColor="@color/zdhl3"
+                        android:textColor="@color/black"
                         android:layout_marginRight="@dimen/size10"
-                        android:textSize="@dimen/size18" />
+                        android:textSize="@dimen/size23"
+                        style="@style/Widget.AppCompat.EditText"/>
 
                     <com.application.baatna.utils.EditTextRegular
                         android:id="@+id/phone_number"
-                        android:layout_width="fill_parent"
+                        android:layout_width="165dp"
                         android:layout_height="fill_parent"
-                        android:background="@drawable/rounded_right_corner_white"
                         android:gravity="center"
-                        android:inputType="phone"
+                        android:inputType="number"
                         android:maxLength="10"
                         android:padding="@dimen/size20"
-                        android:textColor="@color/zdark"
-                        android:textSize="@dimen/size18" />
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/size23" />
                 </LinearLayout>
 
                 <com.application.baatna.utils.TextViewSemiBold
@@ -188,12 +194,17 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/phone_number_container"
                     android:layout_centerHorizontal="true"
-                    android:text="Submit"
-                    android:background="@drawable/greenbuttonfeedback"
+                    android:text="Verify"
+                    android:background="@drawable/verify_drawable"
                     android:layout_margin="10dp"
                     android:textColor="@color/white"
-                    android:padding="10dp"
-                    android:textSize="@dimen/size14" />
+                   android:paddingTop="13dp"
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:textSize="@dimen/size14"
+                    android:phoneNumber="true"
+                    />
             </RelativeLayout>
         </ScrollView>
     </RelativeLayout>

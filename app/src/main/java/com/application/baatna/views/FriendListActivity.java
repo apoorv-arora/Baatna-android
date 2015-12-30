@@ -138,11 +138,13 @@ public class FriendListActivity extends AppCompatActivity implements UploadManag
 		};
 
 		searchView.setOnQueryTextListener(textChangeListener);
+//		int closeButtonId = getResources().getIdentifier("android:id/search_close_btn", null, null);
+//		ImageView closeButtonImage = (ImageView) searchView.findViewById(closeButtonId);
+//		closeButtonImage.setImageResource(R.mipmap.map_icon);
 
 		return super.onCreateOptionsMenu(menu);
 
 	}
-
 
 
 

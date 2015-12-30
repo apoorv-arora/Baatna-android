@@ -49,7 +49,7 @@
     <string name="messages">Messages</string>
     <string name="post_request">New Request</string>
     <string name="could_not_logout">Could not logout</string>
-    <string name="category_hint">What would you like to borrow ?(Max 30 chars)</string>
+    <string name="category_hint">What would you like to borrow ?</string>
     <string name="time_duration">For how long ?</string>
     <string name="description_hint">Convince your neighbours\n\n<i><small>Eg Dear neighbours, I\'m looking to a company trip this weekend. I\'m short of a sleeping bag and would need one for 2 days. Thanks a lot for the help in advance :)</small></i></string>
     <string name="post">Post</string>
@@ -114,5 +114,6 @@
     <string name="dialog_request_accepted">Your request has been accepted for %1$s days</string>
     <string name="dialog_change_time_duration">Do you want to change the duration?</string>
     <string name="rate_your_experience">How would you like to rate your \nexperience with</string>
+    <string name="join_the_college"><u>Join the college community</u></string>
 
 </resources>

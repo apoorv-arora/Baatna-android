@@ -532,6 +532,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 			if (zProgressDialog != null && zProgressDialog.isShowing())
 				zProgressDialog.dismiss();
 			findViewById(R.id.product_status).setVisibility(View.GONE);
+			findViewById(R.id.messages_tick_icon).setVisibility(View.GONE);
 		}
 	}
 

@@ -72,23 +72,23 @@ public class NewRequestFragment extends Fragment {
 
 	private void fixSizes() {
 
-		rootView.findViewById(R.id.category_et).setPadding(width / 20, width / 20, width / 20, width / 40);
-
-		rootView.findViewById(R.id.time_duration).setPadding(width / 20, width / 20, width / 20, width / 40);
+		rootView.findViewById(R.id.category_et).setPadding(width / 20+width/40, width / 20, width / 20+width/40, width / 40);
+		rootView.findViewById(R.id.days_hint).setPadding(0,0,width/20+width/40,0);
+		rootView.findViewById(R.id.time_duration).setPadding(width / 20+width/40, width / 20, width / 20+width/40, width / 40);
 		((LinearLayout.LayoutParams) rootView.findViewById(R.id.category_separator1).getLayoutParams())
-				.setMargins(width / 20, 0, width / 20, 0);
+				.setMargins(width / 20+width/40, 0, width / 20+width/40, 0);
 		((LinearLayout.LayoutParams) rootView.findViewById(R.id.category_separator2).getLayoutParams())
-				.setMargins(width / 20, 0, width / 20, 0);
+				.setMargins(width / 20+width/40, 0, width / 20+width/40, 0);
 
 
-		rootView.findViewById(R.id.description_et).setPadding(width / 20, width / 10, width / 20, width / 10);
+		rootView.findViewById(R.id.description_et).setPadding(width / 20+width/40, width / 10, width / 20+width/40, width / 10);
 
 		((LinearLayout.LayoutParams) rootView.findViewById(R.id.post).getLayoutParams()).setMargins(width / 20,
 				width / 20, 0, width / 20);
 
 		rootView.findViewById(R.id.post).setPadding(width / 20, width / 40, width / 20, width / 40);
 
-		rootView.findViewById(R.id.category_selection_label).setPadding(width / 20, width / 20, width / 20, width / 20);
+		rootView.findViewById(R.id.category_selection_label).setPadding(width / 20+width/40, width / 20, width / 20+width/40, width / 20);
 
 		mCategoriesListView.setDivider(null);
 
@@ -168,6 +168,8 @@ public class NewRequestFragment extends Fragment {
 					((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
 					return;
 				}
+
+
 				if (description == null || description.length() < 30) {
 					Toast.makeText(mContext, "Please enter description of the request of at least 30 characters", Toast.LENGTH_SHORT).show();
 					((TextView) rootView.findViewById(R.id.description_et)).requestFocus();
@@ -185,19 +187,30 @@ public class NewRequestFragment extends Fragment {
 
 			}
 		});
-		EditText et=(EditText)rootView.findViewById(R.id.time_duration);
+		final EditText et=(EditText)rootView.findViewById(R.id.time_duration);
 		et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 					rootView.findViewById(R.id.days_hint).setVisibility(View.VISIBLE);
-				} else {
-					rootView.findViewById(R.id.days_hint).setVisibility(View.GONE);
-					int timeDurartion=Integer.parseInt( ((TextView) rootView.findViewById(R.id.time_duration)).getText().toString());
-					if(timeDurartion>31)
-					{Toast.makeText(mContext, "Time Duration has to be less than a month", Toast.LENGTH_SHORT).show();
-					rootView.findViewById(R.id.days_hint).requestFocus();}
+					et.setHint("");
+				} else{
+					if(et.getText().toString().equals("")){
+						et.setHint(R.string.time_duration);
+						rootView.findViewById(R.id.days_hint).setVisibility(View.GONE);
+					}
+					if(et.getText().toString().equals("1")){
+						((TextView)rootView.findViewById(R.id.days_hint)).setText("Day");
+					}
+					else
+						((TextView)rootView.findViewById(R.id.days_hint)).setText("Days");
 
+					//rootView.findViewById(R.id.days_hint).setVisibility(View.GONE);
+//					int timeDurartion=Integer.parseInt( ((TextView) rootView.findViewById(R.id.time_duration)).getText().toString());
+//					if(timeDurartion>31)
+//					{Toast.makeText(mContext, "Time Duration has to be less than a month", Toast.LENGTH_SHORT).show();
+//					rootView.findViewById(R.id.days_hint).requestFocus();}
+//
 				}
 			}
 		});
@@ -344,12 +357,12 @@ public class NewRequestFragment extends Fragment {
 						.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.whitebuttoncustomback));
 			}
 
-			v.findViewById(R.id.proceed_icon).setPadding(width / 20, 0, width / 20, 0);
+			v.findViewById(R.id.proceed_icon).setPadding(width / 20+width/40, 0, width / 20+width/20, 0);
 
 			viewHolder.category_label.setText(categoryName.getCategory());
 			viewHolder.category_image.setText(categoryName.getCategoryIcon());
 			viewHolder.category_label.setPadding(width / 40, width / 40, width / 20, width / 40);
-			viewHolder.category_image.setPadding(width / 20, width / 40, width / 40, width / 40);
+			viewHolder.category_image.setPadding(width / 20+width/40, width / 40, width / 40+width/40, width / 40);
 			viewHolder.category_label.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {

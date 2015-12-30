@@ -210,6 +210,12 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 			((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
 			return;
 		}
+		if(timeDuration > 31){
+			Toast.makeText(mContext, "Time Duration cannot be more than a month", Toast.LENGTH_SHORT).show();
+			((TextView) rootView.findViewById(R.id.time_duration)).requestFocus();
+			return;
+		}
+
 		if (description == null || description.length() < 30) {
 			Toast.makeText(mContext, "Please enter description of the request of at least 30 characters", Toast.LENGTH_SHORT).show();
 			((TextView) rootView.findViewById(R.id.description_et)).requestFocus();

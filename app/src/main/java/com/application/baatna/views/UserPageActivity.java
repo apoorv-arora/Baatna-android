@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -88,7 +89,6 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 	private int count = 10;
 	View headerView;
 	ListView feedlistview;
-
 	public static final int WISH_OWN = 2;
 
 	User user;
@@ -176,8 +176,10 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
 					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "profile", width, width, false);
 					((TextView) findViewById(R.id.name)).setText(user.getUserName());
-					((TextView) findViewById(R.id.description)).setText(user.getBio());
-					if(user.getBio().equals(""))
+					TextView desc=((TextView) findViewById(R.id.description));
+							desc.setText(user.getBio());
+
+					if(!isTextTruncated(user.getBio(),desc))
 					{
 						findViewById(R.id.showall).setVisibility(View.GONE);
 						 //((TextView) findViewById(R.id.description)).setMaxLines(0);
@@ -197,6 +199,29 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 			}
 
 		}
+	}
+
+	public static boolean isTextTruncated( String text, TextView textView )
+	{
+		if ( textView != null && text != null )
+		{
+
+			Layout layout = textView.getLayout();
+			if ( layout != null )
+			{
+				int lines = layout.getLineCount();
+				if ( lines > 0 )
+				{
+					int ellipsisCount = layout.getEllipsisCount( lines - 1 );
+					if ( ellipsisCount > 0 )
+					{
+						return true;
+					}
+				}
+			}
+
+		}
+		return false;
 	}
 
 
@@ -245,12 +270,13 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 	ImageView imageViewBlur;
 
 	private void fixSizes() {
+
 		findViewById(R.id.name).setPadding(width / 20, width / 20, width / 20, width / 20);
 		findViewById(R.id.description).setPadding(width / 20, 0, width / 20, width / 20);
 		imageView = ((ImageView) findViewById(R.id.user_image));
 		imageViewBlur = (ImageView) findViewById(R.id.drawer_user_info_background_image);
 
-		((RelativeLayout.LayoutParams) findViewById(R.id.back_icon).getLayoutParams()).setMargins(width / 20,
+		findViewById(R.id.back_icon).setPadding(width / 20,
 				width / 9, width / 20, width / 20);
 
 		findViewById(R.id.back_icon).setOnClickListener(new View.OnClickListener() {

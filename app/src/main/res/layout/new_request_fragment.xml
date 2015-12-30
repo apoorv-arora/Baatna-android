@@ -23,7 +23,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fillViewport="true"
-        android:scrollbarStyle="outsideOverlay" >
+        android:scrollbarStyle="outsideOverlay"
+        >
 
         <LinearLayout
             android:id="@+id/new_request_container"
@@ -56,7 +57,7 @@
                 android:background="@color/zomato_red"
                 />
             <FrameLayout
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
             <com.application.baatna.utils.ClearableEditText
                 android:id="@+id/time_duration"
@@ -72,6 +73,7 @@
                 android:textColorHint="@color/default_font_color"
                 android:textSize="@dimen/size16"
                 android:maxLength="2"
+
                 />
                 <com.application.baatna.utils.TextViewSemiBold
                     android:id="@+id/days_hint"
@@ -79,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:text="Days"
                     android:textAllCaps="true"
-                    android:layout_marginTop="55dp"
+                    android:layout_marginTop="46dp"
                     android:textSize="16dp"
                     android:layout_marginLeft="50dp"
                     android:textColor="@color/zhl_darkest"

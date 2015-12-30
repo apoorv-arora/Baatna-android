@@ -52,6 +52,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
@@ -731,8 +732,27 @@ public class Home extends AppCompatActivity
 		switch (view.getId()) {
 			case R.id.fab_post_request:
 				if (view.getAlpha() == 1) {
+					// previously invisible view
+					View view1 = findViewById(R.id.drawer_layout);
+
+// get the center for the clipping circle
+					int centerX = (view1.getLeft() + view1.getRight()) / 2;
+					int centerY = (view1.getTop() + view1.getBottom()) / 2;
+
+					int startRadius = 0;
+// get the final radius for the clipping circle
+					int endRadius = Math.max(view1.getWidth(), view1.getHeight());
+
+// create the animator for this view (the start radius is zero)
+					Animator anim =
+							ViewAnimationUtils.createCircularReveal(view1, centerX, centerY, startRadius, endRadius);
+
+// make the view visible and start the animation
+
+					anim.start();
 					Intent intent = new Intent(Home.this, NewRequestActivity.class);
 					startActivityForResult(intent, CommonLib.NEW_REQUEST);
+					overridePendingTransition(0,0);
 					break;
 				}
 		}

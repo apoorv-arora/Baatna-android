@@ -20,7 +20,7 @@
             android:layout_height="@dimen/height60"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:clickable="true"
+            android:clickable="false"
             android:gravity="center"
             android:text="D"
             android:textColor="@color/bt_drawer_green"

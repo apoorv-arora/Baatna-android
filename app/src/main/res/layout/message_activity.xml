@@ -18,7 +18,7 @@
         android:theme="@style/ToolbarBaseTheme"
         android:layout_marginBottom="10dp"
         app:contentInsetStart="0dp"
-        android:clickable="true"
+
 
         >
 

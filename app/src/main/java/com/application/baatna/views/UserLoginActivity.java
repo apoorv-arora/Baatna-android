@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -224,12 +223,12 @@ public class UserLoginActivity extends AppCompatActivity implements UploadManage
     ImageView imageViewBlur;
 
     private void fixSizes() {
-        findViewById(R.id.name).setPadding(width / 20, width / 20, width / 20, width / 20);
+        findViewById(R.id.name).setPadding(width / 20, width / 20, width / 20,0);
         imageView = ((ImageView) findViewById(R.id.user_image));
         imageViewBlur = (ImageView) findViewById(R.id.drawer_user_info_background_image);
 
-        ((RelativeLayout.LayoutParams) findViewById(R.id.back_icon).getLayoutParams()).setMargins(width / 20,
-                width / 9, width / 20, width / 20);
+        findViewById(R.id.back_icon).setPadding(width / 20,
+                width /9, width / 20, width / 20);
 
         findViewById(R.id.back_icon).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +238,7 @@ public class UserLoginActivity extends AppCompatActivity implements UploadManage
         });
 
         setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageView, "", width, width, false);
-        ((TextView) findViewById(R.id.name)).setText(prefs.getString("username", ""));
+        ((TextView) findViewById(R.id.name)).setText("Hi "+prefs.getString("username", "")+"!");
     }
 
     @Override

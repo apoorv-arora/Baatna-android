@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/height125"
     android:animateLayoutChanges="true"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    >
 
     <RelativeLayout
         android:id="@+id/feed_item"
@@ -16,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/height125"
             android:background="@drawable/whitebuttoncustomback"
-            android:elevation="@dimen/shadow_elevation" >
+             >
 
             <com.application.baatna.utils.ZCircularImageView
                 android:id="@+id/user_image"

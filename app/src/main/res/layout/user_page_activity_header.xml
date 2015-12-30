@@ -83,7 +83,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:indeterminate="false"
-            android:layout_marginTop="85dp"
+            android:layout_marginTop="90dp"
             android:layout_centerHorizontal="true"
             android:progress="75"
             android:max="100"
@@ -165,7 +165,6 @@
             android:textSize="@dimen/size14"
             android:maxLines="5"
             android:gravity="center"
-            android:scrollbars = "vertical"
             android:minLines="0"
 
             />
