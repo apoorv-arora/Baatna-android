@@ -105,12 +105,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/transparent1"
-            android:clickable="false"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="@string/about_us_terms_of_use"
             android:textColor="@color/black"
-            android:textSize="@dimen/size14" />
+            android:textSize="@dimen/size14"
+            android:onClick="aboutUs"/>
     </LinearLayout>
 
     <View
@@ -126,7 +127,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/whitebuttoncustomback"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:onClick="privacyPolicy">
 
         <com.application.baatna.utils.IconView
             android:layout_width="wrap_content"

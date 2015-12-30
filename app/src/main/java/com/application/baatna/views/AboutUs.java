@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -222,6 +223,19 @@ public class AboutUs extends AppCompatActivity {
 				break;
 		}
 
+	}
+	public void aboutUs(View view)
+	{
+		Uri uri = Uri.parse("http://www.baatna.com");
+		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		startActivity(intent);
+
+	}
+	public void privacyPolicy(View view)
+	{
+		Uri uri = Uri.parse("http://www.baatna.com");
+		Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		startActivity(intent);
 	}
 
 }

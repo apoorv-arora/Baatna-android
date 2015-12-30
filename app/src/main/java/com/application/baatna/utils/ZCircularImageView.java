@@ -1,7 +1,5 @@
 package com.application.baatna.utils;
 
-import com.application.baatna.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -14,6 +12,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.application.baatna.R;
 
 public class ZCircularImageView extends ImageView {
 	private int borderWidth;
@@ -36,7 +36,6 @@ public class ZCircularImageView extends ImageView {
 		// init paint
 		paint = new Paint();
 		paint.setAntiAlias(true);
-
 		paintBorder = new Paint();
 		paintBorder.setAntiAlias(true);
 
