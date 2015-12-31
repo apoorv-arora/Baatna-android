@@ -173,6 +173,7 @@ public class Home extends AppCompatActivity
 	private PlusOneButton mPlusOneButton;
 
 	private SwipeRefreshLayout swipeRefreshLayout;
+	Location loc;
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -387,6 +388,14 @@ public class Home extends AppCompatActivity
 			}
 		});
 		UploadManager.addCallback(this);
+		//Log.e("lat lon home",prefs.getFloat("lat1",0)+" "+prefs.getFloat("lon1",0));
+
+		zapp.lat=prefs.getFloat("lat1",0);
+		zapp.lon=prefs.getFloat("lon1",0);
+		Editor editor = prefs.edit();
+		editor.putFloat("lat", (float)zapp.lat);
+		editor.putFloat("lon",(float)zapp.lon);
+		Log.e("zapp", zapp.lat + " " + zapp.lon);
 		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
 		//UploadManager.updateLocation(prefs.getString("access_token", ""),zapp.lat, zapp.lon);
 		/*float lon = (float) zapp.lon;
@@ -736,8 +745,8 @@ public class Home extends AppCompatActivity
 					View view1 = findViewById(R.id.drawer_layout);
 
 // get the center for the clipping circle
-					int centerX = (view1.getLeft() + view1.getRight()) / 2;
-					int centerY = (view1.getTop() + view1.getBottom()) / 2;
+					int centerX = view1.getRight();
+					int centerY = view1.getBottom();
 
 					int startRadius = 0;
 // get the final radius for the clipping circle
@@ -745,7 +754,7 @@ public class Home extends AppCompatActivity
 
 // create the animator for this view (the start radius is zero)
 					Animator anim =
-							ViewAnimationUtils.createCircularReveal(view1, centerX, centerY, startRadius, endRadius);
+							ViewAnimationUtils.createCircularReveal(view1, centerX, centerY, startRadius,endRadius);
 
 // make the view visible and start the animation
 
@@ -910,12 +919,12 @@ public class Home extends AppCompatActivity
 			for (ResolveInfo resolveInfo : resInfo) {
 				String packageName = resolveInfo.activityInfo.packageName;
 				Intent targetedShareIntent = new Intent(Intent.ACTION_SEND);
-				targetedShareIntent.setType("text/plain");
+				targetedShareIntent.setType("text/html");
 				shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				if (TextUtils.equals(packageName, "com.facebook.katana")) {
-					shareText = "<p>" + shareText + "</p>";
+					String shareFacebookText = "<p>" + shareText + "</p>";
 					targetedShareIntent.setType("text/plain");
-					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(shareText));
+					targetedShareIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(shareFacebookText));
 					targetedShareIntent.putExtra(Intent.EXTRA_TEXT,
 							"https://play.google.com/store/apps/details?id=com.application.baatna");
 				} else {
@@ -1037,10 +1046,9 @@ public class Home extends AppCompatActivity
 	public void onCoordinatesIdentified(Location loc) {
 		if(loc!=null) {
 			UploadManager.updateLocation(prefs.getString("access_token", ""),loc.getLatitude(), loc.getLongitude());
-			float lon = (float) loc.getLatitude();
-			float lat = (float)loc.getLongitude();
-			Log.e("lat lon",lat+" "+lon);
-
+			float lat = (float) loc.getLatitude();
+			float lon = (float)loc.getLongitude();
+			Log.e("latinhome loninhome",lat+" "+lon);
 			Editor editor = prefs.edit();
 			editor.putFloat("lat", lat);
 			editor.putFloat("lon", lon);
@@ -1537,16 +1545,20 @@ public class Home extends AppCompatActivity
 			});
 
 
-			int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
-					feedItem.getLatitude(), feedItem.getLongitude());
+			float distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+					feedItem.getLongitude(), feedItem.getLatitude());
 
 			final TextView descriptionTextView = viewHolder.descriptiontextview;
 
-			//distance in km
-			distance = (distance / 1000);
+			//distance in kmi
+			if(distance>1)
+			{distance = (distance / 1000);
+			viewHolder.distance.setText((int)distance + "KM");	}
 			//if(distance < 5)
-			viewHolder.distance.setText(distance + "KM");
-			//else
+			else if(distance==0)
+				viewHolder.distance.setText("NEAR YOU");
+			else
+				viewHolder.distance.setText((int)distance + "M");
 			//viewHolder.distance.setVisibility(View.GONE);
 
 
@@ -1657,6 +1669,8 @@ public class Home extends AppCompatActivity
 								z_ProgressDialog.setCancelable(false);
 								UploadManager.updateRequestStatus(prefs.getString("access_token", ""),
 										"" + wish.getWishId(), "1", new Object[]{user, wish});
+								feedListAdapter.remove(feedItem);
+								feedListAdapter.notifyDataSetChanged();
 							}
 						});
 
@@ -1671,6 +1685,8 @@ public class Home extends AppCompatActivity
 								feedListAdapter.notifyDataSetChanged();
 							}
 						});
+
+
 						viewHolder.accept.setVisibility(View.VISIBLE);
 						viewHolder.decline.setVisibility(View.VISIBLE);
 
@@ -2408,9 +2424,9 @@ public class Home extends AppCompatActivity
 		// addressMap.getParent()).getLayoutParams()).setMargins(0, width / 40,
 		// 0, 0);
 
-		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon + "&zoom=14&size="
+		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon + "&zoom=18&size="
 				+ width + "x" + getResources().getDimensionPixelSize(R.dimen.height125)
-				+ "&maptype=roadmap&scale=2&markers=icon:http://i.imgur.com/Kn5aI2q.png?1"+"|scale:2|"
+				+ "&maptype=terrain&scale=2&markers=icon:http://i.imgur.com/Kn5aI2q.png?1"+"|scale:2|"
 				+ lot + "," + lon;
 
 		// CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type,

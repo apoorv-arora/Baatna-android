@@ -67,6 +67,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 
 	private String APPLICATION_ID;
 	private boolean destroyed = false;
+	Location loc;
 
 	private String error_responseCode = "";
 	private String error_exception = "";
@@ -131,6 +132,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 				startLocationCheck();
 			}
 		}, 2000);
+		onCoordinatesIdentified(loc);
 		animate();
 		fixSizes();
 		UploadManager.addCallback(this);
@@ -346,13 +348,13 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 	public void onCoordinatesIdentified(Location loc) {
 		if(loc!=null){
 		UploadManager.updateLocation(prefs.getString("access_token", ""),loc.getLatitude(), loc.getLongitude());
-		float lon = (float) loc.getLatitude();
-		float lat = (float)loc.getLongitude();
-		Log.e("lat lon",lat+" "+lon);
 
+		float lat = (float) loc.getLatitude();
+		float lon = (float)loc.getLongitude();
+		Log.e("lat lon",lat+" "+lon);
 		Editor editor = prefs.edit();
-		editor.putFloat("lat", lat);
-		editor.putFloat("lon", lon);
+		editor.putFloat("lat1", lat);
+		editor.putFloat("lon1", lon);
 		editor.commit();}
 	}
 
