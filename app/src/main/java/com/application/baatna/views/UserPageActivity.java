@@ -653,15 +653,17 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 					}
 				});
 
-				int distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
+				float distance = CommonLib.distFrom(prefs.getFloat("lat", 0), prefs.getFloat("lon", 0),
 						wish.getLatitude(), wish.getLongitude());
 
-				//distance in km
-				distance = (distance / 1000);
+				if(distance>1)
+				{distance = (distance / 1000);
+					viewHolder.distance.setText((int)distance + "KM");	}
 				//if(distance < 5)
-				viewHolder.distance.setText(distance + "KM");
-				//else
-				//viewHolder.distance.setVisibility(View.GONE);
+				else if(distance==0)
+					viewHolder.distance.setText("NEAR YOU");
+				else
+					viewHolder.distance.setText((int)distance + "M");
 
 				if (user != null && wish != null) {
 					String description = getResources().getString(R.string.feed_user_requested,

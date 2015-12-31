@@ -69,8 +69,6 @@
                 android:layout_height="90dp"
                 android:layout_marginTop="95dp"
                 android:layout_gravity="bottom|center_horizontal"
-            
-
                 android:src="@drawable/profile_icon" />
 
 
@@ -83,7 +81,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:indeterminate="false"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="85dp"
             android:layout_centerHorizontal="true"
             android:progress="75"
             android:max="100"
@@ -99,7 +97,7 @@
             android:textColor="@color/white"
             android:textSize="12dp"
             android:id="@+id/matchscore"
-            />
+            android:visibility="gone" />
         <com.application.baatna.utils.TextViewSemiBold
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,7 +109,7 @@
             android:layout_marginTop="125dp"
 
 
-            />
+            android:visibility="gone" />
 
         <com.application.baatna.utils.TextViewRegular
             android:layout_width="wrap_content"
@@ -123,7 +121,7 @@
             android:textColor="@color/white"
             android:textSize="12dp"
 
-            />
+            android:visibility="gone" />
 
 
 

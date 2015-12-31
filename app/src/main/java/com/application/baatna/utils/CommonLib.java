@@ -353,7 +353,7 @@ public class CommonLib {
 	 * @return distance in km
 	 */
 
-	public static int distFrom(double lat1, double lng1, double lat2, double lng2) {
+	public static float distFrom(double lat1, double lng1, double lat2, double lng2) {
 		Log.e("lat1"+lat1+"  long1"+lng1,"lat 2"+lat2 +"  long2"+lng2);
 		/*double earthRadius = 6371;
 		double dLat = Math.toRadians(lat2 - lat1);
@@ -371,7 +371,8 @@ public class CommonLib {
 		Location.distanceBetween(lat1,lng1,lat2,lng2,result);
 		//conversion to m
 		result[0]=result[0]/1000;
-		return (int)result[0];
+
+		return result[0];
 
 	}
 	/*private static double distance(double lat1, double lon1, double lat2, double lon2) {

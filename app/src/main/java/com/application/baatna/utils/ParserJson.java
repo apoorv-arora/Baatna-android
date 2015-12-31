@@ -580,7 +580,8 @@ public class ParserJson {
 								JSONArray usersArr = categoryJson.getJSONArray("users");
 								ArrayList<User> users = new ArrayList<User>();
 								for(int x=0; x<usersArr.length(); x++) {
-									JSONObject userSecondJSONObject = usersArr.getJSONObject(i);
+
+										JSONObject userSecondJSONObject = usersArr.getJSONObject(i);
 
 									if (userSecondJSONObject.has("user")
 											&& userSecondJSONObject.get("user") instanceof JSONObject) {

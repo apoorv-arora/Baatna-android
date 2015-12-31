@@ -919,7 +919,7 @@ public class Home extends AppCompatActivity
 			for (ResolveInfo resolveInfo : resInfo) {
 				String packageName = resolveInfo.activityInfo.packageName;
 				Intent targetedShareIntent = new Intent(Intent.ACTION_SEND);
-				targetedShareIntent.setType("text/html");
+				targetedShareIntent.setType("text/plain");
 				shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 				if (TextUtils.equals(packageName, "com.facebook.katana")) {
 					String shareFacebookText = "<p>" + shareText + "</p>";
