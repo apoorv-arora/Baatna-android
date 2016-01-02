@@ -713,7 +713,7 @@ public class ParserJson {
 	}
 
 	public static Object[] parse_AppConfigandRating(InputStream is) throws JSONException {
-		Object[] response = new Object[2];
+		Object[] response = new Object[3];
 		response[1]=true;
 
 		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
@@ -730,13 +730,23 @@ public class ParserJson {
 						JSONArray userArr = responseJson.getJSONArray("rating_list");
 						for (int i = 0; i < userArr.length(); i++) {
 							JSONObject userJson = userArr.getJSONObject(i);
+
 							if (userJson.has("user") && userJson.get("user") instanceof JSONObject) {
-								User user= parse_User(userJson.getJSONObject("user"));
-								userList.add(user);
+								JSONObject userJsonObject = userJson.getJSONObject("user");
+
+								Wish wish = null;
+								if(userJsonObject.has("user_details") && userJsonObject.get("user_details") instanceof  JSONObject) {
+									User user= parse_User(userJsonObject.getJSONObject("user_details"));
+//									userList.add(user);
+								}
+
+								if(userJsonObject.has("wish_details") && userJsonObject.get("wish_details") instanceof  JSONObject) {
+									Wish user= parse_Wish(userJsonObject.getJSONObject("wish_details"));
+									wish = user;
+								}
+
 							}
 						}
-						User user=new User();
-						userList.add(user);
 						response[0] = userList;
 					}
 					if (responseJson.has("update") && responseJson.get("update") instanceof Boolean) {

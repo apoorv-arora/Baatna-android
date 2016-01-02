@@ -240,7 +240,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 				}
 			}
 
-			else if (regId.isEmpty()) {
+			if (regId.isEmpty()) {
 				CommonLib.ZLog("GCM", "RegID is empty");
 				registerInBackground();
 			} else {

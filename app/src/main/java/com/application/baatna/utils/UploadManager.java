@@ -488,10 +488,8 @@ public class UploadManager {
 
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
-			// nameValuePairs.add(new BasicNameValuePair("client_id",
-			// CommonLib.CLIENT_ID));
-			// nameValuePairs.add(new BasicNameValuePair("app_type",
-			// CommonLib.APP_TYPE));
+			 nameValuePairs.add(new BasicNameValuePair("client_id",CommonLib.CLIENT_ID));
+			 nameValuePairs.add(new BasicNameValuePair("app_type",CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("pushId", regId));
 
 			try {
