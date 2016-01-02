@@ -741,27 +741,33 @@ public class Home extends AppCompatActivity
 		switch (view.getId()) {
 			case R.id.fab_post_request:
 				if (view.getAlpha() == 1) {
-					// previously invisible view
-					View view1 = findViewById(R.id.drawer_layout);
+					if(Build.VERSION.SDK_INT >= 21) {
+
+						// previously invisible view
+						View view1 = findViewById(R.id.drawer_layout);
 
 // get the center for the clipping circle
-					int centerX = view1.getRight();
-					int centerY = view1.getBottom();
+						int centerX = view1.getRight();
+						int centerY = view1.getBottom();
 
-					int startRadius = 0;
+						int startRadius = 0;
 // get the final radius for the clipping circle
-					int endRadius = Math.max(view1.getWidth(), view1.getHeight());
+						int endRadius = Math.max(view1.getWidth(), view1.getHeight());
 
 // create the animator for this view (the start radius is zero)
-					Animator anim =
-							ViewAnimationUtils.createCircularReveal(view1, centerX, centerY, startRadius,endRadius);
+						Animator anim =
+								ViewAnimationUtils.createCircularReveal(view1, centerX, centerY, startRadius, endRadius);
 
 // make the view visible and start the animation
 
-					anim.start();
-					Intent intent = new Intent(Home.this, NewRequestActivity.class);
-					startActivityForResult(intent, CommonLib.NEW_REQUEST);
-					overridePendingTransition(0,0);
+						anim.start();
+						Intent intent = new Intent(Home.this, NewRequestActivity.class);
+						startActivityForResult(intent, CommonLib.NEW_REQUEST);
+						overridePendingTransition(0, 0);
+					} else  {
+						Intent intent = new Intent(Home.this, NewRequestActivity.class);
+						startActivity(intent);
+					}
 					break;
 				}
 		}
