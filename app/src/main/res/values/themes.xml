@@ -37,7 +37,11 @@
     <style name="ZomatoMessageTheme" parent="ZomatoHomeBaseTheme">
 
         <item name="colorPrimary">@color/white</item>
-
+        <item name="android:windowActionBar">false</item>
+        <item name="android:actionBarDivider">@null</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
     </style>
 
     <style name="ZomatoActionBarThemeDefault" parent="android:Theme.Holo.Light">

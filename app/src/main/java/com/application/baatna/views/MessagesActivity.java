@@ -296,9 +296,9 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 	protected Dialog onCreateDialog(int id) {
 		int message = -1;
 		switch (id) {
-		case MESSAGE_CANNOT_BE_SENT:
-			message = R.string.about_text;
-			break;
+			case MESSAGE_CANNOT_BE_SENT:
+				message = R.string.about_text;
+				break;
 		}
 
 		if (message == -1) {
@@ -320,30 +320,10 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
-		if(Build.VERSION.SDK_INT > 20)
-			actionBar.setElevation(0);
-
 		View v = inflater.inflate(R.layout.messages_action_bar, null);
 		v.findViewById(R.id.home_icon_container).setVisibility(View.VISIBLE);
 		actionBar.setCustomView(v);
 		v.findViewById(R.id.back_icon).setPadding(width / 20, 0, width / 20, 0);
-
-		// v.findViewById(R.id.tick_proceed_icon).setOnClickListener(new
-		// View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// View reviewDropDown = findViewById(R.id.dropdown_setting_layout);
-		// if (reviewDropDown.isShown())
-		// reviewDropDown.setVisibility(View.GONE);
-		// else {
-		// reviewDropDown.setVisibility(View.VISIBLE);
-		// }
-		// }
-		// });
-
-		//findViewById(R.id.delete_message).setPadding(width / 20, width / 20, width / 20, width / 20);
-		//findViewById(R.id.sort_by_recency).setPadding(width / 20, width / 20, width / 20, width / 20);
 
 		// user handle
 		TextView title = (TextView) v.findViewById(R.id.title);
@@ -352,10 +332,9 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		TextView subtitle = (TextView) v.findViewById(R.id.subtitle);
 		subtitle.setPadding(width / 80, 0, width / 40, 0);
 
-
 		title.setText(currentUser.getUserName());
 		if (type == CommonLib.CURRENT_USER_WISH_ACCEPTED) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (Build.VERSION.SDK_INT >= 21) {
 				Window window = getWindow();
 				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 				window.setStatusBarColor(getResources().getColor(R.color.item_received_color));
@@ -374,7 +353,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 			subtitle.setText(subtext);
 		}
 		else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (Build.VERSION.SDK_INT >= 21) {
 				Window window = getWindow();
 				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 				window.setStatusBarColor(getResources().getColor(R.color.item_offered_color));
@@ -386,14 +365,10 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 			Pattern p= Pattern.compile(currentWish.getTitle(), Pattern.CASE_INSENSITIVE);
 			Matcher m = p.matcher(subtext);
 			while (m.find()){
-
-
 				subtext.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.item_offered_color)), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 				subtext.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), m.start(), m.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 			}
 			subtitle.setText(subtext);
-
-
 		}
 
 		ImageView imageView = (ImageView) v.findViewById(R.id.user_chat_head);
@@ -437,11 +412,11 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 		switch (v.getId()) {
 
-		case R.id.home_icon_container:
-			onBackPressed();
-			break;
-		default:
-			break;
+			case R.id.home_icon_container:
+				onBackPressed();
+				break;
+			default:
+				break;
 		}
 
 	}
@@ -513,7 +488,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 	@Override
 	public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
-			String stringId) {
+							   String stringId) {
 		if (requestType == CommonLib.SEND_MESSAGE) {
 			if (!destroyed) {
 				if (status) { // add to DB with the message Id
@@ -584,7 +559,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 	}
 
 	private void setImageFromUrlOrDisk(final String url, final ImageView imageView, final String type, int width,
-			int height, boolean useDiskCache) {
+									   int height, boolean useDiskCache) {
 
 		if (cancelPotentialWork(url, imageView)) {
 

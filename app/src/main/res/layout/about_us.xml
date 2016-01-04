@@ -26,7 +26,7 @@
                 android:elevation="@dimen/toolbar_elevation"
                 android:minHeight="@dimen/height60"
                 android:popupTheme="@android:style/ThemeOverlay.Material.Light"
-                android:theme="@style/ToolbarBaseTheme"
+                app:theme="@style/ToolbarBaseTheme"
                 app:contentInsetStart="0dp"
                 />
 
