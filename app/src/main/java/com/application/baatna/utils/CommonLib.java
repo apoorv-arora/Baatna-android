@@ -93,8 +93,8 @@ public class CommonLib {
 	private static SharedPreferences prefs;
 
 	/** Application version */
-	public static final int VERSION = 7;
-	public static final String VERSION_STRING = "1.2";
+	public static final int VERSION = 8;
+	public static final String VERSION_STRING = "1.21";
 
 	/** Preferences */
 	public final static String APP_SETTINGS = "application_settings";

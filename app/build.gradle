@@ -22,8 +22,8 @@ android {
         applicationId "com.application.baatna"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 7
-        versionName "1.2"
+        versionCode 8
+        versionName "1.21"
     }
     buildTypes {
         release {

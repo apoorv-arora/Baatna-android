@@ -581,7 +581,7 @@ public class ParserJson {
 								ArrayList<User> users = new ArrayList<User>();
 								for(int x=0; x<usersArr.length(); x++) {
 
-										JSONObject userSecondJSONObject = usersArr.getJSONObject(i);
+									JSONObject userSecondJSONObject = usersArr.getJSONObject(x);
 
 									if (userSecondJSONObject.has("user")
 											&& userSecondJSONObject.get("user") instanceof JSONObject) {
