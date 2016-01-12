@@ -1031,12 +1031,13 @@ public class Home extends AppCompatActivity
 			case 1000:
 				switch (resultCode) {
 					case Activity.RESULT_OK:
-						startLocationCheck();
+						zapp.zll.forced = true;
+						zapp.startLocationCheck();
 						break;
 					case Activity.RESULT_CANCELED:
-						LocationCheck(mContext);
-						Toast.makeText(mContext, "Please enable location services",
-								Toast.LENGTH_LONG).show();//keep asking if imp or do whatever
+//						LocationCheck(mContext);
+//						Toast.makeText(mContext, "Please enable location services",
+//								Toast.LENGTH_LONG).show();//keep asking if imp or do whatever
 						break;
 				}
 				break;
