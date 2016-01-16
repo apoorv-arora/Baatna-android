@@ -78,6 +78,7 @@ import com.application.baatna.R;
 import com.application.baatna.Splash;
 import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.User;
+import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
 import com.application.baatna.mapUtils.Cluster;
 import com.application.baatna.mapUtils.ClusterManager;
@@ -2395,10 +2396,10 @@ public class Home extends AppCompatActivity
 				}
 
 				if (response[0] instanceof ArrayList<?>) {
-					ArrayList<User> userlist = (ArrayList<User>) response[0];
+					ArrayList<UserComactMessage> userlist = (ArrayList<UserComactMessage>) response[0];
 
 					if (!userlist.isEmpty()) {
-						for (User user : userlist) {
+						for (UserComactMessage user : userlist) {
 							showRatingDialog(user);
 						}
 
@@ -2453,16 +2454,19 @@ public class Home extends AppCompatActivity
 
 	}
 
-	public void showRatingDialog(User user)
+	public void showRatingDialog(UserComactMessage user)
 	{
+
+		if(user == null || user.getUser() == null)
+			return;
 
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = this.getLayoutInflater();
 		final View dialogView = inflater.inflate(R.layout.rating_popup, null);
 		dialogBuilder.setView(dialogView);
-		((TextView)dialogView.findViewById(R.id.name)).setText(user.getUserName());
+		((TextView)dialogView.findViewById(R.id.name)).setText(user.getUser().getUserName());
 		ImageView userratingimage =((ImageView)dialogView.findViewById(R.id.image));
-		setImageFromUrlOrDisk(user.getImageUrl(), userratingimage, "profile_pic", width, width, false, false);
+		setImageFromUrlOrDisk(user.getUser().getImageUrl(), userratingimage, "profile_pic", width, width, false, false);
 		RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.ratingBar);
 		final float ratedValue=ratingBar.getRating();
 		Drawable progress = ratingBar.getProgressDrawable();
