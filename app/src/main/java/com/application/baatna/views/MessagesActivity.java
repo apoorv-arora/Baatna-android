@@ -30,6 +30,8 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -100,6 +102,12 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_messages, menu);
+		return true;
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -426,6 +434,14 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		if (item.getItemId() == android.R.id.home) {
 			onBackPressed();
 		}
+
+		else if (item.getItemId() == R.id.block) {
+			zProgressDialog = ProgressDialog.show(MessagesActivity.this, null,
+					getResources().getString(R.string.update_rating_dialog), true, false);
+
+			UploadManager.blockUser(prefs.getString("access_token", ""),currentUser.getUserId()+"");
+
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -508,6 +524,10 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 				zProgressDialog.dismiss();
 			findViewById(R.id.product_status).setVisibility(View.GONE);
 			findViewById(R.id.messages_tick_icon).setVisibility(View.GONE);
+		} else if (requestType == CommonLib.BLOCK_USER && !destroyed) {
+			if (zProgressDialog != null && zProgressDialog.isShowing())
+				zProgressDialog.dismiss();
+
 		}
 	}
 

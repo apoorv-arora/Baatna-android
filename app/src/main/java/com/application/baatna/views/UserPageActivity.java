@@ -171,7 +171,8 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 					user = (User) result;
 					//displaying rating in circle annd match score
 					ProgressBar userRating=(ProgressBar)view.findViewById(R.id.wish_progress);
-					//userRating.setProgress(user.getRating().intValue());
+
+					userRating.setProgress(user.getRating().intValue());
 					((TextView)view.findViewById(R.id.rating)).setText(""+user.getRating().intValue());
 					findViewById(R.id.content_container).setVisibility(View.VISIBLE);
 					setImageFromUrlOrDisk(user.getImageUrl(), imageView, "profile", width, width, false);

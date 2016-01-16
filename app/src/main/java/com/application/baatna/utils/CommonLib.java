@@ -176,6 +176,8 @@ public class CommonLib {
 	public static final int WISH_OFFERED_STATUS = 211;
 	public static final int COUPON_UPDATE = 212;
 	public static final int SEND_FEEDBACK = 213;
+	public static final int UPDATE_RATING = 214;
+	public static final int BLOCK_USER = 215;
 
 
 	/** Constant to track location identification progress */
@@ -1090,7 +1092,9 @@ public class CommonLib {
 //            System.out.print(diffSeconds + " seconds.");
 //            Log.e("difference is", diffDays + " days, " + diffHours + " hours, " + diffMinutes + " minutes, ");
 			if (diffDays == 0) {
-				if (diffMinutes > 0) {
+					if(diffHours>0)
+					return diffHours+"HOURS AGO";
+					else if (diffMinutes > 0) {
 					return diffMinutes+ " MINS AGO";
 					//return timeFormat.format(calendar1.getTime());
 				} else return "Just Now";

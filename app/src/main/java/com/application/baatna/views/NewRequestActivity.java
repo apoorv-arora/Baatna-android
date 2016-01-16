@@ -167,8 +167,7 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 	@Override
 	public void uploadStarted(int requestType, int objectId, String stringId, Object object) {
 		if (requestType == CommonLib.WISH_ADD) {
-			if (!isDestroyed) {
-				z_ProgressDialog = ProgressDialog.show(NewRequestActivity.this, null,
+			if (!isDestroyed) {z_ProgressDialog = ProgressDialog.show(NewRequestActivity.this, null,
 						getResources().getString(R.string.wish_post_dialog), true, false);
 				z_ProgressDialog.setCancelable(false);
 			}

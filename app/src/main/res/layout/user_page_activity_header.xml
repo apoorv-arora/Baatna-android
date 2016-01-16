@@ -83,9 +83,9 @@
             android:indeterminate="false"
             android:layout_marginTop="85dp"
             android:layout_centerHorizontal="true"
-            android:progress="75"
-            android:max="100"
-            android:secondaryProgress="100"
+            android:progress="0"
+            android:max="5"
+            android:secondaryProgress="5"
             android:progressDrawable="@drawable/ring_progress_bar" />
         <com.application.baatna.utils.TextViewRegular
             android:layout_width="wrap_content"
@@ -107,9 +107,9 @@
             android:textColor="@color/white"
             android:textSize="12dp"
             android:layout_marginTop="125dp"
+            android:visibility="gone"
 
-
-            android:visibility="gone" />
+             />
 
         <com.application.baatna.utils.TextViewRegular
             android:layout_width="wrap_content"

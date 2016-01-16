@@ -33,7 +33,7 @@
         android:layout_marginTop="10dp"
         android:numStars="5"
         android:stepSize="1.0"
-        android:rating="2.0"
+
 
         />
 

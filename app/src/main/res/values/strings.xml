@@ -82,6 +82,7 @@
     <string name="redeem">Redeem</string>
     <string name="settings">Settings</string>
     <string name="wish_post_dialog">Posting your request..Please wait</string>
+    <string name="update_rating_dialog">Posting your rating..Please wait</string>
     <string name="your_message">Your Message</string>
     <string name="sending_request">Sending request. Please wait..</string>
     <string name="rate_dialog_message">Help us spread the word. Rate us on Google Play.</string>

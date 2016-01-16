@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -2230,6 +2231,12 @@ public class Home extends AppCompatActivity
 						}
 					}).create();
 			messageDialog.show();
+		} else if (requestType == CommonLib.UPDATE_RATING) {
+			if (z_ProgressDialog != null && z_ProgressDialog.isShowing())
+				z_ProgressDialog.dismiss();
+
+			if (destroyed || !status)
+				return;
 		}
 	}
 
@@ -2401,6 +2408,7 @@ public class Home extends AppCompatActivity
 					if (!userlist.isEmpty()) {
 						for (UserComactMessage user : userlist) {
 							showRatingDialog(user);
+							break;
 						}
 
 						}
@@ -2456,9 +2464,10 @@ public class Home extends AppCompatActivity
 
 	public void showRatingDialog(UserComactMessage user)
 	{
-
 		if(user == null || user.getUser() == null)
 			return;
+
+		final UserComactMessage temp=user;
 
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = this.getLayoutInflater();
@@ -2468,12 +2477,17 @@ public class Home extends AppCompatActivity
 		ImageView userratingimage =((ImageView)dialogView.findViewById(R.id.image));
 		setImageFromUrlOrDisk(user.getUser().getImageUrl(), userratingimage, "profile_pic", width, width, false, false);
 		RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.ratingBar);
-		final float ratedValue=ratingBar.getRating();
+		final String ratedValue=ratingBar.getRating()+"";
 		Drawable progress = ratingBar.getProgressDrawable();
+		DrawableCompat.setTintMode(progress, PorterDuff.Mode.SRC_ATOP);
 		DrawableCompat.setTint(progress, R.color.green_gradient);
 		dialogBuilder.setPositiveButton("SUBMIT", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				sendRatingtoBackend(ratedValue);
+
+				z_ProgressDialog = ProgressDialog.show(Home.this, null,
+						getResources().getString(R.string.update_rating_dialog), true, false);
+
+				UploadManager.updateRating(prefs.getString("access_token", ""),temp.getUser().getUserId()+"",ratedValue,temp.getWish().getWishId()+"",temp.getWish().getUserId()+"");
 			}
 		});
 		dialogBuilder.setNegativeButton("LATER", new DialogInterface.OnClickListener() {
@@ -2484,10 +2498,6 @@ public class Home extends AppCompatActivity
 		AlertDialog b = dialogBuilder.create();
 		b.show();
 
-
-	}
-	public void sendRatingtoBackend(float rating)
-	{
 
 	}
 

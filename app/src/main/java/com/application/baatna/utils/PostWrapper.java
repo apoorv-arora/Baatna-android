@@ -1,22 +1,20 @@
 package com.application.baatna.utils;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.util.List;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.application.baatna.R;
+import com.application.baatna.data.User;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicHeader;
-import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.application.baatna.R;
-import com.application.baatna.data.User;
-import com.crashlytics.android.Crashlytics;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.util.List;
 
 public class PostWrapper {
 
@@ -35,6 +33,10 @@ public class PostWrapper {
 	public static String LOCATION_UPDATE = "update_location";
 	public static String REDEEM_UPDATE = "redeem_update";
 	public static String SEND_FEEDBACK = "send_feedback";
+	public static String RATING_POST = "rating_post";
+	public static String BLOCK_USER = "block_user";
+
+
 
 	public static void Initialize(Context context) {
 		// helper = new ResponseCacheManager(context);
@@ -85,7 +87,12 @@ public class PostWrapper {
 					resp = ParserJson.parseRedeemUpdateResponse(is);
 				} else if (type.equals(SEND_FEEDBACK)){
 					resp = ParserJson.parseFeedbackResponse(is);
+				} else if (type.equals(RATING_POST)){
+					resp = ParserJson.parseFeedbackResponse(is);
 				}
+				else if (type.equals(BLOCK_USER)){
+					resp = ParserJson.parseFeedbackResponse(is);}
+
 
 			} 
 //			else {

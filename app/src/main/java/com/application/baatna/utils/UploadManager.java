@@ -90,6 +90,26 @@ public class UploadManager {
 
 	}
 
+	public static void updateRating(String accessToken, String userId, String rating,String wish_id,String user_wish_id) {
+		for (UploadManagerCallback callback : callbacks) {
+			callback.uploadStarted(CommonLib.UPDATE_RATING, 0, accessToken, null);
+		}
+
+		new UpdateRating().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				new Object[] { accessToken, userId, rating, wish_id,user_wish_id});
+
+	}
+	public static void blockUser(String accessToken, String userId){
+		for (UploadManagerCallback callback : callbacks) {
+			callback.uploadStarted(CommonLib.BLOCK_USER, 0, accessToken, null);
+		}
+
+		new BlockUser().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				new Object[] { accessToken, userId});
+
+	}
+
+
 	public static void deleteRequest(String accessToken, String wishId) {
 		for (UploadManagerCallback callback : callbacks) {
 			callback.uploadStarted(CommonLib.WISH_REMOVE, 0, accessToken, null);
@@ -342,7 +362,96 @@ public class UploadManager {
 			}
 		}
 	}
+	private static class UpdateRating extends AsyncTask<Object, Void, Object[]> {
 
+		private String accessToken;
+		private String userId;
+		private String rating;
+		private String wish_id;
+		private String user_wish_id;
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+
+			Object result[] = null;
+			accessToken = (String) params[0];
+			userId = (String) params[1];
+			rating = (String) params[2];
+			wish_id=(String)params[3];
+			user_wish_id = (String) params[4];
+
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
+			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
+			nameValuePairs.add(new BasicNameValuePair("userId", userId));
+			nameValuePairs.add(new BasicNameValuePair("rating", rating));
+			nameValuePairs.add(new BasicNameValuePair("wish_id", wish_id));
+			nameValuePairs.add(new BasicNameValuePair("user_wish_id", user_wish_id));
+
+			try {
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/rating?", nameValuePairs, PostWrapper.RATING_POST,
+						context);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return result;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Object[] arg) {
+			if (arg[0].equals("failure"))
+				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
+
+			for (UploadManagerCallback callback : callbacks) {
+				callback.uploadFinished(CommonLib.UPDATE_RATING, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
+			}
+		}
+	}
+
+	private static class BlockUser extends AsyncTask<Object, Void, Object[]> {
+
+		private String accessToken;
+		private String userId;
+
+
+		@Override
+		protected Object[] doInBackground(Object... params) {
+
+			Object result[] = null;
+			accessToken = (String) params[0];
+			userId = (String) params[1];
+
+
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
+			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
+			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
+			nameValuePairs.add(new BasicNameValuePair("userId", userId));
+
+			try {
+				result = PostWrapper.postRequest(CommonLib.SERVER + "user/block?", nameValuePairs, PostWrapper.BLOCK_USER,
+						context);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return result;
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(Object[] arg) {
+			if (arg[0].equals("failure"))
+				Toast.makeText(context, (String) arg[1], Toast.LENGTH_SHORT).show();
+
+			for (UploadManagerCallback callback : callbacks) {
+				callback.uploadFinished(CommonLib.BLOCK_USER, prefs.getInt("uid", 0), 0, arg[1], 0,
+						arg[0].equals("success"), "");
+			}
+		}
+	}
 	private static class DeleteRequest extends AsyncTask<Object, Void, Object[]> {
 
 		private String accessToken;

@@ -42,8 +42,13 @@
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
     </style>
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_launcher</item>
+        <item name="android:background">?android:attr/actionBarItemBackground</item>
 
+    </style>
     <style name="ZomatoActionBarThemeDefault" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ZomatoActionBarDefault</item>
         <item name="android:actionBarTabStyle">@style/ZomatoActionBarTabs</item>

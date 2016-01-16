@@ -730,25 +730,30 @@ public class ParserJson {
 						JSONArray userArr = responseJson.getJSONArray("rating_list");
 						for (int i = 0; i < userArr.length(); i++) {
 							JSONObject userJson = userArr.getJSONObject(i);
+							UserComactMessage userComactMessage = new UserComactMessage();
 
 							if (userJson.has("user") && userJson.get("user") instanceof JSONObject) {
 								JSONObject userJsonObject = userJson.getJSONObject("user");
-								UserComactMessage userComactMessage = new UserComactMessage();
-								Wish wish = null;
 								if(userJsonObject.has("user_details") && userJsonObject.get("user_details") instanceof  JSONObject) {
 									User user= parse_User(userJsonObject.getJSONObject("user_details"));
 									userComactMessage.setUser(user);
 								}
 
-								if(userJsonObject.has("wish_details") && userJsonObject.get("wish_details") instanceof  JSONObject) {
-									Wish user= parse_Wish(userJsonObject.getJSONObject("wish_details"));
-									userComactMessage.setWish(user);
-								}
-
-								if(userComactMessage != null && userComactMessage.getUser() != null) {
-									userWish.add(userComactMessage);
-								}
 							}
+							if (userJson.has("wish_details") && userJson.get("wish_details") instanceof JSONObject) {
+								JSONObject userJsonObject = userJson.getJSONObject("wish_details");
+							if(userJsonObject.has("wish") && userJsonObject.get("wish") instanceof  JSONObject) {
+								JSONObject wishJsonObject = userJsonObject.getJSONObject("wish");
+								if(wishJsonObject.has("wish")&& wishJsonObject.get("wish")instanceof JSONObject){
+								Wish user= parse_Wish(wishJsonObject.getJSONObject("wish"));
+								userComactMessage.setWish(user);
+							}}}
+
+							if(userComactMessage != null && userComactMessage.getUser() != null) {
+								userWish.add(userComactMessage);
+							}
+
+
 
 						}
 						response[0] = userWish;
