@@ -17,10 +17,6 @@ import android.widget.Toast;
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
 import com.application.baatna.data.User;
-import com.application.baatna.mapUtils.Cluster;
-import com.application.baatna.mapUtils.ClusterManager;
-import com.application.baatna.mapUtils.GoogleMapRenderer;
-import com.application.baatna.mapUtils.SimpleRestaurantPin;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.TypefaceSpan;
@@ -29,14 +25,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+/**
+ * Created by apoorvarora on 17/01/16.
+ */
 public class MapActivity extends AppCompatActivity {
 
 	private BaatnaApp zapp;
@@ -46,23 +46,12 @@ public class MapActivity extends AppCompatActivity {
 	private AsyncTask mAsyncRunning;
 
 	/** Map Object */
-	private boolean mapRefreshed = false;
 	private GoogleMap mMap;
 	private MapView mMapView;
 	private float defaultMapZoomLevel = 12.5f + 1.75f;
-	private boolean mMapSearchAnimating = false;
-	public boolean mapSearchVisible = false;
-	private boolean mapOptionsVisible = true;
 	// private LatLng recentLatLng;
 	private ArrayList<LatLng> mapCoords;
 	private final float MIN_MAP_ZOOM = 13.0f;
-
-	private View restMarker;
-	private View clusterMarker;
-	private View landmarkMarker;
-
-	private ClusterManager plotManager;
-	public boolean drawOverlayActive = false;
 
 	private double lat;
 	private double lon;
@@ -75,7 +64,7 @@ public class MapActivity extends AppCompatActivity {
 		setContentView(R.layout.google_map_view_layout);
 
 		width = getWindowManager().getDefaultDisplay().getWidth();
-		
+
 		inflater = LayoutInflater.from(this);
 
 		try {
@@ -83,7 +72,7 @@ public class MapActivity extends AppCompatActivity {
 		} catch (Exception e) {
 			Crashlytics.logException(e);
 		}
-		
+
 		mMapView = (MapView) findViewById(R.id.search_map);
 		mMapView.onCreate(savedInstanceState);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
@@ -97,7 +86,7 @@ public class MapActivity extends AppCompatActivity {
 		refreshView();
 
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
@@ -154,14 +143,14 @@ public class MapActivity extends AppCompatActivity {
 			CameraPosition cameraPosition;
 			if (targetCoords != null) {
 				cameraPosition = new CameraPosition.Builder().target(targetCoords) // Sets
-																					// the
-																					// center
-																					// of
-																					// the
-																					// map
-																					// to
-																					// Mountain
-																					// View
+						// the
+						// center
+						// of
+						// the
+						// map
+						// to
+						// Mountain
+						// View
 						.zoom(defaultMapZoomLevel) // Sets the zoom
 						.build(); // Creates a CameraPosition from the builder
 
@@ -235,46 +224,17 @@ public class MapActivity extends AppCompatActivity {
 			if (mMap == null)
 				setUpMapIfNeeded();
 
-			if (plotManager == null)
-				plotManager = new ClusterManager(this, mMap);
-
 			// Clearing The current clustering restaurant dataset
-
 			if (mMap != null && mapResultList != null && !mapResultList.isEmpty()) {
 
-				LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-				ArrayList<SimpleRestaurantPin> clusterPins = new ArrayList<SimpleRestaurantPin>();
 				for (User r : mapResultList) {
 					if (r.getLatitude() != 0.0 || r.getLongitude() != 0.0) {
-						// if (type.equals(MAP_LOCATION_SEARCH)
-						// || (!type.equals(MAP_DRAW_SEARCH)))
-						builder.include(new LatLng(r.getLatitude(), r.getLongitude()));
-						SimpleRestaurantPin pin = new SimpleRestaurantPin();
-						pin.setRestaurant(r);
-						clusterPins.add(pin);
+						BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.map_icon);
+						mMap.addMarker(new MarkerOptions().position(new LatLng(r.getLatitude(), r.getLongitude())).icon(icon));
 					}
 				}
 
-				if (clusterPins != null && clusterPins.size() == 1)
-					showSingleRestaurant(clusterPins.get(0));
-
-				// Adding new restaurant set to clustering algorithm
-				plotManager.addItems(clusterPins);
-				if (mMap != null) {
-					mMap.setOnCameraChangeListener(plotManager);
-					mMap.setOnMarkerClickListener(plotManager);
-				}
 			}
-		}
-	}
-
-	private void showSingleRestaurant(SimpleRestaurantPin item) {
-
-		String resIds = "";
-		ArrayList<User> resList = new ArrayList<User>();
-		if (item != null && item.getRestaurant() != null) {
-			resList.add(item.getRestaurant());
 		}
 	}
 
@@ -300,36 +260,6 @@ public class MapActivity extends AppCompatActivity {
 			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, width / 40 + width / 15 + width / 15));
 		} else if (mMap != null)
 			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, width / 40 + width / 15));
-	}
-
-	private class mRenderer extends GoogleMapRenderer implements GoogleMap.OnCameraChangeListener {
-
-		public mRenderer() {
-			super(mMap, plotManager);
-		}
-
-		@Override
-		public void onCameraChange(CameraPosition cameraPosition) {
-		}
-
-		@Override
-		protected void onBeforeClusterItemRendered(SimpleRestaurantPin item, MarkerOptions markerOptions) {
-
-		}
-
-		@Override
-		protected void onBeforeClusterRendered(Cluster<SimpleRestaurantPin> cluster, MarkerOptions markerOptions) {
-
-		}
-
-		@Override
-		protected void onClusterRendered(Cluster<SimpleRestaurantPin> cluster, Marker marker) {
-		}
-
-		@Override
-		protected void onClusterItemRendered(SimpleRestaurantPin clusterItem, Marker marker) {
-		}
-
 	}
 
 	private void refreshView() {
@@ -399,12 +329,13 @@ public class MapActivity extends AppCompatActivity {
 
 	public void actionBarSelected(View v) {
 		switch (v.getId()) {
-		case R.id.home_icon_container:
-			onBackPressed();
-			break;
-		default:
-			break;
+			case R.id.home_icon_container:
+				onBackPressed();
+				break;
+			default:
+				break;
 		}
 	}
 
 }
+

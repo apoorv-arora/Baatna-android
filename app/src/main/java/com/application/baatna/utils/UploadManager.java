@@ -282,16 +282,16 @@ public class UploadManager {
 
 	private static class Logout extends AsyncTask<Object, Void, Object[]> {
 
-		private String email;
+		private String access_token;
 
 		@Override
 		protected Object[] doInBackground(Object... params) {
 
 			Object result[] = null;
-			email = (String) params[0];
+			access_token = (String) params[0];
 
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
+			nameValuePairs.add(new BasicNameValuePair("access_token", access_token));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 

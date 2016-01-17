@@ -70,8 +70,8 @@ public class CommonLib {
 
 //	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
 //	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
-	public static final String SERVER_BODY = "192.168.2.77:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.2.77:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "192.168.1.36:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://192.168.1.36:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -146,10 +146,6 @@ public class CommonLib {
 			mImageAsyncsMaxSize, 1, TimeUnit.SECONDS, sPoolWorkQueueImage, sThreadFactoryImage);
 
 	// AppsFlyer
-	public static final String APPSFLYER_KEY = "ZWajvvuaGUAqqD83ZNauKW";
-
-	public static final String CRASHLYTICS_VERSION_STRING = "1.1 Live";
-
 	public static String LightItalic = "fonts/Glober_Light_Italic.otf";
 	public static String Regular = "fonts/Glober_Light.otf";
 	public static String Bold = "fonts/Glober_SemiBold.otf";
@@ -186,14 +182,7 @@ public class CommonLib {
 	public static final int LOCATION_NOT_DETECTED = 1;
 	/** Constant to track location identification progress */
 	public static final int LOCATION_DETECTED = 2;
-	/** Constant to track location identification progress */
-	public static final int GETZONE_CALLED = 3;
-	/** Constant to track location identification progress */
-	public static final int CITY_IDENTIFIED = 4;
-	/** Constant to track location identification progress */
-	public static final int CITY_NOT_IDENTIFIED = 5;
 	public static final int LOCATION_DETECTION_RUNNING = 6;
-	public static final int DIFFERENT_CITY_IDENTIFIED = 7;
 
 	/**
 	 * Feed types
