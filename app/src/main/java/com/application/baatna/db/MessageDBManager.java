@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -37,10 +36,6 @@ public class MessageDBManager extends SQLiteOpenHelper {
 	public MessageDBManager(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		ctx = context;
-	}
-
-	public MessageDBManager(Context context, String name, CursorFactory factory, int version) {
-		super(context, name, factory, version);
 	}
 
 	@Override
@@ -111,9 +106,6 @@ public class MessageDBManager extends SQLiteOpenHelper {
 		try {
 			db = ctx.openOrCreateDatabase("/data/data/com.application.baatna/databases/" + DATABASE_NAME,
 					SQLiteDatabase.OPEN_READONLY, null);
-			
-//			*CITYID + "=? AND " +*/ USERID + "=?",
-//            new String[] { /*Integer.toString(cityId),*/ Integer.toString(userId) }
 			
 			cursor = db.query(CACHE_TABLE_NAME, new String[] { ID, MESSAGEID, WISHID, TIMESTAMP, TYPE, BUNDLE },
 					WISHID + "=? AND " + MESSAGEID + "=?", new String[] {Integer.toString(wishId), Integer.toString(userId)}, null, null, TIMESTAMP + " ASC", null);

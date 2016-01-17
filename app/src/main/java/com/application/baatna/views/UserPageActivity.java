@@ -88,7 +88,6 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 	private boolean loading = false;
 	private int count = 10;
 	View headerView;
-	ListView feedlistview;
 	public static final int WISH_OWN = 2;
 
 	User user;
@@ -101,10 +100,6 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 		super.onCreate(arg0);
 		setContentView(R.layout.user_page_activity);
 		zapp = (BaatnaApp) getApplication();
-		headerView = View.inflate(this, R.layout.user_page_activity_header, null);
-		feedlistview = (ListView) findViewById(R.id.wish_items);
-		feedlistview.addHeaderView(headerView);
-
 		UploadManager.addCallback(this);
 		prefs = getSharedPreferences("application_settings", 0);
 		width = getWindowManager().getDefaultDisplay().getWidth();
@@ -123,7 +118,9 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 		}
 		if (!isSecondProfile)
 			userId = prefs.getInt("uid", 0);
+		headerView = View.inflate(this, R.layout.user_page_activity_header, null);
 		mListView = (ListView) findViewById(R.id.wish_items);
+		mListView.addHeaderView(headerView);
 		mListView.setDivider(new ColorDrawable(getResources().getColor(R.color.feed_bg)));
 		mListView.setDividerHeight(width / 40);
 		fixSizes();

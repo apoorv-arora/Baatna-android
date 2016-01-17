@@ -203,7 +203,7 @@
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
                     android:textSize="@dimen/size14"
-                    android:phoneNumber="true"
+                    android:inputType="number"
                     />
             </RelativeLayout>
         </ScrollView>

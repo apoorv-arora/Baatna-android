@@ -476,7 +476,7 @@ public class Home extends AppCompatActivity
 
 
 			if (delayed) {
-			ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
+				ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
 						.setDuration(250).setInterpolator(new AccelerateInterpolator()).setStartDelay(200);
 
 //				final Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fab_animate_in);
@@ -823,10 +823,9 @@ public class Home extends AppCompatActivity
 	@Override
 	public void onResume() {
 		getSupportActionBar().show();
-		if(CommonLib.isAndroidL())
-		{Window window = getWindow();
+		if(CommonLib.isAndroidL()) {
+			Window window = getWindow();
 			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
 			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 			window.setStatusBarColor(getResources().getColor(R.color.action_bar_default));
 		}
@@ -1515,7 +1514,7 @@ public class Home extends AppCompatActivity
 				viewHolder.action_container = (LinearLayout) v.findViewById(R.id.action_container);
 				viewHolder.imageView = (ImageView) v.findViewById(R.id.user_image);
 				if(type==0)
-				viewHolder.descriptiontextview=(TextView)v.findViewById(R.id.description_text_view);
+					viewHolder.descriptiontextview=(TextView)v.findViewById(R.id.description_text_view);
 				v.setTag(viewHolder);
 			}
 			if (position == 0) {
@@ -1537,7 +1536,7 @@ public class Home extends AppCompatActivity
 
 			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getTimestamp()));
 			if(type==0)
-			viewHolder.descriptiontextview.setVisibility(View.GONE);
+				viewHolder.descriptiontextview.setVisibility(View.GONE);
 			if(feedItems.get(position).getType()==CommonLib.FEED_TYPE_NEW_USER) {
 				v.findViewById(R.id.feed_item).setOnClickListener(null);
 			}
@@ -1562,7 +1561,7 @@ public class Home extends AppCompatActivity
 			//distance in kmi
 			if(distance>1)
 			{distance = (distance / 1000);
-			viewHolder.distance.setText((int)distance + "KM");	}
+				viewHolder.distance.setText((int)distance + "KM");	}
 			//if(distance < 5)
 			else if(distance==0)
 				viewHolder.distance.setText("NEAR YOU");
@@ -1875,27 +1874,27 @@ public class Home extends AppCompatActivity
 
 
 
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-			}
+											 public void onScrollStateChanged(AbsListView view, int scrollState) {
+											 }
 
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				if(feedListView.canScrollVertically(-1))
-					showFAB(true);
-				else hideFAB();
-				if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount - 1 < mWishesTotalCount
-						&& !loading && mListViewFooter != null) {
+											 public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+												 if(feedListView.canScrollVertically(-1))
+													 showFAB(true);
+												 else hideFAB();
+												 if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount - 1 < mWishesTotalCount
+														 && !loading && mListViewFooter != null) {
 
-					if (feedListView.getFooterViewsCount() == 1) {
-						loading = true;
-						new LoadModeFeed().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
-					}
-				} else if (totalItemCount - 1 == mWishesTotalCount) {
-					feedListView.removeFooterView(mListViewFooter);
-				}
-			}
+													 if (feedListView.getFooterViewsCount() == 1) {
+														 loading = true;
+														 new LoadModeFeed().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, totalItemCount - 1);
+													 }
+												 } else if (totalItemCount - 1 == mWishesTotalCount) {
+													 feedListView.removeFooterView(mListViewFooter);
+												 }
+											 }
 
 
-		}
+										 }
 		);
 	}
 
@@ -2411,12 +2410,12 @@ public class Home extends AppCompatActivity
 							break;
 						}
 
-						}
-
 					}
 
-
 				}
+
+
+			}
 
 			else {
 

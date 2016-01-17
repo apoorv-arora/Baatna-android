@@ -21,7 +21,6 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text="sfdsdfzsdfdsf"
         android:textColor="@color/default_font_color"
         android:textSize="@dimen/size15" />
 
