@@ -99,13 +99,13 @@ public class UploadManager {
 				new Object[] { accessToken, userId, rating, wish_id,user_wish_id});
 
 	}
-	public static void blockUser(String accessToken, String userId){
+	public static void blockUser(String userId){
 		for (UploadManagerCallback callback : callbacks) {
-			callback.uploadStarted(CommonLib.BLOCK_USER, 0, accessToken, null);
+			callback.uploadStarted(CommonLib.BLOCK_USER, 0, userId, null);
 		}
 
 		new BlockUser().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-				new Object[] { accessToken, userId});
+				new Object[] { userId});
 
 	}
 
@@ -413,7 +413,6 @@ public class UploadManager {
 
 	private static class BlockUser extends AsyncTask<Object, Void, Object[]> {
 
-		private String accessToken;
 		private String userId;
 
 
@@ -421,12 +420,11 @@ public class UploadManager {
 		protected Object[] doInBackground(Object... params) {
 
 			Object result[] = null;
-			accessToken = (String) params[0];
-			userId = (String) params[1];
+			userId = (String) params[0];
 
 
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-			nameValuePairs.add(new BasicNameValuePair("access_token", accessToken));
+			nameValuePairs.add(new BasicNameValuePair("access_token", prefs.getString("access_token", "")));
 			nameValuePairs.add(new BasicNameValuePair("client_id", CommonLib.CLIENT_ID));
 			nameValuePairs.add(new BasicNameValuePair("app_type", CommonLib.APP_TYPE));
 			nameValuePairs.add(new BasicNameValuePair("userId", userId));

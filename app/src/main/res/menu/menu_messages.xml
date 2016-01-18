@@ -4,6 +4,6 @@
     <item android:id="@+id/block"
         android:title="Block"
         app:showAsAction="never"
-       />
+        />
 
 </menu>

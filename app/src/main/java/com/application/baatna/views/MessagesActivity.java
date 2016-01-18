@@ -443,9 +443,9 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 		else if (item.getItemId() == R.id.block) {
 			zProgressDialog = ProgressDialog.show(MessagesActivity.this, null,
-					getResources().getString(R.string.update_rating_dialog), true, false);
+					getResources().getString(R.string.sending_request), true, false);
 
-			UploadManager.blockUser(prefs.getString("access_token", ""),currentUser.getUserId()+"");
+			UploadManager.blockUser(currentUser.getUserId()+"");
 
 		}
 		return super.onOptionsItemSelected(item);
@@ -534,6 +534,8 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 			if (zProgressDialog != null && zProgressDialog.isShowing())
 				zProgressDialog.dismiss();
 
+			if(status)
+				finish();
 		}
 	}
 
