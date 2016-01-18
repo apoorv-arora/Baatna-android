@@ -81,10 +81,6 @@ import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
-import com.application.baatna.mapUtils.Cluster;
-import com.application.baatna.mapUtils.ClusterManager;
-import com.application.baatna.mapUtils.GoogleMapRenderer;
-import com.application.baatna.mapUtils.SimpleRestaurantPin;
 import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.CustomTypefaceSpan;
@@ -92,7 +88,6 @@ import com.application.baatna.utils.RequestWrapper;
 import com.application.baatna.utils.UploadManager;
 import com.application.baatna.utils.UploadManagerCallback;
 import com.application.baatna.utils.fab.FABControl.OnFloatingActionsMenuUpdateListener;
-import com.crashlytics.android.Crashlytics;
 import com.facebook.Session;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -148,7 +143,6 @@ public class Home extends AppCompatActivity
 	private NewsFeedAdapter feedListAdapter;
 	private List<FeedItem> feedItems;
 
-	private GoogleMapFragment maps;
 	private Activity mContext;
 
 	// FAB Stuff
@@ -220,30 +214,13 @@ public class Home extends AppCompatActivity
 			public void onClick(View v) {
 
 				Intent intent = new Intent(Home.this, NewRequestActivity.class);
-//				getSupportActionBar().hide();
-//				if (CommonLib.isAndroidL()) {
-//					Window window = getWindow();
-//					window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//
-//					window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//					window.setStatusBarColor(getResources().getColor(R.color.green_gradient));
-//				}
-				//TranslateAnimation anim=new TranslateAnimation(0,0,-getResources().getDimensionPixelOffset(R.dimen.height60),0);
-				//anim.setFillAfter(true);
-				//anim.setDuration(1500);
-				//feedListView.setEnabled(true);
-				//feedListView.startAnimation(anim);
 				startActivity(intent);
-//				overridePendingTransition(0, 0);
-
 
 			}
 		});
 
-		setMapActivity(savedInstanceState);
 		findViewById(R.id.feedListView).setVisibility(View.GONE);
 		refreshFeed();
-
 
 		feedListView.setOnScrollListener(new OnScrollListener() {
 
@@ -390,7 +367,6 @@ public class Home extends AppCompatActivity
 			}
 		});
 		UploadManager.addCallback(this);
-		//Log.e("lat lon home",prefs.getFloat("lat1",0)+" "+prefs.getFloat("lon1",0));
 
 		zapp.lat=prefs.getFloat("lat1",0);
 		zapp.lon=prefs.getFloat("lon1",0);
@@ -399,20 +375,10 @@ public class Home extends AppCompatActivity
 		editor.putFloat("lon",(float)zapp.lon);
 		Log.e("zapp", zapp.lat + " " + zapp.lon);
 		displayAddressMap((ImageView) headerView.findViewById(R.id.search_map), zapp.lat, zapp.lon);
-		//UploadManager.updateLocation(prefs.getString("access_token", ""),zapp.lat, zapp.lon);
-		/*float lon = (float) zapp.lon;
-		float lat = (float) zapp.lat;
-		Editor editor = prefs.edit();
-		editor.putFloat("lat", lat);
-		editor.putFloat("lon", lon);
-		editor.commit();*/
 		new AppConfigandRating().execute(null, null, null);
 		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mFeedReceived,
 				new IntentFilter(CommonLib.LOCAL_FEED_BROADCAST_NOTIFICATION));
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
 	}
 
 
@@ -424,9 +390,6 @@ public class Home extends AppCompatActivity
 
 			try {
 				if (intent != null && intent.getExtras() != null && intent.hasExtra("feed")) {
-					// new
-					// GetMessages().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-					// check for user and wish
 					FeedItem feedItem = (FeedItem) intent.getSerializableExtra("feed");
 					wishes.add(0, feedItem);
 					if (feedListView != null && feedListView.getFirstVisiblePosition() >= 2)
@@ -443,10 +406,6 @@ public class Home extends AppCompatActivity
 
 	private void setUpFAB() {
 
-		// ((FABControl)
-		// findViewById(R.id.multiple_actions)).setOnFloatingActionsMenuUpdateListener(this);
-		// overlay behind FAB
-
 		mFABOverlay = findViewById(R.id.fab_overlay);
 		mFABOverlay.setOnClickListener(new OnClickListener() {
 
@@ -456,11 +415,7 @@ public class Home extends AppCompatActivity
 			}
 		});
 		mFABOverlay.setClickable(false);
-		//View fab=findViewById(R.id.fab_post_request);
-		//showFAB(true);
 	}
-
-
 
 	private void toggleFAB() {
 		// ((FABControl) findViewById(R.id.multiple_actions)).toggle();
@@ -473,17 +428,11 @@ public class Home extends AppCompatActivity
 		if (!mFABVisible) {
 			mFABVisible = true;
 
-
-
 			if (delayed) {
 				ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(1).scaleY(1)
 						.setDuration(250).setInterpolator(new AccelerateInterpolator()).setStartDelay(200);
 
-//				final Animation mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.fab_animate_in);
-//				 //It has to be invisible before here
-//				findViewById(R.id.fab_post_request).startAnimation(mAnimation);
 				findViewById(R.id.fab_post_request).setVisibility(View.VISIBLE);
-				// required | dont remove
 				animator.setListener(new AnimatorListener() {
 
 					@Override
@@ -607,14 +556,11 @@ public class Home extends AppCompatActivity
 	// makes FAB gone.
 	public void hideFAB() {
 
-		//findViewById(R.id.fab_post_request).animate().translationY(getResources().getDimensionPixelOffset(R.dimen.height60));
-
 		if (mFABVisible) {
 			mFABVisible = false;
 
 			ViewPropertyAnimator animator = findViewById(R.id.fab_post_request).animate().scaleX(0).scaleY(0)
 					.setDuration(50).setStartDelay(0).setInterpolator(new AccelerateInterpolator());
-			//findViewById(R.id.fab_post_request).setVisibility(View.GONE);
 			animator.setListener(new AnimatorListener() {
 
 				@Override
@@ -708,20 +654,6 @@ public class Home extends AppCompatActivity
 		actionBar.setCustomView(v);
 
 		// setImageOnActionBar();
-	}
-
-	private void initializeMap() {
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		maps = new GoogleMapFragment();
-		Bundle bundle = new Bundle();
-		bundle.putDouble("latitude", 0);
-		bundle.putDouble("longitude", 0);
-		maps.setArguments(bundle);
-		fragmentTransaction.add(R.id.fragment_container, maps, "map_container");
-		// fragmentTransaction.setCustomAnimations(R.anim.slide_in_right,
-		// R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-		fragmentTransaction.commit();
 	}
 
 	public void openOrCloseDrawer() {
@@ -832,22 +764,8 @@ public class Home extends AppCompatActivity
 		try {
 			super.onResume();
 
-			displayed = true;
-			if (mMapView != null) {
-				mMapView.onResume();
-
-				if (mMap == null && (lat != 0.0 || lon != 0.0))
-					setUpMapIfNeeded();
-			}
 			if (mFABExpanded)
 				toggleFAB();
-
-			// logging out user
-			// if (prefs.getInt("uid", 0) == 0) {
-			// Intent intent = new Intent(zapp, BaatnaActivity.class);
-			// startActivity(intent);
-			// finish();
-			// }
 
 		} catch (Exception e) {
 		}
@@ -856,13 +774,8 @@ public class Home extends AppCompatActivity
 
 	private void setUpUserSettingsInDrawer() {
 
-		// user snippet in drawer
-		// findViewById(R.id.`).getLayoutParams().height = width / 3;
 		findViewById(R.id.drawer_user_stat_cont).setPadding(3 * width / 80, 0, 0, 0);
 		findViewById(R.id.drawer_user_gradient_bottom).getLayoutParams().height = (12 * width / 90);
-		// findViewById(R.id.drawer_user_info_background_image).getLayoutParams().height
-		// = width / 3;
-		// findViewById(R.id.seperator).getLayoutParams().height = width / 30;
 
 		// user click
 		findViewById(R.id.drawer_user_container).setOnClickListener(new OnClickListener() {
@@ -889,10 +802,6 @@ public class Home extends AppCompatActivity
 		setImageFromUrlOrDisk(prefs.getString("profile_pic", ""), imageBlur, "blur", width / 20, width / 20, false, true);
 	}
 
-	// public void feedback(View v) {
-	// startActivity(new Intent(this, FeedbackPage.class));
-	// }
-
 	public void rate(View v) {
 
 		try {
@@ -910,12 +819,6 @@ public class Home extends AppCompatActivity
 		String userId = "";
 		String shortUrl = "https://play.google.com/store/apps/details?id=com.application.baatna";
 		String shareText = getResources().getString(R.string.share_description) + shortUrl;
-
-		// Intent i = new Intent(android.content.Intent.ACTION_SEND);
-		// i.setType("text/plain");
-		// i.putExtra(Intent.EXTRA_TEXT, shareText);
-		// startActivity(Intent.createChooser(i,
-		// getResources().getString(R.string.toast_share_longpress)));
 
 		List<Intent> targetedShareIntents = new ArrayList<Intent>();
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -961,7 +864,6 @@ public class Home extends AppCompatActivity
 	}
 
 	public void openWishbox(View v) {
-		// Intent intent = new Intent(this, WishboxActivity.class);
 		Intent intent = new Intent(this, WishHistoryActivity.class);
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -969,8 +871,6 @@ public class Home extends AppCompatActivity
 
 	@Override
 	public void onDestroy() {
-		if (mMapView != null)
-			mMapView.onDestroy();
 		destroyed = true;
 		mDrawerLayout = null;
 		zapp.zll.removeCallback(this);
@@ -979,9 +879,6 @@ public class Home extends AppCompatActivity
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(mFeedReceived);
 		super.onDestroy();
 	}
-
-
-
 
 	public void LocationCheck(Context context)
 	{
@@ -1043,12 +940,6 @@ public class Home extends AppCompatActivity
 				}
 				break;
 		}
-	}
-
-	public void startLocationCheck() {
-		zapp.zll.forced = true;
-		zapp.zll.addCallback(this);
-		zapp.startLocationCheck();
 	}
 
 	public void onCoordinatesIdentified(Location loc) {
@@ -1119,324 +1010,8 @@ public class Home extends AppCompatActivity
 		mFABOverlay.setClickable(false);
 	}
 
-	private boolean mapRefreshed = false;
-	private GoogleMap mMap;
-	private MapView mMapView;
-	private float defaultMapZoomLevel = 12.5f + 1.75f;
-	private boolean mMapSearchAnimating = false;
-	public boolean mapSearchVisible = false;
-	private boolean mapOptionsVisible = true;
-	// private LatLng recentLatLng;
-	private ArrayList<LatLng> mapCoords;
-	private final float MIN_MAP_ZOOM = 13.0f;
-
-	private View restMarker;
-	private View clusterMarker;
-	private View landmarkMarker;
-
-	private ClusterManager plotManager;
-	public boolean drawOverlayActive = false;
-
 	private double lat;
 	private double lon;
-
-	private ArrayList<User> mapResultList;
-
-	private void setMapActivity(Bundle savedInstanceState) {
-		try {
-			MapsInitializer.initialize(this);
-		} catch (Exception e) {
-			Crashlytics.logException(e);
-		}
-
-		// View inflatedView = inflater.inflate(R.layout.google_map_view_layout,
-		// null);
-		// mMapView = (MapView) headerView.findViewById(R.id.search_map);
-		// mMapView.onCreate(savedInstanceState);
-
-		prefs = getSharedPreferences("application_settings", 0);
-		zapp = (BaatnaApp) getApplication();
-		init();
-	}
-
-	private void init() {
-		lat = zapp.lat;
-		lon = zapp.lon;
-
-		// refreshMap();
-		// new GetCategoriesList().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-	}
-
-	private void updateMapPoints(ArrayList<LatLng> locations) {
-
-		mapResultList = new ArrayList<User>();
-		for (LatLng location : locations) {
-			User offsetItem = new User();
-			offsetItem.setLatitude(location.latitude);
-			offsetItem.setLongitude(location.longitude);
-			mapResultList.add(offsetItem);
-		}
-
-		refreshMap();
-	}
-
-	private void setUpMapIfNeeded() {
-
-		if (mMap == null && mMapView != null)
-			mMap = mMapView.getMap();
-		if (mMap != null) {
-
-			LatLng targetCoords = null;
-
-			if (lat != 0.0 || lon != 0.0)
-				targetCoords = new LatLng(lat, lon);
-			else {
-				// target the current city
-			}
-			mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-			mMap.getUiSettings().setAllGesturesEnabled(true);
-			mMap.getUiSettings().setZoomControlsEnabled(false);
-			mMap.getUiSettings().setTiltGesturesEnabled(false);
-			mMap.getUiSettings().setCompassEnabled(false);
-			mMap.setMyLocationEnabled(false);
-			mMap.setBuildingsEnabled(true);
-
-			CameraPosition cameraPosition;
-			if (targetCoords != null) {
-				cameraPosition = new CameraPosition.Builder().target(targetCoords) // Sets
-						// the
-						// center
-						// of
-						// the
-						// map
-						// to
-						// Mountain
-						// View
-						.zoom(defaultMapZoomLevel) // Sets the zoom
-						.build(); // Creates a CameraPosition from the builder
-
-				try {
-					mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-				} catch (Exception e) {
-					MapsInitializer.initialize(Home.this);
-					mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-				}
-			}
-
-		}
-
-	}
-
-	private void disableMap() {
-		if (mMap != null)
-			mMap.getUiSettings().setAllGesturesEnabled(false);
-	}
-
-	private void enableMap() {
-		if (mMap != null) {
-			mMap.getUiSettings().setAllGesturesEnabled(true);
-			mMap.getUiSettings().setZoomControlsEnabled(false);
-			mMap.getUiSettings().setTiltGesturesEnabled(false);
-			mMap.getUiSettings().setCompassEnabled(false);
-			mMap.getUiSettings().setMyLocationButtonEnabled(false);
-		}
-
-	}
-
-	@Override
-	public void onPause() {
-		displayed = false;
-		if (mMapView != null)
-			mMapView.onPause();
-		super.onPause();
-	}
-
-	@Override
-	public void onLowMemory() {
-
-		try {
-			if (mMapView != null) {
-				mMapView.onLowMemory();
-			}
-			// clearMapCache();
-		} catch (Exception e) {
-			Crashlytics.logException(e);
-		}
-
-		super.onLowMemory();
-	}
-
-	private void refreshMap() {
-
-		if (lat != 0.0 && lon != 0.0) {
-
-			if (mMap == null)
-				setUpMapIfNeeded();
-
-			if (plotManager == null)
-				plotManager = new ClusterManager(this, mMap);
-
-			// Clearing The current clustering restaurant dataset
-
-			if (mMap != null && mapResultList != null && !mapResultList.isEmpty()) {
-
-				LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-				ArrayList<SimpleRestaurantPin> clusterPins = new ArrayList<SimpleRestaurantPin>();
-				for (User r : mapResultList) {
-					if (r.getLatitude() != 0.0 || r.getLongitude() != 0.0) {
-						// if (type.equals(MAP_LOCATION_SEARCH)
-						// || (!type.equals(MAP_DRAW_SEARCH)))
-						builder.include(new LatLng(r.getLatitude(), r.getLongitude()));
-						SimpleRestaurantPin pin = new SimpleRestaurantPin();
-						pin.setRestaurant(r);
-						clusterPins.add(pin);
-					}
-				}
-
-				if (clusterPins != null && clusterPins.size() == 1)
-					showSingleRestaurant(clusterPins.get(0));
-
-				// Adding new restaurant set to clustering algorithm
-				plotManager.addItems(clusterPins);
-				if (mMap != null) {
-					mMap.setOnCameraChangeListener(plotManager);
-					mMap.setOnMarkerClickListener(plotManager);
-				}
-			}
-		}
-	}
-
-	private void showSingleRestaurant(SimpleRestaurantPin item) {
-
-		String resIds = "";
-		ArrayList<User> resList = new ArrayList<User>();
-		if (item != null && item.getRestaurant() != null) {
-			resList.add(item.getRestaurant());
-		}
-	}
-
-	private boolean displayed = false;
-
-	private void dynamicZoom(LatLngBounds bounds) throws IllegalStateException {
-
-		if (mapResultList != null && mapResultList.size() == 1) {
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, width / 40 + width / 15 + width / 15));
-		} else if (mMap != null)
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, width / 40 + width / 15));
-	}
-
-	/*@Override
-	public void onStart() {
-		super.onStart();
-
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		client.connect();
-		Action viewAction = Action.newAction(
-				Action.TYPE_VIEW, // TODO: choose an action type.
-				"Home Page", // TODO: Define a title for the content shown.
-				// TODO: If you have web page content that matches this app activity's content,
-				// make sure this auto-generated web page URL is correct.
-				// Otherwise, set the URL to null.
-				Uri.parse("http://host/path"),
-				// TODO: Make sure this auto-generated app deep link URI is correct.
-				Uri.parse("android-app://com.application.baatna.views/http/host/path")
-		);
-		AppIndex.AppIndexApi.start(client, viewAction);
-	}*/
-
-	//@Override
-	/*public void onStop() {
-		super.onStop();
-
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		Action viewAction = Action.newAction(
-				Action.TYPE_VIEW, // TODO: choose an action type.
-				"Home Page", // TODO: Define a title for the content shown.
-				// TODO: If you have web page content that matches this app activity's content,
-				// make sure this auto-generated web page URL is correct.
-				// Otherwise, set the URL to null.
-				Uri.parse("http://host/path"),
-				// TODO: Make sure this auto-generated app deep link URI is correct.
-				Uri.parse("android-app://com.application.baatna.views/http/host/path")
-		);
-		AppIndex.AppIndexApi.end(client, viewAction);
-		client.disconnect();
-	}*/
-
-	private class mRenderer extends GoogleMapRenderer implements GoogleMap.OnCameraChangeListener {
-
-		public mRenderer() {
-			super(mMap, plotManager);
-		}
-
-		@Override
-		public void onCameraChange(CameraPosition cameraPosition) {
-		}
-
-		@Override
-		protected void onBeforeClusterItemRendered(SimpleRestaurantPin item, MarkerOptions markerOptions) {
-
-		}
-
-		@Override
-		protected void onBeforeClusterRendered(Cluster<SimpleRestaurantPin> cluster, MarkerOptions markerOptions) {
-
-		}
-
-		@Override
-		protected void onClusterRendered(Cluster<SimpleRestaurantPin> cluster, Marker marker) {
-		}
-
-		@Override
-		protected void onClusterItemRendered(SimpleRestaurantPin clusterItem, Marker marker) {
-		}
-
-	}
-
-	// get institution name list...
-	private class GetCategoriesList extends AsyncTask<Object, Void, Object> {
-
-		// execute the api
-		@Override
-		protected Object doInBackground(Object... params) {
-			try {
-				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
-				String url = "";
-				url = CommonLib.SERVER + "user/nearbyusers?";
-				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.NEARBY_USERS, RequestWrapper.FAV);
-				CommonLib.ZLog("url", url);
-				return info;
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Object result) {
-			if (destroyed)
-				return;
-
-			if (result != null) {
-				if (result instanceof ArrayList<?>) {
-					updateMapPoints((ArrayList<LatLng>) result);
-				}
-			} else {
-				if (CommonLib.isNetworkAvailable(Home.this)) {
-					Toast.makeText(Home.this, getResources().getString(R.string.error_try_again), Toast.LENGTH_SHORT)
-							.show();
-				} else {
-					Toast.makeText(Home.this, getResources().getString(R.string.no_internet_message),
-							Toast.LENGTH_SHORT).show();
-				}
-			}
-
-		}
-	}
 
 	public class NewsFeedAdapter extends ArrayAdapter<FeedItem> {
 
@@ -2277,9 +1852,7 @@ public class Home extends AppCompatActivity
 						}
 					})
 
-							// .setTitle(getResources().getString(R.string.rate_dialog_title))
 					.setView(customView)
-							// .setMessage(getResources().getString(R.string.rate_dialog_message))
 					.create();
 
 			dialog.setCanceledOnTouchOutside(true);
@@ -2429,23 +2002,14 @@ public class Home extends AppCompatActivity
 
 		addressMap.getLayoutParams().width = width;
 
-		// ((FrameLayout) addressMap.getParent()).getLayoutParams().height = 3 *
-		// width / 10;
 		((FrameLayout) addressMap.getParent()).getLayoutParams().width = width;
 		addressMap.getLayoutParams().width = width;
-		// addressMap.getLayoutParams().width = mapWidth;
-
-		// ((RelativeLayout.LayoutParams) ((FrameLayout)
-		// addressMap.getParent()).getLayoutParams()).setMargins(0, width / 40,
-		// 0, 0);
 
 		String mapUrl = "http://maps.googleapis.com/maps/api/staticmap?center=" + lot + "," + lon + "&zoom=18&size="
 				+ width + "x" + getResources().getDimensionPixelSize(R.dimen.height125)
 				+ "&maptype=terrain&scale=2&markers=icon:http://i.imgur.com/Kn5aI2q.png?1"+"|scale:2|"
 				+ lot + "," + lon;
 
-		// CommonLib.ZLog("displayAddressMap", mapUrl);url, imageView, type,
-		// mapWidth, height, useDiskCache, fastBlur);
 		setImageFromUrlOrDisk(mapUrl, addressMap, "static_map", width,
 				getResources().getDimensionPixelSize(R.dimen.height125), false, false);
 
