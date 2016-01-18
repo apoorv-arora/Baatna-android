@@ -19,7 +19,6 @@ import com.application.baatna.utils.BaatnaLocationListener;
 import com.application.baatna.utils.CacheCleanerService;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.CommonLib.TrackerName;
-import com.application.baatna.utils.DeletePendingUploadCallback;
 import com.application.baatna.utils.LruCache;
 import com.application.baatna.utils.PostWrapper;
 import com.application.baatna.utils.RequestWrapper;
@@ -30,7 +29,6 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -50,9 +48,6 @@ public class BaatnaApp extends Application {
 	public boolean isGpsProviderEnabled = false;
 	public boolean firstLaunch = false;
 	public int state = CommonLib.LOCATION_DETECTION_RUNNING;
-
-
-	public ArrayList<DeletePendingUploadCallback> pendingUploadCallbacks = new ArrayList<DeletePendingUploadCallback>();
 
 	private CheckLocationTimeoutAsync checkLocationTimeoutThread;
 
@@ -317,14 +312,6 @@ public class BaatnaApp extends Application {
 
 	public boolean isLocationAvailable() {
 		return (isNetworkProviderEnabled || isGpsProviderEnabled);
-	}
-
-	public void addPendingUploadCallback(DeletePendingUploadCallback pendingUploadCallback) {
-		pendingUploadCallbacks.add(pendingUploadCallback);
-	}
-
-	public void removePendingUploadCallback(DeletePendingUploadCallback pendingUploadCallback) {
-		pendingUploadCallbacks.remove(pendingUploadCallback);
 	}
 
 	// GA
