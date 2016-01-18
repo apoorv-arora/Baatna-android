@@ -273,7 +273,6 @@
         <service android:name="com.application.baatna.utils.CacheCleanerService" />
         <service android:name="com.application.baatna.services.LocationUpdateService" />
         <service android:name="com.application.baatna.services.GcmIntentService" />
-        <service android:name="com.application.baatna.services.IMService" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
