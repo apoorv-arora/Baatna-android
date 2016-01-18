@@ -321,7 +321,7 @@ public class BaatnaApp extends Application {
 
 		if (!mTrackers.containsKey(trackerId)) {
 			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-			Tracker t = trackerId == CommonLib.TrackerName.APPLICATION_TRACKER ? analytics.newTracker("UA-19617341-61")
+			Tracker t = trackerId == CommonLib.TrackerName.APPLICATION_TRACKER ? analytics.newTracker("UA-69383611-1")
 					: analytics.newTracker(R.xml.global_tracker);
 			mTrackers.put(trackerId, t);
 		}

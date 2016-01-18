@@ -4,8 +4,6 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -81,6 +79,7 @@ import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.User;
 import com.application.baatna.data.UserComactMessage;
 import com.application.baatna.data.Wish;
+import com.application.baatna.utils.BTracker;
 import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.CustomTypefaceSpan;
@@ -100,15 +99,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.plus.PlusOneButton;
 
 import java.io.IOException;
@@ -212,7 +202,7 @@ public class Home extends AppCompatActivity
 
 			@Override
 			public void onClick(View v) {
-
+				BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_MAKE_NEW_REQUEST_PRESSED, "");
 				Intent intent = new Intent(Home.this, NewRequestActivity.class);
 				startActivity(intent);
 
@@ -493,6 +483,7 @@ public class Home extends AppCompatActivity
 	}
 
 	public void logoutConfirm(View V) {
+		BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_DRAWER_SIGN_OUT_PRESSED, "");
 		final AlertDialog logoutDialog;
 		logoutDialog = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.logout))
 				.setMessage(getResources().getString(R.string.logout_confirm))
@@ -628,6 +619,7 @@ public class Home extends AppCompatActivity
 		v.findViewById(R.id.open_messages).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_MESSAGES_ICON_PRESSED, "");
 				Intent intent = new Intent(Home.this, FriendListActivity.class);
 				startActivity(intent);
 				overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -695,10 +687,12 @@ public class Home extends AppCompatActivity
 // make the view visible and start the animation
 
 						anim.start();
+						BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_FAB_ICON_PRESSED, "");
 						Intent intent = new Intent(Home.this, NewRequestActivity.class);
 						startActivityForResult(intent, CommonLib.NEW_REQUEST);
 						overridePendingTransition(0, 0);
 					} else  {
+						BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_FAB_ICON_PRESSED, "");
 						Intent intent = new Intent(Home.this, NewRequestActivity.class);
 						startActivity(intent);
 					}
@@ -781,6 +775,7 @@ public class Home extends AppCompatActivity
 		findViewById(R.id.drawer_user_container).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_OWN_PROFILE_PRESSED, "");
 				Intent intent = new Intent(Home.this, UserPageActivity.class);
 				startActivity(intent);
 				overridePendingTransition(R.anim.rotation, R.anim.rotation1);
@@ -864,6 +859,7 @@ public class Home extends AppCompatActivity
 	}
 
 	public void openWishbox(View v) {
+		BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_DRAWER_WISH_HISTORY_PRESSED, "");
 		Intent intent = new Intent(this, WishHistoryActivity.class);
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -981,12 +977,14 @@ public class Home extends AppCompatActivity
 	}
 
 	public void aboutus(View view) {
+		BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_DRAWER_ABOUT_PRESSED, "");
 		Intent intent = new Intent(this, AboutUs.class);
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
 
 	public void feedback(View v) {
+		BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_DRAWER_FEEDBACK_PRESSED, "");
 		startActivity(new Intent(this, FeedbackPage.class));
 		overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 	}
@@ -1119,6 +1117,7 @@ public class Home extends AppCompatActivity
 
 				@Override
 				public void onClick(View v) {
+					BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_USER_PROFILE_PRESSED, "");
 					Intent intent = new Intent(Home.this, UserPageActivity.class);
 					if (user != null && user.getUserId() != prefs.getInt("uid", 0))
 						intent.putExtra("uid", user.getUserId());
@@ -2017,6 +2016,7 @@ public class Home extends AppCompatActivity
 		((FrameLayout) addressMap.getParent()).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				BTracker.logGAEvent(Home.this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_MAP_IMAGE_PRESSED, "");
 				Intent intent = new Intent(Home.this, MapActivity.class);
 				startActivity(intent);
 

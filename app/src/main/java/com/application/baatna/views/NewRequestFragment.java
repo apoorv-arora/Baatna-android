@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.application.baatna.R;
 import com.application.baatna.data.Categories;
+import com.application.baatna.utils.BTracker;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.IconView;
 import com.application.baatna.utils.RequestWrapper;
@@ -148,6 +149,7 @@ public class NewRequestFragment extends Fragment {
 		rootView.findViewById(R.id.post).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				BTracker.logGAEvent(mContext, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_WISH_POST_PRESSED, "");
 				int timeDuration = -1;
 				try {
 					timeDuration = Integer.parseInt( ((TextView) rootView.findViewById(R.id.time_duration)).getText().toString());

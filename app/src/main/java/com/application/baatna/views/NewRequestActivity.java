@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.application.baatna.R;
+import com.application.baatna.utils.BTracker;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.TypefaceSpan;
 import com.application.baatna.utils.UploadManager;
@@ -185,7 +186,7 @@ public class NewRequestActivity extends AppCompatActivity implements UploadManag
 
 	}
 	public void postRequest(View v){
-
+		BTracker.logGAEvent(this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_WISH_TICK_PRESSED, "");
 		LayoutInflater mInflater = inflater;
 		Context mContext=getBaseContext();
 		View rootView = mInflater.inflate(R.layout.new_request_fragment, null);

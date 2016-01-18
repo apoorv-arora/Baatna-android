@@ -204,6 +204,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 			if (currentWish.getStatus() == CommonLib.STATUS_OFFERED) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.messages_tick_icon)).setVisibility(View.VISIBLE);
 				((TextView) findViewById(R.id.product_status)).setText(Text.toUpperCase());
 				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_received_color));
 				((TextView) findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_received_color));
@@ -212,11 +213,13 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 				// check if the product is received
 			} else if (currentWish.getStatus() == CommonLib.STATUS_ACTIVE) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.messages_tick_icon)).setVisibility(View.VISIBLE);
 				((TextView) findViewById(R.id.product_status)).setText(Text);
 				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_received_color));
 				((TextView)findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_received_color));
 			} else {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.GONE);
+				((TextView) findViewById(R.id.messages_tick_icon)).setVisibility(View.GONE);
 			}
 		} else if (type == CommonLib.WISH_ACCEPTED_CURRENT_USER) {
 			// subtitle.setText("REQUESTED FOR A "+ currentWish.getTitle());
@@ -227,6 +230,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 				// the view gone, else visible
 			} else if (currentWish.getStatus() == CommonLib.STATUS_RECEIVED) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.messages_tick_icon)).setVisibility(View.VISIBLE);
 				((TextView) findViewById(R.id.product_status)).setText(Text.toUpperCase());
 				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_offered_color));
 				((TextView)findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_offered_color));
@@ -234,6 +238,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 			} else if (currentWish.getStatus() == CommonLib.STATUS_ACTIVE) {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.VISIBLE);
+				((TextView) findViewById(R.id.messages_tick_icon)).setVisibility(View.VISIBLE);
 				((TextView) findViewById(R.id.product_status)).setText(Text.toUpperCase());
 				((TextView) findViewById(R.id.product_status)).setTextColor(getResources().getColor(R.color.item_offered_color));
 				((TextView)findViewById(R.id.messages_tick_icon)).setTextColor(getResources().getColor(R.color.item_offered_color));
@@ -241,6 +246,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 
 			} else {
 				((TextView) findViewById(R.id.product_status)).setVisibility(View.GONE);
+				((TextView) findViewById(R.id.messages_tick_icon)).setVisibility(View.GONE);
 			}
 		}
 

@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.application.baatna.utils.BTracker;
 import com.application.baatna.utils.BaatnaLocationCallback;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.FacebookConnect;
@@ -530,7 +531,7 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 	}
 
 	public void facebookAction(View view) {
-
+		BTracker.logGAEvent(this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_FACEBOOK_LOGIN_PRESSED, "");
 		z_ProgressDialog = ProgressDialog.show(Splash.this, null, getResources().getString(R.string.verifying_creds),
 				true, false);
 		z_ProgressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
