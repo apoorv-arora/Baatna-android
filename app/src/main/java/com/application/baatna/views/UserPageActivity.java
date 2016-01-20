@@ -109,7 +109,6 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 				userId = extras.getInt("uid");
 				isSecondProfile = true;
 				// start the loader
-				findViewById(R.id.userpage_progress_container).setVisibility(View.VISIBLE);
 				findViewById(R.id.content_container).setVisibility(View.GONE);
 				findViewById(R.id.empty_view).setVisibility(View.GONE);
 				refreshView();
@@ -161,7 +160,6 @@ public class UserPageActivity extends AppCompatActivity implements UploadManager
 		protected void onPostExecute(Object result) {
 			if (destroyed)
 				return;
-			findViewById(R.id.userpage_progress_container).setVisibility(View.GONE);
 			View view=findViewById(R.id.content_container);
 			if (result != null) {
 				if (result instanceof User) {

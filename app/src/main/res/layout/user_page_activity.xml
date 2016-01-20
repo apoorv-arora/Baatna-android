@@ -4,37 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:id="@+id/content_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" >
 
-
-
-
-        <RelativeLayout
+        <ListView
+            android:id="@+id/wish_items"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="@color/feed_bg"/>
 
-            android:layout_centerHorizontal="true" >
+        <LinearLayout
+            android:id="@+id/wish_items_progress"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:visibility="gone" >
 
-            <ListView
-                android:id="@+id/wish_items"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:background="@color/feed_bg"/>
-
-            <LinearLayout
-                android:id="@+id/wish_items_progress"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:visibility="gone" >
-
-                <ProgressBar
-                    android:id="@+id/wish_progress"
-                    style="?android:attr/progressBarStyleInverse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </RelativeLayout>
+            <ProgressBar
+                android:id="@+id/wish_progress"
+                style="?android:attr/progressBarStyleInverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
 
 
     <LinearLayout
