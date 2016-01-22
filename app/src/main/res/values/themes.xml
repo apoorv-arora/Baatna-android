@@ -27,28 +27,25 @@
 
     <style name="ZomatoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
-
         <item name="colorPrimary">@color/green_gradient</item>
         <item name="colorPrimaryDark">@color/green_gradient</item>
 
 
     </style>
     
-    <style name="ZomatoMessageTheme" parent="ZomatoHomeBaseTheme">
+    <style name="ZomatoMessageTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="colorPrimary">@color/white</item>
+
         <item name="android:windowActionBar">false</item>
         <item name="android:actionBarDivider">@null</item>
-        <item name="android:textColorSecondary">@color/white</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="actionMenuTextColor">@color/white</item>
-        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
-    </style>
-    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_launcher</item>
-        <item name="android:background">?android:attr/actionBarItemBackground</item>
 
     </style>
+
+    <style name="overflowmenu" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColor">@color/zdhl3</item>
+    </style>
+
     <style name="ZomatoActionBarThemeDefault" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ZomatoActionBarDefault</item>
         <item name="android:actionBarTabStyle">@style/ZomatoActionBarTabs</item>

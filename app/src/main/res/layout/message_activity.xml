@@ -12,12 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height60"
         android:elevation="0dp"
-        android:background="@color/action_bar_default"
         android:minHeight="@dimen/height60"
         android:layout_marginBottom="10dp"
-        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
-        app:theme="@style/ToolbarBaseTheme"
-        app:contentInsetStart="0dp" />
+        app:contentInsetStart="0dp"
+        android:background="@color/white"
+        app:popupTheme="@style/overflowmenu"
+
+        />
 
     <LinearLayout
         android:id="@+id/bottom_parent"
