@@ -1178,8 +1178,13 @@ public class Home extends AppCompatActivity
 					//viewHolder.feed_item_container.setLayoutParams(new RelativeLayout.LayoutParams(width/80, getResources().getDimensionPixelOffset(R.dimen.height125)));
 
 					if (user != null && wish != null) {
-						String description = getResources().getString(R.string.feed_user_requested,
-								user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", wish.getRequiredFor());
+						String description = "";
+						try {
+							description = getResources().getString(R.string.feed_user_requested,
+									user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", wish.getRequiredFor());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 
 						setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 						Spannable desc = new SpannableString(description);
