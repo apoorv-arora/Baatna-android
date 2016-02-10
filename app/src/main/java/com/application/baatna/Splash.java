@@ -532,8 +532,12 @@ public class Splash extends Activity implements FacebookConnectCallback, UploadM
 
 	public void facebookAction(View view) {
 		BTracker.logGAEvent(this, BTracker.CATEGORY_WIDGET_ACTION, BTracker.ACTION_FACEBOOK_LOGIN_PRESSED, "");
-		z_ProgressDialog = ProgressDialog.show(Splash.this, null, getResources().getString(R.string.verifying_creds),
-				true, false);
+//		z_ProgressDialog = ProgressDialog.show(Splash.this, null, getResources().getString(R.string.verifying_creds),
+//				true, false);
+		z_ProgressDialog = new ProgressDialog(Splash.this,R.style.StyledDialog);
+		z_ProgressDialog.setMessage(getResources().getString(R.string.verifying_creds));
+		z_ProgressDialog.setCancelable(false);
+		z_ProgressDialog.setIndeterminate(true);
 		z_ProgressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 		z_ProgressDialog.setCancelable(false);
 		String regId = prefs.getString("registration_id", "");

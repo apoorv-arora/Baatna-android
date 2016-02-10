@@ -191,4 +191,6 @@
         <color name="transparent_super_white">#66ffffff</color>
     <color name="item_offered_color">@color/green_gradient</color>
     <color name="item_received_color">@color/bt_orange_2</color>
+
+    <color name="transparent">@android:color/transparent</color>
 </resources>

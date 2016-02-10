@@ -125,6 +125,22 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="actionMenuTextColor">@color/white</item>
     </style>
+
+    <style name="MessageToolbarBaseTheme" parent="Theme.AppCompat">
+        <item name="android:background">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:height">@dimen/height60</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="actionMenuTextColor">@color/black</item>
+        <item name="android:actionOverflowButtonStyle">@style/MessageButtonOverflow</item>
+    </style>
+    <style name="MessageButtonOverflow">
+        <item name="android:src">@drawable/ic_more_vert_black_24dp</item>
+        <item name="android:height">48dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+    </style>
     
      <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
