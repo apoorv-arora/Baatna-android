@@ -1615,8 +1615,8 @@ public class Home extends AppCompatActivity
 								bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent(), null,
 										opts);
 
-								if (fastBlur)
-									bitmap = CommonLib.fastBlur(bitmap, 4);
+//								if (fastBlur)
+//									bitmap = CommonLib.fastBlur(bitmap, 4);
 								if (useDiskCache) {
 									// if
 									// (CommonLib.shouldScaleDownBitmap(Home.this,
@@ -1680,6 +1680,8 @@ public class Home extends AppCompatActivity
 					if ((!url.equals("")) && currentTask != null
 							&& (currentTask.url.equals(url) || currentTask.url2.equals(url))) {
 						GetImage task = new GetImage(url, imageView, width, height, true, type, fastBlur);
+                        if (fastBlur)
+                            bitmap = CommonLib.fastBlur(bitmap, 4);
 						final AsyncDrawable asyncDrawable = new AsyncDrawable(getResources(), bitmap, task);
 						imageView.setImageDrawable(asyncDrawable);
 						imageView.setBackgroundResource(0);
