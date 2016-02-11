@@ -274,7 +274,7 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 						mAdapter.notifyDataSetChanged();
 						messageList.setSelection(mAdapter.getCount() - 1);
 						NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-						notificationManager.cancelAll();
+						notificationManager.cancel(com.application.baatna.utils.NotificationManager.NOTIFICATION_ID_MESSAGE);
 					}
 				}
 
