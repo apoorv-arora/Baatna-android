@@ -54,8 +54,9 @@
         <item name="android:topDark">@color/transparent</item>
     </style>
 
-    <style name="StyledDialog" parent="@android:style/Theme.Panel">
+    <style name="StyledDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:alertDialogStyle">@style/CustomAlertDialogStyle</item>
         <item name="android:background">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 </resources>

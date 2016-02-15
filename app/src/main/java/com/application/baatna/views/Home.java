@@ -1288,8 +1288,8 @@ public class Home extends AppCompatActivity
 					StringBuilder builder = new StringBuilder();
 					builder.append(getResources().getString(R.string.feed_requested_fulfilled,
 							user.getUserName() + " ", wish.getTitle().toUpperCase() + " ", users.get(0).getUserName()));
-					if(users.size() > 1)
-						builder.append(getResources().getString(R.string.and_more, users.size() - 2));
+					if(users.size() > 2)
+						builder.append(" "+getResources().getString(R.string.and_more, users.size() - 2));
 					String description = builder.toString();
 					setImageFromUrlOrDisk(user.getImageUrl(), viewHolder.imageView, "user", value, value, false, false);
 					Spannable desc = new SpannableString(description);
