@@ -115,8 +115,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 public class Home extends AppCompatActivity
 		implements OnFloatingActionsMenuUpdateListener, UploadManagerCallback, BaatnaLocationCallback {
 
