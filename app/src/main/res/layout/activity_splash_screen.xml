@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/baatna_background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/black_trans_twenty" />
+
+    <RelativeLayout
+        android:id="@+id/main_root"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="visible" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/tour_view_pager"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foreground="@drawable/photo_feedback"
+            android:clickable="true"
+            android:layout_margin="@dimen/size10"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true">
+
+            <com.application.baatna.utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="@dimen/size10"
+                android:paddingRight="@dimen/size10"
+                android:paddingTop="@dimen/size5"
+                android:paddingBottom="@dimen/size5"
+                android:textColor="@color/white"
+                android:text="@string/skip"
+                android:textSize="@dimen/size14"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/tour_dots"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tour_view_pager"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"/>
+
+        <RelativeLayout
+            android:id="@+id/signup_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tour_view_pager"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true">
+
+            <com.application.baatna.utils.TextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/size10"
+                android:paddingRight="@dimen/size10"
+                android:paddingTop="@dimen/size5"
+                android:paddingBottom="@dimen/size5"
+                android:textColor="@color/z_white_feedback"
+                android:letterSpacing=".01"
+                android:background="@drawable/textview_zhl_drawable"
+                android:text="@string/login_via_facebook"
+                android:textAllCaps="true"
+                android:textSize="@dimen/size14"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

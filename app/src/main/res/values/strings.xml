@@ -21,7 +21,7 @@
     <string name="login_using_email">Or Login Using Email</string>
     <string name="signup_using_email">Or Sign up Using Email</string>
     <string name="signup_facebook">Sign up via Facebook</string>
-    <string name="login_via_facebook">Join in via Facebook</string>
+    <string name="login_via_facebook">Login with Facebook</string>
     <string name="Login">Login</string>
     <string name="Sign_up">Sign up</string>
     <string name="already_have_account">Already have an account?</string>
@@ -116,5 +116,12 @@
     <string name="dialog_change_time_duration">Do you want to change the duration?</string>
     <string name="rate_your_experience">How would you like to rate your \nexperience with</string>
     <string name="join_the_college"><u>Join the college community</u></string>
+
+    <string name="skip">Skip</string>
+
+    <string name="splash_description_1">Baatna helps you borrow things\nfrom people around you,\nin an instant</string>
+    <string name="splash_description_2">Join the community and post\n a request for anything\nyou need</string>
+    <string name="splash_description_3">Connect with and borrow\nfrom a peer who offers\nyour request</string>
+    <string name="splash_description_4">Share your things with others\nto earn rewards and credibility</string>
 
 </resources>
