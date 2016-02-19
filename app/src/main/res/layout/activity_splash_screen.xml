@@ -63,7 +63,8 @@
             android:id="@+id/signup_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tour_view_pager"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/size40"
             android:visibility="gone"
             android:layout_centerHorizontal="true">
 

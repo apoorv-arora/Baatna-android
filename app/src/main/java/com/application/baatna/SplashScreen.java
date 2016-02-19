@@ -96,6 +96,7 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
 
     private ViewPager mViewPager;
 //    private RelativeLayout mSignupContainer;
+    private boolean firstBackground = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
             int imageWidth = width;
             int imageHeight = height;
 
-            Bitmap bgBitmap = CommonLib.getBitmap(this, R.drawable.baatna_background, imageWidth, imageHeight);
+            Bitmap bgBitmap = CommonLib.getBitmap(this, R.drawable.bg, imageWidth, imageHeight);
             imgBg.getLayoutParams().width = imageWidth;
             imgBg.getLayoutParams().height = imageHeight;
             imgBg.setImageBitmap(bgBitmap);
@@ -689,6 +690,21 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                     tour_text_logo.setImageBitmap(bitmap2);
 
                     tour_text.setText(getResources().getString(R.string.splash_description_1));
+                    if(!firstBackground) {
+                        try {
+                            int imageWidth = width;
+                            int imageHeight = height;
+
+                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg, imageWidth, imageHeight);
+                            imgBg.getLayoutParams().width = imageWidth;
+                            imgBg.getLayoutParams().height = imageHeight;
+                            imgBg.setImageBitmap(bgBitmap);
+
+                        } catch (OutOfMemoryError e) {
+                            e.printStackTrace();
+                        }
+                        firstBackground = true;
+                    }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
@@ -723,6 +739,21 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
 
                     tour_logo.setImageBitmap(bitmap);
 
+                    if(firstBackground) {
+                        try {
+                            int imageWidth = width;
+                            int imageHeight = height;
+
+                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
+                            imgBg.getLayoutParams().width = imageWidth;
+                            imgBg.getLayoutParams().height = imageHeight;
+                            imgBg.setImageBitmap(bgBitmap);
+
+                        } catch (OutOfMemoryError e) {
+                            e.printStackTrace();
+                        }
+                        firstBackground = false;
+                    }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
@@ -756,7 +787,21 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tour_2, options);
 
                     tour_logo.setImageBitmap(bitmap);
+                    if(firstBackground) {
+                        try {
+                            int imageWidth = width;
+                            int imageHeight = height;
 
+                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
+                            imgBg.getLayoutParams().width = imageWidth;
+                            imgBg.getLayoutParams().height = imageHeight;
+                            imgBg.setImageBitmap(bgBitmap);
+
+                        } catch (OutOfMemoryError e) {
+                            e.printStackTrace();
+                        }
+                        firstBackground = false;
+                    }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
@@ -790,7 +835,21 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tour_3, options);
 
                     tour_logo.setImageBitmap(bitmap);
+                    if(firstBackground) {
+                        try {
+                            int imageWidth = width;
+                            int imageHeight = height;
 
+                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
+                            imgBg.getLayoutParams().width = imageWidth;
+                            imgBg.getLayoutParams().height = imageHeight;
+                            imgBg.setImageBitmap(bgBitmap);
+
+                        } catch (OutOfMemoryError e) {
+                            e.printStackTrace();
+                        }
+                        firstBackground = false;
+                    }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
@@ -832,10 +891,24 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                     options2.inSampleSize = CommonLib.calculateInSampleSize(options2, width, height);
                     options2.inJustDecodeBounds = false;
                     options2.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.logo, options2);
+                    Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.baatna_splash_text, options2);
                     tour_text_logo.setImageBitmap(bitmap2);
 
+                    if(firstBackground) {
+                        try {
+                            int imageWidth = width;
+                            int imageHeight = height;
 
+                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
+                            imgBg.getLayoutParams().width = imageWidth;
+                            imgBg.getLayoutParams().height = imageHeight;
+                            imgBg.setImageBitmap(bgBitmap);
+
+                        } catch (OutOfMemoryError e) {
+                            e.printStackTrace();
+                        }
+                        firstBackground = false;
+                    }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
