@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/size5"
+    android:paddingBottom="@dimen/size10"
+    android:background="@color/android_light_background">
+
+    <com.application.baatna.utils.TextViewRegular
+        android:id="@+id/email_input_message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/height10"
+        android:paddingLeft="@dimen/height15"
+        android:paddingTop="@dimen/height10"
+        android:text="@string/email_required_text"
+        android:textColor="@color/zhl_darkest"
+        android:textSize="@dimen/size16" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/email_input_message"
+        android:background="@color/zhl_darkest" />
+
+    <com.application.baatna.utils.EditTextRegular
+        android:id="@+id/email_input"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/line"
+        android:layout_marginTop="@dimen/size5"
+        android:layout_marginBottom="@dimen/size5"
+        android:background="@drawable/abc_edit_text_material"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:padding="@dimen/height15"
+        android:hint="@string/email_required_hint"
+        android:textColor="@color/zhl_darkest"
+        android:textSize="@dimen/size18" >
+        <requestFocus />
+    </com.application.baatna.utils.EditTextRegular>
+
+    <com.application.baatna.utils.TextViewRegular
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/email_input"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="@dimen/size5"
+        android:layout_marginRight="@dimen/size10"
+        android:layout_marginLeft="@dimen/size10"
+        android:text="@string/submit"
+        android:background="@drawable/blue_button_feedback"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size18" />
+
+</RelativeLayout>

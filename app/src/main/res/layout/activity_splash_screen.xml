@@ -13,6 +13,7 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:visibility="gone"
         android:background="@color/black_trans_twenty" />
 
     <RelativeLayout
@@ -52,37 +53,42 @@
 
         </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/tour_dots"
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tour_view_pager"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"/>
-
-        <RelativeLayout
-            android:id="@+id/signup_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/size40"
-            android:visibility="gone"
-            android:layout_centerHorizontal="true">
+            android:layout_marginBottom="@dimen/size40">
 
-            <com.application.baatna.utils.TextViewSemiBold
+            <LinearLayout
+                android:id="@+id/tour_dots"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"/>
+
+            <RelativeLayout
+                android:id="@+id/signup_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/size10"
-                android:paddingRight="@dimen/size10"
-                android:paddingTop="@dimen/size5"
-                android:paddingBottom="@dimen/size5"
-                android:textColor="@color/z_white_feedback"
-                android:letterSpacing=".01"
-                android:background="@drawable/textview_zhl_drawable"
-                android:text="@string/login_via_facebook"
-                android:textAllCaps="true"
-                android:textSize="@dimen/size14"/>
+                android:visibility="invisible"
+                android:onClick="facebookAction"
+                android:layout_centerHorizontal="true">
 
+                <com.application.baatna.utils.TextViewSemiBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/size10"
+                    android:paddingRight="@dimen/size10"
+                    android:paddingTop="@dimen/size5"
+                    android:paddingBottom="@dimen/size5"
+                    android:textColor="@color/z_white_feedback"
+                    android:letterSpacing=".01"
+                    android:background="@drawable/textview_zhl_drawable"
+                    android:text="@string/login_via_facebook"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/size14"/>
+
+            </RelativeLayout>
         </RelativeLayout>
 
     </RelativeLayout>

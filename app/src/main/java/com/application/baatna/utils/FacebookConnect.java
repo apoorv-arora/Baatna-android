@@ -1,12 +1,20 @@
 package com.application.baatna.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.application.baatna.R;
 import com.application.baatna.data.FriendsCollection;
@@ -263,7 +271,7 @@ public class FacebookConnect {
 			public void onCompleted(Response response) {
 
 				CommonLib.ZLog("FC response.getRawResponse();", response.getRawResponse());
-				GraphUser user = response.getGraphObjectAs(GraphUser.class);
+				final GraphUser user = response.getGraphObjectAs(GraphUser.class);
 		
 				if (user != null) {
 					CommonLib.ZLog("FC", "user !null");
@@ -272,11 +280,66 @@ public class FacebookConnect {
 						JSONObject json = user.getInnerJSONObject();
 						Map<String, Object> map = user.asMap();
 						json = new JSONObject(map);
+						final JSONObject finalJson = json;
 
 						// email = json.getString("email");
-						JSONArray permissionsJson = new JSONArray(session.getPermissions());
+						final JSONArray permissionsJson = new JSONArray(session.getPermissions());
 						if (action == 1) {
-							new FBLogin().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new String[] { user.getId().toString(), json.toString(), email, session.getAccessToken(), permissionsJson.toString() });
+							//check for the email here...
+//							if email is null show dialog
+
+							if(email == null || email.equalsIgnoreCase("")) {
+								LayoutInflater inflater = LayoutInflater.from((Context) callback);
+								final View customView = inflater.inflate(R.layout.email_input_dialog, null);
+								final AlertDialog dialog = new AlertDialog.Builder((Context) callback, AlertDialog.THEME_HOLO_LIGHT)
+										.setCancelable(false)
+										.setView(customView)
+										.create();
+								dialog.setCanceledOnTouchOutside(false);
+								dialog.show();
+								customView.findViewById(R.id.email_input).requestFocus();
+								((InputMethodManager) ((Activity)callback).getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(((EditText)customView.findViewById(R.id.email_input)), InputMethodManager.SHOW_FORCED);
+								try {
+									android.os.Handler handler = new android.os.Handler();
+									handler.postDelayed(new Runnable() {
+										@Override
+										public void run() {
+											if( (Build.VERSION.SDK_INT >=17 && !((Activity) callback).isDestroyed()) && customView != null && customView.findViewById(R.id.email_input) != null)
+												((InputMethodManager) ((Activity)callback).getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(customView.findViewById(R.id.email_input), InputMethodManager.SHOW_FORCED);
+										}
+									}, 400);
+
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								customView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
+									@Override
+									public void onClick(View v) {
+										String inputMail = ((TextView)customView.findViewById(R.id.email_input)).getText().toString();
+										if(inputMail == null || inputMail.equalsIgnoreCase("")) {
+											Toast.makeText((Context) callback, "Invalid email", Toast.LENGTH_SHORT).show();
+											return;
+										}
+										boolean result = true;
+										try {
+											String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+											java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+											java.util.regex.Matcher m = p.matcher(inputMail);
+											result = m.matches();
+										} catch (Exception ex) {
+											result = false;
+										}
+										if(!result) {
+											Toast.makeText((Context) callback, "Invalid email", Toast.LENGTH_SHORT).show();
+											return;
+										}
+										CommonLib.hideKeyBoard((Activity)callback, customView.findViewById(R.id.email_input));
+										new FBLogin().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new String[] { user.getId().toString(), finalJson.toString(), inputMail.trim().toString(), session.getAccessToken(), permissionsJson.toString() });
+										dialog.dismiss();
+									}
+								});
+							} else
+								new FBLogin().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new String[] { user.getId().toString(), json.toString(), email, session.getAccessToken(), permissionsJson.toString() });
 						} else if (action == 2 || action == 3) {
 							new FBConnect().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new String[] { user.getId().toString(), json.toString(), user.getName(), session.getAccessToken(), permissionsJson.toString() });
 						} else if (action == 5) {

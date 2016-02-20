@@ -122,6 +122,10 @@
     <string name="splash_description_1">Baatna helps you borrow things\nfrom people around you,\nin an instant</string>
     <string name="splash_description_2">Join the community and post\n a request for anything\nyou need</string>
     <string name="splash_description_3">Connect with and borrow\nfrom a peer who offers\nyour request</string>
-    <string name="splash_description_4">Share your things with others\nto earn rewards and credibility</string>
+    <string name="splash_description_4">Share your things with others\nto earn rewards and\ncredibility</string>
+
+    <string name="email_required_text">OOPS!\n We couldn\'t fetch email.</string>
+    <string name="email_required_hint">Email</string>
+
 
 </resources>

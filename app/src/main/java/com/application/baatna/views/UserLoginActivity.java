@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
-import com.application.baatna.Splash;
+import com.application.baatna.SplashScreen;
 import com.application.baatna.data.User;
 import com.application.baatna.data.Wish;
 import com.application.baatna.utils.CommonLib;
@@ -187,7 +187,7 @@ public class UserLoginActivity extends AppCompatActivity implements UploadManage
         editor.commit();
 
         if (prefs.getInt("uid", 0) == 0) {
-            Intent intent = new Intent(zapp, Splash.class);
+            Intent intent = new Intent(zapp, SplashScreen.class);
             startActivity(intent);
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -200,7 +200,7 @@ public class UserLoginActivity extends AppCompatActivity implements UploadManage
         super.onResume();
 
         if (prefs.getInt("uid", 0) == 0) {
-            Intent intent = new Intent(UserLoginActivity.this, Splash.class);
+            Intent intent = new Intent(UserLoginActivity.this, SplashScreen.class);
             startActivity(intent);
             finish();
         }

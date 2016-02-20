@@ -1,22 +1,5 @@
 package com.application.baatna.views;
 
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.application.baatna.BaatnaApp;
-import com.application.baatna.R;
-import com.application.baatna.Splash;
-import com.application.baatna.data.Coupon;
-import com.application.baatna.utils.CommonLib;
-import com.application.baatna.utils.RequestWrapper;
-import com.application.baatna.utils.TypefaceSpan;
-import com.application.baatna.utils.UploadManager;
-import com.application.baatna.utils.UploadManagerCallback;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,6 +27,23 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.application.baatna.BaatnaApp;
+import com.application.baatna.R;
+import com.application.baatna.SplashScreen;
+import com.application.baatna.data.Coupon;
+import com.application.baatna.utils.CommonLib;
+import com.application.baatna.utils.RequestWrapper;
+import com.application.baatna.utils.TypefaceSpan;
+import com.application.baatna.utils.UploadManager;
+import com.application.baatna.utils.UploadManagerCallback;
+
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RedeemPage extends Activity implements UploadManagerCallback {
 
@@ -142,7 +141,7 @@ public class RedeemPage extends Activity implements UploadManagerCallback {
 
 		// should be handled at ever activity
 		if (prefs.getInt("uid", 0) == 0) {
-			Intent intent = new Intent(RedeemPage.this, Splash.class);
+			Intent intent = new Intent(RedeemPage.this, SplashScreen.class);
 			startActivity(intent);
 			finish();
 		}

@@ -34,7 +34,7 @@ import android.widget.Toast;
 
 import com.application.baatna.BaatnaApp;
 import com.application.baatna.R;
-import com.application.baatna.Splash;
+import com.application.baatna.SplashScreen;
 import com.application.baatna.data.Institution;
 import com.application.baatna.utils.CommonLib;
 import com.application.baatna.utils.RequestWrapper;
@@ -158,7 +158,7 @@ public class HSLoginActivity extends AppCompatActivity implements UploadManagerC
 		editor.commit();
 
 		if (prefs.getInt("uid", 0) == 0) {
-			Intent intent = new Intent(zapp, Splash.class);
+			Intent intent = new Intent(zapp, SplashScreen.class);
 			startActivity(intent);
 			finish();
 			overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

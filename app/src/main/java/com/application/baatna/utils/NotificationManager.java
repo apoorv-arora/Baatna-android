@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.application.baatna.R;
-import com.application.baatna.Splash;
+import com.application.baatna.SplashScreen;
 import com.application.baatna.data.FeedItem;
 import com.application.baatna.data.Message;
 import com.application.baatna.data.User;
@@ -174,7 +174,7 @@ public class NotificationManager {
         // check if app is alive, do not push the message notifiication then
         mNotificationManager = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationActivity == null)
-            notificationActivity = new Intent(context, Splash.class);
+            notificationActivity = new Intent(context, SplashScreen.class);
         int flags = PendingIntent.FLAG_CANCEL_CURRENT;
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationActivity, flags);
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
