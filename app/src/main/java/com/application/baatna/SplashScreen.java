@@ -7,14 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -46,6 +47,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -81,7 +84,7 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
     private String error_stackTrace = "";
 
     private BaatnaApp zapp;
-    Context context;
+    private Activity context;
     private boolean windowHasFocus = false;
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     GoogleCloudMessaging gcm;
@@ -95,8 +98,10 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
     private TranslateAnimation translation;
 
     private ViewPager mViewPager;
-//    private RelativeLayout mSignupContainer;
+    //    private RelativeLayout mSignupContainer;
     private boolean firstBackground = true;
+
+    private boolean hasSwipedPager = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,7 +109,7 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
         setContentView(R.layout.activity_splash_screen);
 
         prefs = getSharedPreferences("application_settings", 0);
-        context = getApplicationContext();
+        context = this;
         zapp = (BaatnaApp) getApplication();
         APPLICATION_ID = prefs.getString("app_id", "");
 
@@ -161,6 +166,13 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                     else
                         dots.setImageResource(R.drawable.tour_image_dots_unselected);
                 }
+
+                if (arg0 == 0 || arg0 == 1 || arg0 == 2) {
+                    findViewById(R.id.signup_container).setVisibility(View.GONE);
+                } else if (arg0 == 3 || arg0 == 4) {
+                    findViewById(R.id.signup_container).setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
@@ -171,10 +183,36 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+
+        ((ViewPager) mViewPager).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hasSwipedPager = true;
+                return false;
+            }
+        });
         fixSizes();
         animate();
         UploadManager.addCallback(this);
         updateDotsContainer();
+
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!destroyed)
+                    startTimer();
+            }
+        }, 1000);
+
+        findViewById(R.id.skip_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mViewPager != null) {
+                    mViewPager.setCurrentItem(4, true);
+                }
+            }
+        });
     }
 
     private void animate() {
@@ -445,6 +483,7 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
     private void fixSizes() {
 
         mViewPager.getLayoutParams().height = 2 * height / 3;
+        ((RelativeLayout.LayoutParams)mViewPager.getLayoutParams()).setMargins(0, height / 5, 0, width / 20);
 //        mSignupContainer.getLayoutParams().height = height / 3 - width / 10 - width / 40;
     }
 
@@ -578,7 +617,7 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
 
     @Override
     public void uploadFinished(int requestType, int userId, int objectId, Object data, int uploadId, boolean status,
-    String stringId) {
+                               String stringId) {
         if (requestType == CommonLib.SIGNUP) {
             if (destroyed)
                 return;
@@ -668,48 +707,34 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
 
                 // setting image
                 try {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
 
-                    BitmapFactory.decodeResource(getResources(), R.drawable.logo, options);
-                    options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
-                    options.inJustDecodeBounds = false;
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo, options);
+                    Bitmap logoBitmap = CommonLib.getBitmap(context, R.drawable.logo, width / 2, width / 2);
+                    tour_logo.getLayoutParams().width = width / 2;
+                    tour_logo.getLayoutParams().height = width / 2;
+                    tour_logo.setImageBitmap(logoBitmap);
 
-                    tour_logo.setImageBitmap(bitmap);
-
-                    BitmapFactory.Options options2 = new BitmapFactory.Options();
-                    options2.inJustDecodeBounds = true;
-
-                    BitmapFactory.decodeResource(getResources(), R.drawable.logo, options2);
-                    options2.inSampleSize = CommonLib.calculateInSampleSize(options2, width, height);
-                    options2.inJustDecodeBounds = false;
-                    options2.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.baatna_splash_text, options2);
-                    tour_text_logo.setImageBitmap(bitmap2);
+                    Bitmap splashTextBitmap = CommonLib.getBitmap(context, R.drawable.baatna_splash_text, width / 2, width / 10);
+                    tour_text_logo.getLayoutParams().width = width / 2;
+                    tour_text_logo.getLayoutParams().height = width / 10;
+                    tour_text_logo.setImageBitmap(splashTextBitmap);
 
                     tour_text.setText(getResources().getString(R.string.splash_description_1));
-                    if(!firstBackground) {
-                        try {
-                            int imageWidth = width;
-                            int imageHeight = height;
+                    int imageWidth = width;
+                    int imageHeight = height;
 
-                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg, imageWidth, imageHeight);
-                            imgBg.getLayoutParams().width = imageWidth;
-                            imgBg.getLayoutParams().height = imageHeight;
-                            imgBg.setImageBitmap(bgBitmap);
-
-                        } catch (OutOfMemoryError e) {
-                            e.printStackTrace();
-                        }
+                    if(mViewPager.getCurrentItem() == 0 ) {
+                        Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg, imageWidth, imageHeight);
+                        imgBg.getLayoutParams().width = imageWidth;
+                        imgBg.getLayoutParams().height = imageHeight;
+                        imgBg.setImageBitmap(bgBitmap);
                         firstBackground = true;
                     }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
                 }
-                findViewById(R.id.signup_container).setVisibility(View.GONE);
+                if( mViewPager.getCurrentItem() == 0 )
+                    findViewById(R.id.signup_container).setVisibility(View.GONE);
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 imageParams.setMargins(15 * width / 50, 3 * width / 16, 15 * width / 50, 0);
@@ -728,37 +753,28 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                 tour_logo.getLayoutParams().height = 2 * width / 5;
                 // setting image
                 try {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
 
-                    BitmapFactory.decodeResource(getResources(), R.drawable.tour_1, options);
-                    options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
-                    options.inJustDecodeBounds = false;
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tour_1, options);
+                    Bitmap logoBitmap = CommonLib.getBitmap(context, R.drawable.tour_1, width / 2, width / 2);
+                    tour_logo.getLayoutParams().width = width / 2;
+                    tour_logo.getLayoutParams().height = width / 2;
+                    tour_logo.setImageBitmap(logoBitmap);
 
-                    tour_logo.setImageBitmap(bitmap);
+                    if(firstBackground && mViewPager.getCurrentItem() != 0) {
+                        int imageWidth = width;
+                        int imageHeight = height;
 
-                    if(firstBackground) {
-                        try {
-                            int imageWidth = width;
-                            int imageHeight = height;
-
-                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
-                            imgBg.getLayoutParams().width = imageWidth;
-                            imgBg.getLayoutParams().height = imageHeight;
-                            imgBg.setImageBitmap(bgBitmap);
-
-                        } catch (OutOfMemoryError e) {
-                            e.printStackTrace();
-                        }
+                        Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
+                        imgBg.getLayoutParams().width = imageWidth;
+                        imgBg.getLayoutParams().height = imageHeight;
+                        imgBg.setImageBitmap(bgBitmap);
                         firstBackground = false;
                     }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
                 }
-                findViewById(R.id.signup_container).setVisibility(View.GONE);
+                if( mViewPager.getCurrentItem() == 1 )
+                    findViewById(R.id.signup_container).setVisibility(View.GONE);
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 imageParams.setMargins(width / 20, width / 20, width / 20, 0);
@@ -777,38 +793,28 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                 tour_logo.getLayoutParams().height = 2 * width / 5;
                 // setting image
                 try {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
 
-                    BitmapFactory.decodeResource(getResources(), R.drawable.tour_2, options);
-                    options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
-                    options.inJustDecodeBounds = false;
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tour_2, options);
+                    Bitmap logoBitmap = CommonLib.getBitmap(context, R.drawable.tour_2, width / 2, width / 2);
+                    tour_logo.getLayoutParams().width = width / 2;
+                    tour_logo.getLayoutParams().height = width / 2;
+                    tour_logo.setImageBitmap(logoBitmap);
 
-                    tour_logo.setImageBitmap(bitmap);
-                    if(firstBackground) {
-                        try {
-                            int imageWidth = width;
-                            int imageHeight = height;
+                    if(firstBackground && mViewPager.getCurrentItem() != 0) {
+                        int imageWidth = width;
+                        int imageHeight = height;
 
-                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
-                            imgBg.getLayoutParams().width = imageWidth;
-                            imgBg.getLayoutParams().height = imageHeight;
-                            imgBg.setImageBitmap(bgBitmap);
-
-                        } catch (OutOfMemoryError e) {
-                            e.printStackTrace();
-                        }
+                        Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
+                        imgBg.getLayoutParams().width = imageWidth;
+                        imgBg.getLayoutParams().height = imageHeight;
+                        imgBg.setImageBitmap(bgBitmap);
                         firstBackground = false;
                     }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
                 }
-
-                tour_logo.setVisibility(View.VISIBLE);
-                findViewById(R.id.signup_container).setVisibility(View.GONE);
+                if( mViewPager.getCurrentItem() == 2 )
+                    findViewById(R.id.signup_container).setVisibility(View.GONE);
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 imageParams.setMargins(15 * width / 50, 3 * width / 16, 15 * width / 50, 0);
@@ -825,29 +831,20 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                 tour_logo.getLayoutParams().height = 2 * width / 5;
                 // setting image
                 try {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
 
-                    BitmapFactory.decodeResource(getResources(), R.drawable.tour_3, options);
-                    options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
-                    options.inJustDecodeBounds = false;
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tour_3, options);
+                    Bitmap logoBitmap = CommonLib.getBitmap(context, R.drawable.tour_3, width / 2, width / 2);
+                    tour_logo.getLayoutParams().width = width / 2;
+                    tour_logo.getLayoutParams().height = width / 2;
+                    tour_logo.setImageBitmap(logoBitmap);
 
-                    tour_logo.setImageBitmap(bitmap);
-                    if(firstBackground) {
-                        try {
-                            int imageWidth = width;
-                            int imageHeight = height;
+                    if(firstBackground && mViewPager.getCurrentItem() != 0) {
+                        int imageWidth = width;
+                        int imageHeight = height;
 
-                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
-                            imgBg.getLayoutParams().width = imageWidth;
-                            imgBg.getLayoutParams().height = imageHeight;
-                            imgBg.setImageBitmap(bgBitmap);
-
-                        } catch (OutOfMemoryError e) {
-                            e.printStackTrace();
-                        }
+                        Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
+                        imgBg.getLayoutParams().width = imageWidth;
+                        imgBg.getLayoutParams().height = imageHeight;
+                        imgBg.setImageBitmap(bgBitmap);
                         firstBackground = false;
                     }
                 } catch (OutOfMemoryError e) {
@@ -855,7 +852,8 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
                 }
 
-                findViewById(R.id.signup_container).setVisibility(View.GONE);
+                if( mViewPager.getCurrentItem() == 3 )
+                    findViewById(R.id.signup_container).setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 imageParams.setMargins(15 * width / 50, 3 * width / 16, 15 * width / 50, 0);
@@ -869,56 +867,36 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                 tour_text_logo.setVisibility(View.VISIBLE);
                 tour_text.setVisibility(View.GONE);
 
-                tour_logo.getLayoutParams().width = 4 * width  / 5;
-                tour_logo.getLayoutParams().height = 2 * width / 5;
                 // setting image
                 try {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
 
-                    BitmapFactory.decodeResource(getResources(), R.drawable.logo, options);
-                    options.inSampleSize = CommonLib.calculateInSampleSize(options, width, height);
-                    options.inJustDecodeBounds = false;
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo, options);
+                    Bitmap logoBitmap = CommonLib.getBitmap(context, R.drawable.logo, width / 2, width / 2);
+                    tour_logo.getLayoutParams().width = width / 2;
+                    tour_logo.getLayoutParams().height = width / 2;
+                    tour_logo.setImageBitmap(logoBitmap);
 
-                    tour_logo.setImageBitmap(bitmap);
+                    Bitmap splashTextBitmap = CommonLib.getBitmap(context, R.drawable.baatna_splash_text, width / 2, width / 10);
+                    tour_text_logo.getLayoutParams().width = width / 2;
+                    tour_text_logo.getLayoutParams().height = width / 10;
+                    tour_text_logo.setImageBitmap(splashTextBitmap);
 
-                    BitmapFactory.Options options2 = new BitmapFactory.Options();
-                    options2.inJustDecodeBounds = true;
+                    tour_text.setText(getResources().getString(R.string.splash_description_1));
+                    int imageWidth = width;
+                    int imageHeight = height;
 
-                    BitmapFactory.decodeResource(getResources(), R.drawable.logo, options2);
-                    options2.inSampleSize = CommonLib.calculateInSampleSize(options2, width, height);
-                    options2.inJustDecodeBounds = false;
-                    options2.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.baatna_splash_text, options2);
-                    tour_text_logo.setImageBitmap(bitmap2);
-
-                    if(firstBackground) {
-                        try {
-                            int imageWidth = width;
-                            int imageHeight = height;
-
-                            Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg2, imageWidth, imageHeight);
-                            imgBg.getLayoutParams().width = imageWidth;
-                            imgBg.getLayoutParams().height = imageHeight;
-                            imgBg.setImageBitmap(bgBitmap);
-
-                        } catch (OutOfMemoryError e) {
-                            e.printStackTrace();
-                        }
-                        firstBackground = false;
+                    if(mViewPager.getCurrentItem() == 0 ) {
+                        Bitmap bgBitmap = CommonLib.getBitmap(context, R.drawable.bg, imageWidth, imageHeight);
+                        imgBg.getLayoutParams().width = imageWidth;
+                        imgBg.getLayoutParams().height = imageHeight;
+                        imgBg.setImageBitmap(bgBitmap);
+                        firstBackground = true;
                     }
                 } catch (OutOfMemoryError e) {
                     e.printStackTrace();
                     tour_logo.setBackgroundColor(getResources().getColor(R.color.transparent1));
                 }
-
-                tour_logo.setVisibility(View.VISIBLE);
-
-                findViewById(R.id.tour_dots).setVisibility(View.GONE);
-                findViewById(R.id.tour_dots).setClickable(false);
-                findViewById(R.id.signup_container).setVisibility(View.VISIBLE);
+                if( mViewPager.getCurrentItem() == 4 )
+                    findViewById(R.id.signup_container).setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 imageParams.setMargins(15 * width / 50, 3 * width / 16, 15 * width / 50, 0);
@@ -1005,5 +983,44 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
                 finish();
             }
         }
+    }
+
+    int seconds = 12;
+    Timer timer;
+    private int mCurrentItem = 0;
+
+    private void startTimer() {
+        if (context == null || destroyed)
+            return;
+
+        timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (!destroyed) {
+
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!destroyed) {
+                                seconds -= 1;
+                                if (seconds <= 0) {
+                                    seconds = 12;
+                                    timer.cancel();
+                                } else {
+                                    mCurrentItem++;
+                                    if(mCurrentItem < 5 && !hasSwipedPager)
+                                        mViewPager.setCurrentItem(mCurrentItem);
+                                }
+
+                            }
+                        }
+                    });
+                } else {
+                    timer.cancel();
+                }
+            }
+        }, 3000, 3000);
     }
 }

@@ -28,6 +28,7 @@
             android:layout_height="wrap_content" />
 
         <FrameLayout
+            android:id="@+id/skip_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:foreground="@drawable/photo_feedback"
@@ -36,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true">
 
-            <com.application.baatna.utils.TextViewRegular
+            <com.application.baatna.utils.TextViewSemiBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -68,7 +69,7 @@
             android:visibility="gone"
             android:layout_centerHorizontal="true">
 
-            <com.application.baatna.utils.TextViewBold
+            <com.application.baatna.utils.TextViewSemiBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/size10"

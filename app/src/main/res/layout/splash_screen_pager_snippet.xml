@@ -20,7 +20,7 @@
         android:visibility="gone"
         android:scaleType="fitXY" />
 
-    <com.application.baatna.utils.TextViewRegular
+    <com.application.baatna.utils.TextViewSemiBold
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
