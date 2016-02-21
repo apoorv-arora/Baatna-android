@@ -604,7 +604,6 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 			} else if (imageView != null && imageView.getDrawable() != null
 					&& ((BitmapDrawable) imageView.getDrawable()).getBitmap() != null) {
 				imageView.setBackgroundResource(0);
-				Bitmap blurBitmap = null;
 				if (imageView.getParent() != null && imageView.getParent() instanceof ViewGroup
 						&& ((ViewGroup) imageView.getParent()).getChildAt(2) != null
 						&& ((ViewGroup) imageView.getParent()).getChildAt(2) instanceof ProgressBar) {
@@ -664,7 +663,6 @@ public class MessagesActivity extends AppCompatActivity implements UploadManager
 		private int height;
 		boolean useDiskCache;
 		String type;
-		Bitmap blurBitmap;
 
 		public GetImage(String url, ImageView imageView, int width, int height, boolean useDiskCache, String type) {
 			this.url = url;
