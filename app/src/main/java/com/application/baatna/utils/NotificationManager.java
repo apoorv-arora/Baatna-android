@@ -44,13 +44,15 @@ public class NotificationManager {
 
     public static NotificationManager getInstance(Context context)
     {
-        if(null== _instance)
+        if(null== _instance) {
             _instance = new NotificationManager(context);
+        }
         return _instance;
     }
 
     public void sendNotification(Bundle extras) {
-
+        if(prefs == null)
+            prefs = context.getSharedPreferences("application_settings", 0);
         String msg = extras.getString("Notification");
         String type = extras.getString("type");
         Intent notificationActivity = null;

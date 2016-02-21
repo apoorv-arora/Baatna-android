@@ -570,6 +570,8 @@ public class FacebookConnect {
 						nameValuePairs.add(new BasicNameValuePair("uuid", regId));
 					}
 				}
+				nameValuePairs.add(new BasicNameValuePair("deviceId", CommonLib.getIMEI((Context)callback)));
+
 				String url = CommonLib.SERVER + "auth/login?isFacebookLogin=true" + "&uuid=" + APPLICATION_ID;
 				
 				HttpResponse response = PostWrapper.getPostResponse(url, nameValuePairs, null);
