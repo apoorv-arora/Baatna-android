@@ -367,6 +367,8 @@ public class Home extends AppCompatActivity
 		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mFeedReceived,
 				new IntentFilter(CommonLib.LOCAL_FEED_BROADCAST_NOTIFICATION));
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+		new CheckToken().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 	}
 
 
@@ -2068,5 +2070,98 @@ public class Home extends AppCompatActivity
 
 
 	}
+
+	private class CheckToken extends AsyncTask<Object, Void, Object> {
+
+		// execute the api
+		@Override
+		protected Object doInBackground(Object... params) {
+			try {
+				CommonLib.ZLog("API RESPONSER", "CALLING GET WRAPPER");
+				String url = "";
+				url = CommonLib.SERVER + "appConfig/token";
+				Object info = RequestWrapper.RequestHttp(url, RequestWrapper.APP_CONFIG_TOKEN, RequestWrapper.FAV);
+				CommonLib.ZLog("url", url);
+				return info;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			if (destroyed)
+				return;
+
+			if (result != null) {
+				if (result instanceof Object[]) {
+				try {
+					String status = (String) ((Object[]) result)[0];
+					String response = (String) ((Object[]) result)[1];
+					if(status != null && status.equalsIgnoreCase("success") && response != null && response.equalsIgnoreCase("1")) {
+
+					} if(status != null && status.equalsIgnoreCase("success") && response.equalsIgnoreCase("2")) {
+						// disconnect facebook
+						try {
+
+							Session fbSession = Session.getActiveSession();
+							if (fbSession != null) {
+								fbSession.closeAndClearTokenInformation();
+							}
+							Session.setActiveSession(null);
+
+						} catch (Exception e) {
+						}
+
+						String accessToken = prefs.getString("access_token", "");
+						UploadManager.logout(accessToken);
+
+						Editor editor = prefs.edit();
+						editor.putInt("uid", 0);
+						editor.putString("thumbUrl", "");
+						editor.putString("access_token", "");
+						editor.remove("username");
+						editor.remove("profile_pic");
+						editor.remove("HSLogin");
+						editor.remove("INSTITUTION_NAME");
+						editor.remove("STUDENT_ID");
+						editor.putBoolean("facebook_post_permission", false);
+						editor.putBoolean("post_to_facebook_flag", false);
+						editor.putBoolean("facebook_connect_flag", false);
+						editor.putBoolean("twitter_status", false);
+
+						editor.commit();
+						//To stop getting chat notification after uninstall
+						try {
+							GoogleCloudMessaging.getInstance(getApplicationContext()).unregister();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						if (prefs.getInt("uid", 0) == 0) {
+							Intent intent = new Intent(zapp, SplashScreen.class);
+							startActivity(intent);
+							finish();
+						}
+					}
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+				}
+			} else {
+				if (CommonLib.isNetworkAvailable(mContext)) {
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.error_try_again),
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.no_internet_message),
+							Toast.LENGTH_SHORT).show();
+
+					findViewById(R.id.feedListView).setVisibility(View.GONE);
+				}
+			}
+		}
+	}
+
 
 }

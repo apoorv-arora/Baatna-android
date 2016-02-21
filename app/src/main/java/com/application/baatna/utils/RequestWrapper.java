@@ -50,6 +50,7 @@ public class RequestWrapper {
 	public static final String USER_INFO = "user_info";
 	public static final String APP_CONFIG_VERSION_AND_RATING = "appConfig_version";
 	public static final String GET_REDEEM_COUPONS = "redeem_coupons_get";
+	public static final String APP_CONFIG_TOKEN = "app_config_token";
 
 	public static void Initialize(Context context) {
 		prefs = context.getSharedPreferences("application_settings", 0);
@@ -184,6 +185,14 @@ public class RequestWrapper {
 			Object[] coupons = null;
 			try {
 				coupons = (Object[]) ParserJson.parse_Coupons(result);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return coupons;
+		} else if (Type == APP_CONFIG_TOKEN) {
+			Object[] coupons = null;
+			try {
+				coupons = (Object[]) ParserJson.parseGenericResponse(result);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

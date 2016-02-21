@@ -282,7 +282,7 @@ public class FacebookConnect {
 						json = new JSONObject(map);
 						final JSONObject finalJson = json;
 
-						// email = json.getString("email");
+					 	email = json.getString("email");
 						final JSONArray permissionsJson = new JSONArray(session.getPermissions());
 						if (action == 1) {
 							//check for the email here...

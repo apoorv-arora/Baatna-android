@@ -183,6 +183,27 @@ public class ParserJson {
 		return output;
 	}
 
+	public static Object[] parseGenericResponse(InputStream is) throws JSONException {
+
+		Object[] output = new Object[] { "failed", "", null };
+
+		JSONObject responseObject = ParserJson.convertInputStreamToJSON(is);
+
+		if (responseObject != null && responseObject.has("status")) {
+			output[0] = responseObject.getString("status");
+			if (output[0].equals("success")) {
+				if (responseObject.has("response")) {
+					output[1] = responseObject.get("response");
+				}
+			} else {
+				if (responseObject.has("errorMessage")) {
+					output[1] = responseObject.getString("errorMessage");
+				}
+			}
+		}
+		return output;
+	}
+
 	public static JSONObject parseFBLoginResponse(InputStream is) throws JSONException {
 
 		JSONObject output = new JSONObject();
