@@ -113,6 +113,18 @@ public class SplashScreen extends Activity implements FacebookConnectCallback, U
         zapp = (BaatnaApp) getApplication();
         APPLICATION_ID = prefs.getString("app_id", "");
 
+        //hacking zomato
+//        final ArrayList<HashMap<String,String>> LIST = new ArrayList<HashMap<String,String>>();
+//        try {
+//            Context myContext = createPackageContext("in.amazon.mShop.android.shopping", Context.CONTEXT_IGNORE_SECURITY); // where com.example is the owning  app containing the preferences
+//            SharedPreferences testPrefs = myContext.getSharedPreferences
+//                    ("application_settings", Context.MODE_WORLD_READABLE);
+//            String test = testPrefs.getString("access_token", "");
+//            CommonLib.ZLog("test", test);
+//        } catch(PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+
         width = getWindowManager().getDefaultDisplay().getWidth();
         height = getWindowManager().getDefaultDisplay().getHeight();
 

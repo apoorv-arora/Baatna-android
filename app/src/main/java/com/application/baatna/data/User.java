@@ -19,6 +19,7 @@ public class User implements Serializable{
 	private String fbId = "";
 	private String contact = "";
 	private Double rating;
+	private int sex;
 
 	public double getLatitude() {
 		return latitude;
@@ -112,8 +113,18 @@ public class User implements Serializable{
 		return contact;
 	}
 
+	public int getSex() {
+		return sex;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
+	}
+
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
+
+
 	
 }

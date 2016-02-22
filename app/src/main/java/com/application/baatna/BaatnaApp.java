@@ -128,7 +128,7 @@ public class BaatnaApp extends Application {
 		MessageDBWrapper.Initialize(getApplicationContext());
 		cache = new LruCache<String, Bitmap>(30);
 
-//		new ThirdPartyInitAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		new ThirdPartyInitAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 		getTracker(CommonLib.TrackerName.GLOBAL_TRACKER);
 

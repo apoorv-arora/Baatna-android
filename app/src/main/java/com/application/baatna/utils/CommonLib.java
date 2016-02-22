@@ -68,10 +68,10 @@ public class CommonLib {
 
 	public static final String SERVER_PREFIX = "http://";
 
-//	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
-//	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
-	public static final String SERVER_BODY = "192.168.0.18:8080/BaatnaServer/rest/";
-	public static String SERVER_WITHOUT_VERSION = "http://192.168.0.18:8080/BaatnaServer/rest/";
+	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
+	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
+//	public static final String SERVER_BODY = "192.168.0.18:8080/BaatnaServer/rest/";
+//	public static String SERVER_WITHOUT_VERSION = "http://192.168.0.18:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -95,8 +95,8 @@ public class CommonLib {
 	private static SharedPreferences prefs;
 
 	/** Application version */
-	public static final int VERSION = 12;
-	public static final String VERSION_STRING = "1.32";
+	public static final int VERSION = 13;
+	public static final String VERSION_STRING = "1.33";
 
 	/** Preferences */
 	public final static String APP_SETTINGS = "application_settings";
