@@ -16,6 +16,7 @@
     <com.application.baatna.utils.ZCircularImageView
         android:layout_width="@dimen/size60"
         android:layout_height="@dimen/size60"
+        android:scaleType="centerCrop"
         android:id="@+id/image"/>
     <com.application.baatna.utils.TextViewSemiBold
         android:layout_width="wrap_content"

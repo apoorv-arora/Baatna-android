@@ -503,10 +503,14 @@ public class ParserJson {
 			if (userObject.has("bio")) {
 				returnUser.setBio(String.valueOf(userObject.get("bio")));
 			}
+
 			if(userObject.has("rating")){
 				returnUser.setRating(userObject.getDouble("rating"));
 			}
 
+			if(userObject.has("sex") && userObject.get("sex") instanceof Integer) {
+				returnUser.setSex(userObject.getInt("sex"));
+			}
 
 		} catch (JSONException e) {
 			e.printStackTrace();

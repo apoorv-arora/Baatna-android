@@ -91,8 +91,14 @@ public class WishActivity extends AppCompatActivity implements UploadManagerCall
 			final Wish wish = (Wish) ((Object[])data)[1];
 				
 			final AlertDialog messageDialog;
+			String sex = "";
+			if(user.getSex() == CommonLib.SEX_MALE)
+				sex = "him";
+			else if(user.getSex() == CommonLib.SEX_FEMALE)
+				sex = "her";
+
 			messageDialog = new AlertDialog.Builder(this)
-					.setMessage(getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle()))
+					.setMessage(getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle(), sex))
 					.setPositiveButton(getResources().getString(R.string.message), new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {

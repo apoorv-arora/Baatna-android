@@ -47,7 +47,7 @@
     <color name="selected_background_green">#3e873e</color>
     <color name="selected_background">#f2f2f2</color>
     <color name="submit_green">#69bc63</color> <!-- #51a351 -->
-    <color name="submit_green_pressed">#3e873e</color>
+    <color name="submit_green_pressed">#52bb93</color>
     <color name="submit_green_transparent">#EE69bc63</color>
     <color name="separator_color">#e7e7e7</color>
     <color name="button_background_grey">#dedede</color>

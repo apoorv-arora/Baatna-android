@@ -1655,8 +1655,8 @@ public class Home extends AppCompatActivity
 			}
 
 			if (bitmap != null) {
-//				if (this.type.equalsIgnoreCase("user"))
-//					bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
+				if (this.type.equalsIgnoreCase("user"))
+					bitmap = CommonLib.getRoundedCornerBitmap(bitmap, width);
 
 				zapp.cache.put(url, bitmap);
 
@@ -1787,11 +1787,15 @@ public class Home extends AppCompatActivity
 
 			final User user = (User) ((Object[]) data)[0];
 			final Wish wish = (Wish) ((Object[]) data)[1];
-
+			String sex = "";
+			if(user.getSex() == CommonLib.SEX_MALE)
+				sex = "him";
+			else if(user.getSex() == CommonLib.SEX_FEMALE)
+				sex = "her";
 			final AlertDialog messageDialog;
 			messageDialog = new AlertDialog.Builder(this)
 					.setMessage(
-							getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle()))
+							getResources().getString(R.string.thanks_wish_tick, user.getUserName(), wish.getTitle(), sex))
 					.setPositiveButton(getResources().getString(R.string.message),
 							new DialogInterface.OnClickListener() {
 								@Override

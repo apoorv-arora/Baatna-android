@@ -533,6 +533,8 @@ public class FacebookConnect {
 						fbData.put("email", String.valueOf(fbDataJson.get("email")));
 					if(fbDataJson.has("name"))
 						fbData.put("name", String.valueOf(fbDataJson.get("name")));
+					if(fbDataJson.has("gender"))
+						fbData.put("gender", String.valueOf(fbDataJson.get("gender")));
 					nameValuePairs.add(new BasicNameValuePair("fbdata", String.valueOf(fbData)));
 				} catch(JSONException e) {
 					e.printStackTrace();

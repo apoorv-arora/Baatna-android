@@ -70,8 +70,6 @@ public class CommonLib {
 
 	public static final String SERVER_BODY = "52.76.14.6:8080/BaatnaServer/rest/";
 	public static String SERVER_WITHOUT_VERSION = "http://52.76.14.6:8080/BaatnaServer/rest/";
-//	public static final String SERVER_BODY = "192.168.0.18:8080/BaatnaServer/rest/";
-//	public static String SERVER_WITHOUT_VERSION = "http://192.168.0.18:8080/BaatnaServer/rest/";
 
 	public static final boolean enableHSLogin = true;
 
@@ -95,8 +93,8 @@ public class CommonLib {
 	private static SharedPreferences prefs;
 
 	/** Application version */
-	public static final int VERSION = 13;
-	public static final String VERSION_STRING = "1.33";
+	public static final int VERSION = 14;
+	public static final String VERSION_STRING = "1.34";
 
 	/** Preferences */
 	public final static String APP_SETTINGS = "application_settings";
@@ -105,6 +103,10 @@ public class CommonLib {
 
 	public static final int CURRENT_USER_WISH_ACCEPTED = 1;
 	public static final int WISH_ACCEPTED_CURRENT_USER = 2;
+
+	public static int SEX_MALE = 1;
+	public static int SEX_FEMALE = 2;
+	public static int SEX_IDONTKNOW = 3;
 
 	public static String BOLD_FONT_FILENAME = "BOLD_FONT_FILENAME";
 
