@@ -1110,7 +1110,7 @@ public class Home extends AppCompatActivity
 			viewHolder.time.setText(CommonLib.findDateDifference(feedItem.getTimestamp()));
 			if(type==0)
 				viewHolder.descriptiontextview.setVisibility(View.GONE);
-			if(feedItems.get(position).getType()==CommonLib.FEED_TYPE_NEW_USER) {
+			if(feedItems.get(position).getType()==CommonLib.FEED_TYPE_NEW_USER || feedItems.get(position).getType()==CommonLib.FEED_TYPE_REQUEST_FULFILLED) {
 				v.findViewById(R.id.feed_item).setOnClickListener(null);
 			}
 			viewHolder.imageView.setOnClickListener(new OnClickListener() {
